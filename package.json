@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && node scripts/prepare-sites.mjs",
+    "build": "tsc && vite build && node scripts/prepare-sites-v2.mjs",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview"
   },
