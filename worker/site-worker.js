@@ -1,4 +1,5 @@
 import {handleHierarchyApi} from './hierarchy-api.js';
+import {handleCatalogAdminApi} from './catalog-admin-api.js';
 
 const files = new Map(/*__STATIC_FILES__*/);
 const ADMIN_EMAIL = 'hussein2004810@gmail.com';
@@ -71,6 +72,9 @@ async function handleApi(request,env,url){
     const origin=request.headers.get('origin');
     if(origin&&origin!==url.origin)return error('INVALID_ORIGIN','طلب غير مسموح',403);
   }
+
+  const catalogAdminResponse=await handleCatalogAdminApi(request,env,url,user);
+  if(catalogAdminResponse)return catalogAdminResponse;
 
   const hierarchyResponse=await handleHierarchyApi(request,env,url,user);
   if(hierarchyResponse)return hierarchyResponse;
