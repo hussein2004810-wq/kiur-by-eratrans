@@ -225,7 +225,7 @@ export default {
       if(request.method==='GET'&&!url.pathname.includes('.'))return serve('/index.html');
       return new Response('Not found',{status:404});
     }catch(cause){
-      console.error('MedExam request failed',cause);
+      console.error('KIUR request failed',cause);
       return url.pathname.startsWith('/api/')?error('INTERNAL_ERROR','حدث خطأ غير متوقع',500):new Response('Internal error',{status:500});
     }
   }
