@@ -30,3 +30,4 @@ await mkdir(serverDir,{recursive:true});
 await writeFile(join(serverDir,'index.js'),worker,'utf8');
 await copyFile(join(project,'worker','hierarchy-api.js'),join(serverDir,'hierarchy-api.js'));
 await copyFile(join(project,'worker','catalog-admin-api.js'),join(serverDir,'catalog-admin-api.js'));
+await copyFile(join(project,'worker','student-insights-api.js'),join(serverDir,'student-insights-api.js'));

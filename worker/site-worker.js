@@ -1,5 +1,6 @@
 import {handleHierarchyApi} from './hierarchy-api.js';
 import {handleCatalogAdminApi} from './catalog-admin-api.js';
+import {handleStudentInsightsApi} from './student-insights-api.js';
 
 const files = new Map(/*__STATIC_FILES__*/);
 const ADMIN_EMAIL = 'hussein2004810@gmail.com';
@@ -46,7 +47,7 @@ async function ensureSchema(env){
   schemaReady=true;
 }
 async function upsertUser(env,user){
-  await env.DB.prepare(`INSERT INTO users(id,email,name,role) VALUES(?,?,?,?) ON CONFLICT(id) DO UPDATE SET email=excluded.email,name=excluded.name,role=excluded.role,updated_at=CURRENT_TIMESTAMP`).bind(user.id,user.email,user.name,user.role).run();
+  await env.DB.prepare(`INSERT INTO users(id,email,name,role) VALUES(?,?,?,?) ON CONFLICT(id) DO UPDATE SET email=excluded.email,name=excluded.name,role=excluded.role,updated_at=CURRENT_TIMESTAMP WHERE users.email<>excluded.email OR users.name<>excluded.name OR users.role<>excluded.role`).bind(user.id,user.email,user.name,user.role).run();
 }
 async function body(request){try{return await request.json()}catch{return null}}
 function validTest(value){
@@ -72,6 +73,9 @@ async function handleApi(request,env,url){
     const origin=request.headers.get('origin');
     if(origin&&origin!==url.origin)return error('INVALID_ORIGIN','طلب غير مسموح',403);
   }
+
+  const studentInsightsResponse=await handleStudentInsightsApi(request,env,url,user);
+  if(studentInsightsResponse)return studentInsightsResponse;
 
   const catalogAdminResponse=await handleCatalogAdminApi(request,env,url,user);
   if(catalogAdminResponse)return catalogAdminResponse;

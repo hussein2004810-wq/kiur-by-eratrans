@@ -15,7 +15,7 @@ class D1{
   async batch(statements){const results=[];for(const statement of statements)results.push(await statement.run());return results}
 }
 const sqlite=new DatabaseSync(':memory:');sqlite.exec('PRAGMA foreign_keys=ON');
-for(const file of ['drizzle/0000_medexam.sql','drizzle/0001_academic_hierarchy.sql','drizzle/0002_backfill_existing_tests.sql'])sqlite.exec(await readFile(file,'utf8'));
+for(const file of ['drizzle/0000_medexam.sql','drizzle/0001_academic_hierarchy.sql','drizzle/0002_backfill_existing_tests.sql','drizzle/0003_scale_indexes.sql'])sqlite.exec(await readFile(file,'utf8'));
 const env={DB:new D1(sqlite)};const user={id:'admin-test',role:'admin'};
 sqlite.prepare(`INSERT INTO users(id,email,name,role) VALUES(?,?,?,?)`).run(user.id,'admin@example.com','Admin','admin');
 async function call(path,method,body){const request=new Request('https://example.test'+path,{method,headers:{'content-type':'application/json'},body:body?JSON.stringify(body):undefined});const response=await handleCatalogAdminApi(request,env,new URL(request.url),user);return {status:response.status,data:response.status===204?null:await response.json()}}
