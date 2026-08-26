@@ -1,3 +1,5 @@
+import {handleHierarchyApi} from './hierarchy-api.js';
+
 const files = new Map(/*__STATIC_FILES__*/);
 const ADMIN_EMAIL = 'hussein2004810@gmail.com';
 let schemaReady = false;
@@ -69,6 +71,9 @@ async function handleApi(request,env,url){
     const origin=request.headers.get('origin');
     if(origin&&origin!==url.origin)return error('INVALID_ORIGIN','طلب غير مسموح',403);
   }
+
+  const hierarchyResponse=await handleHierarchyApi(request,env,url,user);
+  if(hierarchyResponse)return hierarchyResponse;
 
   if(url.pathname==='/api/me'&&request.method==='GET'){
     if(!user)return error('UNAUTHENTICATED','سجّل الدخول للمتابعة',401);
