@@ -1,0 +1,15 @@
+import {DatabaseSync} from 'node:sqlite';
+import {readFile} from 'node:fs/promises';
+import {performance} from 'node:perf_hooks';
+import worker from '../worker/site-worker.js';
+
+class Statement{constructor(database,sql){this.database=database;this.sql=sql}bind(...values){this.values=values;return this}statement(){return this.database.prepare(this.sql)}async first(){return this.statement().get(...(this.values||[]))||null}async all(){return {results:this.statement().all(...(this.values||[]))}}async run(){const result=this.statement().run(...(this.values||[]));return {meta:{changes:Number(result.changes)}}}}
+class D1{constructor(database){this.database=database}prepare(sql){return new Statement(this.database,sql)}async batch(statements){const results=[];for(const statement of statements)results.push(await statement.run());return results}}
+const sqlite=new DatabaseSync(':memory:');sqlite.exec('PRAGMA foreign_keys=ON');for(const file of ['drizzle/0000_medexam.sql','drizzle/0001_academic_hierarchy.sql','drizzle/0002_backfill_existing_tests.sql','drizzle/0003_scale_indexes.sql'])sqlite.exec(await readFile(file,'utf8'));const env={DB:new D1(sqlite)};
+function headers(index,json=false){const value={'oai-authenticated-user-id':`load-user-${index}`,'oai-authenticated-user-email':`student${index}@example.com`,'oai-authenticated-user-full-name':encodeURIComponent(`طالب ${index}`),'oai-authenticated-user-full-name-encoding':'percent-encoded-utf-8'};if(json)value['content-type']='application/json';return value}
+async function call(index,path,method='GET',body){const response=await worker.fetch(new Request('https://example.test'+path,{method,headers:headers(index,body!==undefined),body:body===undefined?undefined:JSON.stringify(body)}),env);const data=response.status===204?null:await response.json();if(!response.ok)throw new Error(`${path}: ${response.status} ${JSON.stringify(data)}`);return data}
+await call('warm','/api/me');
+const students=Math.max(1,Number(process.argv[2])||100);const started=performance.now();
+await Promise.all(Array.from({length:students},async(_,index)=>{const created=await call(index,'/api/attempts','POST',{testId:'demo-preop'});const attemptId=created.attempt.id;await call(index,`/api/attempts/${attemptId}/answers`,'PATCH',{questionId:'demo-q1',selectedOption:2});await call(index,`/api/attempts/${attemptId}/answers`,'PATCH',{questionId:'demo-q2',selectedOption:1});await call(index,`/api/attempts/${attemptId}/answers`,'PATCH',{questionId:'demo-q3',selectedOption:0});const result=await call(index,`/api/attempts/${attemptId}/submit`,'POST');if(result.score!==3)throw new Error('Unexpected score')}));
+const elapsed=Math.round(performance.now()-started);const submitted=Number(sqlite.prepare(`SELECT count(*) AS count FROM attempts WHERE status='submitted'`).get().count);if(submitted!==students)throw new Error(`Expected ${students} submitted attempts, received ${submitted}`);
+console.log(JSON.stringify({ok:true,simulatedStudents:students,apiRequests:students*5,submittedAttempts:submitted,elapsedMs:elapsed}));

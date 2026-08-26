@@ -1,0 +1,11 @@
+import {readFile} from 'node:fs/promises';
+import {DatabaseSync} from 'node:sqlite';
+import {serveSharePage} from '../worker/share-page.js';
+
+class Statement{constructor(database,sql){this.statement=database.prepare(sql)}bind(...values){this.values=values;return this}async first(){return this.statement.get(...(this.values||[]))||null}}
+class D1{constructor(database){this.database=database}prepare(sql){return new Statement(this.database,sql)}}
+const sqlite=new DatabaseSync(':memory:');sqlite.exec('PRAGMA foreign_keys=ON');for(const file of ['drizzle/0000_medexam.sql','drizzle/0001_academic_hierarchy.sql','drizzle/0002_backfill_existing_tests.sql','drizzle/0003_scale_indexes.sql'])sqlite.exec(await readFile(file,'utf8'));const env={DB:new D1(sqlite)};
+const shell=()=>new Response('<!doctype html><html><head><meta name="description" content="old"/><title>Old</title></head><body><div id="root"></div></body></html>',{headers:{'content-type':'text/html'}});
+const testRequest=new Request('https://example.test/test/demo-preop');const testResponse=await serveSharePage(testRequest,env,new URL(testRequest.url),shell());const testHtml=await testResponse.text();if(!testHtml.includes('تقييم المريض قبل العملية | KIUR by ERATRANS')||!testHtml.includes('/test/demo-preop')||!testHtml.includes('og:title'))throw new Error('Direct test metadata failed');
+const lectureRequest=new Request('https://example.test/lecture/lec-a4-general-3');const lectureResponse=await serveSharePage(lectureRequest,env,new URL(lectureRequest.url),shell());const lectureHtml=await lectureResponse.text();if(!lectureHtml.includes('المحاضرة الثالثة: تقييم ما قبل العملية | KIUR by ERATRANS')||!lectureHtml.includes('/lecture/lec-a4-general-3'))throw new Error('Direct lecture metadata failed');
+console.log(JSON.stringify({ok:true,testStatus:testResponse.status,lectureStatus:lectureResponse.status,testTitle:'تقييم المريض قبل العملية',lectureId:'lec-a4-general-3'}));
