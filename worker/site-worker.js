@@ -1,6 +1,7 @@
 import {handleHierarchyApi} from './hierarchy-api.js';
 import {handleCatalogAdminApi} from './catalog-admin-api.js';
 import {handleStudentInsightsApi} from './student-insights-api.js';
+import {serveSharePage} from './share-page.js';
 
 const files = new Map(/*__STATIC_FILES__*/);
 const ADMIN_EMAIL = 'hussein2004810@gmail.com';
@@ -217,6 +218,8 @@ export default {
     const url=new URL(request.url);
     try{
       if(url.pathname.startsWith('/api/'))return await handleApi(request,env,url);
+      const shared=await serveSharePage(request,env,url,serve('/index.html'));
+      if(shared)return shared;
       const exact=serve(url.pathname==='/'?'/index.html':url.pathname);
       if(exact)return exact;
       if(request.method==='GET'&&!url.pathname.includes('.'))return serve('/index.html');
