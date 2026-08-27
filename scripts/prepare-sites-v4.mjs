@@ -32,3 +32,4 @@ await copyFile(join(project,'worker','hierarchy-api.js'),join(serverDir,'hierarc
 await copyFile(join(project,'worker','catalog-admin-api.js'),join(serverDir,'catalog-admin-api.js'));
 await copyFile(join(project,'worker','student-insights-api.js'),join(serverDir,'student-insights-api.js'));
 await copyFile(join(project,'worker','share-page.js'),join(serverDir,'share-page.js'));
+await copyFile(join(project,'worker','attempt-shuffle.js'),join(serverDir,'attempt-shuffle.js'));
