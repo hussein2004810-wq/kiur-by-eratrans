@@ -7,20 +7,28 @@
     "dev": "vite",
     "build": "tsc && vite build && node scripts/prepare-sites-v4.mjs",
     "typecheck": "tsc --noEmit",
+    "test:node": "node scripts/test-migrations.mjs && node scripts/test-catalog-api.mjs && node scripts/test-worker.mjs && node scripts/test-student-insights.mjs && node scripts/test-share-links.mjs && node scripts/test-attempt-shuffle.mjs && node scripts/test-security.mjs && node scripts/test-auth.mjs && node scripts/test-scoped-access.mjs && node scripts/test-exam-features.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
+    "docx": "^9.7.1",
+    "exceljs": "^4.4.0",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.1",
     "lucide-react": "^0.468.0",
+    "mammoth": "^1.12.1",
+    "qrcode": "^1.5.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.1.1"
   },
   "devDependencies": {
     "@openai/sites-vite-plugin": "^0.2.0",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^6.0.0",
     "typescript": "^5.7.2",
-    "vite": "^8.0.0"
+    "vite": "^8.0.16"
   }
 }

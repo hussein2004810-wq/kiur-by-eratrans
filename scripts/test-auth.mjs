@@ -1,0 +1,20 @@
+import {readFile} from 'node:fs/promises';
+import {DatabaseSync} from 'node:sqlite';
+import worker from '../worker/site-worker.js';
+
+class Statement{constructor(database,sql){this.statement=database.prepare(sql)}bind(...values){this.values=values;return this}async first(){return this.statement.get(...(this.values||[]))||null}async all(){return {results:this.statement.all(...(this.values||[]))}}async run(){const result=this.statement.run(...(this.values||[]));return {meta:{changes:Number(result.changes)}}}}
+class D1{constructor(database){this.database=database}prepare(sql){return new Statement(this.database,sql)}async batch(statements){const results=[];for(const statement of statements)results.push(await statement.run());return results}}
+const sqlite=new DatabaseSync(':memory:');sqlite.exec('PRAGMA foreign_keys=ON');
+for(const file of ['drizzle/0000_medexam.sql','drizzle/0001_academic_hierarchy.sql','drizzle/0002_backfill_existing_tests.sql','drizzle/0003_scale_indexes.sql','drizzle/0004_attempt_shuffle.sql','drizzle/0005_security_hardening.sql','drizzle/0006_accounts_organizations_permissions.sql','drizzle/0007_exam_modes_question_types_files.sql'])sqlite.exec(await readFile(file,'utf8'));
+const env={DB:new D1(sqlite),OWNER_USER_IDS:'owner-auth'};const base='https://example.test';
+function headers(extra={}){return {'content-type':'application/json','origin':base,'sec-fetch-site':'same-origin',...extra}}
+async function call(path,{method='GET',body,extraHeaders={}}={}){const response=await worker.fetch(new Request(base+path,{method,headers:headers(extraHeaders),body:body===undefined?undefined:JSON.stringify(body)}),env);let data=null;if(response.status!==204)data=await response.json();return {response,data}}
+
+const registration=await call('/api/auth/register',{method:'POST',body:{name:'طالب تجريبي',email:'student@example.com',password:'SecurePass2026',universityId:'uni-eratrans',collegeId:'college-eratrans-medical',departmentId:'dep-anesthesia',phaseId:'pha-a4'}});if(registration.response.status!==202||!registration.data.pending)throw new Error('Registration did not create a pending account');
+const beforeApproval=await call('/api/auth/login',{method:'POST',body:{email:'student@example.com',password:'SecurePass2026'}});if(beforeApproval.response.status!==403||beforeApproval.data.error.code!=='ACCOUNT_PENDING')throw new Error('Pending account could log in');
+await call('/api/me',{extraHeaders:{'oai-authenticated-user-id':'owner-auth','oai-authenticated-user-email':'owner@example.com'}});const studentId=sqlite.prepare(`SELECT id FROM users WHERE email=?`).get('student@example.com').id;
+const approval=await call(`/api/admin/users/${studentId}`,{method:'PATCH',extraHeaders:{'oai-authenticated-user-id':'owner-auth','oai-authenticated-user-email':'owner@example.com'},body:{status:'active'}});if(approval.response.status!==200)throw new Error('Owner could not approve account');
+const login=await call('/api/auth/login',{method:'POST',body:{email:'student@example.com',password:'SecurePass2026'}});const cookie=login.response.headers.get('set-cookie');if(login.response.status!==200||!cookie?.includes('HttpOnly')||!cookie.includes('Secure')||!cookie.includes('SameSite=Lax'))throw new Error('Secure session cookie was not issued');
+const session=await call('/api/auth/session',{extraHeaders:{cookie:cookie.split(';')[0]}});if(session.response.status!==200||session.data.user.email!=='student@example.com')throw new Error('Password session was not resolved');
+const logout=await call('/api/auth/logout',{method:'POST',extraHeaders:{cookie:cookie.split(';')[0]},body:{}});if(logout.response.status!==200)throw new Error('Logout failed');const revoked=await call('/api/auth/session',{extraHeaders:{cookie:cookie.split(';')[0]}});if(revoked.response.status!==401)throw new Error('Revoked session remained valid');
+console.log(JSON.stringify({ok:true,pending:registration.response.status,blocked:beforeApproval.response.status,approved:approval.response.status,session:session.response.status,revoked:revoked.response.status}));

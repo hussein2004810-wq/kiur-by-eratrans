@@ -1,7 +1,11 @@
-function json(data,status=200){return new Response(JSON.stringify(data),{status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff'}})}
+import {secureHeaders} from './security.js';
+import {loadGrants,permittedWith} from './access-control.js';
+
+function json(data,status=200){return new Response(JSON.stringify(data),{status,headers:secureHeaders({'content-type':'application/json; charset=utf-8','cache-control':'no-store'})})}
 function fail(code,message,status=400){return json({error:{code,message}},status)}
 function denyUser(user){return user?null:fail('UNAUTHENTICATED','سجّل الدخول للمتابعة',401)}
-function denyAdmin(user){return user?.role==='admin'?null:fail('FORBIDDEN','هذه العملية للمشرف فقط',403)}
+function denyReporter(user){return ['owner','admin','teacher'].includes(user?.role)?null:fail('FORBIDDEN','هذه العملية للكوادر المخولة فقط',403)}
+function context(row){return {universityId:row.universityId,collegeId:row.collegeId,departmentId:row.departmentId,phaseId:row.phaseId,sectionId:row.sectionId}}
 
 export async function handleStudentInsightsApi(request,env,url,user){
   const review=url.pathname.match(/^\/api\/attempts\/([^/]+)\/review$/);
@@ -9,18 +13,22 @@ export async function handleStudentInsightsApi(request,env,url,user){
     const denied=denyUser(user);if(denied)return denied;
     const attempt=await env.DB.prepare(`SELECT a.id,a.score,a.max_score AS maxScore,a.percentage,a.finished_at AS finishedAt,t.title,t.pass_percentage AS passPercentage FROM attempts a JOIN tests t ON t.id=a.test_id WHERE a.id=? AND a.user_id=? AND a.status='submitted'`).bind(review[1],user.id).first();
     if(!attempt)return fail('NOT_FOUND','مراجعة المحاولة غير متاحة',404);
-    const questions=await env.DB.prepare(`SELECT q.id,q.text,q.options_json,q.correct_option AS correctOption,q.explanation,q.position,aa.selected_option AS selectedOption FROM attempts a JOIN questions q ON q.test_id=a.test_id LEFT JOIN attempt_answers aa ON aa.attempt_id=a.id AND aa.question_id=q.id WHERE a.id=? AND a.user_id=? ORDER BY q.position`).bind(review[1],user.id).all();
-    return json({...attempt,passed:Number(attempt.percentage)>=Number(attempt.passPercentage),questions:questions.results.map(item=>({...item,options:JSON.parse(item.options_json),selectedOption:item.selectedOption===null?null:Number(item.selectedOption),correctOption:Number(item.correctOption),isCorrect:item.selectedOption!==null&&Number(item.selectedOption)===Number(item.correctOption)}))});
+    const questions=await env.DB.prepare(`SELECT q.id,q.text,q.options_json,q.correct_option AS correctOption,q.explanation,q.position,q.question_type AS questionType,q.accepted_answers_json AS acceptedAnswers,q.image_id AS imageId,aa.selected_option AS selectedOption,aa.answer_text AS answerText,aa.is_correct AS isCorrect FROM attempts a JOIN questions q ON q.test_id=a.test_id LEFT JOIN attempt_answers aa ON aa.attempt_id=a.id AND aa.question_id=q.id WHERE a.id=? AND a.user_id=? ORDER BY q.position`).bind(review[1],user.id).all();
+    return json({...attempt,passed:Number(attempt.percentage)>=Number(attempt.passPercentage),questions:questions.results.map(item=>({...item,options:JSON.parse(item.options_json),acceptedAnswers:item.acceptedAnswers?JSON.parse(item.acceptedAnswers):[],selectedOption:item.selectedOption===null?null:Number(item.selectedOption),correctOption:Number(item.correctOption),isCorrect:Number(item.isCorrect)===1,imageUrl:item.imageId?`/api/media/${encodeURIComponent(item.imageId)}`:null}))});
   }
 
   if(url.pathname==='/api/admin/students'&&request.method==='GET'){
-    const denied=denyAdmin(user);if(denied)return denied;
+    const denied=denyReporter(user);if(denied)return denied;
     const limit=Math.min(100,Math.max(10,Number(url.searchParams.get('limit'))||50));const offset=Math.max(0,Number(url.searchParams.get('offset'))||0);const search=(url.searchParams.get('q')||'').trim().slice(0,80);const like=`%${search}%`;
     const where=search?`u.role='student' AND (u.name LIKE ? OR u.email LIKE ?)`:`u.role='student'`;
     const countStatement=env.DB.prepare(`SELECT count(*) AS total FROM users u WHERE ${where}`);const count=await (search?countStatement.bind(like,like):countStatement).first();
-    const sql=`SELECT u.id,u.name,u.email,u.created_at AS registeredAt,d.name AS departmentName,p.name AS phaseName,count(a.id) AS attempts,COALESCE(round(avg(a.percentage),2),0) AS averagePercentage,COALESCE(sum(CASE WHEN a.percentage>=t.pass_percentage THEN 1 ELSE 0 END),0) AS passedAttempts,max(a.finished_at) AS lastActivity FROM users u LEFT JOIN departments d ON d.id=u.department_id LEFT JOIN phases p ON p.id=u.phase_id LEFT JOIN attempts a ON a.user_id=u.id AND a.status='submitted' LEFT JOIN tests t ON t.id=a.test_id WHERE ${where} GROUP BY u.id ORDER BY u.created_at DESC LIMIT ? OFFSET ?`;
+    const sql=`SELECT u.id,u.name,u.email,u.created_at AS registeredAt,u.university_id AS universityId,u.college_id AS collegeId,u.department_id AS departmentId,u.phase_id AS phaseId,u.section_id AS sectionId,v.name AS universityName,c.name AS collegeName,d.name AS departmentName,p.name AS phaseName,x.name AS sectionName,count(a.id) AS attempts,COALESCE(round(avg(a.percentage),2),0) AS averagePercentage,COALESCE(sum(CASE WHEN a.percentage>=t.pass_percentage THEN 1 ELSE 0 END),0) AS passedAttempts,max(a.finished_at) AS lastActivity FROM users u LEFT JOIN universities v ON v.id=u.university_id LEFT JOIN colleges c ON c.id=u.college_id LEFT JOIN departments d ON d.id=u.department_id LEFT JOIN phases p ON p.id=u.phase_id LEFT JOIN sections x ON x.id=u.section_id LEFT JOIN attempts a ON a.user_id=u.id AND a.status='submitted' LEFT JOIN tests t ON t.id=a.test_id WHERE ${where} GROUP BY u.id ORDER BY u.created_at DESC LIMIT ? OFFSET ?`;
     const statement=env.DB.prepare(sql);const values=search?[like,like,limit,offset]:[limit,offset];const result=await statement.bind(...values).all();
-    return json({data:result.results,total:Number(count?.total||0),limit,offset});
+    const grants=user.role==='owner'?null:await loadGrants(env,user.id);const data=user.role==='owner'?result.results:result.results.filter(row=>permittedWith(grants,'view_reports',context(row))||permittedWith(grants,'manage_students',context(row)));
+    return json({data,total:user.role==='owner'?Number(count?.total||0):data.length,limit,offset});
+  }
+  if(url.pathname==='/api/admin/results'&&request.method==='GET'){
+    const denied=denyReporter(user);if(denied)return denied;const rows=await env.DB.prepare(`SELECT a.id AS attemptId,a.started_at AS startedAt,a.finished_at AS finishedAt,a.score,a.max_score AS maxScore,a.percentage,u.id AS studentId,u.name AS studentName,u.email,t.id AS testId,t.title AS testTitle,t.subject,t.lecture,t.department_id AS departmentId,t.phase_id AS phaseId,t.section_id AS sectionId,t.subject_id AS subjectId,t.lecture_id AS lectureId,c.university_id AS universityId,d.college_id AS collegeId,v.name AS universityName,c.name AS collegeName,d.name AS departmentName,p.name AS phaseName,x.name AS sectionName FROM attempts a JOIN users u ON u.id=a.user_id JOIN tests t ON t.id=a.test_id LEFT JOIN departments d ON d.id=t.department_id LEFT JOIN colleges c ON c.id=d.college_id LEFT JOIN universities v ON v.id=c.university_id LEFT JOIN phases p ON p.id=t.phase_id LEFT JOIN sections x ON x.id=t.section_id WHERE a.status='submitted' ORDER BY a.finished_at DESC LIMIT 5000`).all();const grants=user.role==='owner'?null:await loadGrants(env,user.id);const data=user.role==='owner'?rows.results:rows.results.filter(row=>permittedWith(grants,'view_reports',row));return json({data,generatedAt:new Date().toISOString()});
   }
   return null;
 }
