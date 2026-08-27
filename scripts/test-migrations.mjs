@@ -4,7 +4,7 @@ import {resolve} from 'node:path';
 
 const database=new DatabaseSync(':memory:');
 database.exec('PRAGMA foreign_keys=ON');
-for(const file of ['drizzle/0000_medexam.sql','drizzle/0001_academic_hierarchy.sql','drizzle/0002_backfill_existing_tests.sql','drizzle/0003_scale_indexes.sql']){
+for(const file of ['drizzle/0000_medexam.sql','drizzle/0001_academic_hierarchy.sql','drizzle/0002_backfill_existing_tests.sql','drizzle/0003_scale_indexes.sql','drizzle/0004_attempt_shuffle.sql']){
   database.exec(await readFile(resolve(file),'utf8'));
 }
 const counts={

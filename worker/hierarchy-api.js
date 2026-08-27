@@ -33,7 +33,7 @@ function validateQuestions(value){
   return null;
 }
 
-const testSelect=`SELECT t.id,t.title,t.subject,t.lecture,t.duration_minutes AS durationMinutes,t.pass_percentage AS passPercentage,t.status,t.updated_at AS updatedAt,t.department_id AS departmentId,t.phase_id AS phaseId,t.subject_id AS subjectId,t.lecture_id AS lectureId,COALESCE(d.name,'') AS departmentName,COALESCE(p.name,'') AS phaseName,COALESCE(s.name,t.subject) AS subjectName,COALESCE(l.name,t.lecture) AS lectureName,count(q.id) AS questionCount FROM tests t LEFT JOIN departments d ON d.id=t.department_id LEFT JOIN phases p ON p.id=t.phase_id LEFT JOIN subjects s ON s.id=t.subject_id LEFT JOIN lectures l ON l.id=t.lecture_id LEFT JOIN questions q ON q.test_id=t.id`;
+const testSelect=`SELECT t.id,t.title,t.subject,t.lecture,t.duration_minutes AS durationMinutes,t.pass_percentage AS passPercentage,t.shuffle_questions AS shuffleQuestions,t.shuffle_options AS shuffleOptions,t.status,t.updated_at AS updatedAt,t.department_id AS departmentId,t.phase_id AS phaseId,t.subject_id AS subjectId,t.lecture_id AS lectureId,COALESCE(d.name,'') AS departmentName,COALESCE(p.name,'') AS phaseName,COALESCE(s.name,t.subject) AS subjectName,COALESCE(l.name,t.lecture) AS lectureName,count(q.id) AS questionCount FROM tests t LEFT JOIN departments d ON d.id=t.department_id LEFT JOIN phases p ON p.id=t.phase_id LEFT JOIN subjects s ON s.id=t.subject_id LEFT JOIN lectures l ON l.id=t.lecture_id LEFT JOIN questions q ON q.test_id=t.id`;
 
 export async function handleHierarchyApi(request,env,url,user){
   if(url.pathname==='/api/catalog'&&request.method==='GET'){
@@ -84,16 +84,16 @@ export async function handleHierarchyApi(request,env,url,user){
     const value=await readBody(request);const issue=validateQuestions(value);if(issue)return fail('VALIDATION',issue);
     const path=await resolvePath(env,value);if(!path)return fail('VALIDATION','المسار الأكاديمي المختار غير صالح');
     const id=crypto.randomUUID();
-    const statements=[env.DB.prepare(`INSERT INTO tests(id,title,subject,lecture,duration_minutes,pass_percentage,status,created_by,department_id,phase_id,subject_id,lecture_id) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)`).bind(id,value.title.trim(),path.subjectName,path.lectureName,Number(value.durationMinutes),Number(value.passPercentage??60),value.status||'published',user.id,path.departmentId,path.phaseId,path.subjectId,path.lectureId)];
+    const statements=[env.DB.prepare(`INSERT INTO tests(id,title,subject,lecture,duration_minutes,pass_percentage,shuffle_questions,shuffle_options,status,created_by,department_id,phase_id,subject_id,lecture_id) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).bind(id,value.title.trim(),path.subjectName,path.lectureName,Number(value.durationMinutes),Number(value.passPercentage??60),value.shuffleQuestions?1:0,value.shuffleOptions?1:0,value.status||'published',user.id,path.departmentId,path.phaseId,path.subjectId,path.lectureId)];
     value.questions.forEach((question,index)=>statements.push(env.DB.prepare(`INSERT INTO questions(id,test_id,text,options_json,correct_option,explanation,position) VALUES(?,?,?,?,?,?,?)`).bind(crypto.randomUUID(),id,question.text.trim(),JSON.stringify(question.options.map(String)),Number(question.correctOption),question.explanation?.trim()||null,index+1)));
-    statements.push(env.DB.prepare(`INSERT INTO audit_logs(entity,entity_id,action,by_user_id,details_json) VALUES('test',?,'create',?,?)`).bind(id,user.id,JSON.stringify({title:value.title,path})));
+    statements.push(env.DB.prepare(`INSERT INTO audit_logs(entity,entity_id,action,by_user_id,details_json) VALUES('test',?,'create',?,?)`).bind(id,user.id,JSON.stringify({title:value.title,path,shuffleQuestions:Boolean(value.shuffleQuestions),shuffleOptions:Boolean(value.shuffleOptions)})));
     await env.DB.batch(statements);return json({id},201);
   }
 
   const adminTest=url.pathname.match(/^\/api\/admin\/tests\/([^/]+)$/);
   if(adminTest&&request.method==='GET'){
     const denied=denyAdmin(user);if(denied)return denied;
-    const test=await env.DB.prepare(`SELECT id,title,subject,lecture,duration_minutes AS durationMinutes,pass_percentage AS passPercentage,status,department_id AS departmentId,phase_id AS phaseId,subject_id AS subjectId,lecture_id AS lectureId FROM tests WHERE id=? AND status!='archived'`).bind(adminTest[1]).first();
+    const test=await env.DB.prepare(`SELECT id,title,subject,lecture,duration_minutes AS durationMinutes,pass_percentage AS passPercentage,shuffle_questions AS shuffleQuestions,shuffle_options AS shuffleOptions,status,department_id AS departmentId,phase_id AS phaseId,subject_id AS subjectId,lecture_id AS lectureId FROM tests WHERE id=? AND status!='archived'`).bind(adminTest[1]).first();
     if(!test)return fail('NOT_FOUND','الاختبار غير موجود',404);
     const questions=await env.DB.prepare(`SELECT id,text,options_json,correct_option AS correctOption,explanation,position FROM questions WHERE test_id=? ORDER BY position`).bind(test.id).all();
     return json({...test,questions:questions.results.map(question=>({...question,options:JSON.parse(question.options_json)}))});
@@ -106,11 +106,11 @@ export async function handleHierarchyApi(request,env,url,user){
     const exists=await env.DB.prepare(`SELECT id FROM tests WHERE id=? AND status!='archived'`).bind(adminTest[1]).first();
     if(!exists)return fail('NOT_FOUND','الاختبار غير موجود',404);
     const statements=[
-      env.DB.prepare(`UPDATE tests SET title=?,subject=?,lecture=?,duration_minutes=?,pass_percentage=?,status=?,department_id=?,phase_id=?,subject_id=?,lecture_id=?,updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(value.title.trim(),path.subjectName,path.lectureName,Number(value.durationMinutes),Number(value.passPercentage??60),value.status||'published',path.departmentId,path.phaseId,path.subjectId,path.lectureId,adminTest[1]),
+      env.DB.prepare(`UPDATE tests SET title=?,subject=?,lecture=?,duration_minutes=?,pass_percentage=?,shuffle_questions=?,shuffle_options=?,status=?,department_id=?,phase_id=?,subject_id=?,lecture_id=?,updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(value.title.trim(),path.subjectName,path.lectureName,Number(value.durationMinutes),Number(value.passPercentage??60),value.shuffleQuestions?1:0,value.shuffleOptions?1:0,value.status||'published',path.departmentId,path.phaseId,path.subjectId,path.lectureId,adminTest[1]),
       env.DB.prepare(`DELETE FROM questions WHERE test_id=?`).bind(adminTest[1])
     ];
     value.questions.forEach((question,index)=>statements.push(env.DB.prepare(`INSERT INTO questions(id,test_id,text,options_json,correct_option,explanation,position) VALUES(?,?,?,?,?,?,?)`).bind(crypto.randomUUID(),adminTest[1],question.text.trim(),JSON.stringify(question.options.map(String)),Number(question.correctOption),question.explanation?.trim()||null,index+1)));
-    statements.push(env.DB.prepare(`INSERT INTO audit_logs(entity,entity_id,action,by_user_id,details_json) VALUES('test',?,'update',?,?)`).bind(adminTest[1],user.id,JSON.stringify({title:value.title,path})));
+    statements.push(env.DB.prepare(`INSERT INTO audit_logs(entity,entity_id,action,by_user_id,details_json) VALUES('test',?,'update',?,?)`).bind(adminTest[1],user.id,JSON.stringify({title:value.title,path,shuffleQuestions:Boolean(value.shuffleQuestions),shuffleOptions:Boolean(value.shuffleOptions)})));
     await env.DB.batch(statements);return json({updated:true});
   }
 

@@ -2,15 +2,16 @@ import {handleHierarchyApi} from './hierarchy-api.js';
 import {handleCatalogAdminApi} from './catalog-admin-api.js';
 import {handleStudentInsightsApi} from './student-insights-api.js';
 import {serveSharePage} from './share-page.js';
+import {buildAttemptOrders,parseOptionOrders,parseOrder,presentQuestions,toDisplayOption,toOriginalOption} from './attempt-shuffle.js';
 
 const files = new Map(/*__STATIC_FILES__*/);
 let schemaReady = false;
 
 const schemaStatements = [
   `CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY,email TEXT NOT NULL UNIQUE,name TEXT NOT NULL,role TEXT NOT NULL DEFAULT 'student' CHECK(role IN ('student','admin')),created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)`,
-  `CREATE TABLE IF NOT EXISTS tests (id TEXT PRIMARY KEY,title TEXT NOT NULL,subject TEXT NOT NULL,lecture TEXT NOT NULL,duration_minutes INTEGER NOT NULL,pass_percentage INTEGER NOT NULL DEFAULT 60,status TEXT NOT NULL DEFAULT 'published',created_by TEXT NOT NULL,created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)`,
+  `CREATE TABLE IF NOT EXISTS tests (id TEXT PRIMARY KEY,title TEXT NOT NULL,subject TEXT NOT NULL,lecture TEXT NOT NULL,duration_minutes INTEGER NOT NULL,pass_percentage INTEGER NOT NULL DEFAULT 60,shuffle_questions INTEGER NOT NULL DEFAULT 0,shuffle_options INTEGER NOT NULL DEFAULT 0,status TEXT NOT NULL DEFAULT 'published',created_by TEXT NOT NULL,created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)`,
   `CREATE TABLE IF NOT EXISTS questions (id TEXT PRIMARY KEY,test_id TEXT NOT NULL REFERENCES tests(id) ON DELETE CASCADE,text TEXT NOT NULL,options_json TEXT NOT NULL,correct_option INTEGER NOT NULL,explanation TEXT,position INTEGER NOT NULL)`,
-  `CREATE TABLE IF NOT EXISTS attempts (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),test_id TEXT NOT NULL REFERENCES tests(id),status TEXT NOT NULL DEFAULT 'in_progress',score INTEGER,max_score INTEGER,percentage REAL,started_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,last_saved_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,finished_at TEXT)`,
+  `CREATE TABLE IF NOT EXISTS attempts (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),test_id TEXT NOT NULL REFERENCES tests(id),status TEXT NOT NULL DEFAULT 'in_progress',score INTEGER,max_score INTEGER,percentage REAL,question_order_json TEXT,option_orders_json TEXT,started_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,last_saved_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,finished_at TEXT)`,
   `CREATE TABLE IF NOT EXISTS attempt_answers (attempt_id TEXT NOT NULL REFERENCES attempts(id) ON DELETE CASCADE,question_id TEXT NOT NULL REFERENCES questions(id) ON DELETE CASCADE,selected_option INTEGER NOT NULL,is_correct INTEGER,answered_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(attempt_id,question_id))`,
   `CREATE TABLE IF NOT EXISTS audit_logs (id INTEGER PRIMARY KEY AUTOINCREMENT,entity TEXT NOT NULL,entity_id TEXT NOT NULL,action TEXT NOT NULL,by_user_id TEXT NOT NULL,at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,details_json TEXT)`,
   `CREATE INDEX IF NOT EXISTS idx_tests_status_created ON tests(status,created_at DESC)`,
@@ -66,6 +67,16 @@ function validTest(value){
 function requireUser(user){return user?null:error('UNAUTHENTICATED','سجّل الدخول للمتابعة',401)}
 function requireAdmin(user){return user?.role==='admin'?null:error('FORBIDDEN','هذه العملية للمشرف فقط',403)}
 
+function decodeQuestions(rows){return rows.map(question=>({...question,options:JSON.parse(question.options_json)}))}
+async function latestOrders(env,userId,testId,excludeId=''){
+  const previous=await env.DB.prepare(`SELECT question_order_json AS questionOrder,option_orders_json AS optionOrders FROM attempts WHERE user_id=? AND test_id=? AND id<>? AND question_order_json IS NOT NULL ORDER BY started_at DESC LIMIT 1`).bind(userId,testId,excludeId).first();
+  return previous||{};
+}
+async function createOrders(env,userId,test,questions,excludeId=''){
+  const previous=await latestOrders(env,userId,test.id,excludeId);
+  return buildAttemptOrders(questions,{shuffleQuestions:Boolean(test.shuffleQuestions),shuffleOptions:Boolean(test.shuffleOptions)},previous);
+}
+
 async function handleApi(request,env,url){
   await ensureSchema(env);
   const user=identity(request,env);
@@ -99,17 +110,27 @@ async function handleApi(request,env,url){
     const test=await env.DB.prepare(`SELECT id,title,subject,lecture,duration_minutes AS durationMinutes,pass_percentage AS passPercentage FROM tests WHERE id=? AND status='published'`).bind(publicTest[1]).first();
     if(!test)return error('NOT_FOUND','الاختبار غير موجود',404);
     const list=await env.DB.prepare(`SELECT id,text,options_json,position FROM questions WHERE test_id=? ORDER BY position`).bind(test.id).all();
-    return response({...test,questions:list.results.map(q=>({...q,options:JSON.parse(q.options_json)}))});
+    const questions=decodeQuestions(list.results);const attemptId=url.searchParams.get('attemptId');
+    if(!attemptId)return response({...test,questions});
+    const attempt=await env.DB.prepare(`SELECT id,question_order_json AS questionOrder,option_orders_json AS optionOrders FROM attempts WHERE id=? AND user_id=? AND test_id=? AND status='in_progress'`).bind(attemptId,user.id,test.id).first();
+    if(!attempt)return error('ATTEMPT_NOT_FOUND','المحاولة غير موجودة أو منتهية',404);
+    const questionOrder=parseOrder(attempt.questionOrder,questions.map(question=>question.id));const optionOrders=parseOptionOrders(attempt.optionOrders);
+    const answerRows=await env.DB.prepare(`SELECT question_id AS questionId,selected_option AS selectedOption FROM attempt_answers WHERE attempt_id=?`).bind(attempt.id).all();
+    const questionById=new Map(questions.map(question=>[question.id,question]));const savedAnswers={};
+    for(const answer of answerRows.results){const question=questionById.get(answer.questionId);if(question){const displayIndex=toDisplayOption(Number(answer.selectedOption),question,optionOrders);if(displayIndex>=0)savedAnswers[answer.questionId]=displayIndex}}
+    return response({...test,questions:presentQuestions(questions,questionOrder,optionOrders),savedAnswers});
   }
   if(url.pathname==='/api/attempts'&&request.method==='POST'){
     const denied=requireUser(user);if(denied)return denied;
     const value=await body(request);if(!value?.testId)return error('VALIDATION','الاختبار مطلوب');
-    const test=await env.DB.prepare(`SELECT id FROM tests WHERE id=? AND status='published'`).bind(value.testId).first();
+    const test=await env.DB.prepare(`SELECT id,shuffle_questions AS shuffleQuestions,shuffle_options AS shuffleOptions FROM tests WHERE id=? AND status='published'`).bind(value.testId).first();
     if(!test)return error('NOT_FOUND','الاختبار غير متاح',404);
-    const existing=await env.DB.prepare(`SELECT id,test_id AS testId,started_at AS startedAt FROM attempts WHERE user_id=? AND test_id=? AND status='in_progress' ORDER BY started_at DESC LIMIT 1`).bind(user.id,value.testId).first();
-    if(existing)return response({attempt:existing,resumed:true});
+    const questionRows=await env.DB.prepare(`SELECT id,options_json FROM questions WHERE test_id=? ORDER BY position`).bind(test.id).all();const questions=decodeQuestions(questionRows.results);
+    const existing=await env.DB.prepare(`SELECT id,test_id AS testId,started_at AS startedAt,question_order_json AS questionOrder,option_orders_json AS optionOrders FROM attempts WHERE user_id=? AND test_id=? AND status='in_progress' ORDER BY started_at DESC LIMIT 1`).bind(user.id,value.testId).first();
+    if(existing){if(!existing.questionOrder||!existing.optionOrders){const orders=await createOrders(env,user.id,test,questions,existing.id);await env.DB.prepare(`UPDATE attempts SET question_order_json=?,option_orders_json=? WHERE id=?`).bind(JSON.stringify(orders.questionOrder),JSON.stringify(orders.optionOrders),existing.id).run()}return response({attempt:existing,resumed:true})}
     const id=crypto.randomUUID();
-    await env.DB.prepare(`INSERT INTO attempts(id,user_id,test_id) VALUES(?,?,?)`).bind(id,user.id,value.testId).run();
+    const orders=await createOrders(env,user.id,test,questions);
+    await env.DB.prepare(`INSERT INTO attempts(id,user_id,test_id,question_order_json,option_orders_json) VALUES(?,?,?,?,?)`).bind(id,user.id,value.testId,JSON.stringify(orders.questionOrder),JSON.stringify(orders.optionOrders)).run();
     return response({attempt:{id,testId:value.testId},resumed:false},201);
   }
   const saveAnswer=url.pathname.match(/^\/api\/attempts\/([^/]+)\/answers$/);
@@ -117,12 +138,14 @@ async function handleApi(request,env,url){
     const denied=requireUser(user);if(denied)return denied;
     const value=await body(request);
     if(!value?.questionId||!Number.isInteger(Number(value.selectedOption)))return error('VALIDATION','الإجابة غير صالحة');
-    const attempt=await env.DB.prepare(`SELECT id,test_id FROM attempts WHERE id=? AND user_id=? AND status='in_progress'`).bind(saveAnswer[1],user.id).first();
+    const attempt=await env.DB.prepare(`SELECT id,test_id,option_orders_json AS optionOrders FROM attempts WHERE id=? AND user_id=? AND status='in_progress'`).bind(saveAnswer[1],user.id).first();
     if(!attempt)return error('NOT_EDITABLE','المحاولة غير قابلة للتعديل',409);
-    const question=await env.DB.prepare(`SELECT id FROM questions WHERE id=? AND test_id=?`).bind(value.questionId,attempt.test_id).first();
+    const question=await env.DB.prepare(`SELECT id,options_json FROM questions WHERE id=? AND test_id=?`).bind(value.questionId,attempt.test_id).first();
     if(!question)return error('BAD_QUESTION','السؤال لا يتبع الاختبار',400);
+    question.options=JSON.parse(question.options_json);const selectedOption=toOriginalOption(Number(value.selectedOption),question,parseOptionOrders(attempt.optionOrders));
+    if(selectedOption<0)return error('VALIDATION','الإجابة غير صالحة');
     await env.DB.batch([
-      env.DB.prepare(`INSERT INTO attempt_answers(attempt_id,question_id,selected_option) VALUES(?,?,?) ON CONFLICT(attempt_id,question_id) DO UPDATE SET selected_option=excluded.selected_option,answered_at=CURRENT_TIMESTAMP`).bind(attempt.id,value.questionId,Number(value.selectedOption)),
+      env.DB.prepare(`INSERT INTO attempt_answers(attempt_id,question_id,selected_option) VALUES(?,?,?) ON CONFLICT(attempt_id,question_id) DO UPDATE SET selected_option=excluded.selected_option,answered_at=CURRENT_TIMESTAMP`).bind(attempt.id,value.questionId,selectedOption),
       env.DB.prepare(`UPDATE attempts SET last_saved_at=CURRENT_TIMESTAMP WHERE id=?`).bind(attempt.id)
     ]);
     return response({saved:true});
@@ -160,14 +183,14 @@ async function handleApi(request,env,url){
   }
   if(url.pathname==='/api/admin/tests'&&request.method==='GET'){
     const denied=requireAdmin(user);if(denied)return denied;
-    const tests=await env.DB.prepare(`SELECT t.id,t.title,t.subject,t.lecture,t.duration_minutes AS durationMinutes,t.pass_percentage AS passPercentage,t.status,t.updated_at AS updatedAt,count(q.id) AS questionCount FROM tests t LEFT JOIN questions q ON q.test_id=t.id WHERE t.status!='archived' GROUP BY t.id ORDER BY t.created_at DESC`).all();
+    const tests=await env.DB.prepare(`SELECT t.id,t.title,t.subject,t.lecture,t.duration_minutes AS durationMinutes,t.pass_percentage AS passPercentage,t.shuffle_questions AS shuffleQuestions,t.shuffle_options AS shuffleOptions,t.status,t.updated_at AS updatedAt,count(q.id) AS questionCount FROM tests t LEFT JOIN questions q ON q.test_id=t.id WHERE t.status!='archived' GROUP BY t.id ORDER BY t.created_at DESC`).all();
     return response({data:tests.results});
   }
   if(url.pathname==='/api/admin/tests'&&request.method==='POST'){
     const denied=requireAdmin(user);if(denied)return denied;
     const value=await body(request);const issue=validTest(value);if(issue)return error('VALIDATION',issue);
     const id=crypto.randomUUID();
-    const statements=[env.DB.prepare(`INSERT INTO tests(id,title,subject,lecture,duration_minutes,pass_percentage,status,created_by) VALUES(?,?,?,?,?,?,?,?)`).bind(id,value.title.trim(),value.subject.trim(),value.lecture.trim(),Number(value.durationMinutes),Number(value.passPercentage??60),value.status||'published',user.id)];
+    const statements=[env.DB.prepare(`INSERT INTO tests(id,title,subject,lecture,duration_minutes,pass_percentage,shuffle_questions,shuffle_options,status,created_by) VALUES(?,?,?,?,?,?,?,?,?,?)`).bind(id,value.title.trim(),value.subject.trim(),value.lecture.trim(),Number(value.durationMinutes),Number(value.passPercentage??60),value.shuffleQuestions?1:0,value.shuffleOptions?1:0,value.status||'published',user.id)];
     value.questions.forEach((q,index)=>statements.push(env.DB.prepare(`INSERT INTO questions(id,test_id,text,options_json,correct_option,explanation,position) VALUES(?,?,?,?,?,?,?)`).bind(crypto.randomUUID(),id,q.text.trim(),JSON.stringify(q.options.map(String)),Number(q.correctOption),q.explanation?.trim()||null,index+1)));
     statements.push(env.DB.prepare(`INSERT INTO audit_logs(entity,entity_id,action,by_user_id,details_json) VALUES('test',?,'create',?,?)`).bind(id,user.id,JSON.stringify({title:value.title})));
     await env.DB.batch(statements);return response({id},201);
@@ -175,7 +198,7 @@ async function handleApi(request,env,url){
   const adminTest=url.pathname.match(/^\/api\/admin\/tests\/([^/]+)$/);
   if(adminTest&&request.method==='GET'){
     const denied=requireAdmin(user);if(denied)return denied;
-    const test=await env.DB.prepare(`SELECT id,title,subject,lecture,duration_minutes AS durationMinutes,pass_percentage AS passPercentage,status FROM tests WHERE id=? AND status!='archived'`).bind(adminTest[1]).first();
+    const test=await env.DB.prepare(`SELECT id,title,subject,lecture,duration_minutes AS durationMinutes,pass_percentage AS passPercentage,shuffle_questions AS shuffleQuestions,shuffle_options AS shuffleOptions,status FROM tests WHERE id=? AND status!='archived'`).bind(adminTest[1]).first();
     if(!test)return error('NOT_FOUND','الاختبار غير موجود',404);
     const questions=await env.DB.prepare(`SELECT id,text,options_json,correct_option AS correctOption,explanation,position FROM questions WHERE test_id=? ORDER BY position`).bind(test.id).all();
     return response({...test,questions:questions.results.map(q=>({...q,options:JSON.parse(q.options_json)}))});
@@ -186,7 +209,7 @@ async function handleApi(request,env,url){
     const exists=await env.DB.prepare(`SELECT id FROM tests WHERE id=? AND status!='archived'`).bind(adminTest[1]).first();
     if(!exists)return error('NOT_FOUND','الاختبار غير موجود',404);
     const statements=[
-      env.DB.prepare(`UPDATE tests SET title=?,subject=?,lecture=?,duration_minutes=?,pass_percentage=?,status=?,updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(value.title.trim(),value.subject.trim(),value.lecture.trim(),Number(value.durationMinutes),Number(value.passPercentage??60),value.status||'published',adminTest[1]),
+      env.DB.prepare(`UPDATE tests SET title=?,subject=?,lecture=?,duration_minutes=?,pass_percentage=?,shuffle_questions=?,shuffle_options=?,status=?,updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(value.title.trim(),value.subject.trim(),value.lecture.trim(),Number(value.durationMinutes),Number(value.passPercentage??60),value.shuffleQuestions?1:0,value.shuffleOptions?1:0,value.status||'published',adminTest[1]),
       env.DB.prepare(`DELETE FROM questions WHERE test_id=?`).bind(adminTest[1])
     ];
     value.questions.forEach((q,index)=>statements.push(env.DB.prepare(`INSERT INTO questions(id,test_id,text,options_json,correct_option,explanation,position) VALUES(?,?,?,?,?,?,?)`).bind(crypto.randomUUID(),adminTest[1],q.text.trim(),JSON.stringify(q.options.map(String)),Number(q.correctOption),q.explanation?.trim()||null,index+1)));
