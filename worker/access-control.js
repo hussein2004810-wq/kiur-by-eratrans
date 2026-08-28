@@ -1,4 +1,4 @@
-export const PERMISSIONS=['manage_catalog','manage_tests','manage_students','manage_teachers','view_reports','import_questions','use_media','export_results'];
+export const PERMISSIONS=['manage_catalog','manage_tests','manage_students','manage_teachers','view_reports','import_questions','use_media','export_results','manage_glimpses','manage_library','view_library_log','view_student_log','view_audit_log','view_account_log'];
 
 export function parsePermissions(value){try{const parsed=typeof value==='string'?JSON.parse(value):value;return Array.isArray(parsed)?parsed.filter(permission=>PERMISSIONS.includes(permission)):[]}catch{return []}}
 export async function loadGrants(env,userId){const rows=await env.DB.prepare(`SELECT id,grant_role AS grantRole,scope_type AS scopeType,scope_id AS scopeId,permissions_json AS permissions FROM user_grants WHERE user_id=?`).bind(userId).all();return rows.results.map(row=>({...row,permissions:parsePermissions(row.permissions)}))}

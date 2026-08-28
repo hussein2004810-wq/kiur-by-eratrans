@@ -7,10 +7,13 @@ import {enforceRateLimit,readJsonBody,secureHeaders} from './security.js';
 import {handleAuthApi} from './auth-api.js';
 import {resolvePasswordSession} from './password-auth.js';
 import {handleAdminUsersApi} from './admin-users-api.js';
-import {hasPermission} from './access-control.js';
+import {hasPermission,loadGrants} from './access-control.js';
 import {handleMediaApi} from './media-api.js';
 import {handleImportApi} from './import-api.js';
 import {handleCertificateApi} from './certificate-api.js';
+import {handleClinicalGlimpsesApi} from './clinical-glimpses-api.js';
+import {handleLogsApi} from './logs-api.js';
+import {recordAccountEvent} from './account-events.js';
 
 const files = new Map(/*__STATIC_FILES__*/);
 let schemaReady = false;
@@ -62,6 +65,7 @@ async function chatGptIdentity(request,env){
         env.DB.prepare(`INSERT INTO users(id,email,name,role,account_role,account_status,auth_provider) VALUES(?,?,?,?,?,'active','chatgpt')`).bind(providerId,email,name,legacyRole,accountRole),
         env.DB.prepare(`INSERT INTO user_identities(provider,provider_user_id,user_id,email) VALUES('chatgpt',?,?,?)`).bind(providerId,providerId,email)
       ]);
+      await recordAccountEvent(env,request,{userId:providerId,accountCode:providerId,email,eventType:'account_created',details:{provider:'chatgpt',role:accountRole}});
       account={id:providerId,email,name,role:accountRole,accountStatus:'active',authProvider:'chatgpt'};
     }
   }else{
@@ -145,6 +149,12 @@ async function handleApi(request,env,url){
   const authResponse=await handleAuthApi(request,env,url,user);
   if(authResponse)return authResponse;
 
+  const glimpsesResponse=await handleClinicalGlimpsesApi(request,env,url,user);
+  if(glimpsesResponse)return glimpsesResponse;
+
+  const logsResponse=await handleLogsApi(request,env,url,user);
+  if(logsResponse)return logsResponse;
+
   const adminUsersResponse=await handleAdminUsersApi(request,env,url,user);
   if(adminUsersResponse)return adminUsersResponse;
 
@@ -168,7 +178,9 @@ async function handleApi(request,env,url){
 
   if(url.pathname==='/api/me'&&request.method==='GET'){
     if(!user)return error('UNAUTHENTICATED','سجّل الدخول للمتابعة',401);
-    return response({user});
+    const permissions=user.role==='owner'?['*']:[...new Set((await loadGrants(env,user.id)).flatMap(grant=>grant.permissions))];
+    if(user.authProvider==='chatgpt')await recordAccountEvent(env,request,{userId:user.id,accountCode:user.id,email:user.email,eventType:'login_success',details:{provider:'chatgpt'}});
+    return response({user:{...user,permissions}});
   }
   if(url.pathname==='/api/tests'&&request.method==='GET'){
     const denied=requireUser(user);if(denied)return denied;

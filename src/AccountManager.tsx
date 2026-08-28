@@ -12,7 +12,7 @@ type Account={id:string;name:string;email:string;role:Role;staffTitle?:StaffTitl
 type FormState={name:string;email:string;password:string;role:'teacher'|'admin';staffTitle:StaffTitle;scopeType:string;scopeId:string;permissions:string[]};
 
 const staffTitles:Record<StaffTitle,string>={department_head:'رئيس قسم',department_coordinator:'مقرر قسم',university_doctor:'دكتور جامعي',university_professor:'أستاذ جامعي'};
-const permissions=[['manage_catalog','إدارة الهيكل الأكاديمي'],['manage_tests','إدارة الاختبارات'],['manage_students','إدارة الطلاب'],['manage_teachers','إنشاء وإدارة الكادر'],['view_reports','عرض التقارير'],['import_questions','استيراد الأسئلة'],['use_media','استخدام مكتبة الصور'],['export_results','تصدير النتائج']] as const;
+const permissions=[['manage_catalog','إدارة الهيكل الأكاديمي'],['manage_tests','إدارة الاختبارات'],['manage_students','إدارة الطلاب'],['manage_teachers','إنشاء وإدارة الكادر'],['view_reports','عرض التقارير'],['import_questions','استيراد الأسئلة'],['use_media','اختيار صور المكتبة'],['manage_glimpses','إدارة اللمحات السريرية'],['manage_library','رفع وإدارة المكتبة'],['view_library_log','عرض سجل المكتبة'],['view_student_log','عرض سجل الطلاب'],['view_audit_log','عرض سجل التدقيق'],['view_account_log','عرض سجل الحسابات'],['export_results','تصدير النتائج']] as const;
 const scopeLabels:Record<string,string>={platform:'المنصة كاملة',university:'جامعة',college:'كلية',department:'قسم',phase:'مرحلة',section:'شعبة',subject:'مادة',lecture:'محاضرة'};
 const scopeCollections:Record<string,keyof Catalog>={university:'universities',college:'colleges',department:'departments',phase:'phases',section:'sections',subject:'subjects',lecture:'lectures'};
 

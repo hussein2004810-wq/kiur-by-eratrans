@@ -13,7 +13,12 @@ export const tables = {
   authSessions: ['id','user_id','token_hash','created_at','expires_at','last_used_at','revoked_at','user_agent_hash'],
   userIdentities: ['provider','provider_user_id','user_id','email','created_at'],
   userGrants: ['id','user_id','grant_role','scope_type','scope_id','permissions_json','granted_by','created_at','updated_at'],
-  mediaAssets: ['id','object_key','original_name','content_type','byte_size','sha256','alt_text','uploaded_by','created_at','deleted_at'],
+  mediaAssets: ['id','object_key','original_name','content_type','byte_size','sha256','alt_text','title','clinical_question','explanation','correct_answer','tags_json','uploaded_by','created_at','updated_by','updated_at','deleted_at','deleted_by'],
   importBatches: ['id','source_type','original_name','object_key','target_lecture_id','target_test_id','status','total_rows','valid_rows','error_rows','conflicts_json','created_by','created_at','committed_at'],
   certificates: ['id','attempt_id','user_id','test_id','verification_code','issued_at','revoked_at'],
+  clinicalGlimpses: ['id','title','summary','clinical_point','warning','image_id','reference_text','publish_at','status','audience_all','created_by','created_at','updated_by','updated_at','reviewed_by','reviewed_at','approved_by','approved_at','published_by','published_at','deleted_at','deleted_by'],
+  clinicalGlimpseTargets: ['id','glimpse_id','university_id','college_id','department_id','phase_id'],
+  clinicalGlimpseLogs: ['id','glimpse_id','action','by_user_id','at','details_json'],
+  libraryLogs: ['id','media_id','action','by_user_id','test_id','question_id','at','details_json'],
+  accountEvents: ['id','user_id','account_code','email_hash','event_type','outcome','device_hash','at','details_json'],
 } as const;

@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build && node scripts/prepare-sites-v4.mjs",
     "typecheck": "tsc --noEmit",
-    "test:node": "node scripts/test-migrations.mjs && node scripts/test-catalog-api.mjs && node scripts/test-worker.mjs && node scripts/test-student-insights.mjs && node scripts/test-share-links.mjs && node scripts/test-attempt-shuffle.mjs && node scripts/test-security.mjs && node scripts/test-auth.mjs && node scripts/test-scoped-access.mjs && node scripts/test-exam-features.mjs",
+    "test:node": "node scripts/test-migrations.mjs && node scripts/test-catalog-api.mjs && node scripts/test-worker.mjs && node scripts/test-student-insights.mjs && node scripts/test-share-links.mjs && node scripts/test-attempt-shuffle.mjs && node scripts/test-security.mjs && node scripts/test-auth.mjs && node scripts/test-scoped-access.mjs && node scripts/test-exam-features.mjs && node scripts/test-governance-features.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

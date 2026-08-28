@@ -1,5 +1,6 @@
 import {enforceRateLimit,readJsonBody,secureHeaders} from './security.js';
 import {authRateKey,clearSessionCookie,createPasswordRecord,createSession,normalizeEmail,revokeSession,validatePassword,verifyPassword} from './password-auth.js';
+import {recordAccountEvent} from './account-events.js';
 
 function json(data,status=200,headers={}){return new Response(JSON.stringify(data),{status,headers:secureHeaders({'content-type':'application/json; charset=utf-8','cache-control':'no-store',...headers})})}
 function fail(code,message,status=400,headers={}){return json({error:{code,message}},status,headers)}
@@ -28,6 +29,7 @@ export async function handleAuthApi(request,env,url,user){
         env.DB.prepare(`INSERT INTO audit_logs(entity,entity_id,action,by_user_id,details_json) VALUES('user',?,'register_password',?,?)`).bind(id,id,JSON.stringify({provider:'password'}))
       ]);
     }catch{return fail('EMAIL_EXISTS','البريد مستخدم بالفعل؛ سجّل الدخول أو استخدم بريدًا آخر',409)}
+    await recordAccountEvent(env,request,{userId:id,accountCode:id,email,eventType:'register',details:{provider:'password'}});
     return json({pending:true,message:'تم إنشاء الحساب وهو بانتظار موافقة المشرف'},202);
   }
 
@@ -36,13 +38,14 @@ export async function handleAuthApi(request,env,url,user){
     if(!emailLimit.allowed||!ipLimit.allowed)return fail('RATE_LIMITED','محاولات دخول كثيرة؛ حاول لاحقًا',429,{'retry-after':String(Math.max(emailLimit.retryAfter,ipLimit.retryAfter))});
     const account=validEmail(email)?await env.DB.prepare(`SELECT id,email,name,account_role,password_hash,password_salt,password_iterations,account_status FROM users WHERE email=? AND auth_provider IN ('password','hybrid')`).bind(email).first():null;
     let valid=false;if(account?.password_hash)valid=await verifyPassword(String(data?.password||''),account);else await createPasswordRecord(String(data?.password||'invalid-password-0'));
-    if(!valid)return fail('INVALID_CREDENTIALS','البريد أو كلمة المرور غير صحيحة',401);if(account.account_status==='pending')return fail('ACCOUNT_PENDING','الحساب بانتظار موافقة المشرف',403);if(account.account_status==='suspended')return fail('ACCOUNT_SUSPENDED','الحساب موقوف؛ تواصل مع المشرف',403);
+    if(!valid){await recordAccountEvent(env,request,{userId:account?.id||null,accountCode:account?.id||null,email,eventType:'login_failure',outcome:'failure',details:{reason:'invalid_credentials'}});return fail('INVALID_CREDENTIALS','البريد أو كلمة المرور غير صحيحة',401)}if(account.account_status==='pending'){await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email,eventType:'login_failure',outcome:'failure',details:{reason:'pending'}});return fail('ACCOUNT_PENDING','الحساب بانتظار موافقة المشرف',403)}if(account.account_status==='suspended'){await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email,eventType:'login_failure',outcome:'failure',details:{reason:'suspended'}});return fail('ACCOUNT_SUSPENDED','الحساب موقوف؛ تواصل مع المشرف',403)}
     const session=await createSession(env,account.id,request);await env.DB.prepare(`UPDATE users SET last_login_at=CURRENT_TIMESTAMP,updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(account.id).run();
+    await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email,eventType:'login_success'});
     return json({user:{id:account.id,email:account.email,name:account.name,role:account.account_role}},200,{'set-cookie':session.cookie});
   }
 
   if(url.pathname==='/api/auth/logout'&&request.method==='POST'){
-    await revokeSession(env,request);return json({signedOut:true},200,{'set-cookie':clearSessionCookie()});
+    if(user)await recordAccountEvent(env,request,{userId:user.id,accountCode:user.id,email:user.email,eventType:'logout'});await revokeSession(env,request);return json({signedOut:true},200,{'set-cookie':clearSessionCookie()});
   }
 
   if(url.pathname==='/api/auth/session'&&request.method==='GET')return user?json({user}):fail('UNAUTHENTICATED','سجّل الدخول للمتابعة',401);
