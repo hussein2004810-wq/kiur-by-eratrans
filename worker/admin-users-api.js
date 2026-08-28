@@ -2,7 +2,7 @@ import {PERMISSIONS,hasPermission,loadGrants,mayDelegate,resolveScope} from './a
 import {hashToken,newOneTimeToken,normalizeEmail,revokeUserSessions} from './password-auth.js';
 import {readJsonBody,secureHeaders} from './security.js';
 import {recordAccountEvent} from './account-events.js';
-import {absoluteActionUrl,deliverSecurityEmail,emailDeliveryConfigured} from './email-delivery.js';
+import {firebaseAuthConfigured,firebaseDeleteAccount,firebaseSendPasswordReset,firebaseSignUp,firebaseTemporaryPassword,isFirebaseError} from './firebase-auth.js';
 
 function json(data,status=200){return new Response(JSON.stringify(data),{status,headers:secureHeaders({'content-type':'application/json; charset=utf-8','cache-control':'no-store'})})}
 function fail(code,message,status=400,details){return json({error:{code,message,...(details?{details}: {})}},status)}
@@ -70,7 +70,7 @@ export async function handleAdminUsersApi(request,env,url,actor){
     const staffTitle=role==='teacher'?String(value.staffTitle||''):null;if(role==='teacher'&&!validStaffTitle(staffTitle))return fail('VALIDATION','اختر صفة كادر صالحة');
     const name=String(value.name||'').trim();const email=normalizeEmail(value.email);if(name.length<2||name.length>120||!validEmail(email))return fail('VALIDATION','الاسم أو البريد الإلكتروني غير صالح');
     const grantResult=await validateGrants(env,actor,role,value.grants);if(grantResult.error)return fail(grantResult.status===403?'FORBIDDEN':'VALIDATION',grantResult.error,grantResult.status||400);
-    const existing=await env.DB.prepare(`SELECT u.id,u.name,u.email,u.account_role AS role,u.staff_title AS staffTitle,u.account_status AS status,u.auth_provider AS authProvider,e.verified_at AS emailVerifiedAt,EXISTS(SELECT 1 FROM user_identities i WHERE i.user_id=u.id AND i.provider='chatgpt') AS hasChatgpt FROM users u LEFT JOIN email_verifications e ON e.user_id=u.id WHERE u.email=?`).bind(email).first();
+    const existing=await env.DB.prepare(`SELECT u.id,u.name,u.email,u.account_role AS role,u.staff_title AS staffTitle,u.account_status AS status,u.auth_provider AS authProvider,COALESCE(u.email_verified_at,e.verified_at) AS emailVerifiedAt,EXISTS(SELECT 1 FROM user_identities i WHERE i.user_id=u.id AND i.provider='chatgpt') AS hasChatgpt FROM users u LEFT JOIN email_verifications e ON e.user_id=u.id WHERE u.email=?`).bind(email).first();
     if(existing){
       if(actor.role!=='owner')return fail('ACCOUNT_EXISTS','يوجد حساب بهذا البريد، ويجب على مالك المنصة تأكيد ربطه أو ترقيته.',409);
       if(!value.linkExisting||String(value.existingUserId||'')!==String(existing.id))return fail('ACCOUNT_EXISTS','يوجد حساب بهذا البريد. يمكن لمالك المنصة ربطه وترقيته بدل إنشاء نسخة مكررة.',409,{account:{id:existing.id,name:existing.name,email:existing.email,role:existing.role,status:existing.status,authProvider:existing.authProvider},canLink:actor.role==='owner'});
@@ -88,26 +88,27 @@ export async function handleAdminUsersApi(request,env,url,actor){
       try{await recordAccountEvent(env,request,{userId:existing.id,accountCode:existing.id,email,eventType:'grant_changed',details:{changedBy:actor.id,linkedExisting:true,role,staffTitle}})}catch(cause){console.error('Account event write failed',{operation:'link_existing',name:cause instanceof Error?cause.name:'UnknownError'})}
       return json({id:existing.id,linked:true});
     }
-    if(!emailDeliveryConfigured(env))return fail('EMAIL_INVITE_UNAVAILABLE','لا يمكن إنشاء حساب كادر قبل تهيئة خدمة إرسال دعوات التفعيل',503);
+    if(!firebaseAuthConfigured(env))return fail('FIREBASE_AUTH_UNAVAILABLE','لا يمكن إنشاء حساب كادر قبل تهيئة Firebase Authentication',503);
+    let firebaseAccount=null;try{firebaseAccount=await firebaseSignUp(env,email,firebaseTemporaryPassword())}catch(error){if(!isFirebaseError(error,'EMAIL_EXISTS'))return fail('FIREBASE_ACCOUNT_CREATE_FAILED','تعذر إنشاء حساب Google للكادر؛ حاول لاحقًا',503)}
     const id=crypto.randomUUID(),token=newOneTimeToken(),tokenHash=await hashToken(token),expiresAt=new Date(Date.now()+24*60*60*1000).toISOString();const statements=[
-      env.DB.prepare(`INSERT INTO users(id,email,name,role,account_role,staff_title,account_status,auth_provider) VALUES(?,?,?,?,?,?,'active','password')`).bind(id,email,name,legacyRole(role),role,staffTitle),
-      env.DB.prepare(`INSERT INTO user_identities(provider,provider_user_id,user_id,email) VALUES('password',?,?,?)`).bind(email,id,email)
+      env.DB.prepare(`INSERT INTO users(id,email,name,role,account_role,staff_title,account_status,auth_provider,firebase_uid) VALUES(?,?,?,?,?,?,'active','password',?)`).bind(id,email,name,legacyRole(role),role,staffTitle,firebaseAccount?.uid||null)
     ];
+    if(firebaseAccount)statements.push(env.DB.prepare(`INSERT INTO user_identities(provider,provider_user_id,user_id,email) VALUES('password',?,?,?)`).bind(firebaseAccount.uid,id,email));
     for(const grant of grantResult.grants)statements.push(env.DB.prepare(`INSERT INTO user_grants(id,user_id,grant_role,scope_type,scope_id,permissions_json,granted_by) VALUES(?,?,?,?,?,?,?)`).bind(grant.id,id,role,grant.scopeType,grant.scopeId,JSON.stringify(grant.permissions),actor.id));
     statements.push(env.DB.prepare(`INSERT INTO staff_invites(user_id,token_hash,expires_at,created_by) VALUES(?,?,?,?)`).bind(id,tokenHash,expiresAt,actor.id));
     statements.push(env.DB.prepare(`INSERT INTO audit_logs(entity,entity_id,action,by_user_id,details_json) VALUES('user',?,'create_account_invited',?,?)`).bind(id,actor.id,JSON.stringify({role,staffTitle,grants:grantResult.grants.map(({scopeType,scopeId,permissions})=>({scopeType,scopeId,permissions}))})));
-    try{await env.DB.batch(statements)}catch(cause){console.error('Account create batch failed',{name:cause instanceof Error?cause.name:'UnknownError'});const raced=await env.DB.prepare(`SELECT id,name,email,account_role AS role,account_status AS status,auth_provider AS authProvider FROM users WHERE email=?`).bind(email).first();if(raced)return fail('ACCOUNT_EXISTS','يوجد حساب بهذا البريد. أعد المحاولة لاختيار ربطه وترقيته.',409,{account:raced,canLink:actor.role==='owner'});return fail('CREATE_ACCOUNT_FAILED','تعذر إنشاء الحساب. لم يتم حفظ حساب جزئي.',500)}
-    try{await deliverSecurityEmail(env,{kind:'staff_invite',to:email,name,actionUrl:absoluteActionUrl(request,'/activate-staff',token),expiresInHours:24})}catch{
-      await env.DB.batch([env.DB.prepare(`DELETE FROM staff_invites WHERE user_id=?`).bind(id),env.DB.prepare(`DELETE FROM user_grants WHERE user_id=?`).bind(id),env.DB.prepare(`DELETE FROM user_identities WHERE user_id=?`).bind(id),env.DB.prepare(`DELETE FROM users WHERE id=?`).bind(id)]);
-      return fail('EMAIL_DELIVERY_FAILED','تعذر إرسال دعوة التفعيل؛ لم يتم حفظ الحساب',503);
+    try{await env.DB.batch(statements)}catch(cause){if(firebaseAccount)await firebaseDeleteAccount(env,firebaseAccount.idToken);console.error('Account create batch failed',{name:cause instanceof Error?cause.name:'UnknownError'});const raced=await env.DB.prepare(`SELECT id,name,email,account_role AS role,account_status AS status,auth_provider AS authProvider FROM users WHERE email=?`).bind(email).first();if(raced)return fail('ACCOUNT_EXISTS','يوجد حساب بهذا البريد. أعد المحاولة لاختيار ربطه وترقيته.',409,{account:raced,canLink:actor.role==='owner'});return fail('CREATE_ACCOUNT_FAILED','تعذر إنشاء الحساب. لم يتم حفظ حساب جزئي.',500)}
+    try{await firebaseSendPasswordReset(env,email)}catch{
+      await env.DB.batch([env.DB.prepare(`DELETE FROM staff_invites WHERE user_id=?`).bind(id),env.DB.prepare(`DELETE FROM user_grants WHERE user_id=?`).bind(id),env.DB.prepare(`DELETE FROM user_identities WHERE user_id=?`).bind(id),env.DB.prepare(`DELETE FROM users WHERE id=?`).bind(id)]);if(firebaseAccount)await firebaseDeleteAccount(env,firebaseAccount.idToken);
+      return fail('EMAIL_DELIVERY_FAILED','تعذر إرسال رسالة تعيين كلمة المرور من Google؛ لم يتم حفظ الحساب',503);
     }
-    try{await recordAccountEvent(env,request,{userId:id,accountCode:id,email,eventType:'account_created',details:{createdBy:actor.id,role,staffTitle,activation:'invite'}})}catch(cause){console.error('Account event write failed',{operation:'create',name:cause instanceof Error?cause.name:'UnknownError'})}
-    return json({id,invited:true},201);
+    try{await recordAccountEvent(env,request,{userId:id,accountCode:id,email,eventType:'account_created',details:{createdBy:actor.id,role,staffTitle,activation:'firebase_password_reset'}})}catch(cause){console.error('Account event write failed',{operation:'create',name:cause instanceof Error?cause.name:'UnknownError'})}
+    return json({id,invited:true,activation:'firebase_password_reset'},201);
   }
 
   const match=url.pathname.match(/^\/api\/admin\/users\/([^/]+)$/);
   if(match&&request.method==='PATCH'){
-    const target=await env.DB.prepare(`SELECT u.id,u.account_role AS role,u.account_status AS status,u.auth_provider AS authProvider,u.university_id AS universityId,u.college_id AS collegeId,u.department_id AS departmentId,u.phase_id AS phaseId,u.section_id AS sectionId,e.verified_at AS emailVerifiedAt FROM users u LEFT JOIN email_verifications e ON e.user_id=u.id WHERE u.id=?`).bind(match[1]).first();if(!target)return fail('NOT_FOUND','الحساب غير موجود',404);
+    const target=await env.DB.prepare(`SELECT u.id,u.account_role AS role,u.account_status AS status,u.auth_provider AS authProvider,u.university_id AS universityId,u.college_id AS collegeId,u.department_id AS departmentId,u.phase_id AS phaseId,u.section_id AS sectionId,COALESCE(u.email_verified_at,e.verified_at) AS emailVerifiedAt FROM users u LEFT JOIN email_verifications e ON e.user_id=u.id WHERE u.id=?`).bind(match[1]).first();if(!target)return fail('NOT_FOUND','الحساب غير موجود',404);
     if(target.role==='owner')return fail('FORBIDDEN','لا يمكن تعديل حساب مالك المنصة',403);
     const permission=target.role==='student'?'manage_students':'manage_teachers';if(!(await canManageTarget(env,actor,target,permission)))return fail('FORBIDDEN','هذا الحساب خارج نطاق صلاحيتك',403);
     const parsed=await body(request);if(parsed.response)return parsed.response;const status=String(parsed.value?.status||'');if(!validStatus(status))return fail('VALIDATION','حالة الحساب غير صالحة');

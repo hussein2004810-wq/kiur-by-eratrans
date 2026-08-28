@@ -1,5 +1,5 @@
 export const tables = {
-  users: ['id','email','name','role','account_role','staff_title','account_status','auth_provider','created_at','updated_at','department_id','phase_id','university_id','college_id','section_id','password_hash','password_salt','password_iterations','last_login_at','ban_status','ban_until','active_ban_request_id','active_ban_id'],
+  users: ['id','email','name','role','account_role','staff_title','account_status','auth_provider','created_at','updated_at','department_id','phase_id','university_id','college_id','section_id','password_hash','password_salt','password_iterations','firebase_uid','email_verified_at','last_login_at','ban_status','ban_until','active_ban_request_id','active_ban_id'],
   universities: ['id','name','sort_order','created_at'],
   colleges: ['id','university_id','name','sort_order','created_at'],
   departments: ['id','name','display_name','college_id','sort_order'],
