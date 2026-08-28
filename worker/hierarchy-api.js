@@ -1,6 +1,6 @@
 import {readJsonBody,secureHeaders} from './security.js';
-import {hasPermission,loadGrants,permittedWith} from './access-control.js';
-import {recordAccountEvent} from './account-events.js';
+import {hasPermission,loadGrants,permittedWith,resolveScope} from './access-control.js';
+import {studentProfileComplete} from './test-access.js';
 
 function json(data,status=200){
   return new Response(JSON.stringify(data),{status,headers:secureHeaders({'content-type':'application/json; charset=utf-8','cache-control':'no-store'})});
@@ -13,7 +13,8 @@ function denyTestStaff(user){return ['owner','admin','teacher'].includes(user?.r
 function pathContext(path){return {universityId:path.universityId,collegeId:path.collegeId,departmentId:path.departmentId,phaseId:path.phaseId,sectionId:path.sectionId,subjectId:path.subjectId,lectureId:path.lectureId}}
 async function canManageTests(env,user,path){return hasPermission(env,user,'manage_tests',pathContext(path))}
 async function visibleTests(env,user,rows){if(user.role==='owner')return rows;const grants=await loadGrants(env,user.id);return rows.filter(row=>permittedWith(grants,'manage_tests',pathContext(row)))}
-async function clinicalMediaIssue(env,user,questions,path){const ids=[...new Set(questions.filter(question=>question.questionType==='clinical_case').map(question=>question.imageId))];if(!ids.length)return null;if(!(await hasPermission(env,user,'use_media',pathContext(path)))&&!(await hasPermission(env,user,'manage_library',pathContext(path))))return 'لا تملك صلاحية استخدام مكتبة الصور';for(const id of ids){const asset=await env.DB.prepare(`SELECT id FROM media_assets WHERE id=? AND deleted_at IS NULL`).bind(id).first();if(!asset)return 'إحدى صور الحالات السريرية غير موجودة أو محذوفة'}return null}
+async function clinicalMediaIssue(env,user,questions,path){const ids=[...new Set(questions.filter(question=>question.questionType==='clinical_case').map(question=>question.imageId))];if(!ids.length)return null;if(!(await hasPermission(env,user,'use_media',pathContext(path)))&&!(await hasPermission(env,user,'manage_library',pathContext(path))))return 'لا تملك صلاحية استخدام مكتبة الصور';for(const id of ids){const asset=await env.DB.prepare(`SELECT id,scope_type AS scopeType,scope_id AS scopeId FROM media_assets WHERE id=? AND deleted_at IS NULL`).bind(id).first();if(!asset)return 'إحدى صور الحالات السريرية غير موجودة أو محذوفة';const context=await resolveScope(env,asset.scopeType,asset.scopeId);if(!context||(!(await hasPermission(env,user,'use_media',context))&&!(await hasPermission(env,user,'manage_library',context))))return 'إحدى صور الحالات السريرية خارج نطاق صلاحيتك'}return null}
+async function testHasAttempts(env,testId){const row=await env.DB.prepare(`SELECT 1 AS value FROM attempts WHERE test_id=? LIMIT 1`).bind(testId).first();return Boolean(row)}
 
 async function catalog(env){
   const [universities,colleges,departments,phases,sections,subjects,lectures]=await Promise.all([
@@ -69,11 +70,14 @@ export async function handleHierarchyApi(request,env,url,user,restriction=null){
   if(url.pathname==='/api/me'&&request.method==='GET'){
     const denied=denyUser(user);if(denied)return denied;
     const profile=await env.DB.prepare(`SELECT u.university_id AS universityId,u.college_id AS collegeId,u.department_id AS departmentId,u.phase_id AS phaseId,u.section_id AS sectionId,v.name AS universityName,c.name AS collegeName,COALESCE(d.display_name,d.name) AS departmentName,p.name AS phaseName,x.name AS sectionName FROM users u LEFT JOIN universities v ON v.id=u.university_id LEFT JOIN colleges c ON c.id=u.college_id LEFT JOIN departments d ON d.id=u.department_id LEFT JOIN phases p ON p.id=u.phase_id LEFT JOIN sections x ON x.id=u.section_id WHERE u.id=?`).bind(user.id).first();
-    const permissions=user.role==='owner'?['*']:[...new Set((await loadGrants(env,user.id)).flatMap(grant=>grant.permissions))];if(user.authProvider==='chatgpt')await recordAccountEvent(env,request,{userId:user.id,accountCode:user.id,email:user.email,eventType:'login_success',details:{provider:'chatgpt'}});return json({user:{...user,...profile,permissions,restriction}});
+    const permissions=user.role==='owner'?['*']:[...new Set((await loadGrants(env,user.id)).flatMap(grant=>grant.permissions))];return json({user:{...user,...profile,permissions,restriction}});
   }
 
   if(url.pathname==='/api/me/profile'&&request.method==='PATCH'){
     const denied=denyUser(user);if(denied)return denied;
+    if(user.role!=='student')return fail('FORBIDDEN','المسار الأكاديمي الذاتي متاح للطلاب فقط',403);
+    const current=await env.DB.prepare(`SELECT university_id AS universityId,college_id AS collegeId,department_id AS departmentId,phase_id AS phaseId FROM users WHERE id=?`).bind(user.id).first();
+    if(studentProfileComplete(current))return fail('PROFILE_LOCKED','لا يمكن تغيير المسار الأكاديمي بعد حفظه؛ اطلب من المشرف تصحيحه',409);
     const parsed=await readBody(request);if(parsed.error)return fail(parsed.error.code,parsed.error.message,parsed.error.status);const value=parsed.value;
     const sectionId=value?.sectionId||null;const phase=await env.DB.prepare(`SELECT v.id AS universityId,c.id AS collegeId,d.id AS departmentId,p.id AS phaseId,x.id AS sectionId FROM phases p JOIN departments d ON d.id=p.department_id JOIN colleges c ON c.id=d.college_id JOIN universities v ON v.id=c.university_id LEFT JOIN sections x ON x.id=? AND x.phase_id=p.id WHERE p.id=? AND d.id=? AND c.id=? AND v.id=? AND (? IS NULL OR x.id IS NOT NULL)`).bind(sectionId,value?.phaseId||'',value?.departmentId||'',value?.collegeId||'',value?.universityId||'',sectionId).first();
     if(!phase)return fail('VALIDATION','اختر جامعة وكلية وقسمًا ومرحلة وشعبة صحيحة');
@@ -87,6 +91,10 @@ export async function handleHierarchyApi(request,env,url,user,restriction=null){
   if(url.pathname==='/api/tests'&&request.method==='GET'){
     const denied=denyUser(user);if(denied)return denied;
     const filters=[];const binds=[];
+    if(user.role==='student'){
+      if(!studentProfileComplete(user))return json({data:[]});
+      filters.push(`u.id=?`,`c.id=?`,`t.department_id=?`,`t.phase_id=?`,`(t.section_id IS NULL OR t.section_id=?)`);binds.push(user.universityId,user.collegeId,user.departmentId,user.phaseId,user.sectionId||'');
+    }
     for(const [param,column] of [['departmentId','t.department_id'],['phaseId','t.phase_id'],['sectionId','t.section_id'],['subjectId','t.subject_id'],['lectureId','t.lecture_id']]){
       const value=url.searchParams.get(param);if(value){filters.push(`${column}=?`);binds.push(value)}
     }
@@ -95,7 +103,7 @@ export async function handleHierarchyApi(request,env,url,user,restriction=null){
     const where=[`t.status='published'`,...filters].join(' AND ');
     const statement=env.DB.prepare(`${testSelect} WHERE ${where} GROUP BY t.id ORDER BY t.created_at DESC`);
     const result=await (binds.length?statement.bind(...binds):statement).all();
-    return json({data:result.results});
+    return json({data:user.role==='student'?result.results:await visibleTests(env,user,result.results)});
   }
 
   if(url.pathname==='/api/admin/tests'&&request.method==='GET'){
@@ -134,6 +142,7 @@ export async function handleHierarchyApi(request,env,url,user,restriction=null){
     const exists=await env.DB.prepare(`SELECT t.id,t.department_id AS departmentId,t.phase_id AS phaseId,t.section_id AS sectionId,t.subject_id AS subjectId,t.lecture_id AS lectureId,c.university_id AS universityId,d.college_id AS collegeId FROM tests t LEFT JOIN departments d ON d.id=t.department_id LEFT JOIN colleges c ON c.id=d.college_id WHERE t.id=? AND t.status!='archived'`).bind(adminTest[1]).first();
     if(!exists)return fail('NOT_FOUND','الاختبار غير موجود',404);
     if(!(await canManageTests(env,user,exists))||!(await canManageTests(env,user,path)))return fail('FORBIDDEN','لا تملك صلاحية تعديل الاختبار أو نقله إلى هذا النطاق',403);
+    if(await testHasAttempts(env,adminTest[1]))return fail('TEST_LOCKED','لا يمكن تعديل أسئلة اختبار بدأت عليه محاولات؛ أنشئ نسخة جديدة للحفاظ على سجل النتائج',409);
     const mediaIssue=await clinicalMediaIssue(env,user,value.questions,path);if(mediaIssue)return fail('FORBIDDEN',mediaIssue,403);
     const previousMedia=await env.DB.prepare(`SELECT id,image_id AS imageId FROM questions WHERE test_id=? AND image_id IS NOT NULL`).bind(adminTest[1]).all();const statements=[
       env.DB.prepare(`UPDATE tests SET title=?,subject=?,lecture=?,duration_minutes=?,pass_percentage=?,shuffle_questions=?,shuffle_options=?,exam_mode=?,available_from=?,available_until=?,max_attempts=?,certificate_enabled=?,status=?,department_id=?,phase_id=?,section_id=?,subject_id=?,lecture_id=?,updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(value.title.trim(),path.subjectName,path.lectureName,Number(value.durationMinutes),Number(value.passPercentage??60),value.shuffleQuestions?1:0,value.shuffleOptions?1:0,value.examMode||'practice',value.examMode==='formal'?value.availableFrom:null,value.examMode==='formal'?value.availableUntil:null,Number(value.maxAttempts||0),value.certificateEnabled===false?0:1,value.status||'published',path.departmentId,path.phaseId,path.sectionId,path.subjectId,path.lectureId,adminTest[1]),

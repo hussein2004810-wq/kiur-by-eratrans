@@ -16,7 +16,7 @@ class D1{
 }
 
 const sqlite=new DatabaseSync(':memory:');sqlite.exec('PRAGMA foreign_keys=ON');
-for(const file of ['drizzle/0000_medexam.sql','drizzle/0001_academic_hierarchy.sql','drizzle/0002_backfill_existing_tests.sql','drizzle/0003_scale_indexes.sql','drizzle/0004_attempt_shuffle.sql','drizzle/0005_security_hardening.sql','drizzle/0006_accounts_organizations_permissions.sql','drizzle/0007_exam_modes_question_types_files.sql','drizzle/0008_staff_titles_and_college_copy.sql','drizzle/0009_clinical_glimpses_library_logs.sql','drizzle/0010_student_bans.sql'])sqlite.exec(await readFile(file,'utf8'));
+for(const file of ['drizzle/0000_medexam.sql','drizzle/0001_academic_hierarchy.sql','drizzle/0002_backfill_existing_tests.sql','drizzle/0003_scale_indexes.sql','drizzle/0004_attempt_shuffle.sql','drizzle/0005_security_hardening.sql','drizzle/0006_accounts_organizations_permissions.sql','drizzle/0007_exam_modes_question_types_files.sql','drizzle/0008_staff_titles_and_college_copy.sql','drizzle/0009_clinical_glimpses_library_logs.sql','drizzle/0010_student_bans.sql','drizzle/0011_security_hardening.sql'])sqlite.exec(await readFile(file,'utf8'));
 const env={DB:new D1(sqlite),OWNER_USER_IDS:'admin-security'};
 
 function headers(user){return user?{'content-type':'application/json','origin':'https://example.test','sec-fetch-site':'same-origin','oai-authenticated-user-id':user.id,'oai-authenticated-user-email':user.email}:{'content-type':'application/json'}}
@@ -26,6 +26,8 @@ const anonymous=await call('/api/me');if(anonymous.status!==401)throw new Error(
 const admin={id:'admin-security',email:'admin@example.com'};const adminMetrics=await call('/api/admin/metrics',{user:admin});if(adminMetrics.status!==200)throw new Error('Stable admin ID was not accepted');
 
 const owner={id:'student-owner',email:'owner@example.com'};const other={id:'student-other',email:'other@example.com'};
+for(const profileUser of [owner,other]){await call('/api/me',{user:profileUser});const profiled=await call('/api/me/profile',{method:'PATCH',user:profileUser,body:{universityId:'uni-eratrans',collegeId:'college-eratrans-medical',departmentId:'dep-anesthesia',phaseId:'pha-a4'}});if(profiled.status!==200)throw new Error('Student profile setup failed')}
+const lockedProfile=await call('/api/me/profile',{method:'PATCH',user:owner,body:{universityId:'uni-eratrans',collegeId:'college-eratrans-medical',departmentId:'dep-anesthesia',phaseId:'pha-a4'}});if(lockedProfile.status!==409)throw new Error('Student could change an already saved academic profile');
 const started=await call('/api/attempts',{method:'POST',user:owner,body:{testId:'demo-preop'}});if(started.status!==201)throw new Error('Attempt creation failed');const startedData=await started.json();
 const idor=await call(`/api/tests/demo-preop?attemptId=${startedData.attempt.id}`,{user:other});if(idor.status!==404)throw new Error('Cross-user attempt access was not blocked');
 

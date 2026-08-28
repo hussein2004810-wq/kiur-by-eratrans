@@ -16,15 +16,28 @@ export function secureHeaders(initial={}){
   return headers;
 }
 
+export async function readLimitedBytes(request,maxBytes){
+  const declaredLength=Number(request.headers.get('content-length')||0);
+  if(Number.isFinite(declaredLength)&&declaredLength>maxBytes)return {error:{code:'PAYLOAD_TOO_LARGE',message:'حجم الطلب يتجاوز الحد المسموح',status:413}};
+  if(!request.body){return {value:new Uint8Array()}}
+  const reader=request.body.getReader();const chunks=[];let total=0;
+  try{
+    while(true){
+      const {done,value}=await reader.read();if(done)break;
+      total+=value.byteLength;if(total>maxBytes){await reader.cancel();return {error:{code:'PAYLOAD_TOO_LARGE',message:'حجم الطلب يتجاوز الحد المسموح',status:413}}}
+      chunks.push(value);
+    }
+  }catch{return {error:{code:'INVALID_BODY',message:'تعذر قراءة محتوى الطلب',status:400}}}
+  const bytes=new Uint8Array(total);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.byteLength}
+  return {value:bytes};
+}
+
 export async function readJsonBody(request,maxBytes=MAX_JSON_BODY_BYTES){
   const contentType=(request.headers.get('content-type')||'').split(';',1)[0].trim().toLowerCase();
   if(contentType!=='application/json')return {error:{code:'UNSUPPORTED_MEDIA_TYPE',message:'يجب إرسال البيانات بصيغة JSON',status:415}};
-  const declaredLength=Number(request.headers.get('content-length')||0);
-  if(Number.isFinite(declaredLength)&&declaredLength>maxBytes)return {error:{code:'PAYLOAD_TOO_LARGE',message:'حجم الطلب يتجاوز الحد المسموح',status:413}};
   try{
-    const buffer=await request.arrayBuffer();
-    if(buffer.byteLength>maxBytes)return {error:{code:'PAYLOAD_TOO_LARGE',message:'حجم الطلب يتجاوز الحد المسموح',status:413}};
-    return {value:JSON.parse(new TextDecoder().decode(buffer))};
+    const parsed=await readLimitedBytes(request,maxBytes);if(parsed.error)return parsed;
+    return {value:JSON.parse(new TextDecoder().decode(parsed.value))};
   }catch{
     return {error:{code:'INVALID_JSON',message:'بيانات JSON غير صالحة',status:400}};
   }

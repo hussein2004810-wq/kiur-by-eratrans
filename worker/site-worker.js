@@ -15,6 +15,7 @@ import {handleClinicalGlimpsesApi} from './clinical-glimpses-api.js';
 import {handleLogsApi} from './logs-api.js';
 import {recordAccountEvent} from './account-events.js';
 import {handleStudentBanApi,refreshStudentRestriction,restrictedStudentPathAllowed} from './student-ban-api.js';
+import {computeAttemptDeadline,deadlineSql,studentCanAccessTest} from './test-access.js';
 
 const files = new Map(/*__STATIC_FILES__*/);
 let schemaReady = false;
@@ -121,9 +122,11 @@ function limitRule(request,url){
   if(/^\/api\/attempts\/[^/]+\/answers$/.test(path)&&request.method==='PATCH')return ['attempt:answer',120];
   if(/^\/api\/attempts\/[^/]+\/submit$/.test(path)&&request.method==='POST')return ['attempt:submit',10];
   if(path==='/api/tests'&&request.method==='GET')return ['tests:list',90];
+  if(path==='/api/me'&&request.method==='GET')return ['me:read',60];
   if(path==='/api/me/profile'&&request.method==='PATCH')return ['profile:update',10];
   if(path.startsWith('/api/admin/')&&!['GET','HEAD'].includes(request.method))return ['admin:write',30];
   if(path==='/api/admin/students'&&request.method==='GET')return ['admin:students',60];
+  if(/^\/api\/admin\/(results(?:\/|$)|logs\/|student-bans(?:\/|$)|media(?:\/|$)|glimpses(?:\/|$))/.test(path)&&request.method==='GET')return ['admin:read',60];
   return null;
 }
 
@@ -184,7 +187,6 @@ async function handleApi(request,env,url){
   if(url.pathname==='/api/me'&&request.method==='GET'){
     if(!user)return error('UNAUTHENTICATED','سجّل الدخول للمتابعة',401);
     const permissions=user.role==='owner'?['*']:[...new Set((await loadGrants(env,user.id)).flatMap(grant=>grant.permissions))];
-    if(user.authProvider==='chatgpt')await recordAccountEvent(env,request,{userId:user.id,accountCode:user.id,email:user.email,eventType:'login_success',details:{provider:'chatgpt'}});
     return response({user:{...user,permissions,restriction}});
   }
   if(url.pathname==='/api/tests'&&request.method==='GET'){
@@ -195,12 +197,13 @@ async function handleApi(request,env,url){
   const publicTest=url.pathname.match(/^\/api\/tests\/([^/]+)$/);
   if(publicTest&&request.method==='GET'){
     const denied=requireUser(user);if(denied)return denied;
-    const test=await env.DB.prepare(`SELECT id,title,subject,lecture,duration_minutes AS durationMinutes,pass_percentage AS passPercentage,exam_mode AS examMode,available_from AS availableFrom,available_until AS availableUntil,max_attempts AS maxAttempts FROM tests WHERE id=? AND status='published'`).bind(publicTest[1]).first();
+    const test=await env.DB.prepare(`SELECT t.id,t.title,t.subject,t.lecture,t.duration_minutes AS durationMinutes,t.pass_percentage AS passPercentage,t.exam_mode AS examMode,t.available_from AS availableFrom,t.available_until AS availableUntil,t.max_attempts AS maxAttempts,t.department_id AS departmentId,t.phase_id AS phaseId,t.section_id AS sectionId,d.college_id AS collegeId,c.university_id AS universityId FROM tests t LEFT JOIN departments d ON d.id=t.department_id LEFT JOIN colleges c ON c.id=d.college_id WHERE t.id=? AND t.status='published'`).bind(publicTest[1]).first();
     if(!test)return error('NOT_FOUND','الاختبار غير موجود',404);
+    if(!studentCanAccessTest(user,test))return error('FORBIDDEN','هذا الاختبار خارج مسارك الأكاديمي',403);
     const list=await env.DB.prepare(`SELECT id,text,options_json,position,question_type AS questionType,image_id AS imageId FROM questions WHERE test_id=? ORDER BY position`).bind(test.id).all();
     const questions=decodeQuestions(list.results);const attemptId=url.searchParams.get('attemptId');
-    if(!attemptId)return response({...test,questions});
-    const attempt=await env.DB.prepare(`SELECT a.id,a.test_id,a.question_order_json AS questionOrder,a.option_orders_json AS optionOrders,CASE WHEN unixepoch('now')>unixepoch(a.started_at)+(t.duration_minutes*60)+5 THEN 1 ELSE 0 END AS expired,MAX(0,unixepoch(a.started_at)+(t.duration_minutes*60)-unixepoch('now')) AS remainingSeconds FROM attempts a JOIN tests t ON t.id=a.test_id WHERE a.id=? AND a.user_id=? AND a.test_id=? AND a.status='in_progress'`).bind(attemptId,user.id,test.id).first();
+    if(!attemptId){if(test.examMode==='formal')return error('ATTEMPT_REQUIRED','يجب بدء محاولة رسمية صالحة قبل عرض الأسئلة',403);return response({...test,questions})}
+    const deadline=deadlineSql('a');const attempt=await env.DB.prepare(`SELECT a.id,a.test_id,a.question_order_json AS questionOrder,a.option_orders_json AS optionOrders,CASE WHEN unixepoch('now')>unixepoch(${deadline}) THEN 1 ELSE 0 END AS expired,MAX(0,unixepoch(${deadline})-unixepoch('now')) AS remainingSeconds FROM attempts a JOIN tests t ON t.id=a.test_id WHERE a.id=? AND a.user_id=? AND a.test_id=? AND a.status='in_progress'`).bind(attemptId,user.id,test.id).first();
     if(!attempt)return error('ATTEMPT_NOT_FOUND','المحاولة غير موجودة أو منتهية',404);
     if(isExpired(attempt)){await finalizeAttempt(env,attempt);return error('ATTEMPT_EXPIRED','انتهت مدة الاختبار وتم تسليم الإجابات المحفوظة',409)}
     const questionOrder=parseOrder(attempt.questionOrder,questions.map(question=>question.id));const optionOrders=parseOptionOrders(attempt.optionOrders);
@@ -212,10 +215,11 @@ async function handleApi(request,env,url){
   if(url.pathname==='/api/attempts'&&request.method==='POST'){
     const denied=requireUser(user);if(denied)return denied;
     const parsed=await body(request);if(parsed.error)return error(parsed.error.code,parsed.error.message,parsed.error.status);const value=parsed.value;if(typeof value?.testId!=='string'||!value.testId||value.testId.length>200)return error('VALIDATION','الاختبار مطلوب');
-    const test=await env.DB.prepare(`SELECT id,duration_minutes AS durationMinutes,shuffle_questions AS shuffleQuestions,shuffle_options AS shuffleOptions,exam_mode AS examMode,available_from AS availableFrom,available_until AS availableUntil,max_attempts AS maxAttempts FROM tests WHERE id=? AND status='published'`).bind(value.testId).first();
+    const test=await env.DB.prepare(`SELECT t.id,t.duration_minutes AS durationMinutes,t.shuffle_questions AS shuffleQuestions,t.shuffle_options AS shuffleOptions,t.exam_mode AS examMode,t.available_from AS availableFrom,t.available_until AS availableUntil,t.max_attempts AS maxAttempts,t.department_id AS departmentId,t.phase_id AS phaseId,t.section_id AS sectionId,d.college_id AS collegeId,c.university_id AS universityId FROM tests t LEFT JOIN departments d ON d.id=t.department_id LEFT JOIN colleges c ON c.id=d.college_id WHERE t.id=? AND t.status='published'`).bind(value.testId).first();
     if(!test)return error('NOT_FOUND','الاختبار غير متاح',404);
+    if(!studentCanAccessTest(user,test))return error('FORBIDDEN','هذا الاختبار خارج مسارك الأكاديمي',403);
     const questionRows=await env.DB.prepare(`SELECT id,options_json FROM questions WHERE test_id=? ORDER BY position`).bind(test.id).all();const questions=decodeQuestions(questionRows.results);
-    const existing=await env.DB.prepare(`SELECT a.id,a.test_id AS testId,a.test_id,a.started_at AS startedAt,a.question_order_json AS questionOrder,a.option_orders_json AS optionOrders,CASE WHEN unixepoch('now')>unixepoch(a.started_at)+(t.duration_minutes*60)+5 THEN 1 ELSE 0 END AS expired FROM attempts a JOIN tests t ON t.id=a.test_id WHERE a.user_id=? AND a.test_id=? AND a.status='in_progress' ORDER BY a.started_at DESC LIMIT 1`).bind(user.id,value.testId).first();
+    const existingDeadline=deadlineSql('a');const existing=await env.DB.prepare(`SELECT a.id,a.test_id AS testId,a.test_id,a.started_at AS startedAt,a.question_order_json AS questionOrder,a.option_orders_json AS optionOrders,CASE WHEN unixepoch('now')>unixepoch(${existingDeadline}) THEN 1 ELSE 0 END AS expired FROM attempts a JOIN tests t ON t.id=a.test_id WHERE a.user_id=? AND a.test_id=? AND a.status='in_progress' ORDER BY a.started_at DESC LIMIT 1`).bind(user.id,value.testId).first();
     if(existing&&!isExpired(existing)){if(!existing.questionOrder||!existing.optionOrders){const orders=await createOrders(env,user.id,test,questions,existing.id);await env.DB.prepare(`UPDATE attempts SET question_order_json=?,option_orders_json=? WHERE id=?`).bind(JSON.stringify(orders.questionOrder),JSON.stringify(orders.optionOrders),existing.id).run()}return response({attempt:existing,resumed:true})}
     if(existing&&isExpired(existing))await finalizeAttempt(env,existing);
     if(test.examMode==='formal'){
@@ -223,7 +227,7 @@ async function handleApi(request,env,url){
     }
     const id=crypto.randomUUID();
     const orders=await createOrders(env,user.id,test,questions);
-    const inserted=await env.DB.prepare(`INSERT INTO attempts(id,user_id,test_id,question_order_json,option_orders_json) SELECT ?,?,?,?,? WHERE NOT EXISTS(SELECT 1 FROM attempts WHERE user_id=? AND test_id=? AND status='in_progress')`).bind(id,user.id,value.testId,JSON.stringify(orders.questionOrder),JSON.stringify(orders.optionOrders),user.id,value.testId).run();
+    const deadlineAt=computeAttemptDeadline(test);const inserted=await env.DB.prepare(`INSERT INTO attempts(id,user_id,test_id,question_order_json,option_orders_json,deadline_at) SELECT ?,?,?,?,?,? WHERE NOT EXISTS(SELECT 1 FROM attempts WHERE user_id=? AND test_id=? AND status='in_progress')`).bind(id,user.id,value.testId,JSON.stringify(orders.questionOrder),JSON.stringify(orders.optionOrders),deadlineAt,user.id,value.testId).run();
     if(!Number(inserted.meta?.changes)){const resumed=await env.DB.prepare(`SELECT id,test_id AS testId,started_at AS startedAt FROM attempts WHERE user_id=? AND test_id=? AND status='in_progress' ORDER BY started_at DESC LIMIT 1`).bind(user.id,value.testId).first();return response({attempt:resumed,resumed:true})}
     return response({attempt:{id,testId:value.testId},resumed:false},201);
   }
@@ -232,7 +236,7 @@ async function handleApi(request,env,url){
     const denied=requireUser(user);if(denied)return denied;
     const parsed=await body(request);if(parsed.error)return error(parsed.error.code,parsed.error.message,parsed.error.status);const value=parsed.value;
     if(!value?.questionId)return error('VALIDATION','الإجابة غير صالحة');
-    const attempt=await env.DB.prepare(`SELECT a.id,a.test_id,a.option_orders_json AS optionOrders,CASE WHEN unixepoch('now')>unixepoch(a.started_at)+(t.duration_minutes*60)+5 THEN 1 ELSE 0 END AS expired FROM attempts a JOIN tests t ON t.id=a.test_id WHERE a.id=? AND a.user_id=? AND a.status='in_progress'`).bind(saveAnswer[1],user.id).first();
+    const answerDeadline=deadlineSql('a');const attempt=await env.DB.prepare(`SELECT a.id,a.test_id,a.option_orders_json AS optionOrders,CASE WHEN unixepoch('now')>unixepoch(${answerDeadline}) THEN 1 ELSE 0 END AS expired FROM attempts a JOIN tests t ON t.id=a.test_id WHERE a.id=? AND a.user_id=? AND a.status='in_progress'`).bind(saveAnswer[1],user.id).first();
     if(!attempt)return error('NOT_EDITABLE','المحاولة غير قابلة للتعديل',409);
     if(isExpired(attempt)){await finalizeAttempt(env,attempt);return error('ATTEMPT_EXPIRED','انتهت مدة الاختبار وتم تسليم الإجابات المحفوظة',409)}
     const question=await env.DB.prepare(`SELECT id,options_json,question_type AS questionType FROM questions WHERE id=? AND test_id=?`).bind(value.questionId,attempt.test_id).first();
@@ -247,7 +251,7 @@ async function handleApi(request,env,url){
   const submit=url.pathname.match(/^\/api\/attempts\/([^/]+)\/submit$/);
   if(submit&&request.method==='POST'){
     const denied=requireUser(user);if(denied)return denied;
-    const attempt=await env.DB.prepare(`SELECT a.id,a.test_id,CASE WHEN unixepoch('now')>unixepoch(a.started_at)+(t.duration_minutes*60)+5 THEN 1 ELSE 0 END AS expired FROM attempts a JOIN tests t ON t.id=a.test_id WHERE a.id=? AND a.user_id=? AND a.status='in_progress'`).bind(submit[1],user.id).first();
+    const submitDeadline=deadlineSql('a');const attempt=await env.DB.prepare(`SELECT a.id,a.test_id,CASE WHEN unixepoch('now')>unixepoch(${submitDeadline}) THEN 1 ELSE 0 END AS expired FROM attempts a JOIN tests t ON t.id=a.test_id WHERE a.id=? AND a.user_id=? AND a.status='in_progress'`).bind(submit[1],user.id).first();
     if(!attempt)return error('ALREADY_SUBMITTED','المحاولة منتهية أو غير موجودة',409);
     const result=await finalizeAttempt(env,attempt);
     return response({...result,expired:isExpired(attempt)});
@@ -261,7 +265,7 @@ async function handleApi(request,env,url){
 
   if(url.pathname==='/api/admin/metrics'&&request.method==='GET'){
     if(user?.role!=='owner')return error('FORBIDDEN','لوحة المؤشرات الشاملة متاحة لمالك المنصة فقط في هذه المرحلة',403);
-    const metrics=await env.DB.prepare(`SELECT (SELECT count(*) FROM tests WHERE status!='archived') AS tests,(SELECT count(*) FROM users WHERE role='student') AS students,(SELECT count(*) FROM attempts) AS attempts,(SELECT round(avg(percentage),2) FROM attempts WHERE status='submitted') AS averagePercentage`).first();
+    const metrics=await env.DB.prepare(`SELECT (SELECT count(*) FROM tests WHERE status!='archived') AS tests,(SELECT count(*) FROM users WHERE account_role='student') AS students,(SELECT count(*) FROM attempts) AS attempts,(SELECT round(avg(percentage),2) FROM attempts WHERE status='submitted') AS averagePercentage`).first();
     return response(metrics);
   }
   if(url.pathname==='/api/admin/audit'&&request.method==='GET'){
@@ -296,6 +300,7 @@ async function handleApi(request,env,url){
     const parsed=await body(request);if(parsed.error)return error(parsed.error.code,parsed.error.message,parsed.error.status);const value=parsed.value;const issue=validTest(value);if(issue)return error('VALIDATION',issue);
     const exists=await env.DB.prepare(`SELECT id FROM tests WHERE id=? AND status!='archived'`).bind(adminTest[1]).first();
     if(!exists)return error('NOT_FOUND','الاختبار غير موجود',404);
+    if(await env.DB.prepare(`SELECT 1 AS value FROM attempts WHERE test_id=? LIMIT 1`).bind(adminTest[1]).first())return error('TEST_LOCKED','لا يمكن تعديل اختبار بدأت عليه محاولات؛ أنشئ نسخة جديدة',409);
     const statements=[
       env.DB.prepare(`UPDATE tests SET title=?,subject=?,lecture=?,duration_minutes=?,pass_percentage=?,shuffle_questions=?,shuffle_options=?,status=?,updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(value.title.trim(),value.subject.trim(),value.lecture.trim(),Number(value.durationMinutes),Number(value.passPercentage??60),value.shuffleQuestions?1:0,value.shuffleOptions?1:0,value.status||'published',adminTest[1]),
       env.DB.prepare(`DELETE FROM questions WHERE test_id=?`).bind(adminTest[1])

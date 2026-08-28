@@ -10,7 +10,7 @@ type Item={id:string;name:string;universityId?:string;collegeId?:string;departme
 type Catalog={universities:Item[];colleges:Item[];departments:Item[];phases:Item[];sections:Item[];subjects:Item[];lectures:Item[]};
 type Grant={scopeType:string;scopeId:string;permissions:string[]};
 type Account={id:string;name:string;email:string;role:Role;staffTitle?:StaffTitle|null;status:Status;authProvider:string;universityName?:string;collegeName?:string;departmentName?:string;phaseName?:string;sectionName?:string;grants?:Grant[]};
-type FormState={name:string;email:string;password:string;role:'teacher'|'admin';staffTitle:StaffTitle;scopeType:string;scopeId:string;permissions:string[]};
+type FormState={name:string;email:string;role:'teacher'|'admin';staffTitle:StaffTitle;scopeType:string;scopeId:string;permissions:string[]};
 type ExistingCandidate={id:string;name:string;email:string;role:Role;status:Status;authProvider:string;canLink:boolean};
 class ApiError extends Error{code:string;details?:any;constructor(message:string,code='REQUEST_FAILED',details?:any){super(message);this.code=code;this.details=details}}
 
@@ -22,7 +22,7 @@ const scopeCollections:Record<string,keyof Catalog>={university:'universities',c
 async function request<T>(path:string,options:RequestInit={}):Promise<T>{const response=await fetch(path,{...options,credentials:'include',headers:{'content-type':'application/json',...(options.headers||{})}});const data=await response.json().catch(()=>({}));if(!response.ok)throw new ApiError(data?.error?.message||'تعذر إكمال العملية',data?.error?.code,data?.error?.details);return data}
 
 export default function AccountManager({catalog,currentRole,notify}:{catalog:Catalog;currentRole:Role;notify:(message:string)=>void}){
-  const initialForm=():FormState=>({name:'',email:'',password:'',role:'teacher',staffTitle:'university_doctor',scopeType:'university',scopeId:catalog.universities[0]?.id||'',permissions:['manage_tests','view_reports']});
+  const initialForm=():FormState=>({name:'',email:'',role:'teacher',staffTitle:'university_doctor',scopeType:'university',scopeId:catalog.universities[0]?.id||'',permissions:['manage_tests','view_reports']});
   const [accounts,setAccounts]=useState<Account[]>([]);
   const [query,setQuery]=useState('');
   const [roleFilter,setRoleFilter]=useState<'all'|'student'|'teacher'|'admin'>('all');
@@ -38,9 +38,9 @@ export default function AccountManager({catalog,currentRole,notify}:{catalog:Cat
   const chooseAccountType=(value:string)=>setForm(current=>value==='admin'?{...current,role:'admin'}:{...current,role:'teacher',staffTitle:value as StaffTitle});
   const reset=()=>{setEditing(null);setExisting(null);setForm(initialForm())};
   const saveAccount=async(linkExisting=false)=>{const grants=[{scopeType:form.scopeType,scopeId:form.scopeType==='platform'?'platform':form.scopeId,permissions:form.permissions}];const payload={...form,staffTitle:form.role==='teacher'?form.staffTitle:null,grants,...(linkExisting&&existing?{linkExisting:true,existingUserId:existing.id}: {})};if(editing)await request(`/api/admin/users/${editing.id}/grants`,{method:'PUT',body:JSON.stringify(payload)});else await request('/api/admin/users',{method:'POST',body:JSON.stringify(payload)})};
-  const submit=async(event:React.FormEvent)=>{event.preventDefault();setExisting(null);setBusy(true);try{await saveAccount();notify(editing?'تم تحديث صفة الكادر والصلاحيات':'تم إنشاء حساب الكادر وتفعيل صلاحياته');reset();await load()}catch(error){const issue=error as ApiError;if(issue.code==='ACCOUNT_EXISTS'&&issue.details?.account)setExisting({...issue.details.account,canLink:Boolean(issue.details.canLink)});notify(issue.message)}finally{setBusy(false)}};
+  const submit=async(event:React.FormEvent)=>{event.preventDefault();setExisting(null);setBusy(true);try{await saveAccount();notify(editing?'تم تحديث صفة الكادر والصلاحيات':'تم إنشاء الحساب وإرسال دعوة التفعيل الآمنة');reset();await load()}catch(error){const issue=error as ApiError;if(issue.code==='ACCOUNT_EXISTS'&&issue.details?.account)setExisting({...issue.details.account,canLink:Boolean(issue.details.canLink)});notify(issue.message)}finally{setBusy(false)}};
   const linkExisting=async()=>{if(!existing?.canLink)return;setBusy(true);try{await saveAccount(true);notify('تم ربط الحساب الموجود وترقيته دون إنشاء نسخة مكررة');reset();await load()}catch(error){notify((error as Error).message)}finally{setBusy(false)}};
-  const edit=(account:Account)=>{const grant=account.grants?.[0];setEditing(account);setForm({name:account.name,email:account.email,password:'',role:account.role==='admin'?'admin':'teacher',staffTitle:account.staffTitle||'university_doctor',scopeType:grant?.scopeType||'university',scopeId:grant?.scopeId||catalog.universities[0]?.id||'',permissions:grant?.permissions||['manage_tests','view_reports']})};
+  const edit=(account:Account)=>{const grant=account.grants?.[0];setEditing(account);setForm({name:account.name,email:account.email,role:account.role==='admin'?'admin':'teacher',staffTitle:account.staffTitle||'university_doctor',scopeType:grant?.scopeType||'university',scopeId:grant?.scopeId||catalog.universities[0]?.id||'',permissions:grant?.permissions||['manage_tests','view_reports']})};
   const status=async(account:Account,next:Status)=>{try{await request(`/api/admin/users/${account.id}`,{method:'PATCH',body:JSON.stringify({status:next})});notify(next==='active'?'تم تفعيل الحساب':'تم إيقاف الحساب');await load()}catch(error){notify((error as Error).message)}};
   const accountLabel=(account:Account)=>account.role==='owner'?'مالك':account.role==='admin'?'مشرف':account.role==='teacher'?staffTitles[account.staffTitle||'university_doctor']:'طالب';
   const visibleAccounts=roleFilter==='all'?accounts:accounts.filter(account=>account.role===roleFilter);const roleFilterLabel={all:'كل الحسابات',student:'الطلاب',teacher:'أعضاء الكادر',admin:'المشرفون'}[roleFilter];
@@ -51,7 +51,7 @@ export default function AccountManager({catalog,currentRole,notify}:{catalog:Cat
     <div className="accountGrid">
       <form className="panel accountForm" onSubmit={event=>void submit(event)}>
         <div className="accountTitle"><span><KeyRound/></span><div><h3>{editing?'تعديل الصفة والصلاحيات':'إنشاء حساب كادر'}</h3><p>المسمى الوظيفي لا يمنح صلاحيات تلقائيًا؛ تحدد الصلاحيات أدناه.</p></div></div>
-        {!editing&&<><input required minLength={2} placeholder="اسم عضو الكادر أو المشرف" value={form.name} onChange={event=>setForm({...form,name:event.target.value})}/><input required type="email" placeholder="البريد الإلكتروني" value={form.email} onChange={event=>{setExisting(null);setForm({...form,email:event.target.value})}}/><input required type="password" minLength={10} placeholder="كلمة مرور مؤقتة قوية" value={form.password} onChange={event=>setForm({...form,password:event.target.value})}/></>}
+        {!editing&&<><input required minLength={2} placeholder="اسم عضو الكادر أو المشرف" value={form.name} onChange={event=>setForm({...form,name:event.target.value})}/><input required type="email" placeholder="البريد الإلكتروني" value={form.email} onChange={event=>{setExisting(null);setForm({...form,email:event.target.value})}}/><p className="accountInviteNote">سيصل إلى هذا البريد رابط تفعيل صالح لمدة 24 ساعة ليعيّن صاحب الحساب كلمة مروره بنفسه.</p></>}
         <select aria-label="صفة حساب الكادر" value={form.role==='admin'?'admin':form.staffTitle} onChange={event=>chooseAccountType(event.target.value)}>
           {Object.entries(staffTitles).map(([value,label])=><option key={value} value={value}>{label}</option>)}
           {currentRole==='owner'&&<option value="admin">مشرف</option>}
