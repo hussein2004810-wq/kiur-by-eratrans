@@ -1,6 +1,9 @@
 const SESSION_COOKIE='__Host-kiur_session';
 const SESSION_SECONDS=7*24*60*60;
-const PASSWORD_ITERATIONS=310000;
+// workerd rejects PBKDF2 iteration counts above 100,000 with
+// NotSupportedError. Keep the platform maximum and rely on the existing
+// password policy plus login throttling to make online guessing impractical.
+const PASSWORD_ITERATIONS=100000;
 
 function bytesToBase64Url(bytes){
   let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);
@@ -50,7 +53,7 @@ export async function createSession(env,userId,request){
 export async function revokeSession(env,request){const token=cookieValue(request,SESSION_COOKIE);if(!token)return;await env.DB.prepare(`UPDATE auth_sessions SET revoked_at=CURRENT_TIMESTAMP WHERE token_hash=? AND revoked_at IS NULL`).bind(await sha256(token)).run()}
 export async function resolvePasswordSession(env,request){
   const token=cookieValue(request,SESSION_COOKIE);if(!token)return null;const tokenHash=await sha256(token);
-  const row=await env.DB.prepare(`SELECT u.id,u.email,u.name,u.account_role AS role,u.staff_title AS staffTitle,u.account_status AS accountStatus,u.auth_provider AS authProvider,u.department_id AS departmentId,u.phase_id AS phaseId,u.university_id AS universityId,u.college_id AS collegeId,u.section_id AS sectionId,s.last_used_at AS lastUsedAt FROM auth_sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=? AND s.revoked_at IS NULL AND s.expires_at>CURRENT_TIMESTAMP AND u.account_status='active'`).bind(tokenHash).first();
+  const row=await env.DB.prepare(`SELECT u.id,u.email,u.name,u.account_role AS role,u.staff_title AS staffTitle,u.account_status AS accountStatus,u.auth_provider AS authProvider,u.department_id AS departmentId,u.phase_id AS phaseId,u.university_id AS universityId,u.college_id AS collegeId,u.section_id AS sectionId,u.ban_status AS banStatus,u.ban_until AS banUntil,u.active_ban_request_id AS activeBanRequestId,u.active_ban_id AS activeBanId,s.last_used_at AS lastUsedAt FROM auth_sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=? AND s.revoked_at IS NULL AND s.expires_at>CURRENT_TIMESTAMP AND u.account_status='active'`).bind(tokenHash).first();
   if(!row)return null;const lastUsed=Date.parse(String(row.lastUsedAt).replace(' ','T')+'Z');if(!Number.isFinite(lastUsed)||Date.now()-lastUsed>15*60*1000)await env.DB.prepare(`UPDATE auth_sessions SET last_used_at=CURRENT_TIMESTAMP WHERE token_hash=?`).bind(tokenHash).run();
   return row;
 }

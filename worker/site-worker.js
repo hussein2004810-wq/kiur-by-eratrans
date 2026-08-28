@@ -14,6 +14,7 @@ import {handleCertificateApi} from './certificate-api.js';
 import {handleClinicalGlimpsesApi} from './clinical-glimpses-api.js';
 import {handleLogsApi} from './logs-api.js';
 import {recordAccountEvent} from './account-events.js';
+import {handleStudentBanApi,refreshStudentRestriction,restrictedStudentPathAllowed} from './student-ban-api.js';
 
 const files = new Map(/*__STATIC_FILES__*/);
 let schemaReady = false;
@@ -51,9 +52,9 @@ function decodeName(request,email){
 async function chatGptIdentity(request,env){
   const providerId=request.headers.get('oai-authenticated-user-id');const email=request.headers.get('oai-authenticated-user-email')?.toLowerCase();if(!providerId||!email)return null;
   const name=decodeName(request,email);const ownerIds=new Set(String(env.OWNER_USER_IDS||env.ADMIN_USER_IDS||'').split(',').map(value=>value.trim()).filter(Boolean));const owner=ownerIds.has(providerId);
-  let account=await env.DB.prepare(`SELECT u.id,u.email,u.name,u.account_role AS role,u.staff_title AS staffTitle,u.account_status AS accountStatus,u.auth_provider AS authProvider,u.department_id AS departmentId,u.phase_id AS phaseId,u.university_id AS universityId,u.college_id AS collegeId,u.section_id AS sectionId FROM user_identities i JOIN users u ON u.id=i.user_id WHERE i.provider='chatgpt' AND i.provider_user_id=?`).bind(providerId).first();
+  let account=await env.DB.prepare(`SELECT u.id,u.email,u.name,u.account_role AS role,u.staff_title AS staffTitle,u.account_status AS accountStatus,u.auth_provider AS authProvider,u.department_id AS departmentId,u.phase_id AS phaseId,u.university_id AS universityId,u.college_id AS collegeId,u.section_id AS sectionId,u.ban_status AS banStatus,u.ban_until AS banUntil,u.active_ban_request_id AS activeBanRequestId,u.active_ban_id AS activeBanId FROM user_identities i JOIN users u ON u.id=i.user_id WHERE i.provider='chatgpt' AND i.provider_user_id=?`).bind(providerId).first();
   if(!account){
-    account=await env.DB.prepare(`SELECT id,email,name,account_role AS role,staff_title AS staffTitle,account_status AS accountStatus,auth_provider AS authProvider,department_id AS departmentId,phase_id AS phaseId,university_id AS universityId,college_id AS collegeId,section_id AS sectionId FROM users WHERE email=?`).bind(email).first();
+    account=await env.DB.prepare(`SELECT id,email,name,account_role AS role,staff_title AS staffTitle,account_status AS accountStatus,auth_provider AS authProvider,department_id AS departmentId,phase_id AS phaseId,university_id AS universityId,college_id AS collegeId,section_id AS sectionId,ban_status AS banStatus,ban_until AS banUntil,active_ban_request_id AS activeBanRequestId,active_ban_id AS activeBanId FROM users WHERE email=?`).bind(email).first();
     if(account){
       await env.DB.batch([
         env.DB.prepare(`INSERT OR IGNORE INTO user_identities(provider,provider_user_id,user_id,email) VALUES('chatgpt',?,?,?)`).bind(providerId,account.id,email),
@@ -66,7 +67,7 @@ async function chatGptIdentity(request,env){
         env.DB.prepare(`INSERT INTO user_identities(provider,provider_user_id,user_id,email) VALUES('chatgpt',?,?,?)`).bind(providerId,providerId,email)
       ]);
       await recordAccountEvent(env,request,{userId:providerId,accountCode:providerId,email,eventType:'account_created',details:{provider:'chatgpt',role:accountRole}});
-      account={id:providerId,email,name,role:accountRole,accountStatus:'active',authProvider:'chatgpt'};
+      account={id:providerId,email,name,role:accountRole,accountStatus:'active',authProvider:'chatgpt',banStatus:'none'};
     }
   }else{
     const role=owner?'owner':account.role;await env.DB.prepare(`UPDATE users SET email=?,name=?,account_role=?,role=?,account_status=CASE WHEN ?=1 THEN 'active' ELSE account_status END,updated_at=CURRENT_TIMESTAMP WHERE id=? AND (email<>? OR name<>? OR account_role<>? OR ?=1)`).bind(email,name,role,['owner','admin'].includes(role)?'admin':'student',owner?1:0,account.id,email,name,role,owner?1:0).run();account={...account,email,name,role,accountStatus:owner?'active':account.accountStatus};
@@ -137,7 +138,7 @@ async function finalizeAttempt(env,attempt){
 
 async function handleApi(request,env,url){
   await ensureSchema(env);
-  const user=await identity(request,env);
+  let user=await identity(request,env);let restriction=null;if(user){const refreshed=await refreshStudentRestriction(request,env,user);user=refreshed.user;restriction=refreshed.restriction}
   if(!['GET','HEAD'].includes(request.method)){
     const origin=request.headers.get('origin');
     if(origin&&origin!==url.origin)return error('INVALID_ORIGIN','طلب غير مسموح',403);
@@ -148,6 +149,10 @@ async function handleApi(request,env,url){
   if(rule){const result=await enforceRateLimit(env,`${user.id}:${rule[0]}`,rule[1]);if(!result.allowed)return response({error:{code:'RATE_LIMITED',message:'طلبات كثيرة جدًا؛ حاول بعد قليل'}},429,{'retry-after':String(result.retryAfter)})}
   const authResponse=await handleAuthApi(request,env,url,user);
   if(authResponse)return authResponse;
+
+  const banResponse=await handleStudentBanApi(request,env,url,user,restriction);
+  if(banResponse)return banResponse;
+  if(restriction&&!restrictedStudentPathAllowed(url.pathname,request.method))return error('STUDENT_RESTRICTED','الحساب محظور؛ الصفحة المحدودة فقط متاحة أثناء الحظر',423);
 
   const glimpsesResponse=await handleClinicalGlimpsesApi(request,env,url,user);
   if(glimpsesResponse)return glimpsesResponse;
@@ -173,14 +178,14 @@ async function handleApi(request,env,url){
   const catalogAdminResponse=await handleCatalogAdminApi(request,env,url,user);
   if(catalogAdminResponse)return catalogAdminResponse;
 
-  const hierarchyResponse=await handleHierarchyApi(request,env,url,user);
+  const hierarchyResponse=await handleHierarchyApi(request,env,url,user,restriction);
   if(hierarchyResponse)return hierarchyResponse;
 
   if(url.pathname==='/api/me'&&request.method==='GET'){
     if(!user)return error('UNAUTHENTICATED','سجّل الدخول للمتابعة',401);
     const permissions=user.role==='owner'?['*']:[...new Set((await loadGrants(env,user.id)).flatMap(grant=>grant.permissions))];
     if(user.authProvider==='chatgpt')await recordAccountEvent(env,request,{userId:user.id,accountCode:user.id,email:user.email,eventType:'login_success',details:{provider:'chatgpt'}});
-    return response({user:{...user,permissions}});
+    return response({user:{...user,permissions,restriction}});
   }
   if(url.pathname==='/api/tests'&&request.method==='GET'){
     const denied=requireUser(user);if(denied)return denied;

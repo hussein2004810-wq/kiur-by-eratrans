@@ -4,7 +4,7 @@ import {readJsonBody,secureHeaders} from './security.js';
 import {recordAccountEvent} from './account-events.js';
 
 function json(data,status=200){return new Response(JSON.stringify(data),{status,headers:secureHeaders({'content-type':'application/json; charset=utf-8','cache-control':'no-store'})})}
-function fail(code,message,status=400){return json({error:{code,message}},status)}
+function fail(code,message,status=400,details){return json({error:{code,message,...(details?{details}: {})}},status)}
 function isManager(user){return ['owner','admin'].includes(user?.role)}
 function validEmail(email){return email.length<=254&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)}
 function validRole(role){return ['admin','teacher','student'].includes(role)}
@@ -68,15 +68,32 @@ export async function handleAdminUsersApi(request,env,url,actor){
     if(role==='admin'&&actor.role!=='owner')return fail('FORBIDDEN','المالك وحده يستطيع إنشاء مشرف',403);
     const staffTitle=role==='teacher'?String(value.staffTitle||''):null;if(role==='teacher'&&!validStaffTitle(staffTitle))return fail('VALIDATION','اختر صفة كادر صالحة');
     const name=String(value.name||'').trim();const email=normalizeEmail(value.email);if(name.length<2||name.length>120||!validEmail(email))return fail('VALIDATION','الاسم أو البريد الإلكتروني غير صالح');
-    const passwordIssue=validatePassword(value.password);if(passwordIssue)return fail('VALIDATION',passwordIssue);
     const grantResult=await validateGrants(env,actor,role,value.grants);if(grantResult.error)return fail(grantResult.status===403?'FORBIDDEN':'VALIDATION',grantResult.error,grantResult.status||400);
+    const existing=await env.DB.prepare(`SELECT id,name,email,account_role AS role,staff_title AS staffTitle,account_status AS status,auth_provider AS authProvider FROM users WHERE email=?`).bind(email).first();
+    if(existing){
+      if(!value.linkExisting||String(value.existingUserId||'')!==String(existing.id))return fail('ACCOUNT_EXISTS','يوجد حساب بهذا البريد. يمكن لمالك المنصة ربطه وترقيته بدل إنشاء نسخة مكررة.',409,{account:{id:existing.id,name:existing.name,email:existing.email,role:existing.role,status:existing.status,authProvider:existing.authProvider},canLink:actor.role==='owner'});
+      if(actor.role!=='owner')return fail('OWNER_CONFIRMATION_REQUIRED','ربط الحساب الموجود وترقيته يحتاج تأكيد مالك المنصة',403);
+      if(existing.role==='owner')return fail('FORBIDDEN','لا يمكن تغيير حساب مالك المنصة',403);
+      const statements=[
+        env.DB.prepare(`UPDATE users SET name=?,account_role=?,role=?,staff_title=?,account_status='active',updated_at=CURRENT_TIMESTAMP WHERE id=? AND email=?`).bind(name,role,legacyRole(role),staffTitle,existing.id,email),
+        env.DB.prepare(`DELETE FROM user_grants WHERE user_id=?`).bind(existing.id)
+      ];
+      for(const grant of grantResult.grants)statements.push(env.DB.prepare(`INSERT INTO user_grants(id,user_id,grant_role,scope_type,scope_id,permissions_json,granted_by) VALUES(?,?,?,?,?,?,?)`).bind(grant.id,existing.id,role,grant.scopeType,grant.scopeId,JSON.stringify(grant.permissions),actor.id));
+      statements.push(env.DB.prepare(`INSERT INTO audit_logs(entity,entity_id,action,by_user_id,details_json) VALUES('user',?,'link_and_upgrade_account',?,?)`).bind(existing.id,actor.id,JSON.stringify({fromRole:existing.role,toRole:role,staffTitle,grants:grantResult.grants.map(({scopeType,scopeId,permissions})=>({scopeType,scopeId,permissions}))})));
+      await env.DB.batch(statements);
+      try{await recordAccountEvent(env,request,{userId:existing.id,accountCode:existing.id,email,eventType:'grant_changed',details:{changedBy:actor.id,linkedExisting:true,role,staffTitle}})}catch(cause){console.error('Account event write failed',{operation:'link_existing',name:cause instanceof Error?cause.name:'UnknownError'})}
+      return json({id:existing.id,linked:true});
+    }
+    const passwordIssue=validatePassword(value.password);if(passwordIssue)return fail('VALIDATION',passwordIssue);
     const password=await createPasswordRecord(value.password);const id=crypto.randomUUID();const statements=[
       env.DB.prepare(`INSERT INTO users(id,email,name,role,account_role,staff_title,account_status,auth_provider,password_hash,password_salt,password_iterations) VALUES(?,?,?,?,?,?,'active','password',?,?,?)`).bind(id,email,name,legacyRole(role),role,staffTitle,password.hash,password.salt,password.iterations),
       env.DB.prepare(`INSERT INTO user_identities(provider,provider_user_id,user_id,email) VALUES('password',?,?,?)`).bind(email,id,email)
     ];
     for(const grant of grantResult.grants)statements.push(env.DB.prepare(`INSERT INTO user_grants(id,user_id,grant_role,scope_type,scope_id,permissions_json,granted_by) VALUES(?,?,?,?,?,?,?)`).bind(grant.id,id,role,grant.scopeType,grant.scopeId,JSON.stringify(grant.permissions),actor.id));
-    try{await env.DB.batch(statements)}catch{return fail('EMAIL_EXISTS','البريد الإلكتروني مستخدم بالفعل',409)}
-    await audit(env,actor,id,'create_account',{role,staffTitle,grants:grantResult.grants.map(({scopeType,scopeId,permissions})=>({scopeType,scopeId,permissions}))});await recordAccountEvent(env,request,{userId:id,accountCode:id,email,eventType:'account_created',details:{createdBy:actor.id,role,staffTitle}});return json({id},201);
+    statements.push(env.DB.prepare(`INSERT INTO audit_logs(entity,entity_id,action,by_user_id,details_json) VALUES('user',?,'create_account',?,?)`).bind(id,actor.id,JSON.stringify({role,staffTitle,grants:grantResult.grants.map(({scopeType,scopeId,permissions})=>({scopeType,scopeId,permissions}))})));
+    try{await env.DB.batch(statements)}catch(cause){console.error('Account create batch failed',{name:cause instanceof Error?cause.name:'UnknownError'});const raced=await env.DB.prepare(`SELECT id,name,email,account_role AS role,account_status AS status,auth_provider AS authProvider FROM users WHERE email=?`).bind(email).first();if(raced)return fail('ACCOUNT_EXISTS','يوجد حساب بهذا البريد. أعد المحاولة لاختيار ربطه وترقيته.',409,{account:raced,canLink:actor.role==='owner'});return fail('CREATE_ACCOUNT_FAILED','تعذر إنشاء الحساب. لم يتم حفظ حساب جزئي.',500)}
+    try{await recordAccountEvent(env,request,{userId:id,accountCode:id,email,eventType:'account_created',details:{createdBy:actor.id,role,staffTitle}})}catch(cause){console.error('Account event write failed',{operation:'create',name:cause instanceof Error?cause.name:'UnknownError'})}
+    return json({id},201);
   }
 
   const match=url.pathname.match(/^\/api\/admin\/users\/([^/]+)$/);

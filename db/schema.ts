@@ -1,5 +1,5 @@
 export const tables = {
-  users: ['id','email','name','role','account_role','staff_title','account_status','auth_provider','created_at','updated_at','department_id','phase_id','university_id','college_id','section_id','password_hash','password_salt','password_iterations','last_login_at'],
+  users: ['id','email','name','role','account_role','staff_title','account_status','auth_provider','created_at','updated_at','department_id','phase_id','university_id','college_id','section_id','password_hash','password_salt','password_iterations','last_login_at','ban_status','ban_until','active_ban_request_id','active_ban_id'],
   universities: ['id','name','sort_order','created_at'],
   colleges: ['id','university_id','name','sort_order','created_at'],
   departments: ['id','name','display_name','college_id','sort_order'],
@@ -21,4 +21,8 @@ export const tables = {
   clinicalGlimpseLogs: ['id','glimpse_id','action','by_user_id','at','details_json'],
   libraryLogs: ['id','media_id','action','by_user_id','test_id','question_id','at','details_json'],
   accountEvents: ['id','user_id','account_code','email_hash','event_type','outcome','device_hash','at','details_json'],
+  studentBanRequests: ['id','request_number','student_id','request_type','ban_id','duration_value','duration_unit','duration_seconds','reason','evidence_text','status','precaution_started_at','precaution_expires_at','requested_by','requester_scope_type','requester_scope_id','reviewed_by','reviewed_at','review_note','created_at','updated_at'],
+  studentBans: ['id','request_id','student_id','ban_type','reason','starts_at','ends_at','status','approved_by','lifted_by','lifted_at','lift_reason','created_at','updated_at'],
+  studentBanAppeals: ['id','request_id','ban_id','student_id','reason','status','reviewed_by','reviewed_at','review_note','created_at'],
+  studentBanLogs: ['id','request_id','ban_id','student_id','action','by_user_id','actor_name_snapshot','actor_email_snapshot','student_name_snapshot','student_email_snapshot','scope_type','scope_id','reason_snapshot','evidence_snapshot','duration_seconds','status_snapshot','device_hash','at','details_json'],
 } as const;

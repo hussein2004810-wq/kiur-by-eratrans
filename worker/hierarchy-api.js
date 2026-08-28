@@ -59,7 +59,7 @@ function validateQuestions(value){
 
 const testSelect=`SELECT t.id,t.title,t.subject,t.lecture,t.duration_minutes AS durationMinutes,t.pass_percentage AS passPercentage,t.shuffle_questions AS shuffleQuestions,t.shuffle_options AS shuffleOptions,t.exam_mode AS examMode,t.available_from AS availableFrom,t.available_until AS availableUntil,t.max_attempts AS maxAttempts,t.certificate_enabled AS certificateEnabled,t.status,t.updated_at AS updatedAt,t.department_id AS departmentId,t.phase_id AS phaseId,t.section_id AS sectionId,t.subject_id AS subjectId,t.lecture_id AS lectureId,COALESCE(u.id,'') AS universityId,COALESCE(c.id,'') AS collegeId,COALESCE(u.name,'') AS universityName,COALESCE(c.name,'') AS collegeName,COALESCE(d.display_name,d.name,'') AS departmentName,COALESCE(p.name,'') AS phaseName,COALESCE(x.name,'') AS sectionName,COALESCE(s.name,t.subject) AS subjectName,COALESCE(l.name,t.lecture) AS lectureName,count(q.id) AS questionCount FROM tests t LEFT JOIN departments d ON d.id=t.department_id LEFT JOIN colleges c ON c.id=d.college_id LEFT JOIN universities u ON u.id=c.university_id LEFT JOIN phases p ON p.id=t.phase_id LEFT JOIN sections x ON x.id=t.section_id LEFT JOIN subjects s ON s.id=t.subject_id LEFT JOIN lectures l ON l.id=t.lecture_id LEFT JOIN questions q ON q.test_id=t.id`;
 
-export async function handleHierarchyApi(request,env,url,user){
+export async function handleHierarchyApi(request,env,url,user,restriction=null){
   if(url.pathname==='/api/public/catalog'&&request.method==='GET')return json(await catalog(env));
   if(url.pathname==='/api/catalog'&&request.method==='GET'){
     const denied=denyUser(user);if(denied)return denied;
@@ -69,7 +69,7 @@ export async function handleHierarchyApi(request,env,url,user){
   if(url.pathname==='/api/me'&&request.method==='GET'){
     const denied=denyUser(user);if(denied)return denied;
     const profile=await env.DB.prepare(`SELECT u.university_id AS universityId,u.college_id AS collegeId,u.department_id AS departmentId,u.phase_id AS phaseId,u.section_id AS sectionId,v.name AS universityName,c.name AS collegeName,COALESCE(d.display_name,d.name) AS departmentName,p.name AS phaseName,x.name AS sectionName FROM users u LEFT JOIN universities v ON v.id=u.university_id LEFT JOIN colleges c ON c.id=u.college_id LEFT JOIN departments d ON d.id=u.department_id LEFT JOIN phases p ON p.id=u.phase_id LEFT JOIN sections x ON x.id=u.section_id WHERE u.id=?`).bind(user.id).first();
-    const permissions=user.role==='owner'?['*']:[...new Set((await loadGrants(env,user.id)).flatMap(grant=>grant.permissions))];if(user.authProvider==='chatgpt')await recordAccountEvent(env,request,{userId:user.id,accountCode:user.id,email:user.email,eventType:'login_success',details:{provider:'chatgpt'}});return json({user:{...user,...profile,permissions}});
+    const permissions=user.role==='owner'?['*']:[...new Set((await loadGrants(env,user.id)).flatMap(grant=>grant.permissions))];if(user.authProvider==='chatgpt')await recordAccountEvent(env,request,{userId:user.id,accountCode:user.id,email:user.email,eventType:'login_success',details:{provider:'chatgpt'}});return json({user:{...user,...profile,permissions,restriction}});
   }
 
   if(url.pathname==='/api/me/profile'&&request.method==='PATCH'){
