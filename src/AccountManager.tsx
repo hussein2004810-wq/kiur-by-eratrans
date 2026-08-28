@@ -1,6 +1,7 @@
 import {useEffect,useMemo,useState} from 'react';
 import {KeyRound,Plus,ShieldCheck,UserCog,Users} from 'lucide-react';
 import './accounts.css';
+import './account-filters.css';
 
 type Role='owner'|'admin'|'teacher'|'student';
 type Status='pending'|'active'|'suspended';
@@ -24,6 +25,7 @@ export default function AccountManager({catalog,currentRole,notify}:{catalog:Cat
   const initialForm=():FormState=>({name:'',email:'',password:'',role:'teacher',staffTitle:'university_doctor',scopeType:'university',scopeId:catalog.universities[0]?.id||'',permissions:['manage_tests','view_reports']});
   const [accounts,setAccounts]=useState<Account[]>([]);
   const [query,setQuery]=useState('');
+  const [roleFilter,setRoleFilter]=useState<'all'|'student'|'teacher'|'admin'>('all');
   const [busy,setBusy]=useState(false);
   const [editing,setEditing]=useState<Account|null>(null);
   const [existing,setExisting]=useState<ExistingCandidate|null>(null);
@@ -41,9 +43,11 @@ export default function AccountManager({catalog,currentRole,notify}:{catalog:Cat
   const edit=(account:Account)=>{const grant=account.grants?.[0];setEditing(account);setForm({name:account.name,email:account.email,password:'',role:account.role==='admin'?'admin':'teacher',staffTitle:account.staffTitle||'university_doctor',scopeType:grant?.scopeType||'university',scopeId:grant?.scopeId||catalog.universities[0]?.id||'',permissions:grant?.permissions||['manage_tests','view_reports']})};
   const status=async(account:Account,next:Status)=>{try{await request(`/api/admin/users/${account.id}`,{method:'PATCH',body:JSON.stringify({status:next})});notify(next==='active'?'تم تفعيل الحساب':'تم إيقاف الحساب');await load()}catch(error){notify((error as Error).message)}};
   const accountLabel=(account:Account)=>account.role==='owner'?'مالك':account.role==='admin'?'مشرف':account.role==='teacher'?staffTitles[account.staffTitle||'university_doctor']:'طالب';
+  const visibleAccounts=roleFilter==='all'?accounts:accounts.filter(account=>account.role===roleFilter);const roleFilterLabel={all:'كل الحسابات',student:'الطلاب',teacher:'أعضاء الكادر',admin:'المشرفون'}[roleFilter];
+  const chooseRoleFilter=(role:'student'|'teacher'|'admin')=>setRoleFilter(current=>current===role?'all':role);
 
   return <section className="accountsManager">
-    <div className="accountStats"><article><Users/><b>{accounts.filter(item=>item.role==='student').length}</b><small>طلاب</small></article><article><UserCog/><b>{accounts.filter(item=>item.role==='teacher').length}</b><small>أعضاء الكادر</small></article><article><ShieldCheck/><b>{accounts.filter(item=>item.role==='admin').length}</b><small>مشرفون ضمن نطاقك</small></article></div>
+    <div className="accountStats"><button type="button" aria-pressed={roleFilter==='student'} className={roleFilter==='student'?'active':''} onClick={()=>chooseRoleFilter('student')}><Users/><b>{accounts.filter(item=>item.role==='student').length}</b><small>طلاب</small></button><button type="button" aria-pressed={roleFilter==='teacher'} className={roleFilter==='teacher'?'active':''} onClick={()=>chooseRoleFilter('teacher')}><UserCog/><b>{accounts.filter(item=>item.role==='teacher').length}</b><small>أعضاء الكادر</small></button><button type="button" aria-pressed={roleFilter==='admin'} className={roleFilter==='admin'?'active':''} onClick={()=>chooseRoleFilter('admin')}><ShieldCheck/><b>{accounts.filter(item=>item.role==='admin').length}</b><small>مشرفون ضمن نطاقك</small></button></div>
     <div className="accountGrid">
       <form className="panel accountForm" onSubmit={event=>void submit(event)}>
         <div className="accountTitle"><span><KeyRound/></span><div><h3>{editing?'تعديل الصفة والصلاحيات':'إنشاء حساب كادر'}</h3><p>المسمى الوظيفي لا يمنح صلاحيات تلقائيًا؛ تحدد الصلاحيات أدناه.</p></div></div>
@@ -57,7 +61,7 @@ export default function AccountManager({catalog,currentRole,notify}:{catalog:Cat
         {existing&&<div className="existingAccount"><b>الحساب موجود بالفعل</b><p>{existing.name} • {existing.email}</p><small>سيبقى تسجيل دخوله الحالي كما هو، وتُضاف إليه الصفة والصلاحيات المحددة أعلاه.</small>{existing.canLink?<button type="button" disabled={busy} onClick={()=>void linkExisting()}>تأكيد المالك: ربط وترقية الحساب</button>:<em>أرسل الطلب إلى مالك المنصة لإتمام الربط والترقية.</em>}</div>}
         <div className="accountActions">{(editing||existing)&&<button type="button" onClick={reset}>إلغاء</button>}<button className="solid" disabled={busy||!form.permissions.length||!form.scopeId}><Plus/>{busy?'جارٍ الحفظ...':editing?'حفظ الصفة والصلاحيات':'إنشاء الحساب'}</button></div>
       </form>
-      <section className="panel accountList"><header><div><h3>الحسابات</h3><p>فعّل الطلاب الجدد وأدر الكادر والمشرفين.</p></div><input placeholder="بحث بالاسم أو البريد" value={query} onChange={event=>setQuery(event.target.value)}/></header>{accounts.map(account=><article key={account.id}><span className={'roleIcon '+account.role}>{account.name.slice(0,2)}</span><div><b>{account.name}</b><small>{account.email}</small><em>{accountLabel(account)} • {account.universityName||account.departmentName||'دون نطاق'} • {account.status==='pending'?'بانتظار الموافقة':account.status==='active'?'فعال':'موقوف'}</em></div><div className="rowActions">{['teacher','admin'].includes(account.role)&&<button onClick={()=>edit(account)}>الصفة والصلاحيات</button>}{account.status!=='active'?<button className="activate" onClick={()=>void status(account,'active')}>تفعيل</button>:account.role!=='owner'&&<button className="suspend" onClick={()=>void status(account,'suspended')}>إيقاف</button>}</div></article>)}{!accounts.length&&<div className="catalogEmpty">لا توجد حسابات مطابقة.</div>}</section>
+      <section className="panel accountList"><header><div><h3>{roleFilterLabel}</h3><p>{roleFilter==='all'?'فعّل الطلاب الجدد وأدر الكادر والمشرفين.':`عرض معلومات ${roleFilterLabel} ضمن نطاقك فقط.`}</p></div>{roleFilter!=='all'&&<button className="clearRoleFilter" onClick={()=>setRoleFilter('all')}>عرض الكل</button>}<input placeholder="بحث بالاسم أو البريد" value={query} onChange={event=>setQuery(event.target.value)}/></header>{visibleAccounts.map(account=><article key={account.id}><span className={'roleIcon '+account.role}>{account.name.slice(0,2)}</span><div><b>{account.name}</b><small>{account.email}</small><em>{accountLabel(account)} • {account.universityName||account.departmentName||'دون نطاق'} • {account.status==='pending'?'بانتظار الموافقة':account.status==='active'?'فعال':'موقوف'}</em></div><div className="rowActions">{['teacher','admin'].includes(account.role)&&<button onClick={()=>edit(account)}>الصفة والصلاحيات</button>}{account.status!=='active'?<button className="activate" onClick={()=>void status(account,'active')}>تفعيل</button>:account.role!=='owner'&&<button className="suspend" onClick={()=>void status(account,'suspended')}>إيقاف</button>}</div></article>)}{!visibleAccounts.length&&<div className="catalogEmpty">لا توجد حسابات مطابقة ضمن هذه الفئة.</div>}</section>
     </div>
   </section>;
 }

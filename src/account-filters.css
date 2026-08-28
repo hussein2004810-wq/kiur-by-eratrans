@@ -1,0 +1,7 @@
+.accountStats button{appearance:none;text-align:inherit;color:inherit;font:inherit;cursor:pointer;display:grid;grid-template-columns:40px 1fr;align-items:center;background:white;border:1px solid var(--line);border-radius:16px;padding:14px}
+.accountStats button svg{grid-row:span 2;width:20px;color:var(--green)}
+.accountStats button b{font-size:20px}
+.accountStats button small{color:var(--muted)}
+.accountStats button.active{border-color:var(--green2);box-shadow:0 0 0 2px #1f806e24;background:#f2fbf8}
+.accountStats button:focus-visible{outline:3px solid #1f806e40;outline-offset:2px}
+.clearRoleFilter{border:0;border-radius:8px;padding:7px 10px;background:#edf5f2;color:#24584c;font-size:10px;white-space:nowrap}
