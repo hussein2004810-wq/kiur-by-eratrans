@@ -28,8 +28,6 @@ const template=await readFile(join(project,'worker','site-worker.js'),'utf8');
 const worker=template.replace('/*__STATIC_FILES__*/',JSON.stringify(entries));
 await mkdir(serverDir,{recursive:true});
 await writeFile(join(serverDir,'index.js'),worker,'utf8');
-await copyFile(join(project,'worker','hierarchy-api.js'),join(serverDir,'hierarchy-api.js'));
-await copyFile(join(project,'worker','catalog-admin-api.js'),join(serverDir,'catalog-admin-api.js'));
-await copyFile(join(project,'worker','student-insights-api.js'),join(serverDir,'student-insights-api.js'));
-await copyFile(join(project,'worker','share-page.js'),join(serverDir,'share-page.js'));
-await copyFile(join(project,'worker','attempt-shuffle.js'),join(serverDir,'attempt-shuffle.js'));
+for(const file of await readdir(join(project,'worker'))){
+  if(file.endsWith('.js')&&file!=='site-worker.js')await copyFile(join(project,'worker',file),join(serverDir,file));
+}

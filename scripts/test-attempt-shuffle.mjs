@@ -6,7 +6,7 @@ class Statement{constructor(database,sql){this.database=database;this.sql=sql}bi
 class D1{constructor(database){this.database=database}prepare(sql){return new Statement(this.database,sql)}async batch(statements){const results=[];for(const statement of statements)results.push(await statement.run());return results}}
 
 const sqlite=new DatabaseSync(':memory:');sqlite.exec('PRAGMA foreign_keys=ON');
-for(const file of ['drizzle/0000_medexam.sql','drizzle/0001_academic_hierarchy.sql','drizzle/0002_backfill_existing_tests.sql','drizzle/0003_scale_indexes.sql','drizzle/0004_attempt_shuffle.sql'])sqlite.exec(await readFile(file,'utf8'));
+for(const file of ['drizzle/0000_medexam.sql','drizzle/0001_academic_hierarchy.sql','drizzle/0002_backfill_existing_tests.sql','drizzle/0003_scale_indexes.sql','drizzle/0004_attempt_shuffle.sql','drizzle/0005_security_hardening.sql','drizzle/0006_accounts_organizations_permissions.sql','drizzle/0007_exam_modes_question_types_files.sql','drizzle/0008_staff_titles_and_college_copy.sql','drizzle/0009_clinical_glimpses_library_logs.sql','drizzle/0010_student_bans.sql'])sqlite.exec(await readFile(file,'utf8'));
 sqlite.prepare(`UPDATE tests SET shuffle_questions=1,shuffle_options=1 WHERE id='demo-preop'`).run();
 const env={DB:new D1(sqlite)};const userId='shuffle-student';
 function headers(json=false){const value={'oai-authenticated-user-id':userId,'oai-authenticated-user-email':'shuffle@example.com'};if(json)value['content-type']='application/json';return value}
