@@ -48,9 +48,9 @@ function decodeName(request,email){
 async function chatGptIdentity(request,env){
   const providerId=request.headers.get('oai-authenticated-user-id');const email=request.headers.get('oai-authenticated-user-email')?.toLowerCase();if(!providerId||!email)return null;
   const name=decodeName(request,email);const ownerIds=new Set(String(env.OWNER_USER_IDS||env.ADMIN_USER_IDS||'').split(',').map(value=>value.trim()).filter(Boolean));const owner=ownerIds.has(providerId);
-  let account=await env.DB.prepare(`SELECT u.id,u.email,u.name,u.account_role AS role,u.account_status AS accountStatus,u.auth_provider AS authProvider,u.department_id AS departmentId,u.phase_id AS phaseId,u.university_id AS universityId,u.college_id AS collegeId,u.section_id AS sectionId FROM user_identities i JOIN users u ON u.id=i.user_id WHERE i.provider='chatgpt' AND i.provider_user_id=?`).bind(providerId).first();
+  let account=await env.DB.prepare(`SELECT u.id,u.email,u.name,u.account_role AS role,u.staff_title AS staffTitle,u.account_status AS accountStatus,u.auth_provider AS authProvider,u.department_id AS departmentId,u.phase_id AS phaseId,u.university_id AS universityId,u.college_id AS collegeId,u.section_id AS sectionId FROM user_identities i JOIN users u ON u.id=i.user_id WHERE i.provider='chatgpt' AND i.provider_user_id=?`).bind(providerId).first();
   if(!account){
-    account=await env.DB.prepare(`SELECT id,email,name,account_role AS role,account_status AS accountStatus,auth_provider AS authProvider,department_id AS departmentId,phase_id AS phaseId,university_id AS universityId,college_id AS collegeId,section_id AS sectionId FROM users WHERE email=?`).bind(email).first();
+    account=await env.DB.prepare(`SELECT id,email,name,account_role AS role,staff_title AS staffTitle,account_status AS accountStatus,auth_provider AS authProvider,department_id AS departmentId,phase_id AS phaseId,university_id AS universityId,college_id AS collegeId,section_id AS sectionId FROM users WHERE email=?`).bind(email).first();
     if(account){
       await env.DB.batch([
         env.DB.prepare(`INSERT OR IGNORE INTO user_identities(provider,provider_user_id,user_id,email) VALUES('chatgpt',?,?,?)`).bind(providerId,account.id,email),

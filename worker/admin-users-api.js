@@ -7,6 +7,8 @@ function fail(code,message,status=400){return json({error:{code,message}},status
 function isManager(user){return ['owner','admin'].includes(user?.role)}
 function validEmail(email){return email.length<=254&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)}
 function validRole(role){return ['admin','teacher','student'].includes(role)}
+const STAFF_TITLES=['department_head','department_coordinator','university_doctor','university_professor'];
+function validStaffTitle(value){return STAFF_TITLES.includes(value)}
 function validStatus(status){return ['pending','active','suspended'].includes(status)}
 function legacyRole(role){return ['owner','admin'].includes(role)?'admin':'student'}
 async function body(request){const parsed=await readJsonBody(request);return parsed.error?{response:fail(parsed.error.code,parsed.error.message,parsed.error.status)}:{value:parsed.value}}
@@ -53,7 +55,7 @@ export async function handleAdminUsersApi(request,env,url,actor){
     const q=String(url.searchParams.get('q')||'').trim().slice(0,80);const limit=Math.min(200,Math.max(10,Number(url.searchParams.get('limit'))||100));
     const filters=[];const binds=[];if(role){filters.push('u.account_role=?');binds.push(role)}if(status){filters.push('u.account_status=?');binds.push(status)}if(q){filters.push('(u.name LIKE ? OR u.email LIKE ?)');binds.push(`%${q}%`,`%${q}%`)}
     const where=filters.length?`WHERE ${filters.join(' AND ')}`:'';
-    const statement=env.DB.prepare(`SELECT u.id,u.name,u.email,u.account_role AS role,u.account_status AS status,u.auth_provider AS authProvider,u.created_at AS createdAt,u.last_login_at AS lastLoginAt,u.university_id AS universityId,u.college_id AS collegeId,u.department_id AS departmentId,u.phase_id AS phaseId,u.section_id AS sectionId,v.name AS universityName,c.name AS collegeName,d.name AS departmentName,p.name AS phaseName,x.name AS sectionName FROM users u LEFT JOIN universities v ON v.id=u.university_id LEFT JOIN colleges c ON c.id=u.college_id LEFT JOIN departments d ON d.id=u.department_id LEFT JOIN phases p ON p.id=u.phase_id LEFT JOIN sections x ON x.id=u.section_id ${where} ORDER BY CASE u.account_status WHEN 'pending' THEN 0 ELSE 1 END,u.created_at DESC LIMIT ?`).bind(...binds,limit);
+    const statement=env.DB.prepare(`SELECT u.id,u.name,u.email,u.account_role AS role,u.staff_title AS staffTitle,u.account_status AS status,u.auth_provider AS authProvider,u.created_at AS createdAt,u.last_login_at AS lastLoginAt,u.university_id AS universityId,u.college_id AS collegeId,u.department_id AS departmentId,u.phase_id AS phaseId,u.section_id AS sectionId,v.name AS universityName,c.name AS collegeName,COALESCE(d.display_name,d.name) AS departmentName,p.name AS phaseName,x.name AS sectionName FROM users u LEFT JOIN universities v ON v.id=u.university_id LEFT JOIN colleges c ON c.id=u.college_id LEFT JOIN departments d ON d.id=u.department_id LEFT JOIN phases p ON p.id=u.phase_id LEFT JOIN sections x ON x.id=u.section_id ${where} ORDER BY CASE u.account_status WHEN 'pending' THEN 0 ELSE 1 END,u.created_at DESC LIMIT ?`).bind(...binds,limit);
     const result=await statement.all();const data=await visibleUsers(env,actor,result.results);
     for(const row of data){if(['admin','teacher'].includes(row.role))row.grants=await loadGrants(env,row.id)}
     return json({data,permissions:PERMISSIONS});
@@ -61,18 +63,19 @@ export async function handleAdminUsersApi(request,env,url,actor){
 
   if(url.pathname==='/api/admin/users'&&request.method==='POST'){
     const parsed=await body(request);if(parsed.response)return parsed.response;const value=parsed.value||{};const role=String(value.role||'teacher');
-    if(!validRole(role)||role==='student')return fail('VALIDATION','إنشاء الحساب المباشر متاح للمعلمين والمشرفين فقط');
+    if(!validRole(role)||role==='student')return fail('VALIDATION','إنشاء الحساب المباشر متاح للكادر والمشرفين فقط');
     if(role==='admin'&&actor.role!=='owner')return fail('FORBIDDEN','المالك وحده يستطيع إنشاء مشرف',403);
+    const staffTitle=role==='teacher'?String(value.staffTitle||''):null;if(role==='teacher'&&!validStaffTitle(staffTitle))return fail('VALIDATION','اختر صفة كادر صالحة');
     const name=String(value.name||'').trim();const email=normalizeEmail(value.email);if(name.length<2||name.length>120||!validEmail(email))return fail('VALIDATION','الاسم أو البريد الإلكتروني غير صالح');
     const passwordIssue=validatePassword(value.password);if(passwordIssue)return fail('VALIDATION',passwordIssue);
     const grantResult=await validateGrants(env,actor,role,value.grants);if(grantResult.error)return fail(grantResult.status===403?'FORBIDDEN':'VALIDATION',grantResult.error,grantResult.status||400);
     const password=await createPasswordRecord(value.password);const id=crypto.randomUUID();const statements=[
-      env.DB.prepare(`INSERT INTO users(id,email,name,role,account_role,account_status,auth_provider,password_hash,password_salt,password_iterations) VALUES(?,?,?,?,?,'active','password',?,?,?)`).bind(id,email,name,legacyRole(role),role,password.hash,password.salt,password.iterations),
+      env.DB.prepare(`INSERT INTO users(id,email,name,role,account_role,staff_title,account_status,auth_provider,password_hash,password_salt,password_iterations) VALUES(?,?,?,?,?,?,'active','password',?,?,?)`).bind(id,email,name,legacyRole(role),role,staffTitle,password.hash,password.salt,password.iterations),
       env.DB.prepare(`INSERT INTO user_identities(provider,provider_user_id,user_id,email) VALUES('password',?,?,?)`).bind(email,id,email)
     ];
     for(const grant of grantResult.grants)statements.push(env.DB.prepare(`INSERT INTO user_grants(id,user_id,grant_role,scope_type,scope_id,permissions_json,granted_by) VALUES(?,?,?,?,?,?,?)`).bind(grant.id,id,role,grant.scopeType,grant.scopeId,JSON.stringify(grant.permissions),actor.id));
     try{await env.DB.batch(statements)}catch{return fail('EMAIL_EXISTS','البريد الإلكتروني مستخدم بالفعل',409)}
-    await audit(env,actor,id,'create_account',{role,grants:grantResult.grants.map(({scopeType,scopeId,permissions})=>({scopeType,scopeId,permissions}))});return json({id},201);
+    await audit(env,actor,id,'create_account',{role,staffTitle,grants:grantResult.grants.map(({scopeType,scopeId,permissions})=>({scopeType,scopeId,permissions}))});return json({id},201);
   }
 
   const match=url.pathname.match(/^\/api\/admin\/users\/([^/]+)$/);
@@ -86,12 +89,12 @@ export async function handleAdminUsersApi(request,env,url,actor){
 
   const grantMatch=url.pathname.match(/^\/api\/admin\/users\/([^/]+)\/grants$/);
   if(grantMatch&&request.method==='PUT'){
-    const target=await env.DB.prepare(`SELECT id,account_role AS role,university_id AS universityId,college_id AS collegeId,department_id AS departmentId,phase_id AS phaseId,section_id AS sectionId FROM users WHERE id=?`).bind(grantMatch[1]).first();if(!target)return fail('NOT_FOUND','الحساب غير موجود',404);if(target.role==='owner')return fail('FORBIDDEN','لا يمكن تعديل مالك المنصة',403);
-    const parsed=await body(request);if(parsed.response)return parsed.response;const role=String(parsed.value?.role||target.role);if(!['admin','teacher'].includes(role))return fail('VALIDATION','الدور المطلوب غير صالح');if(role==='admin'&&actor.role!=='owner')return fail('FORBIDDEN','المالك وحده يستطيع ترقية المشرفين',403);if(actor.role!=='owner'&&target.role==='admin')return fail('FORBIDDEN','لا يمكنك تعديل مشرف آخر',403);
+    const target=await env.DB.prepare(`SELECT id,account_role AS role,staff_title AS staffTitle,university_id AS universityId,college_id AS collegeId,department_id AS departmentId,phase_id AS phaseId,section_id AS sectionId FROM users WHERE id=?`).bind(grantMatch[1]).first();if(!target)return fail('NOT_FOUND','الحساب غير موجود',404);if(target.role==='owner')return fail('FORBIDDEN','لا يمكن تعديل مالك المنصة',403);
+    const parsed=await body(request);if(parsed.response)return parsed.response;const role=String(parsed.value?.role||target.role);if(!['admin','teacher'].includes(role))return fail('VALIDATION','الدور المطلوب غير صالح');if(role==='admin'&&actor.role!=='owner')return fail('FORBIDDEN','المالك وحده يستطيع ترقية المشرفين',403);if(actor.role!=='owner'&&target.role==='admin')return fail('FORBIDDEN','لا يمكنك تعديل مشرف آخر',403);const staffTitle=role==='teacher'?String(parsed.value?.staffTitle||target.staffTitle||''):null;if(role==='teacher'&&!validStaffTitle(staffTitle))return fail('VALIDATION','اختر صفة كادر صالحة');
     const grantResult=await validateGrants(env,actor,role,parsed.value?.grants);if(grantResult.error)return fail(grantResult.status===403?'FORBIDDEN':'VALIDATION',grantResult.error,grantResult.status||400);
-    const statements=[env.DB.prepare(`DELETE FROM user_grants WHERE user_id=?`).bind(target.id),env.DB.prepare(`UPDATE users SET account_role=?,role=?,account_status='active',updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(role,legacyRole(role),target.id)];
+    const statements=[env.DB.prepare(`DELETE FROM user_grants WHERE user_id=?`).bind(target.id),env.DB.prepare(`UPDATE users SET account_role=?,role=?,staff_title=?,account_status='active',updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(role,legacyRole(role),staffTitle,target.id)];
     for(const grant of grantResult.grants)statements.push(env.DB.prepare(`INSERT INTO user_grants(id,user_id,grant_role,scope_type,scope_id,permissions_json,granted_by) VALUES(?,?,?,?,?,?,?)`).bind(grant.id,target.id,role,grant.scopeType,grant.scopeId,JSON.stringify(grant.permissions),actor.id));
-    await env.DB.batch(statements);await audit(env,actor,target.id,'replace_grants',{role,grants:grantResult.grants.map(({scopeType,scopeId,permissions})=>({scopeType,scopeId,permissions}))});return json({updated:true});
+    await env.DB.batch(statements);await audit(env,actor,target.id,'replace_grants',{role,staffTitle,grants:grantResult.grants.map(({scopeType,scopeId,permissions})=>({scopeType,scopeId,permissions}))});return json({updated:true});
   }
   return null;
 }

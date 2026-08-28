@@ -1,7 +1,8 @@
 export const tables = {
-  users: ['id','email','name','role','account_role','account_status','auth_provider','created_at','updated_at','department_id','phase_id','university_id','college_id','section_id','password_hash','password_salt','password_iterations','last_login_at'],
+  users: ['id','email','name','role','account_role','staff_title','account_status','auth_provider','created_at','updated_at','department_id','phase_id','university_id','college_id','section_id','password_hash','password_salt','password_iterations','last_login_at'],
   universities: ['id','name','sort_order','created_at'],
   colleges: ['id','university_id','name','sort_order','created_at'],
+  departments: ['id','name','display_name','college_id','sort_order'],
   sections: ['id','phase_id','name','sort_order','created_at'],
   tests: ['id','title','subject','lecture','duration_minutes','pass_percentage','shuffle_questions','shuffle_options','status','created_by','created_at','updated_at','exam_mode','available_from','available_until','max_attempts','certificate_enabled'],
   questions: ['id','test_id','text','options_json','correct_option','explanation','position','question_type','accepted_answers_json','image_id','points'],
