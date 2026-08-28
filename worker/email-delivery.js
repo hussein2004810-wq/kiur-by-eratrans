@@ -1,5 +1,5 @@
 export function emailDeliveryConfigured(env){
-  return Boolean(env?.EMAIL_SENDER?.send||(env?.RESEND_API_KEY&&env?.EMAIL_FROM)||(env?.EMAIL_VERIFICATION_WEBHOOK_URL&&env?.EMAIL_VERIFICATION_SECRET));
+  return Boolean(env?.EMAIL_SENDER?.send||(env?.BREVO_API_KEY&&env?.EMAIL_FROM_ADDRESS)||(env?.RESEND_API_KEY&&env?.EMAIL_FROM)||(env?.EMAIL_VERIFICATION_WEBHOOK_URL&&env?.EMAIL_VERIFICATION_SECRET));
 }
 
 function escapeHtml(value){return String(value||'').replace(/[&<>"']/g,character=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]))}
@@ -12,6 +12,10 @@ function emailContent(message){
 
 export async function deliverSecurityEmail(env,message){
   if(env?.EMAIL_SENDER?.send){await env.EMAIL_SENDER.send(message);return}
+  if(env?.BREVO_API_KEY&&env?.EMAIL_FROM_ADDRESS){
+    const content=emailContent(message);const response=await fetch('https://api.brevo.com/v3/smtp/email',{method:'POST',headers:{'content-type':'application/json','api-key':String(env.BREVO_API_KEY),'accept':'application/json'},body:JSON.stringify({sender:{name:String(env.EMAIL_FROM_NAME||'KIUR by ERATRANS'),email:String(env.EMAIL_FROM_ADDRESS)},to:[{email:message.to,name:message.name||undefined}],subject:content.subject,textContent:content.text,htmlContent:content.html})});
+    if(!response.ok)throw new Error('EMAIL_DELIVERY_FAILED');return;
+  }
   if(env?.RESEND_API_KEY&&env?.EMAIL_FROM){
     const content=emailContent(message);const response=await fetch('https://api.resend.com/emails',{method:'POST',headers:{'content-type':'application/json','authorization':`Bearer ${env.RESEND_API_KEY}`},body:JSON.stringify({from:String(env.EMAIL_FROM),to:[message.to],subject:content.subject,text:content.text,html:content.html})});
     if(!response.ok)throw new Error('EMAIL_DELIVERY_FAILED');return;
