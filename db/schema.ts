@@ -25,4 +25,7 @@ export const tables = {
   studentBans: ['id','request_id','student_id','ban_type','reason','starts_at','ends_at','status','approved_by','lifted_by','lifted_at','lift_reason','created_at','updated_at'],
   studentBanAppeals: ['id','request_id','ban_id','student_id','reason','status','reviewed_by','reviewed_at','review_note','created_at'],
   studentBanLogs: ['id','request_id','ban_id','student_id','action','by_user_id','actor_name_snapshot','actor_email_snapshot','student_name_snapshot','student_email_snapshot','scope_type','scope_id','reason_snapshot','evidence_snapshot','duration_seconds','status_snapshot','device_hash','at','details_json'],
+  academicDeletions: ['id','resource_type','resource_id','resource_name','deleted_by','deleted_at','restored_by','restored_at','purged_by','purged_at','status','details_json'],
+  academicDeletedItems: ['batch_id','resource_type','resource_id'],
+  userNotifications: ['id','user_id','notification_type','title','message','link','read_at','created_at'],
 } as const;

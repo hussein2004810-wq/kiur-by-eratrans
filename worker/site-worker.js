@@ -16,6 +16,7 @@ import {handleLogsApi} from './logs-api.js';
 import {recordAccountEvent} from './account-events.js';
 import {handleStudentBanApi,refreshStudentRestriction,restrictedStudentPathAllowed} from './student-ban-api.js';
 import {computeAttemptDeadline,deadlineSql,studentCanAccessTest} from './test-access.js';
+import {handleNotificationsApi} from './notifications-api.js';
 
 const files = new Map(/*__STATIC_FILES__*/);
 let schemaReady = false;
@@ -39,6 +40,7 @@ const schemaStatements = [
   `INSERT OR IGNORE INTO questions(id,test_id,text,options_json,correct_option,explanation,position) VALUES('demo-q2','demo-preop','ما الإجراء الأكثر أهمية ضمن التقييم الأولي لمجرى الهواء؟','["قياس ضغط الدم فقط","تقييم فتحة الفم وحركة الرقبة","قياس سكر الدم","تحديد فصيلة الدم"]',1,'تقييم فتحة الفم وحركة الرقبة يساعد على توقع صعوبة التنبيب.',2)`,
   `INSERT OR IGNORE INTO questions(id,test_id,text,options_json,correct_option,explanation,position) VALUES('demo-q3','demo-preop','أي مما يأتي يجب توثيقه قبل بدء التخدير؟','["الموافقة المستنيرة وخطة التخدير","اسم الممرض فقط","موعد الخروج المتوقع فقط","نوع الغرفة"]',0,'يجب توثيق الموافقة المستنيرة وخطة التخدير قبل الإجراء.',3)`,
 ];
+const visibleAcademicPath=`NOT EXISTS(SELECT 1 FROM academic_deleted_items z WHERE (z.resource_type='university' AND z.resource_id=c.university_id) OR (z.resource_type='college' AND z.resource_id=d.college_id) OR (z.resource_type='department' AND z.resource_id=t.department_id) OR (z.resource_type='phase' AND z.resource_id=t.phase_id) OR (z.resource_type='section' AND z.resource_id=t.section_id) OR (z.resource_type='subject' AND z.resource_id=t.subject_id) OR (z.resource_type='lecture' AND z.resource_id=t.lecture_id))`;
 
 function response(data,status=200,extraHeaders={}){
   return new Response(JSON.stringify(data),{status,headers:secureHeaders({'content-type':'application/json; charset=utf-8','cache-control':'no-store',...extraHeaders})});
@@ -184,6 +186,9 @@ async function handleApi(request,env,url){
   const hierarchyResponse=await handleHierarchyApi(request,env,url,user,restriction);
   if(hierarchyResponse)return hierarchyResponse;
 
+  const notificationsResponse=await handleNotificationsApi(request,env,url,user);
+  if(notificationsResponse)return notificationsResponse;
+
   if(url.pathname==='/api/me'&&request.method==='GET'){
     if(!user)return error('UNAUTHENTICATED','سجّل الدخول للمتابعة',401);
     const permissions=user.role==='owner'?['*']:[...new Set((await loadGrants(env,user.id)).flatMap(grant=>grant.permissions))];
@@ -197,7 +202,7 @@ async function handleApi(request,env,url){
   const publicTest=url.pathname.match(/^\/api\/tests\/([^/]+)$/);
   if(publicTest&&request.method==='GET'){
     const denied=requireUser(user);if(denied)return denied;
-    const test=await env.DB.prepare(`SELECT t.id,t.title,t.subject,t.lecture,t.duration_minutes AS durationMinutes,t.pass_percentage AS passPercentage,t.exam_mode AS examMode,t.available_from AS availableFrom,t.available_until AS availableUntil,t.max_attempts AS maxAttempts,t.department_id AS departmentId,t.phase_id AS phaseId,t.section_id AS sectionId,d.college_id AS collegeId,c.university_id AS universityId FROM tests t LEFT JOIN departments d ON d.id=t.department_id LEFT JOIN colleges c ON c.id=d.college_id WHERE t.id=? AND t.status='published'`).bind(publicTest[1]).first();
+    const test=await env.DB.prepare(`SELECT t.id,t.title,t.subject,t.lecture,t.duration_minutes AS durationMinutes,t.pass_percentage AS passPercentage,t.exam_mode AS examMode,t.available_from AS availableFrom,t.available_until AS availableUntil,t.max_attempts AS maxAttempts,t.department_id AS departmentId,t.phase_id AS phaseId,t.section_id AS sectionId,d.college_id AS collegeId,c.university_id AS universityId FROM tests t LEFT JOIN departments d ON d.id=t.department_id LEFT JOIN colleges c ON c.id=d.college_id WHERE t.id=? AND t.status='published' AND ${visibleAcademicPath}`).bind(publicTest[1]).first();
     if(!test)return error('NOT_FOUND','الاختبار غير موجود',404);
     if(!studentCanAccessTest(user,test))return error('FORBIDDEN','هذا الاختبار خارج مسارك الأكاديمي',403);
     const list=await env.DB.prepare(`SELECT id,text,options_json,position,question_type AS questionType,image_id AS imageId FROM questions WHERE test_id=? ORDER BY position`).bind(test.id).all();
@@ -215,7 +220,7 @@ async function handleApi(request,env,url){
   if(url.pathname==='/api/attempts'&&request.method==='POST'){
     const denied=requireUser(user);if(denied)return denied;
     const parsed=await body(request);if(parsed.error)return error(parsed.error.code,parsed.error.message,parsed.error.status);const value=parsed.value;if(typeof value?.testId!=='string'||!value.testId||value.testId.length>200)return error('VALIDATION','الاختبار مطلوب');
-    const test=await env.DB.prepare(`SELECT t.id,t.duration_minutes AS durationMinutes,t.shuffle_questions AS shuffleQuestions,t.shuffle_options AS shuffleOptions,t.exam_mode AS examMode,t.available_from AS availableFrom,t.available_until AS availableUntil,t.max_attempts AS maxAttempts,t.department_id AS departmentId,t.phase_id AS phaseId,t.section_id AS sectionId,d.college_id AS collegeId,c.university_id AS universityId FROM tests t LEFT JOIN departments d ON d.id=t.department_id LEFT JOIN colleges c ON c.id=d.college_id WHERE t.id=? AND t.status='published'`).bind(value.testId).first();
+    const test=await env.DB.prepare(`SELECT t.id,t.duration_minutes AS durationMinutes,t.shuffle_questions AS shuffleQuestions,t.shuffle_options AS shuffleOptions,t.exam_mode AS examMode,t.available_from AS availableFrom,t.available_until AS availableUntil,t.max_attempts AS maxAttempts,t.department_id AS departmentId,t.phase_id AS phaseId,t.section_id AS sectionId,d.college_id AS collegeId,c.university_id AS universityId FROM tests t LEFT JOIN departments d ON d.id=t.department_id LEFT JOIN colleges c ON c.id=d.college_id WHERE t.id=? AND t.status='published' AND ${visibleAcademicPath}`).bind(value.testId).first();
     if(!test)return error('NOT_FOUND','الاختبار غير متاح',404);
     if(!studentCanAccessTest(user,test))return error('FORBIDDEN','هذا الاختبار خارج مسارك الأكاديمي',403);
     const questionRows=await env.DB.prepare(`SELECT id,options_json FROM questions WHERE test_id=? ORDER BY position`).bind(test.id).all();const questions=decodeQuestions(questionRows.results);

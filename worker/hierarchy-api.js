@@ -13,18 +13,20 @@ function denyTestStaff(user){return ['owner','admin','teacher'].includes(user?.r
 function pathContext(path){return {universityId:path.universityId,collegeId:path.collegeId,departmentId:path.departmentId,phaseId:path.phaseId,sectionId:path.sectionId,subjectId:path.subjectId,lectureId:path.lectureId}}
 async function canManageTests(env,user,path){return hasPermission(env,user,'manage_tests',pathContext(path))}
 async function visibleTests(env,user,rows){if(user.role==='owner')return rows;const grants=await loadGrants(env,user.id);return rows.filter(row=>permittedWith(grants,'manage_tests',pathContext(row)))}
+function catalogVisible(type,expression){return `NOT EXISTS(SELECT 1 FROM academic_deleted_items adi WHERE adi.resource_type='${type}' AND adi.resource_id=${expression})`}
+const activeTestPath=[catalogVisible('university','u.id'),catalogVisible('college','c.id'),catalogVisible('department','d.id'),catalogVisible('phase','p.id'),catalogVisible('subject','s.id'),catalogVisible('lecture','l.id'),`(x.id IS NULL OR ${catalogVisible('section','x.id')})`].join(' AND ');
 async function clinicalMediaIssue(env,user,questions,path){const ids=[...new Set(questions.filter(question=>question.questionType==='clinical_case').map(question=>question.imageId))];if(!ids.length)return null;if(!(await hasPermission(env,user,'use_media',pathContext(path)))&&!(await hasPermission(env,user,'manage_library',pathContext(path))))return 'لا تملك صلاحية استخدام مكتبة الصور';for(const id of ids){const asset=await env.DB.prepare(`SELECT id,scope_type AS scopeType,scope_id AS scopeId FROM media_assets WHERE id=? AND deleted_at IS NULL`).bind(id).first();if(!asset)return 'إحدى صور الحالات السريرية غير موجودة أو محذوفة';const context=await resolveScope(env,asset.scopeType,asset.scopeId);if(!context||(!(await hasPermission(env,user,'use_media',context))&&!(await hasPermission(env,user,'manage_library',context))))return 'إحدى صور الحالات السريرية خارج نطاق صلاحيتك'}return null}
 async function testHasAttempts(env,testId){const row=await env.DB.prepare(`SELECT 1 AS value FROM attempts WHERE test_id=? LIMIT 1`).bind(testId).first();return Boolean(row)}
 
 async function catalog(env){
   const [universities,colleges,departments,phases,sections,subjects,lectures]=await Promise.all([
-    env.DB.prepare(`SELECT id,name,sort_order AS sortOrder FROM universities ORDER BY sort_order,name`).all(),
-    env.DB.prepare(`SELECT id,university_id AS universityId,name,sort_order AS sortOrder FROM colleges ORDER BY sort_order,name`).all(),
-    env.DB.prepare(`SELECT id,college_id AS collegeId,COALESCE(display_name,name) AS name,sort_order AS sortOrder FROM departments ORDER BY sort_order,name`).all(),
-    env.DB.prepare(`SELECT id,department_id AS departmentId,name,sort_order AS sortOrder FROM phases ORDER BY sort_order,name`).all(),
-    env.DB.prepare(`SELECT id,phase_id AS phaseId,name,sort_order AS sortOrder FROM sections ORDER BY sort_order,name`).all(),
-    env.DB.prepare(`SELECT id,phase_id AS phaseId,name,sort_order AS sortOrder FROM subjects ORDER BY sort_order,name`).all(),
-    env.DB.prepare(`SELECT id,subject_id AS subjectId,name,sort_order AS sortOrder FROM lectures ORDER BY sort_order,name`).all()
+    env.DB.prepare(`SELECT id,name,sort_order AS sortOrder FROM universities u WHERE ${catalogVisible('university','u.id')} ORDER BY sort_order,name`).all(),
+    env.DB.prepare(`SELECT id,university_id AS universityId,name,sort_order AS sortOrder FROM colleges c WHERE ${catalogVisible('college','c.id')} ORDER BY sort_order,name`).all(),
+    env.DB.prepare(`SELECT id,college_id AS collegeId,COALESCE(display_name,name) AS name,sort_order AS sortOrder FROM departments d WHERE ${catalogVisible('department','d.id')} ORDER BY sort_order,name`).all(),
+    env.DB.prepare(`SELECT id,department_id AS departmentId,name,sort_order AS sortOrder FROM phases p WHERE ${catalogVisible('phase','p.id')} ORDER BY sort_order,name`).all(),
+    env.DB.prepare(`SELECT id,phase_id AS phaseId,name,sort_order AS sortOrder FROM sections x WHERE ${catalogVisible('section','x.id')} ORDER BY sort_order,name`).all(),
+    env.DB.prepare(`SELECT id,phase_id AS phaseId,name,sort_order AS sortOrder FROM subjects s WHERE ${catalogVisible('subject','s.id')} ORDER BY sort_order,name`).all(),
+    env.DB.prepare(`SELECT id,subject_id AS subjectId,name,sort_order AS sortOrder FROM lectures l WHERE ${catalogVisible('lecture','l.id')} ORDER BY sort_order,name`).all()
   ]);
   return {universities:universities.results,colleges:colleges.results,departments:departments.results,phases:phases.results,sections:sections.results,subjects:subjects.results,lectures:lectures.results};
 }
@@ -32,7 +34,7 @@ async function catalog(env){
 async function resolvePath(env,value){
   if(!value?.departmentId||!value?.phaseId||!value?.subjectId||!value?.lectureId)return null;
   const sectionId=value.sectionId||null;
-  return env.DB.prepare(`SELECT u.id AS universityId,u.name AS universityName,c.id AS collegeId,c.name AS collegeName,d.id AS departmentId,COALESCE(d.display_name,d.name) AS departmentName,p.id AS phaseId,p.name AS phaseName,x.id AS sectionId,x.name AS sectionName,s.id AS subjectId,s.name AS subjectName,l.id AS lectureId,l.name AS lectureName FROM lectures l JOIN subjects s ON s.id=l.subject_id JOIN phases p ON p.id=s.phase_id JOIN departments d ON d.id=p.department_id JOIN colleges c ON c.id=d.college_id JOIN universities u ON u.id=c.university_id LEFT JOIN sections x ON x.id=? AND x.phase_id=p.id WHERE d.id=? AND p.id=? AND s.id=? AND l.id=? AND (? IS NULL OR x.id IS NOT NULL) AND (? IS NULL OR u.id=?) AND (? IS NULL OR c.id=?)`).bind(sectionId,value.departmentId,value.phaseId,value.subjectId,value.lectureId,sectionId,value.universityId||null,value.universityId||null,value.collegeId||null,value.collegeId||null).first();
+  return env.DB.prepare(`SELECT u.id AS universityId,u.name AS universityName,c.id AS collegeId,c.name AS collegeName,d.id AS departmentId,COALESCE(d.display_name,d.name) AS departmentName,p.id AS phaseId,p.name AS phaseName,x.id AS sectionId,x.name AS sectionName,s.id AS subjectId,s.name AS subjectName,l.id AS lectureId,l.name AS lectureName FROM lectures l JOIN subjects s ON s.id=l.subject_id JOIN phases p ON p.id=s.phase_id JOIN departments d ON d.id=p.department_id JOIN colleges c ON c.id=d.college_id JOIN universities u ON u.id=c.university_id LEFT JOIN sections x ON x.id=? AND x.phase_id=p.id WHERE d.id=? AND p.id=? AND s.id=? AND l.id=? AND (? IS NULL OR x.id IS NOT NULL) AND (? IS NULL OR u.id=?) AND (? IS NULL OR c.id=?) AND ${activeTestPath}`).bind(sectionId,value.departmentId,value.phaseId,value.subjectId,value.lectureId,sectionId,value.universityId||null,value.universityId||null,value.collegeId||null,value.collegeId||null).first();
 }
 
 function validateQuestions(value){
@@ -79,7 +81,7 @@ export async function handleHierarchyApi(request,env,url,user,restriction=null){
     const current=await env.DB.prepare(`SELECT university_id AS universityId,college_id AS collegeId,department_id AS departmentId,phase_id AS phaseId FROM users WHERE id=?`).bind(user.id).first();
     if(studentProfileComplete(current))return fail('PROFILE_LOCKED','لا يمكن تغيير المسار الأكاديمي بعد حفظه؛ اطلب من المشرف تصحيحه',409);
     const parsed=await readBody(request);if(parsed.error)return fail(parsed.error.code,parsed.error.message,parsed.error.status);const value=parsed.value;
-    const sectionId=value?.sectionId||null;const phase=await env.DB.prepare(`SELECT v.id AS universityId,c.id AS collegeId,d.id AS departmentId,p.id AS phaseId,x.id AS sectionId FROM phases p JOIN departments d ON d.id=p.department_id JOIN colleges c ON c.id=d.college_id JOIN universities v ON v.id=c.university_id LEFT JOIN sections x ON x.id=? AND x.phase_id=p.id WHERE p.id=? AND d.id=? AND c.id=? AND v.id=? AND (? IS NULL OR x.id IS NOT NULL)`).bind(sectionId,value?.phaseId||'',value?.departmentId||'',value?.collegeId||'',value?.universityId||'',sectionId).first();
+    const sectionId=value?.sectionId||null;const phase=await env.DB.prepare(`SELECT v.id AS universityId,c.id AS collegeId,d.id AS departmentId,p.id AS phaseId,x.id AS sectionId FROM phases p JOIN departments d ON d.id=p.department_id JOIN colleges c ON c.id=d.college_id JOIN universities v ON v.id=c.university_id LEFT JOIN sections x ON x.id=? AND x.phase_id=p.id WHERE p.id=? AND d.id=? AND c.id=? AND v.id=? AND (? IS NULL OR x.id IS NOT NULL) AND ${catalogVisible('university','v.id')} AND ${catalogVisible('college','c.id')} AND ${catalogVisible('department','d.id')} AND ${catalogVisible('phase','p.id')} AND (x.id IS NULL OR ${catalogVisible('section','x.id')})`).bind(sectionId,value?.phaseId||'',value?.departmentId||'',value?.collegeId||'',value?.universityId||'',sectionId).first();
     if(!phase)return fail('VALIDATION','اختر جامعة وكلية وقسمًا ومرحلة وشعبة صحيحة');
     await env.DB.batch([
       env.DB.prepare(`UPDATE users SET university_id=?,college_id=?,department_id=?,phase_id=?,section_id=?,updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(phase.universityId,phase.collegeId,phase.departmentId,phase.phaseId,phase.sectionId,user.id),
@@ -100,7 +102,7 @@ export async function handleHierarchyApi(request,env,url,user,restriction=null){
     }
     const q=url.searchParams.get('q')?.trim().slice(0,100);
     if(q){filters.push(`(t.title LIKE ? OR t.subject LIKE ? OR t.lecture LIKE ? OR s.name LIKE ? OR l.name LIKE ?)`);for(let i=0;i<5;i++)binds.push(`%${q}%`)}
-    const where=[`t.status='published'`,...filters].join(' AND ');
+    const where=[`t.status='published'`,activeTestPath,...filters].join(' AND ');
     const statement=env.DB.prepare(`${testSelect} WHERE ${where} GROUP BY t.id ORDER BY t.created_at DESC`);
     const result=await (binds.length?statement.bind(...binds):statement).all();
     return json({data:user.role==='student'?result.results:await visibleTests(env,user,result.results)});
@@ -108,7 +110,7 @@ export async function handleHierarchyApi(request,env,url,user,restriction=null){
 
   if(url.pathname==='/api/admin/tests'&&request.method==='GET'){
     const denied=denyTestStaff(user);if(denied)return denied;
-    const result=await env.DB.prepare(`${testSelect} WHERE t.status!='archived' GROUP BY t.id ORDER BY t.created_at DESC`).all();
+    const result=await env.DB.prepare(`${testSelect} WHERE t.status!='archived' AND ${activeTestPath} GROUP BY t.id ORDER BY t.created_at DESC`).all();
     return json({data:await visibleTests(env,user,result.results)});
   }
 
