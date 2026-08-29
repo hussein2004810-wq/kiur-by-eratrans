@@ -4,7 +4,7 @@ import {resolve} from 'node:path';
 
 const database=new DatabaseSync(':memory:');
 database.exec('PRAGMA foreign_keys=ON');
-for(const file of ['drizzle/0000_medexam.sql','drizzle/0001_academic_hierarchy.sql','drizzle/0002_backfill_existing_tests.sql','drizzle/0003_scale_indexes.sql','drizzle/0004_attempt_shuffle.sql','drizzle/0005_security_hardening.sql','drizzle/0006_accounts_organizations_permissions.sql','drizzle/0007_exam_modes_question_types_files.sql','drizzle/0008_staff_titles_and_college_copy.sql','drizzle/0009_clinical_glimpses_library_logs.sql','drizzle/0010_student_bans.sql','drizzle/0011_security_hardening.sql','drizzle/0012_firebase_auth.sql','drizzle/0013_academic_trash_and_notifications.sql']){
+for(const file of ['drizzle/0000_medexam.sql','drizzle/0001_academic_hierarchy.sql','drizzle/0002_backfill_existing_tests.sql','drizzle/0003_scale_indexes.sql','drizzle/0004_attempt_shuffle.sql','drizzle/0005_security_hardening.sql','drizzle/0006_accounts_organizations_permissions.sql','drizzle/0007_exam_modes_question_types_files.sql','drizzle/0008_staff_titles_and_college_copy.sql','drizzle/0009_clinical_glimpses_library_logs.sql','drizzle/0010_student_bans.sql','drizzle/0011_security_hardening.sql','drizzle/0012_firebase_auth.sql','drizzle/0013_academic_trash_and_notifications.sql','drizzle/0014_media_access_indexes.sql']){
   database.exec(await readFile(resolve(file),'utf8'));
 }
 const counts={
@@ -21,4 +21,8 @@ if(scaleIndexes!==4||!plan.includes('idx_attempts_user_status_finished'))throw n
 const firebaseColumns=database.prepare("SELECT count(*) AS count FROM pragma_table_info('users') WHERE name IN ('firebase_uid','email_verified_at')").get().count;
 const firebaseIndex=database.prepare("SELECT count(*) AS count FROM sqlite_schema WHERE type='index' AND name='idx_users_firebase_uid'").get().count;
 if(firebaseColumns!==2||firebaseIndex!==1)throw new Error('Firebase auth migration verification failed');
-console.log(JSON.stringify({ok:true,counts,demo,scaleIndexes,firebaseColumns,queryPlan:plan}));
+const mediaIndexes=Number(database.prepare("SELECT count(*) AS count FROM sqlite_schema WHERE type='index' AND name IN ('idx_questions_image_test','idx_glimpses_image_public','idx_attempts_user_test_status_deadline')").get().count);
+const imagePlan=database.prepare("EXPLAIN QUERY PLAN SELECT * FROM questions WHERE image_id=? AND test_id=?").all('image','test').map(item=>item.detail).join(' ');
+const activeAttemptPlan=database.prepare("EXPLAIN QUERY PLAN SELECT * FROM attempts WHERE user_id=? AND test_id=? AND status='in_progress' AND deadline_at>CURRENT_TIMESTAMP").all('user','test').map(item=>item.detail).join(' ');
+if(mediaIndexes!==3||!imagePlan.includes('idx_questions_image_test')||!activeAttemptPlan.includes('idx_attempts_user_test_status_deadline'))throw new Error('Media access index verification failed');
+console.log(JSON.stringify({ok:true,counts,demo,scaleIndexes,firebaseColumns,mediaIndexes,queryPlan:plan,imagePlan,activeAttemptPlan}));
