@@ -38,6 +38,6 @@ const rateUser={id:'student-rate',email:'rate@example.com'};let limited;for(let 
 const expired={id:'student-expired',email:'expired@example.com'};await call('/api/me',{user:expired});sqlite.prepare(`INSERT INTO attempts(id,user_id,test_id,status,started_at) VALUES(?,?,?,'in_progress',datetime('now','-30 minutes'))`).run('expired-attempt',expired.id,'demo-preop');
 const expiredSubmit=await call('/api/attempts/expired-attempt/submit',{method:'POST',user:expired});const expiredData=await expiredSubmit.json();if(expiredSubmit.status!==200||expiredData.expired!==true||sqlite.prepare(`SELECT status FROM attempts WHERE id=?`).get('expired-attempt').status!=='submitted')throw new Error('Expired attempt was not finalized');
 
-if(anonymous.headers.get('content-security-policy')===null||anonymous.headers.get('x-frame-options')!=='DENY'||anonymous.headers.get('strict-transport-security')===null)throw new Error('Security headers are missing');
+if(anonymous.headers.get('content-security-policy')===null||anonymous.headers.get('x-frame-options')!=='DENY'||anonymous.headers.get('strict-transport-security')===null||anonymous.headers.get('cross-origin-resource-policy')!=='same-origin'||anonymous.headers.get('origin-agent-cluster')!=='?1'||anonymous.headers.get('x-permitted-cross-domain-policies')!=='none')throw new Error('Security headers are missing');
 
 console.log(JSON.stringify({ok:true,anonymous:anonymous.status,idor:idor.status,payload:tooLarge.status,rateLimit:limited.status,expired:expiredData.expired,securityHeaders:true}));

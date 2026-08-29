@@ -3,11 +3,14 @@ export const MAX_JSON_BODY_BYTES=1024*1024;
 const SECURITY_HEADERS={
   'content-security-policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
   'cross-origin-opener-policy':'same-origin',
-  'permissions-policy':'camera=(), microphone=(), geolocation=()',
+  'cross-origin-resource-policy':'same-origin',
+  'origin-agent-cluster':'?1',
+  'permissions-policy':'accelerometer=(), autoplay=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()',
   'referrer-policy':'strict-origin-when-cross-origin',
   'strict-transport-security':'max-age=31536000',
   'x-content-type-options':'nosniff',
-  'x-frame-options':'DENY'
+  'x-frame-options':'DENY',
+  'x-permitted-cross-domain-policies':'none'
 };
 
 export function secureHeaders(initial={}){
