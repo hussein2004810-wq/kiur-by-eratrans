@@ -2,13 +2,10 @@ import {lazy,Suspense,useEffect,useMemo,useState} from 'react';
 import {Activity,BarChart3,Bell,BookOpen,CheckCircle2,ChevronLeft,ClipboardList,Clock3,FileQuestion,GraduationCap,HeartPulse,History,LayoutDashboard,Link2,LogOut,Menu,Plus,Save,Search,Settings2,ShieldCheck,Trash2,Users,X} from 'lucide-react';
 import './real.css';
 import './hierarchy.css';
-import CatalogManager from './CatalogManagerV2';
-import AccountManager from './AccountManager';
 import {CertificateButton,VerifyScreen} from './Certificate';
-import StudentManager,{type StudentFilters,type StudentRow} from './StudentManager';
+import type {StudentFilters,StudentRow} from './StudentManager';
 import ShareButton from './ShareButton';
 import ClinicalGlimpsesManager,{ClinicalGlimpsesFeed} from './ClinicalGlimpses';
-import LogsManager from './LogsManager';
 import './share.css';
 import AuthScreen from './AuthScreen';
 import StudentBanManager,{BannedStudentScreen} from './StudentBanManager';
@@ -16,6 +13,10 @@ import StudentBanManager,{BannedStudentScreen} from './StudentBanManager';
 const ImportManager=lazy(()=>import('./ImportManager'));
 const MediaManager=lazy(()=>import('./MediaManager'));
 const ExportManager=lazy(()=>import('./ExportManager'));
+const CatalogManager=lazy(()=>import('./CatalogManagerV2'));
+const AccountManager=lazy(()=>import('./AccountManager'));
+const LogsManager=lazy(()=>import('./LogsManager'));
+const StudentManager=lazy(()=>import('./StudentManager'));
 
 type User={id:string;email:string;name:string;role:'student'|'teacher'|'admin'|'owner';permissions?:string[];staffTitle?:'department_head'|'department_coordinator'|'university_doctor'|'university_professor'|null;authProvider?:'chatgpt'|'password'|'hybrid';universityId?:string|null;collegeId?:string|null;departmentId?:string|null;phaseId?:string|null;sectionId?:string|null;universityName?:string|null;collegeName?:string|null;departmentName?:string|null;phaseName?:string|null;sectionName?:string|null;banStatus?:'none'|'precaution'|'temporary'|'permanent';restriction?:{requestId?:string;banId?:string;requestNumber?:string;banType?:string;reason?:string;endsAt?:string|null}|null};
 type University={id:string;name:string;sortOrder:number};
@@ -167,13 +168,13 @@ export default function RealAppV2(){
   </div>
   {adminTab==='tests'&&<div className="contentGrid"><section className="panel tableWrap"><div className="adminHead"><div><h3>إدارة الاختبارات</h3><small>لا تظهر إلا الاختبارات الواقعة ضمن نطاق صلاحيتك</small></div><button className="solid" onClick={()=>setEditor('new')}><Plus/>اختبار جديد</button></div><table><thead><tr><th>العنوان</th><th>المسار</th><th>الأسئلة</th><th>الحالة</th><th/></tr></thead><tbody>{adminTests.map(test=><tr key={test.id}><td>{test.title}</td><td>{test.subjectName||test.subject}<small className="tableLecture">{test.lectureName||test.lecture}</small></td><td>{test.questionCount}</td><td><span className={test.status==='published'?'success':'draft'}>{test.status==='published'?'منشور':'مسودة'}</span></td><td className="actions"><ShareButton kind="test" id={test.id} title={test.title} label="مشاركة" notify={notify} className="tableShare"/><button onClick={()=>void edit(test.id)}>تعديل</button><button className="trash" onClick={()=>void remove(test.id)}><Trash2/></button></td></tr>)}</tbody></table></section>{user.role==='owner'&&<section className="panel"><div className="panelHead"><h3>آخر التعديلات</h3></div>{audit.slice(0,8).map(item=><div className="audit" key={item.id}><b>{item.action}</b><small>{item.actorName||'النظام'} • {new Intl.DateTimeFormat('ar-IQ',{dateStyle:'short',timeStyle:'short'}).format(new Date(item.at))}</small></div>)}</section>}</div>}
   {adminTab==='imports'&&<Suspense fallback={<SectionLoading/>}><ImportManager tests={adminTests} notify={notify} onCommitted={loadAdmin}/></Suspense>}
-  {adminTab==='catalog'&&(user.role!=='teacher'||user.permissions?.some(permission=>['manage_catalog','delete_catalog'].includes(permission)))&&<CatalogManager catalog={catalog} reload={reloadCatalog} notify={notify} currentRole={user.role} permissions={user.permissions||[]}/>}
-  {adminTab==='students'&&<><StudentManager students={students} total={studentsTotal} search={studentSearch} onSearch={setStudentSearch} loading={studentsLoading} catalog={catalog} filters={studentFilters} onFilters={setStudentFilters}/><Suspense fallback={<SectionLoading/>}><ExportManager notify={notify}/></Suspense></>}
-  {adminTab==='accounts'&&user.role!=='teacher'&&<AccountManager catalog={catalog} currentRole={user.role} notify={notify}/>}
+  {adminTab==='catalog'&&(user.role!=='teacher'||user.permissions?.some(permission=>['manage_catalog','delete_catalog'].includes(permission)))&&<Suspense fallback={<SectionLoading/>}><CatalogManager catalog={catalog} reload={reloadCatalog} notify={notify} currentRole={user.role} permissions={user.permissions||[]}/></Suspense>}
+  {adminTab==='students'&&<Suspense fallback={<SectionLoading/>}><StudentManager students={students} total={studentsTotal} search={studentSearch} onSearch={setStudentSearch} loading={studentsLoading} catalog={catalog} filters={studentFilters} onFilters={setStudentFilters}/><ExportManager notify={notify}/></Suspense>}
+  {adminTab==='accounts'&&user.role!=='teacher'&&<Suspense fallback={<SectionLoading/>}><AccountManager catalog={catalog} currentRole={user.role} notify={notify}/></Suspense>}
   {adminTab==='bans'&&<StudentBanManager currentRole={user.role} currentUserId={user.id} permissions={user.permissions||[]} notify={notify}/>}
   {adminTab==='glimpses'&&<ClinicalGlimpsesManager catalog={catalog} currentRole={user.role} notify={notify}/>}
   {adminTab==='library'&&<Suspense fallback={<SectionLoading/>}><MediaManager notify={notify} currentRole={user.role} permissions={user.permissions||[]}/></Suspense>}
-  {adminTab==='logs'&&<LogsManager permissions={user.permissions||[]} currentRole={user.role} notify={notify}/>}
+  {adminTab==='logs'&&<Suspense fallback={<SectionLoading/>}><LogsManager permissions={user.permissions||[]} currentRole={user.role} notify={notify}/></Suspense>}
 </>}
 </main>{menu&&<button className="scrim" onClick={()=>setMenu(false)}/>}<div className={'toast '+(toast?'show':'')}>{toast}</div>{runner&&<ExamRunner test={runner.test} attemptId={runner.attemptId} notify={notify} onDone={()=>void loadHistory()} onClose={()=>setRunner(null)}/>} {editor&&<TestForm catalog={catalog} initial={editor==='new'?undefined:editor} notify={notify} onClose={()=>setEditor(null)} onSaved={async()=>{setEditor(null);await Promise.all([loadAdmin(),loadTests()])}}/>}</div>
 }
