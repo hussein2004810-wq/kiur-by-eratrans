@@ -1,0 +1,15 @@
+@media(max-width:700px){
+  .responsiveRecordWrap,.banLog .tableWrap{overflow:visible}
+  .responsiveRecords,.banLog table{min-width:0!important}
+  .responsiveRecords thead,.banLog thead{display:none}
+  .responsiveRecords,.responsiveRecords tbody,.responsiveRecords tr,.responsiveRecords td,
+  .banLog table,.banLog tbody,.banLog tr,.banLog td{display:block;width:100%}
+  .responsiveRecords tr,.banLog tr{margin:11px 0;border:1px solid var(--line);border-radius:14px;padding:7px 11px;background:#fff;box-shadow:0 8px 22px #0c342b0a}
+  .responsiveRecords td,.banLog td{display:grid;grid-template-columns:minmax(92px,.5fr) minmax(0,1fr);align-items:center;gap:8px;white-space:normal;text-align:left;padding:9px 2px}
+  .responsiveRecords td::before,.banLog td::before{content:attr(data-label);font-size:10px;font-weight:700;color:var(--muted);text-align:right}
+  .responsiveRecords td:first-child,.banLog td:nth-child(2){grid-template-columns:1fr;text-align:right}
+  .responsiveRecords td:first-child::before,.banLog td:nth-child(2)::before{display:none}
+  .responsiveRecords .actions{display:flex;justify-content:flex-end;flex-wrap:wrap}
+  .responsiveRecords .actions::before{margin-left:auto}
+  .banLog code{direction:ltr;overflow-wrap:anywhere}
+}
