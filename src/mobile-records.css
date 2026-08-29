@@ -12,4 +12,5 @@
   .responsiveRecords .actions{display:flex;justify-content:flex-end;flex-wrap:wrap}
   .responsiveRecords .actions::before{margin-left:auto}
   .banLog code{direction:ltr;overflow-wrap:anywhere}
+  .studentsTable tr,.logTable tr,.banLog tr{content-visibility:auto;contain-intrinsic-block-size:120px}
 }

@@ -1,0 +1,5 @@
+.skipLink{position:fixed;top:10px;right:12px;z-index:200;transform:translateY(-160%);border-radius:10px;background:#fff;color:var(--green);padding:10px 14px;font-weight:800;box-shadow:var(--shadow)}
+.skipLink:focus{transform:none}
+:where(button,a,input,select,textarea,[tabindex]):focus-visible{outline:3px solid #e4a334;outline-offset:3px}
+#main-content:focus{outline:0}
+@media(forced-colors:active){:where(button,a,input,select,textarea,[tabindex]):focus-visible{outline:2px solid CanvasText}.skipLink{border:1px solid CanvasText}}
