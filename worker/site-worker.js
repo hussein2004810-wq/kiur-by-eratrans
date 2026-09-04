@@ -263,7 +263,7 @@ async function handleApi(request,env,url){
   }
   if(url.pathname==='/api/me/history'&&request.method==='GET'){
     const denied=requireUser(user);if(denied)return denied;
-    const history=await env.DB.prepare(`SELECT a.id,t.title,t.subject,a.score,a.max_score AS maxScore,a.percentage,a.started_at AS startedAt,a.finished_at AS finishedAt,CASE WHEN a.percentage>=t.pass_percentage THEN 1 ELSE 0 END AS passed FROM attempts a JOIN tests t ON t.id=a.test_id WHERE a.user_id=? AND a.status='submitted' ORDER BY a.finished_at DESC LIMIT 100`).bind(user.id).all();
+    const history=await env.DB.prepare(`SELECT a.id,a.test_id AS testId,t.title,t.subject,a.score,a.max_score AS maxScore,a.percentage,a.started_at AS startedAt,a.finished_at AS finishedAt,CASE WHEN a.percentage>=t.pass_percentage THEN 1 ELSE 0 END AS passed FROM attempts a JOIN tests t ON t.id=a.test_id WHERE a.user_id=? AND a.status='submitted' ORDER BY a.finished_at DESC LIMIT 100`).bind(user.id).all();
     const average=history.results.length?Math.round(history.results.reduce((sum,item)=>sum+Number(item.percentage),0)/history.results.length*100)/100:0;
     return response({data:history.results,summary:{attempts:history.results.length,averagePercentage:average}});
   }
