@@ -53,6 +53,8 @@ function decodeName(request,email){
   return email.split('@')[0];
 }
 async function chatGptIdentity(request,env){
+  const hostname=new URL(request.url).hostname;const localTest=hostname==='localhost'||hostname==='127.0.0.1'||hostname.endsWith('.test');
+  if(!localTest){const supplied=request.headers.get('x-openai-proxy-secret')||'';const expected=String(env.OPENAI_PROXY_SECRET||'');if(expected.length<32||supplied.length!==expected.length)return null;let difference=0;for(let index=0;index<expected.length;index++)difference|=expected.charCodeAt(index)^supplied.charCodeAt(index);if(difference!==0)return null}
   const providerId=request.headers.get('oai-authenticated-user-id');const email=request.headers.get('oai-authenticated-user-email')?.toLowerCase();if(!providerId||!email)return null;
   const name=decodeName(request,email);const ownerIds=new Set(String(env.OWNER_USER_IDS||env.ADMIN_USER_IDS||'').split(',').map(value=>value.trim()).filter(Boolean));const owner=ownerIds.has(providerId);
   let account=await env.DB.prepare(`SELECT u.id,u.email,u.name,u.account_role AS role,u.staff_title AS staffTitle,u.account_status AS accountStatus,u.auth_provider AS authProvider,u.department_id AS departmentId,u.phase_id AS phaseId,u.university_id AS universityId,u.college_id AS collegeId,u.section_id AS sectionId,u.ban_status AS banStatus,u.ban_until AS banUntil,u.active_ban_request_id AS activeBanRequestId,u.active_ban_id AS activeBanId FROM user_identities i JOIN users u ON u.id=i.user_id WHERE i.provider='chatgpt' AND i.provider_user_id=?`).bind(providerId).first();
@@ -146,9 +148,9 @@ async function handleApi(request,env,url){
   let user=await identity(request,env);let restriction=null;if(user){const refreshed=await refreshStudentRestriction(request,env,user);user=refreshed.user;restriction=refreshed.restriction}
   if(!['GET','HEAD'].includes(request.method)){
     const origin=request.headers.get('origin');
-    if(origin&&origin!==url.origin)return error('INVALID_ORIGIN','طلب غير مسموح',403);
+    if(!origin||origin!==url.origin)return error('INVALID_ORIGIN','طلب غير مسموح',403);
     const fetchSite=request.headers.get('sec-fetch-site');
-    if(fetchSite&&!['same-origin','none'].includes(fetchSite))return error('INVALID_ORIGIN','طلب غير مسموح',403);
+    if(fetchSite&&fetchSite!=='same-origin')return error('INVALID_ORIGIN','طلب غير مسموح',403);
   }
   const rule=user&&limitRule(request,url);
   if(rule){const result=await enforceRateLimit(env,`${user.id}:${rule[0]}`,rule[1]);if(!result.allowed)return response({error:{code:'RATE_LIMITED',message:'طلبات كثيرة جدًا؛ حاول بعد قليل'}},429,{'retry-after':String(result.retryAfter)})}
