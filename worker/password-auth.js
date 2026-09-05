@@ -51,14 +51,14 @@ export async function hashToken(value){return sha256(value)}
 function cookieValue(request,name){
   const cookie=request.headers.get('cookie')||'';for(const part of cookie.split(';')){const separator=part.indexOf('=');if(separator<0)continue;if(part.slice(0,separator).trim()===name)return decodeURIComponent(part.slice(separator+1).trim())}return null;
 }
-export function clearSessionCookie(){return `${SESSION_COOKIE}=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`}
+export function clearSessionCookie(){return `${SESSION_COOKIE}=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0`}
 export async function createSession(env,userId,request){
   const token=randomToken();const tokenHash=await sha256(token);const userAgentHash=await sha256(request.headers.get('user-agent')||'unknown');const expiresAt=new Date(Date.now()+SESSION_SECONDS*1000).toISOString();
   await env.DB.batch([
     env.DB.prepare(`INSERT INTO auth_sessions(id,user_id,token_hash,expires_at,user_agent_hash) VALUES(?,?,?,?,?)`).bind(crypto.randomUUID(),userId,tokenHash,expiresAt,userAgentHash),
     env.DB.prepare(`DELETE FROM auth_sessions WHERE unixepoch(expires_at)<=unixepoch('now') OR revoked_at IS NOT NULL`)
   ]);
-  return {cookie:`${SESSION_COOKIE}=${encodeURIComponent(token)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${SESSION_SECONDS}`,expiresAt};
+  return {cookie:`${SESSION_COOKIE}=${encodeURIComponent(token)}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=${SESSION_SECONDS}`,expiresAt};
 }
 export async function revokeSession(env,request){const token=cookieValue(request,SESSION_COOKIE);if(!token)return;await env.DB.prepare(`UPDATE auth_sessions SET revoked_at=CURRENT_TIMESTAMP WHERE token_hash=? AND revoked_at IS NULL`).bind(await sha256(token)).run()}
 export async function revokeUserSessions(env,userId){await env.DB.prepare(`UPDATE auth_sessions SET revoked_at=CURRENT_TIMESTAMP WHERE user_id=? AND revoked_at IS NULL`).bind(userId).run()}
