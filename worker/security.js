@@ -1,7 +1,7 @@
 export const MAX_JSON_BODY_BYTES=1024*1024;
 
 const SECURITY_HEADERS={
-  'content-security-policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+  'content-security-policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
   'cross-origin-opener-policy':'same-origin',
   'cross-origin-resource-policy':'same-origin',
   'origin-agent-cluster':'?1',
