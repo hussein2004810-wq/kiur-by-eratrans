@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 
 const main=await readFile(new URL('../src/main.tsx',import.meta.url),'utf8');
 const theme=await readFile(new URL('../src/theme.css',import.meta.url),'utf8');
+const app=await readFile(new URL('../src/RealAppV2.tsx',import.meta.url),'utf8');
 const html=await readFile(new URL('../index.html',import.meta.url),'utf8');
 
 assert.ok(main.indexOf("import './styles.css'")<main.indexOf("import './theme.css'"),'Theme layer must load after the legacy styles');
@@ -12,6 +13,13 @@ assert.match(theme,/\.app input:not\(\[type=checkbox\]\)/,'Form controls must ha
 assert.match(theme,/@media\(max-width:720px\)[\s\S]*safe-area-inset-bottom/,'Mobile safe areas must be respected');
 assert.match(theme,/@media\(prefers-reduced-motion:reduce\)/,'Reduced motion support is required');
 assert.match(theme,/@media\(forced-colors:active\)/,'Forced-colors support is required');
+assert.match(app,/function LiquidNavigation/,'The real application must render the shared liquid navigation');
+assert.match(app,/aria-current=\{active===id\?'page'/,'Liquid navigation must expose the active destination');
+assert.match(theme,/\.liquidNav\{/,'Liquid navigation styling is required');
+assert.match(theme,/@keyframes liquid-shape/,'The liquid active state must animate');
+assert.match(theme,/@media\(max-width:900px\)[\s\S]*backdrop-filter:none/,'Card blur must be disabled on constrained devices');
+assert.match(theme,/@media\(max-width:720px\)[\s\S]*\.studentFilters\{[^}]*display:grid/,'Student filters must use a non-clipping phone grid');
+assert.doesNotMatch(theme,/--green:#19b99b|--green2:#51cfb1/,'Legacy green brand tokens must not remain active');
 assert.match(theme,/@media print[\s\S]*background:#fff!important/,'Printable outputs must stay light');
 assert.match(html,/viewport-fit=cover/,'Viewport metadata must support phone safe areas');
 assert.match(html,/theme-color" content="#080b1a"/,'Browser chrome must match the KIUR dark theme');
