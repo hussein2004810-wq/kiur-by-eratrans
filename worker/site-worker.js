@@ -353,5 +353,10 @@ export default {
       console.error('KIUR request failed',{requestId,name:cause instanceof Error?cause.name:'UnknownError',code:cause?.code||'UNEXPECTED'});
       return url.pathname.startsWith('/api/')?error('INTERNAL_ERROR','حدث خطأ غير متوقع',500):new Response('Internal error',{status:500,headers:secureHeaders({'content-type':'text/plain; charset=utf-8'})});
     }
-  }
+  },
+  async scheduled(_event,env,ctx){ctx.waitUntil(Promise.all([
+    env.DB.prepare(`DELETE FROM api_rate_limits WHERE window_start<?`).bind(Math.floor(Date.now()/1000)-3600).run(),
+    env.DB.prepare(`DELETE FROM account_events WHERE at<datetime('now','-12 months')`).run(),
+    env.DB.prepare(`DELETE FROM staff_invites WHERE expires_at<CURRENT_TIMESTAMP`).run()
+  ]))}
 };
