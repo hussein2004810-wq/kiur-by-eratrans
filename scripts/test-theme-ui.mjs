@@ -4,6 +4,10 @@ import assert from 'node:assert/strict';
 const main=await readFile(new URL('../src/main.tsx',import.meta.url),'utf8');
 const theme=await readFile(new URL('../src/theme.css',import.meta.url),'utf8');
 const app=await readFile(new URL('../src/RealAppV2.tsx',import.meta.url),'utf8');
+const importUi=await readFile(new URL('../src/ImportManager.tsx',import.meta.url),'utf8');
+const importCss=await readFile(new URL('../src/imports.css',import.meta.url),'utf8');
+const exportUi=await readFile(new URL('../src/ExportManager.tsx',import.meta.url),'utf8');
+const exportCss=await readFile(new URL('../src/exports.css',import.meta.url),'utf8');
 const html=await readFile(new URL('../index.html',import.meta.url),'utf8');
 
 assert.ok(main.indexOf("import './styles.css'")<main.indexOf("import './theme.css'"),'Theme layer must load after the legacy styles');
@@ -25,5 +29,12 @@ assert.match(html,/viewport-fit=cover/,'Viewport metadata must support phone saf
 assert.match(html,/theme-color" content="#080b1a"/,'Browser chrome must match the KIUR dark theme');
 assert.match(html,/og:image[^>]*\/og\.png/,'The root page must expose the KIUR social preview');
 assert.match(html,/twitter:card" content="summary_large_image"/,'The social preview must use a large image card');
+assert.match(importUi,/className="templateDownload"/,'The official Excel template action must have a theme-safe class');
+assert.match(importUi,/setTimeout\(\(\)=>URL\.revokeObjectURL\(url\),2000\)/,'Template downloads must not revoke the object URL before Chromium starts the transfer');
+assert.doesNotMatch(importCss,/\.importIntro>button\{[^}]*background:white/,'The template action must not regress to a white legacy surface');
+assert.match(importCss,/@media\(max-width:760px\)[\s\S]*\.importControls\{grid-template-columns:minmax\(0,1fr\)/,'Import controls must stack without phone overflow');
+assert.match(exportUi,/className="exportAction exportExcel"/,'Result export actions must use explicit high-contrast classes');
+assert.doesNotMatch(exportCss,/\.exportManager button\{[^}]*background:white/,'Export actions must not regress to a white legacy surface');
+assert.match(exportCss,/@media\(max-width:560px\)[\s\S]*\.exportActions\{grid-template-columns:1fr\}/,'Result exports must stack on narrow phones');
 
 console.log('KIUR full-theme contract checks passed');

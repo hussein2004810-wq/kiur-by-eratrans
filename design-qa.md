@@ -33,6 +33,10 @@ A separate crop was not required: the full mobile image clearly resolves every n
 3. P1 — clipped phone filters. Fixed by replacing the RTL horizontal scroller with a responsive grid. Post-fix computed style is `display: grid` with two equal columns.
 4. P2 — navigation was split between a permanent sidebar and phone-only controls. Fixed with one role-aware liquid bottom navigation for all viewports and a separate utility drawer.
 5. P2 — green brand accents conflicted with the new theme. Fixed through an indigo/violet/icy-blue compatibility palette and explicit overrides for legacy direct-color surfaces.
+6. P1 — the official Excel-template and result-export actions inherited legacy white surfaces, producing the washed-out controls visible in the supplied laptop photos. Fixed with explicit indigo/blue action classes, white text, visible focus rings, and format-specific borders.
+7. P1 — the file picker appeared as an empty light capsule. Fixed with a dark dashed drop-zone, a visible filename/placeholder, truncation for long filenames, and an accessible file-input label.
+8. P2 — immediate object-URL revocation could cancel the Excel-template download in Chromium. Fixed by mounting the anchor, removing it after activation, and delaying revocation for two seconds.
+9. P2 — import/export actions could become cramped inside the administration rail layout. Fixed with shrink-safe `minmax(0, 1fr)` tracks, a two-stage import breakpoint, and one-column export actions below 560px.
 
 ## Verification
 
@@ -41,5 +45,9 @@ A separate crop was not required: the full mobile image clearly resolves every n
 - Desktop interaction: liquid navigation and Student Register tab passed.
 - Mobile interaction: Tests activation, drawer open/close, safe area, and overflow checks passed.
 - Console errors: none.
+- Current iteration: desktop width 1440px reports `scrollWidth` 1425px; phone width 390px reports `scrollWidth` 375px. The template and file controls measure 310px from x=33 to x=342, fully inside the phone viewport.
+- Result-export actions render as three 310px stacked controls on phone, with computed text color `rgb(245, 247, 255)` over the dark indigo gradient.
+- Official-template action renders at 247×46px on laptop with white text over the violet/blue gradient; the file drop zone renders dark with visible `rgb(230, 234, 255)` text.
+- Download behavior: source-level contract and delayed-revocation implementation passed; the in-app browser did not expose a Blob download event, so file receipt remains a manual Brave/Chrome acceptance check.
 
 final result: passed
