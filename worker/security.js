@@ -19,6 +19,8 @@ export function secureHeaders(initial={}){
   return headers;
 }
 
+export function escapeLike(value){return String(value||'').replace(/[\\%_]/g,'\\$&')}
+
 export async function readLimitedBytes(request,maxBytes){
   const declaredLength=Number(request.headers.get('content-length')||0);
   if(Number.isFinite(declaredLength)&&declaredLength>maxBytes)return {error:{code:'PAYLOAD_TOO_LARGE',message:'حجم الطلب يتجاوز الحد المسموح',status:413}};
@@ -49,6 +51,6 @@ export async function readJsonBody(request,maxBytes=MAX_JSON_BODY_BYTES){
 export async function enforceRateLimit(env,key,limit,windowSeconds=60){
   const now=Math.floor(Date.now()/1000);const windowStart=Math.floor(now/windowSeconds)*windowSeconds;
   const row=await env.DB.prepare(`INSERT INTO api_rate_limits(bucket_key,window_start,count) VALUES(?,?,1) ON CONFLICT(bucket_key,window_start) DO UPDATE SET count=count+1 RETURNING count`).bind(key,windowStart).first();
-  if(Math.random()<0.01)await env.DB.prepare(`DELETE FROM api_rate_limits WHERE window_start<?`).bind(now-3600).run();
+  if(Math.random()<0.05){try{await env.DB.prepare(`DELETE FROM api_rate_limits WHERE window_start<?`).bind(now-3600).run()}catch{}}
   return {allowed:Number(row?.count||0)<=limit,retryAfter:Math.max(1,windowStart+windowSeconds-now)};
 }

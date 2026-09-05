@@ -1,6 +1,6 @@
 import {PERMISSIONS,hasPermission,loadGrants,mayDelegate,resolveScope} from './access-control.js';
 import {hashToken,newOneTimeToken,normalizeEmail,revokeUserSessions} from './password-auth.js';
-import {readJsonBody,secureHeaders} from './security.js';
+import {escapeLike,readJsonBody,secureHeaders} from './security.js';
 import {recordAccountEvent} from './account-events.js';
 import {firebaseAuthConfigured,firebaseDeleteAccount,firebaseSendPasswordReset,firebaseSignUp,firebaseTemporaryPassword,isFirebaseError} from './firebase-auth.js';
 
@@ -55,7 +55,7 @@ export async function handleAdminUsersApi(request,env,url,actor){
     const role=url.searchParams.get('role');if(role&& !validRole(role)&&role!=='owner')return fail('VALIDATION','نوع الحساب غير صالح');
     const status=url.searchParams.get('status');if(status&&!validStatus(status))return fail('VALIDATION','حالة الحساب غير صالحة');
     const q=String(url.searchParams.get('q')||'').trim().slice(0,80);const limit=Math.min(200,Math.max(10,Number(url.searchParams.get('limit'))||100));
-    const filters=[];const binds=[];if(role){filters.push('u.account_role=?');binds.push(role)}if(status){filters.push('u.account_status=?');binds.push(status)}if(q){filters.push('(u.name LIKE ? OR u.email LIKE ?)');binds.push(`%${q}%`,`%${q}%`)}
+    const filters=[];const binds=[];if(role){filters.push('u.account_role=?');binds.push(role)}if(status){filters.push('u.account_status=?');binds.push(status)}if(q){const eq=escapeLike(q);filters.push("(u.name LIKE ? ESCAPE '\\' OR u.email LIKE ? ESCAPE '\\')");binds.push(`%${eq}%`,`%${eq}%`)}
     const where=filters.length?`WHERE ${filters.join(' AND ')}`:'';
     const statement=env.DB.prepare(`SELECT u.id,u.name,u.email,u.account_role AS role,u.staff_title AS staffTitle,u.account_status AS status,u.auth_provider AS authProvider,u.created_at AS createdAt,u.last_login_at AS lastLoginAt,u.university_id AS universityId,u.college_id AS collegeId,u.department_id AS departmentId,u.phase_id AS phaseId,u.section_id AS sectionId,v.name AS universityName,c.name AS collegeName,COALESCE(d.display_name,d.name) AS departmentName,p.name AS phaseName,x.name AS sectionName FROM users u LEFT JOIN universities v ON v.id=u.university_id LEFT JOIN colleges c ON c.id=u.college_id LEFT JOIN departments d ON d.id=u.department_id LEFT JOIN phases p ON p.id=u.phase_id LEFT JOIN sections x ON x.id=u.section_id ${where} ORDER BY CASE u.account_status WHEN 'pending' THEN 0 ELSE 1 END,u.created_at DESC LIMIT ?`).bind(...binds,limit);
     const result=await statement.all();const data=await visibleUsers(env,actor,result.results);

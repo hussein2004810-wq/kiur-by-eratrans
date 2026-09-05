@@ -1,4 +1,4 @@
-import {readJsonBody,secureHeaders} from './security.js';
+import {escapeLike,readJsonBody,secureHeaders} from './security.js';
 import {hasPermission,loadGrants,permittedWith,resolveScope} from './access-control.js';
 import {studentProfileComplete} from './test-access.js';
 
@@ -101,7 +101,7 @@ export async function handleHierarchyApi(request,env,url,user,restriction=null){
       const value=url.searchParams.get(param);if(value){filters.push(`${column}=?`);binds.push(value)}
     }
     const q=url.searchParams.get('q')?.trim().slice(0,100);
-    if(q){filters.push(`(t.title LIKE ? OR t.subject LIKE ? OR t.lecture LIKE ? OR s.name LIKE ? OR l.name LIKE ?)`);for(let i=0;i<5;i++)binds.push(`%${q}%`)}
+    if(q){const eq=escapeLike(q);filters.push(`(t.title LIKE ? ESCAPE '\\' OR t.subject LIKE ? ESCAPE '\\' OR t.lecture LIKE ? ESCAPE '\\' OR s.name LIKE ? ESCAPE '\\' OR l.name LIKE ? ESCAPE '\\')`);for(let i=0;i<5;i++)binds.push(`%${eq}%`)}
     const where=[`t.status='published'`,activeTestPath,...filters].join(' AND ');
     const statement=env.DB.prepare(`${testSelect} WHERE ${where} GROUP BY t.id ORDER BY t.created_at DESC`);
     const result=await (binds.length?statement.bind(...binds):statement).all();
