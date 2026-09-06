@@ -1,0 +1,4 @@
+.exportManager{grid-template-columns:minmax(180px,.7fr) minmax(260px,1.2fr) auto}
+.exportFilters{display:grid;grid-template-columns:1fr 1fr;gap:8px;min-width:0}.exportFilters label{position:relative;min-width:0}.exportFilters label svg{position:absolute;right:11px;top:11px;width:17px;color:#98a8ca}.exportFilters input,.exportFilters select{width:100%;min-width:0;min-height:43px;border:1px solid #6e75b65e;border-radius:12px;background:#0b1022;color:#edf2ff;padding:9px 12px;font:inherit}.exportFilters input{padding-right:37px}.exportFilters select option{background:#0b1022;color:#edf2ff}.exportFilters small{grid-column:1/-1;color:#f1bd70}
+@media(max-width:1200px){.exportManager{grid-template-columns:1fr}.exportActions{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:650px){.exportFilters{grid-template-columns:1fr}.exportFilters small{grid-column:auto}}

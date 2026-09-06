@@ -1,0 +1,5 @@
+.glimpseList>header button,.glimpseRowActions button{min-height:38px;border-color:#6978a85c!important;background:#171d35!important;color:#dce5fb!important}
+.glimpseList>header button:hover,.glimpseRowActions button:hover{border-color:#8b82df!important;background:#232b4c!important}
+.glimpseList>header button.active{background:#2b2756!important;color:#c5b8ff!important}
+.glimpseRowActions button.publish{background:linear-gradient(120deg,#7255d7,#3975d4)!important;color:#fff!important}
+.glimpseRowActions button.danger{border-color:#8c4853!important;background:#3e242d!important;color:#ffaaa3!important}

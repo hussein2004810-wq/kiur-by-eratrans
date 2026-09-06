@@ -50,4 +50,12 @@ A separate crop was not required: the full mobile image clearly resolves every n
 - Official-template action renders at 247×46px on laptop with white text over the violet/blue gradient; the file drop zone renders dark with visible `rgb(230, 234, 255)` text.
 - Download behavior: source-level contract and delayed-revocation implementation passed; the in-app browser did not expose a Blob download event, so file receipt remains a manual Brave/Chrome acceptance check.
 
-final result: passed
+## Current clinical-glimpses iteration — 2026-09-06
+
+- Added a student-facing clinical-glimpses library and a one-minute rotating spotlight inside the study shelf.
+- Removed the legacy/classic study-view switch and the raised circular energy bubble from navigation markup.
+- Added scoped test search/selection before Excel, PDF, or Word result export.
+- TypeScript, production build, theme contracts, study-shelf scenarios, governance workflow, security, and 500-concurrent-request suites passed.
+- Authenticated visual capture is blocked in the local Sites preview because its local identity did not establish an application account; the browser remained at the sign-in gate. No production deployment was used as a workaround because this iteration is awaiting owner approval.
+
+final result: blocked
