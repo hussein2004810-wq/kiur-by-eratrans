@@ -8,6 +8,14 @@ function fail(code,message,status=400,headers={}){return json({error:{code,messa
 async function value(request){const parsed=await readJsonBody(request);return parsed.error?{response:fail(parsed.error.code,parsed.error.message,parsed.error.status)}:{data:parsed.value}}
 function validEmail(email){return email.length<=254&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)}
 
+async function sameSecret(left,right){
+  const encoder=new TextEncoder();
+  const [a,b]=await Promise.all([crypto.subtle.digest('SHA-256',encoder.encode(String(left||''))),crypto.subtle.digest('SHA-256',encoder.encode(String(right||'')))]);
+  const av=new Uint8Array(a),bv=new Uint8Array(b);let difference=0;
+  for(let index=0;index<av.length;index++)difference|=av[index]^bv[index];
+  return difference===0;
+}
+
 async function validStudentPath(env,data){
   if(!data?.universityId||!data?.collegeId||!data?.departmentId||!data?.phaseId)return null;
   const sectionClause=data.sectionId?`JOIN sections x ON x.id=? AND x.phase_id=p.id`:``;
@@ -63,6 +71,34 @@ async function authenticateWithFirebase(env,account,password){
 }
 
 export async function handleAuthApi(request,env,url,user){
+  // One-time, fail-closed owner recovery. This route is inert unless a
+  // high-entropy deployment secret is present and is disabled after use.
+  if(url.pathname==='/api/auth/recover-owner-password'&&request.method==='POST'){
+    const configured=String(env.OWNER_PASSWORD_SETUP_TOKEN||'');
+    if(configured.length<32)return fail('NOT_FOUND','المسار غير متاح',404);
+    const supplied=request.headers.get('x-kiur-owner-setup-token')||'';
+    if(!(await sameSecret(configured,supplied)))return fail('NOT_FOUND','المسار غير متاح',404);
+    const limit=await enforceRateLimit(env,'auth:owner-password-recovery',2,3600);
+    if(!limit.allowed)return fail('RATE_LIMITED','تم تجاوز عدد محاولات الاستعادة',429,{'retry-after':String(limit.retryAfter)});
+    const parsed=await value(request);if(parsed.response)return parsed.response;
+    const email=normalizeEmail(parsed.data?.email);const passwordIssue=validatePassword(parsed.data?.password);
+    if(!validEmail(email)||passwordIssue)return fail('VALIDATION',passwordIssue||'البريد الإلكتروني غير صالح');
+    const account=await env.DB.prepare(`SELECT id,email,account_role AS role,auth_provider,firebase_uid AS firebaseUid FROM users WHERE email=? AND account_role='owner' AND account_status='active'`).bind(email).first();
+    if(!account)return fail('NOT_FOUND','حساب المالك غير موجود',404);
+    if(!firebaseAuthConfigured(env))return fail('FIREBASE_AUTH_UNAVAILABLE','خدمة تسجيل البريد غير مهيأة',503);
+    let auth,created=false;
+    try{auth=await firebaseSignUp(env,email,parsed.data.password);created=true}catch(error){
+      if(!isFirebaseError(error,'EMAIL_EXISTS'))return fail('FIREBASE_AUTH_UNAVAILABLE','تعذر ربط حساب المالك بخدمة Google',503);
+      try{auth=await firebaseSignIn(env,email,parsed.data.password)}catch{return fail('FIREBASE_ACCOUNT_LINK_REQUIRED','يوجد حساب Google لهذا البريد بكلمة مرور مختلفة؛ استخدم استعادة كلمة المرور',409)}
+    }
+    if(account.firebaseUid&&account.firebaseUid!==auth.uid){if(created)await firebaseDeleteAccount(env,auth.idToken);return fail('IDENTITY_CONFLICT','الحساب مرتبط بهوية بريد مختلفة',409)}
+    try{await env.DB.batch([
+      env.DB.prepare(`UPDATE users SET firebase_uid=?,email_verified_at=COALESCE(email_verified_at,CURRENT_TIMESTAMP),auth_provider='hybrid',password_hash=NULL,password_salt=NULL,password_iterations=NULL,password_peppered=0,updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(auth.uid,account.id),
+      env.DB.prepare(`INSERT OR REPLACE INTO user_identities(provider,provider_user_id,user_id,email) VALUES('password',?,?,?)`).bind(auth.uid,account.id,email)
+    ])}catch(error){if(created)await firebaseDeleteAccount(env,auth.idToken);throw error}
+    await revokeUserSessions(env,account.id);await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email,eventType:'firebase_migration',details:{provider:'firebase',recovery:'owner_password'}});
+    return json({activated:true,message:'تم تفعيل دخول المالك بالبريد وكلمة المرور'});
+  }
   if(url.pathname==='/api/auth/register'&&request.method==='POST'){
     const parsed=await value(request);if(parsed.response)return parsed.response;const data=parsed.data;const email=normalizeEmail(data?.email);const name=String(data?.name||'').trim();
     const emailKey=await authRateKey(email);const ipKey=await authRateKey(request.headers.get('cf-connecting-ip')||'unknown');const [emailLimit,ipLimit]=await Promise.all([enforceRateLimit(env,`auth:register:email:${emailKey}`,3,3600),enforceRateLimit(env,`auth:register:ip:${ipKey}`,10,3600)]);
