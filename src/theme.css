@@ -86,3 +86,38 @@ body{background:var(--kiur-bg);color:var(--ink)}::selection{background:#785bd9;c
 @media(prefers-reduced-motion:reduce){.liquidNav button,.liquidNav button::before{transition:none}.liquidNav button.active{transform:none}.liquidNav button.active::before{animation:none}}
 @media(forced-colors:active){.liquidNav{background:Canvas;color:CanvasText;border-color:CanvasText}.liquidNav button{color:CanvasText}.liquidNav button.active::before{background:ButtonFace;border:1px solid ButtonText}.liquidNav button.active{outline:2px solid Highlight}}
 @media print{.liquidNav{display:none!important}}
+
+/* Liquid energy navigation — adapted from the supplied WebGL concept.
+   The CSS version keeps the same glass/orb character without adding a heavy
+   canvas bundle to every student page. */
+.liquidNav{overflow:visible;border-color:#aebfff38;background:linear-gradient(180deg,#14182cf2,#080b19f7);box-shadow:0 26px 80px #000c,0 0 42px #335fd21d,inset 0 1px #ffffff18}
+.liquidNavTrack{overflow:visible}
+.liquidNav button{overflow:hidden;border:1px solid transparent}
+.liquidNav button::before{inset:5px;background:radial-gradient(circle at 38% 24%,#c8f4ff9c 0,transparent 18%),linear-gradient(125deg,#7658de,#326bd4 57%,#4da9ff);box-shadow:0 12px 32px #315fc984,0 0 28px #5a8eff52,inset 0 1px #ffffff5c}
+.liquidNav button.active{border-color:#b7c9ff2b;text-shadow:0 1px 18px #9ccaff72}
+.liquidNavEnergy{position:absolute;z-index:-1;inset:50% auto auto 50%;width:58px;height:58px;border-radius:50%;opacity:0;transform:translate(-50%,-50%) scale(.32);transition:opacity .22s ease,transform .48s cubic-bezier(.16,1,.3,1);filter:drop-shadow(0 0 8px #8ce8ff) drop-shadow(0 0 20px #397cff)}
+.liquidNavEnergy::before,.liquidNavEnergy::after,.liquidNavEnergy i{content:"";position:absolute;inset:0;border-radius:45% 55% 58% 42%/52% 42% 58% 48%;pointer-events:none}
+.liquidNavEnergy::before{background:radial-gradient(circle at 34% 27%,#e1fbff 0 5%,#63c9ff 17%,#356ce5 44%,#382395 72%,#090b22 100%);box-shadow:inset -8px -9px 16px #05081f99,inset 7px 6px 14px #caf6ff70}
+.liquidNavEnergy::after{inset:4px;border:1px solid #c6efff7d;box-shadow:inset 0 0 14px #6cd8ff7a,0 0 12px #4f8aff80;mix-blend-mode:screen}
+.liquidNavEnergy i:nth-child(1){inset:11px;background:linear-gradient(115deg,transparent 12%,#d7f8ffb8 34%,transparent 53%,#77aaff9c 76%,transparent);filter:blur(2px)}
+.liquidNavEnergy i:nth-child(2){inset:17px 9px;background:#a5eaff8c;filter:blur(7px)}
+.liquidNavEnergy i:nth-child(3){inset:7px;border-top:2px solid #effdffb8;transform:rotate(-28deg)}
+.liquidNav button.active .liquidNavEnergy{opacity:.86;transform:translate(-50%,-50%) scale(1);animation:liquid-orb-float 4.8s ease-in-out infinite,liquid-orb-morph 5.6s linear infinite}
+.liquidNavShine{position:absolute;z-index:1;top:-180%;left:-50%;width:28%;height:450%;background:linear-gradient(90deg,transparent,#ffffff24,transparent);opacity:0;transform:rotate(18deg);pointer-events:none}
+.liquidNav button:hover .liquidNavShine{opacity:1;animation:liquid-nav-shine .75s cubic-bezier(.16,1,.3,1)}
+.liquidNavIcon,.liquidNav button>span:last-child{position:relative;z-index:2}.liquidNav button.active .liquidNavIcon svg{filter:drop-shadow(0 0 7px #d8f7ff);transform:scale(1.06)}
+@keyframes liquid-orb-float{0%,100%{filter:drop-shadow(0 0 8px #8ce8ff) drop-shadow(0 0 18px #397cff)}50%{filter:drop-shadow(0 0 12px #c6f6ff) drop-shadow(0 0 30px #7667ff)}}
+@keyframes liquid-orb-morph{0%,100%{border-radius:45% 55% 58% 42%/52% 42% 58% 48%}33%{border-radius:58% 42% 44% 56%/42% 57% 43% 58%;transform:translate(-50%,-50%) scale(1.04) rotate(4deg)}66%{border-radius:42% 58% 54% 46%/59% 44% 56% 41%;transform:translate(-50%,-50%) scale(.97) rotate(-4deg)}}
+@keyframes liquid-nav-shine{from{left:-50%}to{left:125%}}
+
+/* One visual language across KIUR: midnight, violet and clinical blue. */
+.app .motionToggle.active,.app .statIcon,.app .accountTitle>span,.app .catalogSummary article>span,.app .pathHeading>span,.app .studentStats article>span,.app .studentIdentity>span,.app .mediaFormTitle>span,.app .libraryLog article>span,.app .copyIcon,.app .largeCount,.app .setupIcon{background:#25224a;color:#aa9aff;border-color:#9b87ee33}
+.app .hero,.app .solid,.app .modalCard>header,.app .editor>header{background:linear-gradient(120deg,#7556d9,#3268cc 58%,#4b9aee)}
+.app .heroArt svg,.app .adminRail>header>svg,.app .adminMenuToggle>svg:first-child,.app .good,.app .correctAnswer,.app .importValid,.app .glimpseCards strong{color:#8fc1ff}
+.app .shelfRecent{background:linear-gradient(90deg,#24214a,#171b35);border-inline-start-color:#8068df}.app .shelfRecent button{background:#1b2140;border-color:#696cb4;color:#b8b0ff}
+.app .optionEditor label.correct,.app .options button.selected,.app .options button:hover{background:#202952;border-color:#766fe1}
+.app .tag,.app .success,.app .goodScore,.app .perfectResult,.app .appealSent,.app .logSuccess,.app .rowActions .activate,.app .banActions button,.app .result>span{background:#1a315b;color:#93c6ff}
+.app .roleIcon.teacher,.app .decisionIcon.approve{background:#25224a;color:#b7a8ff}.app .decisionActions .confirmDecision{background:#3a69c8}.app .certificateButtons button{background:#25224a;color:#b3a3ff}
+
+@media(max-width:720px){.liquidNavEnergy{width:48px;height:48px}.liquidNav button.active{transform:translateY(-3px)}.liquidNav button.active::before{inset:2px}}
+@media(prefers-reduced-motion:reduce){.liquidNav button.active .liquidNavEnergy,.liquidNav button:hover .liquidNavShine{animation:none}.liquidNavEnergy{transition:none}.liquidNav button.active .liquidNavEnergy{transform:translate(-50%,-50%) scale(1)}}

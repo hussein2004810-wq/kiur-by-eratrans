@@ -67,6 +67,8 @@ function LiquidNavigation({items,active,onSelect}:{items:readonly (readonly [Mai
   return <nav className="liquidNav" aria-label="التنقل الرئيسي" style={{'--liquid-count':items.length} as React.CSSProperties}>
     <div className="liquidNavTrack">
       {items.map(([id,Icon,label,count])=><button type="button" key={id} className={active===id?'active':''} aria-current={active===id?'page':undefined} onClick={()=>onSelect(id)}>
+        <span className="liquidNavEnergy" aria-hidden="true"><i/><i/><i/></span>
+        <span className="liquidNavShine" aria-hidden="true"/>
         <span className="liquidNavIcon"><Icon aria-hidden="true"/>{typeof count==='number'&&<b>{count}</b>}</span><span>{label}</span>
       </button>)}
     </div>
