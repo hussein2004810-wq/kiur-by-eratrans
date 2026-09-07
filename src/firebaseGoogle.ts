@@ -37,6 +37,9 @@ export async function requestGoogleIdToken(){
     if(code.includes('popup-closed-by-user')||code.includes('cancelled-popup-request'))throw new Error('تم إلغاء دخول Google');
     if(code.includes('popup-blocked'))throw new Error('اسمح بالنوافذ المنبثقة لهذا الموقع ثم حاول مجددًا');
     if(code.includes('unauthorized-domain'))throw new Error('نطاق KIUR غير مصرح له في Firebase');
+    if(code.includes('operation-not-allowed'))throw new Error('تسجيل Google غير مفعّل في Firebase');
+    if(code.includes('network-request-failed'))throw new Error('تعذر الاتصال بخدمة Google؛ تحقق من الاتصال أو مانع الإعلانات');
+    if(code.includes('web-storage-unsupported'))throw new Error('المتصفح يمنع التخزين المطلوب لتسجيل Google');
     throw new Error('تعذر فتح تسجيل Google؛ حاول مجددًا');
   }finally{
     await signOut(auth).catch(()=>undefined);

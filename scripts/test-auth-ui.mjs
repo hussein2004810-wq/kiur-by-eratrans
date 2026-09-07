@@ -23,7 +23,7 @@ assert.match(security,/media-src 'self'/,'CSP must restrict login media to KIUR 
 assert.doesNotMatch(security,/media-src[^;]*pexels/,'The production CSP must not expose an unnecessary third-party media origin');
 
 console.log('Auth UI contract checks passed');
-assert.match(source,/target="_top" href=\{`\/signin-with-chatgpt/,'ChatGPT sign-in must start in the top-level browser');
+assert.doesNotMatch(source,/signin-with-chatgpt|المتابعة بحساب ChatGPT/,'ChatGPT sign-in must not be exposed in the authentication UI');
 assert.match(source,/minLength=\{mode==='login'\?1:9\}/,'Existing login credentials must not be blocked by the new creation policy');
 assert.match(source,/mode==='reset'/,'Password reset action links need a dedicated screen');
 assert.match(source,/verifyEmail','recoverEmail/,'Firebase verification and email-recovery links need a dedicated handler');

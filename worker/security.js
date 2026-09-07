@@ -1,7 +1,7 @@
 export const MAX_JSON_BODY_BYTES=1024*1024;
 
 const SECURITY_HEADERS={
-  'content-security-policy':"default-src 'self'; script-src 'self'; style-src 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data: https://*.googleusercontent.com; media-src 'self'; font-src 'self' data:; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com; object-src 'none'; frame-src https://*.firebaseapp.com https://accounts.google.com; worker-src 'self' blob:; manifest-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests",
+  'content-security-policy':"default-src 'self'; script-src 'self' https://apis.google.com https://www.gstatic.com; style-src 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data: https://*.googleusercontent.com; media-src 'self'; font-src 'self' data:; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://*.googleapis.com https://*.firebaseapp.com; object-src 'none'; frame-src https://*.firebaseapp.com https://accounts.google.com https://apis.google.com; worker-src 'self' blob:; manifest-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests",
   'cross-origin-opener-policy':'same-origin-allow-popups',
   'cross-origin-resource-policy':'same-origin',
   'origin-agent-cluster':'?1',
