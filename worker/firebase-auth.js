@@ -1,5 +1,4 @@
 const FIREBASE_ENDPOINT='https://identitytoolkit.googleapis.com/v1/accounts';
-
 export class FirebaseAuthError extends Error{
   constructor(code){super(code);this.name='FirebaseAuthError';this.code=code}
 }
@@ -19,7 +18,7 @@ async function firebaseRequest(env,method,payload){
   if(!apiKey)throw new FirebaseAuthError('FIREBASE_NOT_CONFIGURED');
   let response;
   try{
-    response=await fetch(`${FIREBASE_ENDPOINT}:${method}?key=${encodeURIComponent(apiKey)}`,{method:'POST',headers:{'content-type':'application/json','accept':'application/json',...(method==='sendOobCode'?{'x-firebase-locale':'ar'}:{})},body:JSON.stringify(payload)});
+    response=await fetch(`${FIREBASE_ENDPOINT}:${method}?key=${encodeURIComponent(apiKey)}`,{method:'POST',signal:AbortSignal.timeout(15000),headers:{'content-type':'application/json','accept':'application/json',...(method==='sendOobCode'?{'x-firebase-locale':'ar'}:{})},body:JSON.stringify(payload)});
   }catch{throw new FirebaseAuthError('FIREBASE_UNAVAILABLE')}
   const data=await response.json().catch(()=>({}));
   if(!response.ok)throw new FirebaseAuthError(normalizedFirebaseCode(data?.error?.message));
@@ -48,6 +47,30 @@ export async function firebaseSendVerification(env,idToken){
 
 export async function firebaseSendPasswordReset(env,email){
   await firebaseRequest(env,'sendOobCode',{requestType:'PASSWORD_RESET',email});
+}
+
+export async function firebaseResetPassword(env,oobCode,newPassword){
+  const action=await firebaseRequest(env,'resetPassword',{oobCode});
+  if(action.requestType!=='PASSWORD_RESET'||!action.email)throw new FirebaseAuthError('INVALID_OOB_CODE');
+  const result=await firebaseRequest(env,'resetPassword',{oobCode,newPassword});
+  return {email:String(result.email||action.email)};
+}
+
+export async function firebaseApplyEmailAction(env,oobCode){
+  const result=await firebaseRequest(env,'update',{oobCode});
+  if(!result.localId)throw new FirebaseAuthError('INVALID_OOB_CODE');
+  return {uid:String(result.localId),email:String(result.email||'')};
+}
+
+export async function firebaseGoogleStart(env,continueUri){
+  return firebaseRequest(env,'createAuthUri',{providerId:'google.com',continueUri,authFlowType:'CODE_FLOW',oauthScope:'openid email profile'});
+}
+export async function firebaseGoogleComplete(env,requestUri,sessionId){
+  const result=await firebaseRequest(env,'signInWithIdp',{requestUri,sessionId,returnSecureToken:true,returnIdpCredential:false});
+  if(result.providerId!=='google.com'||result.needConfirmation||!result.idToken||!result.localId)throw new FirebaseAuthError('GOOGLE_IDENTITY_INVALID');
+  const profile=await firebaseLookup(env,result.idToken);
+  if(profile.disabled||!profile.emailVerified||profile.uid!==result.localId)throw new FirebaseAuthError('GOOGLE_IDENTITY_INVALID');
+  return {...profile,name:String(result.displayName||profile.email.split('@')[0]).slice(0,120)};
 }
 
 export async function firebaseDeleteAccount(env,idToken){

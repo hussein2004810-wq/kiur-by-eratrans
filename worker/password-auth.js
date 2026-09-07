@@ -24,8 +24,8 @@ async function passwordMaterial(password,pepper,usePepper){
 
 export function normalizeEmail(value){return String(value||'').trim().toLowerCase()}
 export function validatePassword(value){
-  if(typeof value!=='string'||value.length<12||value.length>128)return 'كلمة المرور يجب أن تكون بين 12 و128 حرفًا';
-  if(!/\p{L}/u.test(value)||!/\p{N}/u.test(value))return 'كلمة المرور يجب أن تحتوي حروفًا وأرقامًا';
+  if(typeof value!=='string'||value.length<9||value.length>128)return 'كلمة المرور يجب أن تحتوي 8 أرقام وحرفًا على الأقل، وبحد أقصى 128 محرفًا';
+  if(!/\p{L}/u.test(value)||(value.match(/[0-9]/g)||[]).length<8)return 'استخدم 8 أرقام على الأقل من 0 إلى 9 مع حرف واحد على الأقل';
   return null;
 }
 

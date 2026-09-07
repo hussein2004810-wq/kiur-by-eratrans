@@ -17,6 +17,7 @@ import {recordAccountEvent} from './account-events.js';
 import {handleStudentBanApi,refreshStudentRestriction,restrictedStudentPathAllowed} from './student-ban-api.js';
 import {computeAttemptDeadline,deadlineSql,studentCanAccessTest} from './test-access.js';
 import {handleNotificationsApi} from './notifications-api.js';
+import {handleGoogleAuth} from './google-auth.js';
 
 const files = new Map(/*__STATIC_FILES__*/);
 let schemaReady = false;
@@ -156,6 +157,8 @@ async function handleApi(request,env,url){
   if(rule){const result=await enforceRateLimit(env,`${user.id}:${rule[0]}`,rule[1]);if(!result.allowed)return response({error:{code:'RATE_LIMITED',message:'طلبات كثيرة جدًا؛ حاول بعد قليل'}},429,{'retry-after':String(result.retryAfter)})}
   const authResponse=await handleAuthApi(request,env,url,user);
   if(authResponse)return authResponse;
+  const googleResponse=await handleGoogleAuth(request,env,url);
+  if(googleResponse)return googleResponse;
 
   const banResponse=await handleStudentBanApi(request,env,url,user,restriction);
   if(banResponse)return banResponse;
