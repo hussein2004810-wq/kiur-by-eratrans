@@ -38,7 +38,8 @@ export async function firebaseSignIn(env,email,password){
 export async function firebaseLookup(env,idToken){
   const result=await firebaseRequest(env,'lookup',{idToken});const user=result?.users?.[0];
   if(!user)throw new FirebaseAuthError('USER_NOT_FOUND');
-  return {uid:String(user.localId||''),email:String(user.email||''),emailVerified:Boolean(user.emailVerified),disabled:Boolean(user.disabled)};
+  const providers=Array.isArray(user.providerUserInfo)?user.providerUserInfo.map(item=>String(item?.providerId||'')).filter(Boolean):[];
+  return {uid:String(user.localId||''),email:String(user.email||''),name:String(user.displayName||''),emailVerified:Boolean(user.emailVerified),disabled:Boolean(user.disabled),providers};
 }
 
 export async function firebaseSendVerification(env,idToken){
@@ -62,15 +63,11 @@ export async function firebaseApplyEmailAction(env,oobCode){
   return {uid:String(result.localId),email:String(result.email||'')};
 }
 
-export async function firebaseGoogleStart(env,continueUri){
-  return firebaseRequest(env,'createAuthUri',{providerId:'google.com',continueUri,authFlowType:'CODE_FLOW',oauthScope:'openid email profile'});
-}
-export async function firebaseGoogleComplete(env,requestUri,sessionId){
-  const result=await firebaseRequest(env,'signInWithIdp',{requestUri,sessionId,returnSecureToken:true,returnIdpCredential:false});
-  if(result.providerId!=='google.com'||result.needConfirmation||!result.idToken||!result.localId)throw new FirebaseAuthError('GOOGLE_IDENTITY_INVALID');
-  const profile=await firebaseLookup(env,result.idToken);
-  if(profile.disabled||!profile.emailVerified||profile.uid!==result.localId)throw new FirebaseAuthError('GOOGLE_IDENTITY_INVALID');
-  return {...profile,name:String(result.displayName||profile.email.split('@')[0]).slice(0,120)};
+export async function firebaseGoogleProfile(env,idToken){
+  if(typeof idToken!=='string'||idToken.length<40||idToken.length>8192)throw new FirebaseAuthError('GOOGLE_IDENTITY_INVALID');
+  const profile=await firebaseLookup(env,idToken);
+  if(profile.disabled||!profile.emailVerified||!profile.uid||!profile.email||!profile.providers.includes('google.com'))throw new FirebaseAuthError('GOOGLE_IDENTITY_INVALID');
+  return {...profile,name:String(profile.name||profile.email.split('@')[0]).slice(0,120)};
 }
 
 export async function firebaseDeleteAccount(env,idToken){

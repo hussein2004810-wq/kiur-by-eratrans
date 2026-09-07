@@ -29,4 +29,6 @@ assert.match(source,/mode==='reset'/,'Password reset action links need a dedicat
 assert.match(source,/verifyEmail','recoverEmail/,'Firebase verification and email-recovery links need a dedicated handler');
 assert.match(source,/emailActionStarted\.current/,'Email action links must be guarded against duplicate React effects');
 assert.match(source,/\/api\/auth\/google\/start/,'Google sign-in must go through the server-owned flow');
+assert.match(source,/\/api\/auth\/google\/complete/,'Google identity tokens must be exchanged through the server-owned flow');
+assert.match(source,/requestGoogleIdToken/,'Google sign-in must use the Firebase hosted handler');
 assert.match(source,/if\(mode!=='register'\|\|catalog\)return/,'Login must not depend on loading the academic catalog');

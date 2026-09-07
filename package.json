@@ -13,6 +13,7 @@
   "dependencies": {
     "docx": "^9.7.1",
     "exceljs": "^4.4.0",
+    "firebase": "^12.18.0",
     "html2canvas": "^1.4.1",
     "jspdf": "^4.2.1",
     "lucide-react": "^0.468.0",
