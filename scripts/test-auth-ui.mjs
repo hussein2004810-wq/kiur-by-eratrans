@@ -32,6 +32,10 @@ assert.match(source,/جارٍ التحقق من صلاحية رابط الاست
 assert.match(source,/window\.location\.assign\(continuePath\)/,'Validated email-action continuation needs an explicit navigation path');
 assert.match(source,/verifyEmail','recoverEmail/,'Firebase verification and email-recovery links need a dedicated handler');
 assert.match(source,/emailActionStarted\.current/,'Email action links must be guarded against duplicate React effects');
+const accountsSource=await readFile('src/AccountManager.tsx','utf8');
+assert.match(accountsSource,/legacy-migration-report/,'The owner accounts screen must load the safe migration report');
+assert.match(accountsSource,/currentRole==='owner'&&migrationReport/,'Migration readiness must remain owner-only in the UI');
+assert.doesNotMatch(accountsSource,/migrationReport\.(?:email|passwordSalt|passwordHash)(?!Present)/,'The migration UI must not render credential or identity fields');
 assert.match(source,/\/api\/auth\/google\/start/,'Google sign-in must go through the server-owned flow');
 assert.match(source,/\/api\/auth\/google\/complete/,'Google identity tokens must be exchanged through the server-owned flow');
 assert.match(source,/requestGoogleIdToken/,'Google sign-in must use the Firebase hosted handler');

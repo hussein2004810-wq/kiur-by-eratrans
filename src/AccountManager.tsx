@@ -12,6 +12,7 @@ type Grant={scopeType:string;scopeId:string;permissions:string[]};
 type Account={id:string;name:string;email:string;role:Role;staffTitle?:StaffTitle|null;status:Status;authProvider:string;universityName?:string;collegeName?:string;departmentName?:string;phaseName?:string;sectionName?:string;grants?:Grant[]};
 type FormState={name:string;email:string;role:'teacher'|'admin';staffTitle:StaffTitle;scopeType:string;scopeId:string;permissions:string[]};
 type ExistingCandidate={id:string;name:string;email:string;role:Role;status:Status;authProvider:string;canLink:boolean};
+type LegacyMigrationReport={totalUsers:number;firebaseUidPresent:number;passwordHashPresent:number;verified:number;pending:number;orphanedIdentityRows:number;passwordAccountsWithoutFirebaseUid:number;readyToRemoveLegacyFallback:boolean};
 class ApiError extends Error{code:string;details?:any;constructor(message:string,code='REQUEST_FAILED',details?:any){super(message);this.code=code;this.details=details}}
 
 const staffTitles:Record<StaffTitle,string>={department_head:'رئيس قسم',department_coordinator:'مقرر قسم',university_doctor:'دكتور جامعي',university_professor:'أستاذ جامعي'};
@@ -29,9 +30,10 @@ export default function AccountManager({catalog,currentRole,notify}:{catalog:Cat
   const [busy,setBusy]=useState(false);
   const [editing,setEditing]=useState<Account|null>(null);
   const [existing,setExisting]=useState<ExistingCandidate|null>(null);
+  const [migrationReport,setMigrationReport]=useState<LegacyMigrationReport|null>(null);
   const [form,setForm]=useState<FormState>(initialForm);
   const scopeItems=useMemo(()=>form.scopeType==='platform'?[{id:'platform',name:'المنصة كاملة'}]:catalog[scopeCollections[form.scopeType]]||[],[catalog,form.scopeType]);
-  const load=async()=>{const data=await request<{data:Account[]}>('/api/admin/users?limit=200&q='+encodeURIComponent(query));setAccounts(data.data)};
+  const load=async()=>{const [data,report]=await Promise.all([request<{data:Account[]}>('/api/admin/users?limit=200&q='+encodeURIComponent(query)),currentRole==='owner'?request<LegacyMigrationReport>('/api/admin/users/legacy-migration-report'):Promise.resolve(null)]);setAccounts(data.data);setMigrationReport(report)};
   useEffect(()=>{const timer=setTimeout(()=>void load().catch(error=>notify(error.message)),200);return()=>clearTimeout(timer)},[query]);
   useEffect(()=>{if(!scopeItems.some(item=>item.id===form.scopeId))setForm(value=>({...value,scopeId:scopeItems[0]?.id||''}))},[form.scopeType,scopeItems]);
   const toggle=(permission:string)=>setForm(value=>({...value,permissions:value.permissions.includes(permission)?value.permissions.filter(item=>item!==permission):[...value.permissions,permission]}));
@@ -48,6 +50,7 @@ export default function AccountManager({catalog,currentRole,notify}:{catalog:Cat
 
   return <section className="accountsManager">
     <div className="accountStats"><button type="button" aria-pressed={roleFilter==='student'} className={roleFilter==='student'?'active':''} onClick={()=>chooseRoleFilter('student')}><Users/><b>{accounts.filter(item=>item.role==='student').length}</b><small>طلاب</small></button><button type="button" aria-pressed={roleFilter==='teacher'} className={roleFilter==='teacher'?'active':''} onClick={()=>chooseRoleFilter('teacher')}><UserCog/><b>{accounts.filter(item=>item.role==='teacher').length}</b><small>أعضاء الكادر</small></button><button type="button" aria-pressed={roleFilter==='admin'} className={roleFilter==='admin'?'active':''} onClick={()=>chooseRoleFilter('admin')}><ShieldCheck/><b>{accounts.filter(item=>item.role==='admin').length}</b><small>مشرفون ضمن نطاقك</small></button></div>
+    {currentRole==='owner'&&migrationReport&&<section className="legacyMigrationReport" aria-labelledby="legacy-migration-title"><header><div><h3 id="legacy-migration-title">جاهزية ترحيل تسجيل الدخول</h3><p>عدادات فقط دون عرض البريد أو رموز وكلمات المرور.</p></div><span className={migrationReport.readyToRemoveLegacyFallback?'ready':'pending'}>{migrationReport.readyToRemoveLegacyFallback?'جاهز للمراجعة قبل الإزالة':'الترحيل ما زال مستمرًا'}</span></header><div><span><b>{migrationReport.totalUsers}</b>إجمالي الحسابات</span><span><b>{migrationReport.firebaseUidPresent}</b>مرتبطة بـ Firebase</span><span><b>{migrationReport.passwordHashPresent}</b>تحوي بيانات دخول قديمة</span><span><b>{migrationReport.passwordAccountsWithoutFirebaseUid}</b>حسابات بريد بلا Firebase</span><span><b>{migrationReport.verified}</b>بريد موثّق</span><span><b>{migrationReport.pending}</b>بانتظار الموافقة</span><span><b>{migrationReport.orphanedIdentityRows}</b>هويات يتيمة</span></div><small>لن يُحذف مسار الدخول القديم تلقائيًا؛ يلزم فحص بيانات بيئة الإنتاج وموافقة المالك.</small></section>}
     <div className="accountGrid">
       <form className="panel accountForm" onSubmit={event=>void submit(event)}>
         <div className="accountTitle"><span><KeyRound/></span><div><h3>{editing?'تعديل الصفة والصلاحيات':'إنشاء حساب كادر'}</h3><p>المسمى الوظيفي لا يمنح صلاحيات تلقائيًا؛ تحدد الصلاحيات أدناه.</p></div></div>

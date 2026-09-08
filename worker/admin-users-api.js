@@ -51,6 +51,25 @@ export async function handleAdminUsersApi(request,env,url,actor){
   if(!url.pathname.startsWith('/api/admin/users'))return null;
   if(!isManager(actor))return fail('FORBIDDEN','هذه العملية للمشرف فقط',403);
 
+  if(url.pathname==='/api/admin/users/legacy-migration-report'&&request.method==='GET'){
+    if(actor.role!=='owner')return fail('FORBIDDEN','تقرير ترحيل تسجيل الدخول متاح لمالك المنصة فقط',403);
+    const row=await env.DB.prepare(`SELECT
+      count(*) AS totalUsers,
+      coalesce(sum(CASE WHEN firebase_uid IS NOT NULL THEN 1 ELSE 0 END),0) AS firebaseUidPresent,
+      coalesce(sum(CASE WHEN password_hash IS NOT NULL THEN 1 ELSE 0 END),0) AS passwordHashPresent,
+      coalesce(sum(CASE WHEN email_verified_at IS NOT NULL THEN 1 ELSE 0 END),0) AS verified,
+      coalesce(sum(CASE WHEN account_status='pending' THEN 1 ELSE 0 END),0) AS pending,
+      (SELECT count(*) FROM user_identities i LEFT JOIN users identity_user ON identity_user.id=i.user_id WHERE identity_user.id IS NULL) AS orphanedIdentityRows,
+      coalesce(sum(CASE WHEN auth_provider IN ('password','hybrid') AND firebase_uid IS NULL THEN 1 ELSE 0 END),0) AS passwordAccountsWithoutFirebaseUid
+      FROM users`).first();
+    const report={
+      totalUsers:Number(row?.totalUsers||0),firebaseUidPresent:Number(row?.firebaseUidPresent||0),passwordHashPresent:Number(row?.passwordHashPresent||0),
+      verified:Number(row?.verified||0),pending:Number(row?.pending||0),orphanedIdentityRows:Number(row?.orphanedIdentityRows||0),
+      passwordAccountsWithoutFirebaseUid:Number(row?.passwordAccountsWithoutFirebaseUid||0)
+    };
+    return json({...report,readyToRemoveLegacyFallback:report.passwordHashPresent===0&&report.passwordAccountsWithoutFirebaseUid===0});
+  }
+
   if(url.pathname==='/api/admin/users'&&request.method==='GET'){
     const role=url.searchParams.get('role');if(role&& !validRole(role)&&role!=='owner')return fail('VALIDATION','نوع الحساب غير صالح');
     const status=url.searchParams.get('status');if(status&&!validStatus(status))return fail('VALIDATION','حالة الحساب غير صالحة');
