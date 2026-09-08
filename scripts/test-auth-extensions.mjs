@@ -23,10 +23,14 @@ env.FIREBASE_AUTH.resetPassword=async({oobCode,newPassword})=>{
   if(newPassword){firebase.resetPassword('student@example.com',newPassword);consumed=true}
   return {requestType:'PASSWORD_RESET',email:'student@example.com'};
 };
+const externalContinue=await call('/api/auth/check-password-reset',{method:'POST',body:{mode:'resetPassword',oobCode:'one-use-reset-code',continueUrl:'https://evil.example/steal'}});assert.equal(externalContinue.response.status,400);assert.equal(consumed,false);
+const checkedReset=await call('/api/auth/check-password-reset',{method:'POST',body:{mode:'resetPassword',oobCode:'one-use-reset-code',continueUrl:'/tests?from=reset'}});assert.equal(checkedReset.response.status,200);assert.equal(checkedReset.data.valid,true);assert.equal(checkedReset.data.continuePath,'/tests?from=reset');assert.match(checkedReset.data.maskedEmail,/\*+@example\.com$/);assert.equal(consumed,false);
 const weakReset=await call('/api/auth/reset-password',{method:'POST',body:{oobCode:'one-use-reset-code',password:'1234567a'}});assert.equal(weakReset.response.status,400);assert.equal(consumed,false);
+const originalBatch=env.DB.batch.bind(env.DB);env.DB.batch=async()=>{throw new Error('simulated D1 outage')};const unsafeReset=await call('/api/auth/reset-password',{method:'POST',body:{oobCode:'one-use-reset-code',password:'87654321z'}});env.DB.batch=originalBatch;assert.equal(unsafeReset.response.status,503);assert.equal(unsafeReset.data.error.code,'SESSION_REVOCATION_FAILED');assert.equal(consumed,false);assert.equal((await call('/api/auth/session',{extraHeaders:{cookie:oldCookie}})).response.status,200);
 const reset=await call('/api/auth/reset-password',{method:'POST',body:{oobCode:'one-use-reset-code',password:'87654321z'}});assert.equal(reset.response.status,200);
 assert.equal((await call('/api/auth/session',{extraHeaders:{cookie:oldCookie}})).response.status,401);
 assert.equal((await call('/api/auth/reset-password',{method:'POST',body:{oobCode:'one-use-reset-code',password:'87654321z'}})).response.status,410);
+assert.equal((await call('/api/auth/check-password-reset',{method:'POST',body:{mode:'resetPassword',oobCode:'one-use-reset-code'}})).response.status,410);
 
 const studentUid=sqlite.prepare(`SELECT firebase_uid FROM users WHERE email='student@example.com'`).get().firebase_uid;
 sqlite.prepare(`UPDATE users SET email_verified_at=NULL WHERE email='student@example.com'`).run();
@@ -36,6 +40,7 @@ env.FIREBASE_AUTH.update=async({oobCode})=>{
   emailActionUsed=true;return {localId:studentUid,email:'student@example.com'};
 };
 assert.equal((await call('/api/auth/apply-email-action',{method:'POST',body:{mode:'resetPassword',oobCode:'verify-email-code'}})).response.status,400);
+assert.equal((await call('/api/auth/apply-email-action',{method:'POST',body:{mode:'verifyEmail',oobCode:'verify-email-code',continueUrl:'//evil.example'}})).response.status,400);
 assert.equal((await call('/api/auth/apply-email-action',{method:'POST',body:{mode:'verifyEmail',oobCode:'verify-email-code'}})).response.status,200);
 assert.ok(sqlite.prepare(`SELECT email_verified_at FROM users WHERE email='student@example.com'`).get().email_verified_at);
 assert.equal((await call('/api/auth/apply-email-action',{method:'POST',body:{mode:'verifyEmail',oobCode:'verify-email-code'}})).response.status,410);

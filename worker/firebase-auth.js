@@ -50,9 +50,14 @@ export async function firebaseSendPasswordReset(env,email){
   await firebaseRequest(env,'sendOobCode',{requestType:'PASSWORD_RESET',email});
 }
 
-export async function firebaseResetPassword(env,oobCode,newPassword){
+export async function firebaseCheckPasswordReset(env,oobCode){
   const action=await firebaseRequest(env,'resetPassword',{oobCode});
   if(action.requestType!=='PASSWORD_RESET'||!action.email)throw new FirebaseAuthError('INVALID_OOB_CODE');
+  return {email:String(action.email)};
+}
+
+export async function firebaseResetPassword(env,oobCode,newPassword){
+  const action=await firebaseCheckPasswordReset(env,oobCode);
   const result=await firebaseRequest(env,'resetPassword',{oobCode,newPassword});
   return {email:String(result.email||action.email)};
 }

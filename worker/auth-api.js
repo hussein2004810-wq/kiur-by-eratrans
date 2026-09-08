@@ -1,13 +1,18 @@
 import {enforceRateLimit,readJsonBody,secureHeaders} from './security.js';
 import {authRateKey,clearSessionCookie,createSession,hashToken,normalizeEmail,revokeSession,revokeUserSessions,validatePassword,verifyPassword} from './password-auth.js';
 import {recordAccountEvent} from './account-events.js';
-import {firebaseApplyEmailAction,firebaseResetPassword} from './firebase-auth.js';
+import {firebaseApplyEmailAction,firebaseCheckPasswordReset,firebaseResetPassword} from './firebase-auth.js';
 import {firebaseAuthConfigured,firebaseDeleteAccount,firebaseLookup,firebaseSendPasswordReset,firebaseSendVerification,firebaseSignIn,firebaseSignUp,firebaseTemporaryPassword,isFirebaseError} from './firebase-auth.js';
 
 function json(data,status=200,headers={}){return new Response(JSON.stringify(data),{status,headers:secureHeaders({'content-type':'application/json; charset=utf-8','cache-control':'no-store',...headers})})}
 function fail(code,message,status=400,headers={}){return json({error:{code,message}},status,headers)}
 async function value(request){const parsed=await readJsonBody(request);return parsed.error?{response:fail(parsed.error.code,parsed.error.message,parsed.error.status)}:{data:parsed.value}}
 function validEmail(email){return email.length<=254&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)}
+function safeContinuePath(request,raw){
+  if(raw===undefined||raw===null||raw==='')return '/';if(typeof raw!=='string'||raw.length>2048)return null;
+  try{const origin=new URL(request.url).origin;const target=new URL(raw,origin);if(target.origin!==origin||target.username||target.password)return null;if(target.pathname==='/auth/action')return '/';return `${target.pathname}${target.search}${target.hash}`}catch{return null}
+}
+function maskedEmail(value){const [name,domain]=String(value||'').split('@');if(!name||!domain)return '';return `${name.slice(0,2)}${'*'.repeat(Math.min(6,Math.max(2,name.length-2)))}@${domain}`}
 
 async function sameSecret(left,right){
   const encoder=new TextEncoder();
@@ -154,6 +159,18 @@ export async function handleAuthApi(request,env,url,user){
     try{if(account&&!account.firebaseUid)try{await firebaseSignUp(env,email,firebaseTemporaryPassword())}catch(error){if(!isFirebaseError(error,'EMAIL_EXISTS'))throw error}await firebaseSendPasswordReset(env,email);if(account)await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email,eventType:'password_reset_requested'})}catch(error){if(!isFirebaseError(error,'EMAIL_NOT_FOUND'))return fail('FIREBASE_AUTH_UNAVAILABLE','تعذر طلب الاستعادة من Google؛ حاول لاحقًا',503)}return json({accepted:true,message:'إذا كان البريد مسجلًا فستصله رسالة استعادة من Google'},202);
   }
 
+  if(url.pathname==='/api/auth/check-password-reset'&&request.method==='POST'){
+    const ipKey=await authRateKey(request.headers.get('cf-connecting-ip')||'unknown');const limit=await enforceRateLimit(env,`auth:reset-check:${ipKey}`,20,900);
+    if(!limit.allowed)return fail('RATE_LIMITED','طلبات كثيرة؛ حاول لاحقًا',429,{'retry-after':String(limit.retryAfter)});
+    const parsed=await value(request);if(parsed.response)return parsed.response;const code=String(parsed.data?.oobCode||'');const continuePath=safeContinuePath(request,parsed.data?.continueUrl);
+    if(String(parsed.data?.mode||'')!=='resetPassword'||code.length<10||code.length>2048||continuePath===null)return fail('INVALID_TOKEN','رابط الاستعادة غير صالح');
+    if(!firebaseAuthConfigured(env))return fail('FIREBASE_AUTH_UNAVAILABLE','خدمة استعادة الحساب غير متاحة مؤقتًا',503);
+    try{const checked=await firebaseCheckPasswordReset(env,code);return json({valid:true,maskedEmail:maskedEmail(checked.email),continuePath})}catch(error){
+      if(['INVALID_OOB_CODE','EXPIRED_OOB_CODE','USER_DISABLED'].some(issue=>isFirebaseError(error,issue)))return fail('TOKEN_EXPIRED','رابط الاستعادة منتهي أو مستخدم؛ اطلب رابطًا جديدًا',410);
+      return fail('FIREBASE_AUTH_UNAVAILABLE','تعذر التحقق من رابط الاستعادة؛ حاول لاحقًا',503);
+    }
+  }
+
   if(url.pathname==='/api/auth/reset-password'&&request.method==='POST'){
     const ipKey=await authRateKey(request.headers.get('cf-connecting-ip')||'unknown');const limit=await enforceRateLimit(env,`auth:reset-complete:${ipKey}`,10,900);
     if(!limit.allowed)return fail('RATE_LIMITED','طلبات كثيرة؛ حاول لاحقًا',429,{'retry-after':String(limit.retryAfter)});
@@ -161,20 +178,25 @@ export async function handleAuthApi(request,env,url,user){
     const passwordIssue=validatePassword(parsed.data?.password);if(passwordIssue)return fail('VALIDATION',passwordIssue);
     const code=String(parsed.data?.oobCode||'');if(code.length<10||code.length>2048)return fail('INVALID_TOKEN','رابط الاستعادة غير صالح');
     if(!firebaseAuthConfigured(env))return fail('FIREBASE_AUTH_UNAVAILABLE','خدمة استعادة الحساب غير متاحة مؤقتًا',503);
+    let checked;try{checked=await firebaseCheckPasswordReset(env,code)}catch(error){
+      if(['INVALID_OOB_CODE','EXPIRED_OOB_CODE','USER_DISABLED'].some(issue=>isFirebaseError(error,issue)))return fail('TOKEN_EXPIRED','رابط الاستعادة منتهي أو مستخدم؛ اطلب رابطًا جديدًا',410);
+      return fail('FIREBASE_AUTH_UNAVAILABLE','تعذر التحقق من رابط الاستعادة؛ حاول مجددًا لاحقًا',503);
+    }
+    const account=await loadPasswordAccount(env,normalizeEmail(checked.email));
+    if(account)try{await revokeUserSessions(env,account.id)}catch{return fail('SESSION_REVOCATION_FAILED','تعذر تأمين الجلسات السابقة؛ لم يتم تغيير كلمة المرور',503)}
     let reset;try{reset=await firebaseResetPassword(env,code,parsed.data.password)}catch(error){
       if(['INVALID_OOB_CODE','EXPIRED_OOB_CODE','USER_DISABLED'].some(code=>isFirebaseError(error,code)))return fail('TOKEN_EXPIRED','رابط الاستعادة منتهي أو مستخدم؛ اطلب رابطًا جديدًا',410);
       return fail('FIREBASE_AUTH_UNAVAILABLE','تعذر تغيير كلمة المرور؛ حاول مجددًا لاحقًا',503);
     }
-    const account=await loadPasswordAccount(env,normalizeEmail(reset.email));
-    if(account){await revokeUserSessions(env,account.id);await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email:account.email,eventType:'password_reset_requested',details:{phase:'completed',sessionsRevoked:true}})}
+    if(account)await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email:reset.email||account.email,eventType:'password_reset_requested',details:{phase:'completed',sessionsRevoked:true}})
     return json({reset:true,message:'تم تغيير كلمة المرور وإنهاء الجلسات السابقة. سجّل الدخول بكلمة المرور الجديدة'},200,{'set-cookie':clearSessionCookie()});
   }
   if(url.pathname==='/api/auth/apply-email-action'&&request.method==='POST'){
     const ipKey=await authRateKey(request.headers.get('cf-connecting-ip')||'unknown');const limit=await enforceRateLimit(env,`auth:email-action:${ipKey}`,12,900);
     if(!limit.allowed)return fail('RATE_LIMITED','طلبات كثيرة؛ حاول لاحقًا',429,{'retry-after':String(limit.retryAfter)});
     const parsed=await value(request);if(parsed.response)return parsed.response;
-    const mode=String(parsed.data?.mode||'');const code=String(parsed.data?.oobCode||'');
-    if(!['verifyEmail','recoverEmail'].includes(mode)||code.length<10||code.length>2048)return fail('INVALID_TOKEN','رابط الإجراء غير صالح');
+    const mode=String(parsed.data?.mode||'');const code=String(parsed.data?.oobCode||'');const continuePath=safeContinuePath(request,parsed.data?.continueUrl);
+    if(!['verifyEmail','recoverEmail'].includes(mode)||code.length<10||code.length>2048||continuePath===null)return fail('INVALID_TOKEN','رابط الإجراء غير صالح');
     if(!firebaseAuthConfigured(env))return fail('FIREBASE_AUTH_UNAVAILABLE','خدمة توثيق البريد غير متاحة مؤقتًا',503);
     let applied;try{applied=await firebaseApplyEmailAction(env,code)}catch(error){
       if(['INVALID_OOB_CODE','EXPIRED_OOB_CODE','USER_DISABLED'].some(issue=>isFirebaseError(error,issue)))return fail('TOKEN_EXPIRED','الرابط منتهي أو مستخدم؛ اطلب رابطًا جديدًا',410);
@@ -183,7 +205,7 @@ export async function handleAuthApi(request,env,url,user){
     const account=await env.DB.prepare(`SELECT id,email FROM users WHERE firebase_uid=?`).bind(applied.uid).first();
     if(account&&mode==='verifyEmail')await env.DB.prepare(`UPDATE users SET email_verified_at=COALESCE(email_verified_at,CURRENT_TIMESTAMP),updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(account.id).run();
     if(account)await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email:applied.email||account.email,eventType:'account_status',details:{provider:'firebase_action',action:mode}});
-    return json({applied:true,message:mode==='verifyEmail'?'تم توثيق البريد بنجاح. الحساب الآن بانتظار موافقة المشرف.':'تمت استعادة عنوان البريد السابق. ننصح بطلب تغيير كلمة المرور فورًا.'});
+    return json({applied:true,continuePath,message:mode==='verifyEmail'?'تم توثيق البريد بنجاح. الحساب الآن بانتظار موافقة المشرف.':'تمت استعادة عنوان البريد السابق. ننصح بطلب تغيير كلمة المرور فورًا.'});
   }
   if(url.pathname==='/api/auth/logout-all'&&request.method==='POST'){
     if(!user)return fail('UNAUTHENTICATED','سجّل الدخول للمتابعة',401,{'set-cookie':clearSessionCookie()});
