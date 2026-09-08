@@ -4,7 +4,7 @@ import {resolve} from 'node:path';
 
 const database=new DatabaseSync(':memory:');
 database.exec('PRAGMA foreign_keys=ON');
-for(const file of ['drizzle/0000_medexam.sql','drizzle/0001_academic_hierarchy.sql','drizzle/0002_backfill_existing_tests.sql','drizzle/0003_scale_indexes.sql','drizzle/0004_attempt_shuffle.sql','drizzle/0005_security_hardening.sql','drizzle/0006_accounts_organizations_permissions.sql','drizzle/0007_exam_modes_question_types_files.sql','drizzle/0008_staff_titles_and_college_copy.sql','drizzle/0009_clinical_glimpses_library_logs.sql','drizzle/0010_student_bans.sql','drizzle/0011_security_hardening.sql','drizzle/0012_firebase_auth.sql','drizzle/0013_academic_trash_and_notifications.sql','drizzle/0014_media_access_indexes.sql','drizzle/0015_google_auth_flows.sql']){
+for(const file of ['drizzle/0000_medexam.sql','drizzle/0001_academic_hierarchy.sql','drizzle/0002_backfill_existing_tests.sql','drizzle/0003_scale_indexes.sql','drizzle/0004_attempt_shuffle.sql','drizzle/0005_security_hardening.sql','drizzle/0006_accounts_organizations_permissions.sql','drizzle/0007_exam_modes_question_types_files.sql','drizzle/0008_staff_titles_and_college_copy.sql','drizzle/0009_clinical_glimpses_library_logs.sql','drizzle/0010_student_bans.sql','drizzle/0011_security_hardening.sql','drizzle/0012_firebase_auth.sql','drizzle/0013_academic_trash_and_notifications.sql','drizzle/0014_media_access_indexes.sql','drizzle/0015_google_auth_flows.sql','drizzle/0016_auth_session_epoch.sql']){
   database.exec(await readFile(resolve(file),'utf8'));
 }
 const counts={
@@ -26,4 +26,9 @@ const imagePlan=database.prepare("EXPLAIN QUERY PLAN SELECT * FROM questions WHE
 const activeAttemptPlan=database.prepare("EXPLAIN QUERY PLAN SELECT * FROM attempts WHERE user_id=? AND test_id=? AND status='in_progress' AND deadline_at>CURRENT_TIMESTAMP").all('user','test').map(item=>item.detail).join(' ');
 if(mediaIndexes!==3||!imagePlan.includes('idx_questions_image_test')||!activeAttemptPlan.includes('idx_attempts_user_test_status_deadline'))throw new Error('Media access index verification failed');
 if(!database.prepare("SELECT 1 FROM sqlite_schema WHERE type='index' AND name='idx_google_auth_expiry'").get())throw new Error('Missing Google OAuth expiry index');
-console.log(JSON.stringify({ok:true,counts,demo,scaleIndexes,firebaseColumns,mediaIndexes,queryPlan:plan,imagePlan,activeAttemptPlan}));
+const authEpochColumns=Number(database.prepare("SELECT count(*) AS count FROM pragma_table_info('users') WHERE name='auth_epoch'").get().count)+Number(database.prepare("SELECT count(*) AS count FROM pragma_table_info('auth_sessions') WHERE name='auth_epoch'").get().count);
+const recoveryTable=database.prepare("SELECT 1 FROM sqlite_schema WHERE type='table' AND name='owner_recovery_operations'").get();
+const sessionRevocationIndex=database.prepare("SELECT 1 FROM sqlite_schema WHERE type='index' AND name='idx_auth_sessions_user_revoked'").get();
+const revocationPlan=database.prepare("EXPLAIN QUERY PLAN UPDATE auth_sessions SET revoked_at=CURRENT_TIMESTAMP WHERE user_id=? AND revoked_at IS NULL").all('user').map(item=>item.detail).join(' ');
+if(authEpochColumns!==2||!recoveryTable||!sessionRevocationIndex||!revocationPlan.includes('idx_auth_sessions_user_revoked'))throw new Error(`Auth epoch migration verification failed: ${JSON.stringify({authEpochColumns,recoveryTable:Boolean(recoveryTable),sessionRevocationIndex:Boolean(sessionRevocationIndex),revocationPlan})}`);
+console.log(JSON.stringify({ok:true,counts,demo,scaleIndexes,firebaseColumns,mediaIndexes,authEpochColumns,queryPlan:plan,imagePlan,activeAttemptPlan,revocationPlan}));

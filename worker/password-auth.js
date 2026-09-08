@@ -54,17 +54,22 @@ function cookieValue(request,name){
 export function clearSessionCookie(){return `${SESSION_COOKIE}=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0`}
 export async function createSession(env,userId,request){
   const token=randomToken();const tokenHash=await sha256(token);const userAgentHash=await sha256(request.headers.get('user-agent')||'unknown');const expiresAt=new Date(Date.now()+SESSION_SECONDS*1000).toISOString();
-  await env.DB.batch([
-    env.DB.prepare(`INSERT INTO auth_sessions(id,user_id,token_hash,expires_at,user_agent_hash) VALUES(?,?,?,?,?)`).bind(crypto.randomUUID(),userId,tokenHash,expiresAt,userAgentHash),
+  const results=await env.DB.batch([
+    env.DB.prepare(`INSERT INTO auth_sessions(id,user_id,token_hash,expires_at,user_agent_hash,auth_epoch) SELECT ?,u.id,?,?,?,u.auth_epoch FROM users u WHERE u.id=? AND u.account_status='active'`).bind(crypto.randomUUID(),tokenHash,expiresAt,userAgentHash,userId),
     env.DB.prepare(`DELETE FROM auth_sessions WHERE unixepoch(expires_at)<=unixepoch('now') OR revoked_at IS NOT NULL`)
   ]);
+  if(Number(results?.[0]?.meta?.changes)!==1)throw new Error('SESSION_ACCOUNT_UNAVAILABLE');
   return {cookie:`${SESSION_COOKIE}=${encodeURIComponent(token)}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=${SESSION_SECONDS}`,expiresAt};
 }
 export async function revokeSession(env,request){const token=cookieValue(request,SESSION_COOKIE);if(!token)return;await env.DB.prepare(`UPDATE auth_sessions SET revoked_at=CURRENT_TIMESTAMP WHERE token_hash=? AND revoked_at IS NULL`).bind(await sha256(token)).run()}
-export async function revokeUserSessions(env,userId){await env.DB.prepare(`UPDATE auth_sessions SET revoked_at=CURRENT_TIMESTAMP WHERE user_id=? AND revoked_at IS NULL`).bind(userId).run()}
+export async function revokeUserSessions(env,userId,statements=[]){return env.DB.batch([
+  ...statements,
+  env.DB.prepare(`UPDATE users SET auth_epoch=auth_epoch+1,updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(userId),
+  env.DB.prepare(`UPDATE auth_sessions SET revoked_at=CURRENT_TIMESTAMP WHERE user_id=? AND revoked_at IS NULL`).bind(userId)
+])}
 export async function resolvePasswordSession(env,request){
   const token=cookieValue(request,SESSION_COOKIE);if(!token)return null;const tokenHash=await sha256(token);
-  const row=await env.DB.prepare(`SELECT u.id,u.email,u.name,u.account_role AS role,u.staff_title AS staffTitle,u.account_status AS accountStatus,u.auth_provider AS authProvider,u.department_id AS departmentId,u.phase_id AS phaseId,u.university_id AS universityId,u.college_id AS collegeId,u.section_id AS sectionId,u.ban_status AS banStatus,u.ban_until AS banUntil,u.active_ban_request_id AS activeBanRequestId,u.active_ban_id AS activeBanId,s.last_used_at AS lastUsedAt,s.user_agent_hash AS userAgentHash FROM auth_sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=? AND s.revoked_at IS NULL AND unixepoch(s.expires_at)>unixepoch('now') AND unixepoch(s.last_used_at)>unixepoch('now',?) AND u.account_status='active'`).bind(tokenHash,`-${SESSION_IDLE_SECONDS} seconds`).first();
+  const row=await env.DB.prepare(`SELECT u.id,u.email,u.name,u.account_role AS role,u.staff_title AS staffTitle,u.account_status AS accountStatus,u.auth_provider AS authProvider,u.department_id AS departmentId,u.phase_id AS phaseId,u.university_id AS universityId,u.college_id AS collegeId,u.section_id AS sectionId,u.ban_status AS banStatus,u.ban_until AS banUntil,u.active_ban_request_id AS activeBanRequestId,u.active_ban_id AS activeBanId,s.last_used_at AS lastUsedAt,s.user_agent_hash AS userAgentHash FROM auth_sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=? AND s.auth_epoch=u.auth_epoch AND s.revoked_at IS NULL AND unixepoch(s.expires_at)>unixepoch('now') AND unixepoch(s.last_used_at)>unixepoch('now',?) AND u.account_status='active'`).bind(tokenHash,`-${SESSION_IDLE_SECONDS} seconds`).first();
   if(!row)return null;const currentAgent=await sha256(request.headers.get('user-agent')||'unknown');if(row.userAgentHash&&row.userAgentHash!==currentAgent){await env.DB.prepare(`UPDATE auth_sessions SET revoked_at=CURRENT_TIMESTAMP WHERE token_hash=?`).bind(tokenHash).run();return null}
   const rawLastUsed=String(row.lastUsedAt);const lastUsed=Date.parse(rawLastUsed.includes('T')?rawLastUsed:rawLastUsed.replace(' ','T')+'Z');if(!Number.isFinite(lastUsed)||Date.now()-lastUsed>5*60*1000)await env.DB.prepare(`UPDATE auth_sessions SET last_used_at=CURRENT_TIMESTAMP WHERE token_hash=?`).bind(tokenHash).run();
   return row;

@@ -87,17 +87,22 @@ export async function handleAuthApi(request,env,url,user){
     const account=await env.DB.prepare(`SELECT id,email,account_role AS role,auth_provider,firebase_uid AS firebaseUid FROM users WHERE email=? AND account_role='owner' AND account_status='active'`).bind(email).first();
     if(!account)return fail('NOT_FOUND','حساب المالك غير موجود',404);
     if(!firebaseAuthConfigured(env))return fail('FIREBASE_AUTH_UNAVAILABLE','خدمة تسجيل البريد غير مهيأة',503);
+    const operationHash=await hashToken(`owner-password-recovery:v1:${configured}`);
+    try{
+      const consumed=await env.DB.prepare(`INSERT INTO owner_recovery_operations(operation_hash,user_id) VALUES(?,?)`).bind(operationHash,account.id).run();
+      if(Number(consumed?.meta?.changes)!==1)return fail('RECOVERY_ALREADY_USED','تم استهلاك عملية استرداد المالك مسبقًا',410);
+    }catch{return fail('RECOVERY_ALREADY_USED','تم استهلاك عملية استرداد المالك مسبقًا',410)}
     let auth,created=false;
     try{auth=await firebaseSignUp(env,email,parsed.data.password);created=true}catch(error){
       if(!isFirebaseError(error,'EMAIL_EXISTS'))return fail('FIREBASE_AUTH_UNAVAILABLE','تعذر ربط حساب المالك بخدمة Google',503);
       try{auth=await firebaseSignIn(env,email,parsed.data.password)}catch{return fail('FIREBASE_ACCOUNT_LINK_REQUIRED','يوجد حساب Google لهذا البريد بكلمة مرور مختلفة؛ استخدم استعادة كلمة المرور',409)}
     }
     if(account.firebaseUid&&account.firebaseUid!==auth.uid){if(created)await firebaseDeleteAccount(env,auth.idToken);return fail('IDENTITY_CONFLICT','الحساب مرتبط بهوية بريد مختلفة',409)}
-    try{await env.DB.batch([
+    try{await revokeUserSessions(env,account.id,[
       env.DB.prepare(`UPDATE users SET firebase_uid=?,email_verified_at=COALESCE(email_verified_at,CURRENT_TIMESTAMP),auth_provider='hybrid',password_hash=NULL,password_salt=NULL,password_iterations=NULL,password_peppered=0,updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(auth.uid,account.id),
       env.DB.prepare(`INSERT OR REPLACE INTO user_identities(provider,provider_user_id,user_id,email) VALUES('password',?,?,?)`).bind(auth.uid,account.id,email)
     ])}catch(error){if(created)await firebaseDeleteAccount(env,auth.idToken);throw error}
-    await revokeUserSessions(env,account.id);await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email,eventType:'firebase_migration',details:{provider:'firebase',recovery:'owner_password'}});
+    await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email,eventType:'firebase_migration',details:{provider:'firebase',recovery:'owner_password'}});
     return json({activated:true,message:'تم تفعيل دخول المالك بالبريد وكلمة المرور'});
   }
   if(url.pathname==='/api/auth/register'&&request.method==='POST'){
@@ -128,8 +133,8 @@ export async function handleAuthApi(request,env,url,user){
     const parsed=await value(request);if(parsed.response)return parsed.response;const token=String(parsed.data?.token||'');const passwordIssue=validatePassword(parsed.data?.password);if(passwordIssue)return fail('VALIDATION',passwordIssue);if(!firebaseAuthConfigured(env))return fail('FIREBASE_AUTH_UNAVAILABLE','تفعيل البريد متوقف مؤقتًا حتى تهيئة Firebase',503);
     const tokenHash=await hashToken(token);const invite=await env.DB.prepare(`SELECT i.user_id AS userId,u.email,u.name FROM staff_invites i JOIN users u ON u.id=i.user_id WHERE i.token_hash=? AND i.accepted_at IS NULL AND unixepoch(i.expires_at)>unixepoch('now')`).bind(tokenHash).first();if(!invite)return fail('TOKEN_EXPIRED','دعوة التفعيل غير صالحة أو منتهية',410);
     let auth,created=false;try{auth=await firebaseSignUp(env,invite.email,parsed.data.password);created=true}catch(error){if(!isFirebaseError(error,'EMAIL_EXISTS'))return fail('FIREBASE_AUTH_UNAVAILABLE','تعذر تفعيل الحساب لدى Google',503);try{auth=await firebaseSignIn(env,invite.email,parsed.data.password)}catch{return fail('FIREBASE_ACCOUNT_LINK_REQUIRED','يوجد حساب Google لهذا البريد. استخدم استعادة كلمة المرور ثم سجّل الدخول',409)}}
-    try{await env.DB.batch([env.DB.prepare(`UPDATE users SET firebase_uid=?,email_verified_at=COALESCE(email_verified_at,CURRENT_TIMESTAMP),password_hash=NULL,password_salt=NULL,password_iterations=NULL,password_peppered=0,auth_provider=CASE WHEN auth_provider='chatgpt' THEN 'hybrid' ELSE 'password' END,updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(auth.uid,invite.userId),env.DB.prepare(`INSERT OR REPLACE INTO user_identities(provider,provider_user_id,user_id,email) VALUES('password',?,?,?)`).bind(auth.uid,invite.userId,invite.email),env.DB.prepare(`UPDATE staff_invites SET accepted_at=CURRENT_TIMESTAMP,token_hash=? WHERE user_id=?`).bind(`used:${crypto.randomUUID()}`,invite.userId)])}catch(error){if(created)await firebaseDeleteAccount(env,auth.idToken);throw error}
-    await revokeUserSessions(env,invite.userId);return json({activated:true,message:'تم نقل الحساب إلى Firebase ويمكنك تسجيل الدخول الآن'});
+    try{await revokeUserSessions(env,invite.userId,[env.DB.prepare(`UPDATE users SET firebase_uid=?,email_verified_at=COALESCE(email_verified_at,CURRENT_TIMESTAMP),password_hash=NULL,password_salt=NULL,password_iterations=NULL,password_peppered=0,auth_provider=CASE WHEN auth_provider='chatgpt' THEN 'hybrid' ELSE 'password' END,updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(auth.uid,invite.userId),env.DB.prepare(`INSERT OR REPLACE INTO user_identities(provider,provider_user_id,user_id,email) VALUES('password',?,?,?)`).bind(auth.uid,invite.userId,invite.email),env.DB.prepare(`UPDATE staff_invites SET accepted_at=CURRENT_TIMESTAMP,token_hash=? WHERE user_id=?`).bind(`used:${crypto.randomUUID()}`,invite.userId)])}catch(error){if(created)await firebaseDeleteAccount(env,auth.idToken);throw error}
+    return json({activated:true,message:'تم نقل الحساب إلى Firebase ويمكنك تسجيل الدخول الآن'});
   }
 
   if(url.pathname==='/api/auth/login'&&request.method==='POST'){
@@ -179,6 +184,11 @@ export async function handleAuthApi(request,env,url,user){
     if(account&&mode==='verifyEmail')await env.DB.prepare(`UPDATE users SET email_verified_at=COALESCE(email_verified_at,CURRENT_TIMESTAMP),updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(account.id).run();
     if(account)await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email:applied.email||account.email,eventType:'account_status',details:{provider:'firebase_action',action:mode}});
     return json({applied:true,message:mode==='verifyEmail'?'تم توثيق البريد بنجاح. الحساب الآن بانتظار موافقة المشرف.':'تمت استعادة عنوان البريد السابق. ننصح بطلب تغيير كلمة المرور فورًا.'});
+  }
+  if(url.pathname==='/api/auth/logout-all'&&request.method==='POST'){
+    if(!user)return fail('UNAUTHENTICATED','سجّل الدخول للمتابعة',401,{'set-cookie':clearSessionCookie()});
+    await revokeUserSessions(env,user.id);await recordAccountEvent(env,request,{userId:user.id,accountCode:user.id,email:user.email,eventType:'logout',details:{allSessions:true}});
+    return json({signedOut:true,allSessions:true},200,{'set-cookie':clearSessionCookie()});
   }
   if(url.pathname==='/api/auth/logout'&&request.method==='POST'){if(user)await recordAccountEvent(env,request,{userId:user.id,accountCode:user.id,email:user.email,eventType:'logout'});await revokeSession(env,request);return json({signedOut:true},200,{'set-cookie':clearSessionCookie()})}
   if(url.pathname==='/api/auth/session'&&request.method==='GET')return user?json({user}):fail('UNAUTHENTICATED','سجّل الدخول للمتابعة',401);

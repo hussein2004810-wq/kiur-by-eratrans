@@ -1,5 +1,5 @@
 export const tables = {
-  users: ['id','email','name','role','account_role','staff_title','account_status','auth_provider','created_at','updated_at','department_id','phase_id','university_id','college_id','section_id','password_hash','password_salt','password_iterations','firebase_uid','email_verified_at','last_login_at','ban_status','ban_until','active_ban_request_id','active_ban_id'],
+  users: ['id','email','name','role','account_role','staff_title','account_status','auth_provider','created_at','updated_at','department_id','phase_id','university_id','college_id','section_id','password_hash','password_salt','password_iterations','firebase_uid','email_verified_at','last_login_at','ban_status','ban_until','active_ban_request_id','active_ban_id','auth_epoch'],
   universities: ['id','name','sort_order','created_at'],
   colleges: ['id','university_id','name','sort_order','created_at'],
   departments: ['id','name','display_name','college_id','sort_order'],
@@ -10,7 +10,7 @@ export const tables = {
   attemptAnswers: ['attempt_id','question_id','selected_option','answer_text','is_correct','answered_at'],
   auditLogs: ['id','entity','entity_id','action','by_user_id','at','details_json'],
   apiRateLimits: ['bucket_key','window_start','count'],
-  authSessions: ['id','user_id','token_hash','created_at','expires_at','last_used_at','revoked_at','user_agent_hash'],
+  authSessions: ['id','user_id','token_hash','created_at','expires_at','last_used_at','revoked_at','user_agent_hash','auth_epoch'],
   userIdentities: ['provider','provider_user_id','user_id','email','created_at'],
   userGrants: ['id','user_id','grant_role','scope_type','scope_id','permissions_json','granted_by','created_at','updated_at'],
   mediaAssets: ['id','object_key','original_name','content_type','byte_size','sha256','alt_text','title','clinical_question','explanation','correct_answer','tags_json','uploaded_by','created_at','updated_by','updated_at','deleted_at','deleted_by'],
@@ -28,4 +28,5 @@ export const tables = {
   academicDeletions: ['id','resource_type','resource_id','resource_name','deleted_by','deleted_at','restored_by','restored_at','purged_by','purged_at','status','details_json'],
   academicDeletedItems: ['batch_id','resource_type','resource_id'],
   userNotifications: ['id','user_id','notification_type','title','message','link','read_at','created_at'],
+  ownerRecoveryOperations: ['operation_hash','user_id','consumed_at'],
 } as const;

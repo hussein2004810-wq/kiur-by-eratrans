@@ -83,8 +83,7 @@ export async function handleAdminUsersApi(request,env,url,actor){
       ];
       for(const grant of grantResult.grants)statements.push(env.DB.prepare(`INSERT INTO user_grants(id,user_id,grant_role,scope_type,scope_id,permissions_json,granted_by) VALUES(?,?,?,?,?,?,?)`).bind(grant.id,existing.id,role,grant.scopeType,grant.scopeId,JSON.stringify(grant.permissions),actor.id));
       statements.push(env.DB.prepare(`INSERT INTO audit_logs(entity,entity_id,action,by_user_id,details_json) VALUES('user',?,'link_and_upgrade_account',?,?)`).bind(existing.id,actor.id,JSON.stringify({fromRole:existing.role,toRole:role,staffTitle,grants:grantResult.grants.map(({scopeType,scopeId,permissions})=>({scopeType,scopeId,permissions}))})));
-      await env.DB.batch(statements);
-      await revokeUserSessions(env,existing.id);
+      await revokeUserSessions(env,existing.id,statements);
       try{await recordAccountEvent(env,request,{userId:existing.id,accountCode:existing.id,email,eventType:'grant_changed',details:{changedBy:actor.id,linkedExisting:true,role,staffTitle}})}catch(cause){console.error('Account event write failed',{operation:'link_existing',name:cause instanceof Error?cause.name:'UnknownError'})}
       return json({id:existing.id,linked:true});
     }
@@ -113,7 +112,7 @@ export async function handleAdminUsersApi(request,env,url,actor){
     const permission=target.role==='student'?'manage_students':'manage_teachers';if(!(await canManageTarget(env,actor,target,permission)))return fail('FORBIDDEN','هذا الحساب خارج نطاق صلاحيتك',403);
     const parsed=await body(request);if(parsed.response)return parsed.response;const status=String(parsed.value?.status||'');if(!validStatus(status))return fail('VALIDATION','حالة الحساب غير صالحة');
     if(status==='active'&&target.role==='student'&&['password','hybrid'].includes(target.authProvider)&&!target.emailVerifiedAt)return fail('EMAIL_UNVERIFIED','لا يمكن تفعيل حساب طالب قبل توثيق بريده الإلكتروني',409);
-    await env.DB.batch([env.DB.prepare(`UPDATE users SET account_status=?,updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(status,target.id),env.DB.prepare(`UPDATE auth_sessions SET revoked_at=CURRENT_TIMESTAMP WHERE user_id=? AND ?!='active' AND revoked_at IS NULL`).bind(target.id,status)]);await audit(env,actor,target.id,'set_status',{status});await recordAccountEvent(env,request,{userId:target.id,accountCode:target.id,eventType:'account_status',details:{changedBy:actor.id,status}});return json({updated:true});
+    await revokeUserSessions(env,target.id,[env.DB.prepare(`UPDATE users SET account_status=?,updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(status,target.id)]);await audit(env,actor,target.id,'set_status',{status});await recordAccountEvent(env,request,{userId:target.id,accountCode:target.id,eventType:'account_status',details:{changedBy:actor.id,status}});return json({updated:true});
   }
 
   const grantMatch=url.pathname.match(/^\/api\/admin\/users\/([^/]+)\/grants$/);
@@ -123,7 +122,7 @@ export async function handleAdminUsersApi(request,env,url,actor){
     const grantResult=await validateGrants(env,actor,role,parsed.value?.grants);if(grantResult.error)return fail(grantResult.status===403?'FORBIDDEN':'VALIDATION',grantResult.error,grantResult.status||400);
     const statements=[env.DB.prepare(`DELETE FROM user_grants WHERE user_id=?`).bind(target.id),env.DB.prepare(`UPDATE users SET account_role=?,role=?,staff_title=?,account_status='active',updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(role,legacyRole(role),staffTitle,target.id)];
     for(const grant of grantResult.grants)statements.push(env.DB.prepare(`INSERT INTO user_grants(id,user_id,grant_role,scope_type,scope_id,permissions_json,granted_by) VALUES(?,?,?,?,?,?,?)`).bind(grant.id,target.id,role,grant.scopeType,grant.scopeId,JSON.stringify(grant.permissions),actor.id));
-    await env.DB.batch(statements);await revokeUserSessions(env,target.id);await audit(env,actor,target.id,'replace_grants',{role,staffTitle,grants:grantResult.grants.map(({scopeType,scopeId,permissions})=>({scopeType,scopeId,permissions}))});await recordAccountEvent(env,request,{userId:target.id,accountCode:target.id,eventType:'grant_changed',details:{changedBy:actor.id,role,staffTitle}});return json({updated:true});
+    await revokeUserSessions(env,target.id,statements);await audit(env,actor,target.id,'replace_grants',{role,staffTitle,grants:grantResult.grants.map(({scopeType,scopeId,permissions})=>({scopeType,scopeId,permissions}))});await recordAccountEvent(env,request,{userId:target.id,accountCode:target.id,eventType:'grant_changed',details:{changedBy:actor.id,role,staffTitle}});return json({updated:true});
   }
   return null;
 }
