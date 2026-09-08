@@ -18,6 +18,7 @@ import {handleStudentBanApi,refreshStudentRestriction,restrictedStudentPathAllow
 import {computeAttemptDeadline,deadlineSql,studentCanAccessTest} from './test-access.js';
 import {handleNotificationsApi} from './notifications-api.js';
 import {handleGoogleAuth} from './google-auth.js';
+import {handleAcademicChangeApi} from './academic-change-api.js';
 
 const files = new Map(/*__STATIC_FILES__*/);
 let schemaReady = false;
@@ -165,6 +166,9 @@ async function handleApi(request,env,url){
   const banResponse=await handleStudentBanApi(request,env,url,user,restriction);
   if(banResponse)return banResponse;
   if(restriction&&!restrictedStudentPathAllowed(url.pathname,request.method))return error('STUDENT_RESTRICTED','الحساب محظور؛ الصفحة المحدودة فقط متاحة أثناء الحظر',423);
+
+  const academicChangeResponse=await handleAcademicChangeApi(request,env,url,user);
+  if(academicChangeResponse)return academicChangeResponse;
 
   const glimpsesResponse=await handleClinicalGlimpsesApi(request,env,url,user);
   if(glimpsesResponse)return glimpsesResponse;

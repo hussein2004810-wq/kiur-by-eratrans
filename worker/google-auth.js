@@ -60,14 +60,16 @@ export async function handleGoogleAuth(request,env,url){
       if(await env.DB.prepare(`SELECT id FROM users WHERE email=?`).bind(email).first())return clearFlow(json({error:{code:'GOOGLE_LINK_REQUIRED',message:'هذا البريد مرتبط بحساب موجود؛ ادخل بالطريقة السابقة أولًا'}},409));
       const path=JSON.parse(flow.academic_json)||{};const id=crypto.randomUUID();
       await env.DB.batch([
-        env.DB.prepare(`INSERT INTO users(id,email,name,role,account_role,account_status,auth_provider,firebase_uid,email_verified_at,university_id,college_id,department_id,phase_id,section_id) VALUES(?,?,?,'student','student','pending','password',?,CURRENT_TIMESTAMP,?,?,?,?,?)`).bind(id,email,profile.name,profile.uid,path.universityId||null,path.collegeId||null,path.departmentId||null,path.phaseId||null,path.sectionId||null),
+        env.DB.prepare(`INSERT INTO users(id,email,name,role,account_role,account_status,auth_provider,firebase_uid,email_verified_at,university_id,college_id,department_id,phase_id,section_id) VALUES(?,?,?,'student','student','active','password',?,CURRENT_TIMESTAMP,?,?,?,?,?)`).bind(id,email,profile.name,profile.uid,path.universityId||null,path.collegeId||null,path.departmentId||null,path.phaseId||null,path.sectionId||null),
         // Legacy schema names Firebase identities "password"; the immutable Firebase UID is the key.
         env.DB.prepare(`INSERT INTO user_identities(provider,provider_user_id,user_id,email) VALUES('password',?,?,?)`).bind(profile.uid,id,email)
       ]);
-      await recordAccountEvent(env,request,{userId:id,accountCode:id,email,eventType:'register',details:{provider:'google'}});
-      return clearFlow(json({authenticated:false,status:'pending',message:'تم توثيق حساب Google. حساب الطالب بانتظار موافقة المشرف.'},202));
+      await recordAccountEvent(env,request,{userId:id,accountCode:id,email,eventType:'register',details:{provider:'google',autoActivated:true}});
+      const session=await createSession(env,id,request);await env.DB.prepare(`UPDATE users SET last_login_at=CURRENT_TIMESTAMP WHERE id=?`).bind(id).run();
+      const response=json({authenticated:true,user:{id,email,name:profile.name,role:'student'},profileRequired:!path.universityId});response.headers.append('set-cookie',cookie(''));response.headers.append('set-cookie',session.cookie);return response;
     }
-    if(account.account_status!=='active'){await recordAccountEvent(env,request,{userId:account.id,email,eventType:'login_failure',outcome:'failure',details:{provider:'google',reason:account.account_status}});return clearFlow(json({error:{code:account.account_status==='pending'?'ACCOUNT_PENDING':'ACCOUNT_SUSPENDED',message:account.account_status==='pending'?'الحساب بانتظار موافقة المشرف':'الحساب موقوف؛ تواصل مع المشرف'}},403))}
+    if(account.account_status==='pending'&&account.account_role==='student'){await env.DB.prepare(`UPDATE users SET account_status='active',updated_at=CURRENT_TIMESTAMP WHERE id=? AND account_status='pending'`).bind(account.id).run();account.account_status='active';await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email,eventType:'account_status',details:{status:'active',reason:'student_auto_activation'}})}
+    if(account.account_status!=='active'){await recordAccountEvent(env,request,{userId:account.id,email,eventType:'login_failure',outcome:'failure',details:{provider:'google',reason:account.account_status}});return clearFlow(json({error:{code:account.account_status==='pending'?'ACCOUNT_PENDING':'ACCOUNT_SUSPENDED',message:account.account_status==='pending'?'الحساب بانتظار تفعيل الإدارة':'الحساب موقوف؛ تواصل مع المشرف'}},403))}
     const session=await createSession(env,account.id,request);
     await env.DB.prepare(`UPDATE users SET last_login_at=CURRENT_TIMESTAMP WHERE id=?`).bind(account.id).run();
     await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email:account.email,eventType:'login_success',details:{provider:'google'}});

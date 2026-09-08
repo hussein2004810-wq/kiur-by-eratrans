@@ -1,0 +1,24 @@
+import assert from 'node:assert/strict';
+import {call,sqlite} from './test-auth.mjs';
+
+const studentHeaders={'oai-authenticated-user-id':'academic-change-student','oai-authenticated-user-email':'academic-change@example.com'};
+const ownerHeaders={'oai-authenticated-user-id':'owner-auth','oai-authenticated-user-email':'owner@example.com'};
+const profile=await call('/api/me',{extraHeaders:studentHeaders});
+assert.equal(profile.response.status,200);
+const studentId=profile.data.user.id;
+assert.equal((await call('/api/me/profile',{method:'PATCH',extraHeaders:studentHeaders,body:{universityId:'uni-eratrans',collegeId:'college-eratrans-medical',departmentId:'dep-anesthesia',phaseId:'pha-a4',sectionId:null}})).response.status,200);
+sqlite.prepare(`INSERT OR IGNORE INTO sections(id,phase_id,name,sort_order) VALUES('academic-change-section','pha-a4','الشعبة التجريبية',99)`).run();
+const submitted=await call('/api/me/academic-change-requests',{method:'POST',extraHeaders:studentHeaders,body:{universityId:'uni-eratrans',collegeId:'college-eratrans-medical',departmentId:'dep-anesthesia',phaseId:'pha-a4',sectionId:'academic-change-section',reason:'تغيير الشعبة وفق السجل الأكاديمي المحدث'}});
+assert.equal(submitted.response.status,201);
+assert.equal(submitted.data.riskLevel,'green');
+const duplicate=await call('/api/me/academic-change-requests',{method:'POST',extraHeaders:studentHeaders,body:{universityId:'uni-eratrans',collegeId:'college-eratrans-medical',departmentId:'dep-anesthesia',phaseId:'pha-a4',sectionId:'academic-change-section',reason:'محاولة تكرار الطلب المفتوح نفسه'}});
+assert.equal(duplicate.response.status,409);
+const queue=await call('/api/admin/academic-changes?status=pending',{extraHeaders:ownerHeaders});
+assert.equal(queue.response.status,200);
+assert(queue.data.data.some(item=>item.id===submitted.data.id));
+const approved=await call(`/api/admin/academic-changes/${submitted.data.id}/review`,{method:'POST',extraHeaders:ownerHeaders,body:{decision:'approve'}});
+assert.equal(approved.response.status,200);
+assert.equal(approved.data.status,'approved');
+assert.equal(sqlite.prepare(`SELECT section_id AS sectionId FROM users WHERE id=?`).get(studentId).sectionId,'academic-change-section');
+assert(sqlite.prepare(`SELECT 1 FROM academic_change_logs WHERE request_id=? AND action='approved'`).get(submitted.data.id));
+console.log(JSON.stringify({ok:true,requestNumber:submitted.data.requestNumber,risk:'green',duplicateBlocked:duplicate.response.status,approved:true,audit:true}));

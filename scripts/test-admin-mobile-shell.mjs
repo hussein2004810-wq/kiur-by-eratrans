@@ -4,7 +4,7 @@ import {readFile,readdir} from 'node:fs/promises';
 const source=await readFile('src/RealAppV2.tsx','utf8');
 const css=await readFile('src/admin-shell.css','utf8');
 assert(source.includes("import './admin-shell.css';"),'admin shell must load with the main application');
-assert.equal((source.match(/role="tab" aria-selected=/g)||[]).length,9,'all admin destinations need tab semantics');
+assert.equal((source.match(/role="tab" aria-selected=/g)||[]).length,10,'all admin destinations need tab semantics');
 assert(source.includes("setAdminMenuOpen(false)"),'choosing a destination must close the phone menu');
 assert(source.includes('aria-controls="admin-section-menu"')&&source.includes('aria-expanded={adminMenuOpen}'),'phone menu state must be announced');
 for(const required of ['.adminWorkspace{display:grid','.app .adminTabs button{','@media(max-width:900px)','.adminRail{display:none','.adminRail.open{display:block','grid-template-columns:repeat(2,minmax(0,1fr))','@media(prefers-reduced-motion:reduce)'])assert(css.includes(required),`missing mobile admin invariant: ${required}`);
@@ -20,4 +20,4 @@ assert(productionCss.includes('.adminWorkspace')&&productionCss.includes('.app .
 const catalogCss=assets.find(name=>name.startsWith('CatalogManagerV2-')&&name.endsWith('.css'));
 assert(catalogCss,'lazy catalog stylesheet missing');
 assert(productionCss.indexOf('.app .adminTabs')>=0,'specific global selector prevents late lazy CSS from replacing the shell');
-console.log(JSON.stringify({ok:true,adminTabs:9,initialCss:main,mobileMenu:true,verticalRail:true,reducedMotion:true}));
+console.log(JSON.stringify({ok:true,adminTabs:10,initialCss:main,mobileMenu:true,verticalRail:true,reducedMotion:true}));

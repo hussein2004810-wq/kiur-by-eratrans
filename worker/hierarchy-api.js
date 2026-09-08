@@ -64,6 +64,9 @@ const testSelect=`SELECT t.id,t.title,t.subject,t.lecture,t.duration_minutes AS 
 
 export async function handleHierarchyApi(request,env,url,user,restriction=null){
   if(url.pathname==='/api/public/catalog'&&request.method==='GET')return json(await catalog(env));
+  if(url.pathname==='/api/public/tests'&&request.method==='GET'){
+    const filters=[];const binds=[];for(const [param,column] of [['universityId','u.id'],['collegeId','c.id'],['departmentId','t.department_id'],['phaseId','t.phase_id'],['sectionId','t.section_id'],['subjectId','t.subject_id'],['lectureId','t.lecture_id']]){const value=url.searchParams.get(param);if(value){filters.push(`${column}=?`);binds.push(value)}}const q=url.searchParams.get('q')?.trim().slice(0,100);if(q){const eq=escapeLike(q);filters.push(`(t.title LIKE ? ESCAPE '\\' OR t.subject LIKE ? ESCAPE '\\' OR t.lecture LIKE ? ESCAPE '\\' OR s.name LIKE ? ESCAPE '\\' OR l.name LIKE ? ESCAPE '\\')`);for(let i=0;i<5;i++)binds.push(`%${eq}%`)}const where=[`t.status='published'`,activeTestPath,...filters].join(' AND ');const statement=env.DB.prepare(`${testSelect} WHERE ${where} GROUP BY t.id ORDER BY t.created_at DESC LIMIT 300`);const result=await (binds.length?statement.bind(...binds):statement).all();return json({data:result.results.map(({shuffleQuestions,shuffleOptions,passPercentage,...test})=>test)})
+  }
   if(url.pathname==='/api/catalog'&&request.method==='GET'){
     const denied=denyUser(user);if(denied)return denied;
     return json(await catalog(env));

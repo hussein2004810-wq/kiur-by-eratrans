@@ -27,6 +27,10 @@ export const tables = {
   studentBanLogs: ['id','request_id','ban_id','student_id','action','by_user_id','actor_name_snapshot','actor_email_snapshot','student_name_snapshot','student_email_snapshot','scope_type','scope_id','reason_snapshot','evidence_snapshot','duration_seconds','status_snapshot','device_hash','at','details_json'],
   academicDeletions: ['id','resource_type','resource_id','resource_name','deleted_by','deleted_at','restored_by','restored_at','purged_by','purged_at','status','details_json'],
   academicDeletedItems: ['batch_id','resource_type','resource_id'],
+  academicChangeRequests: ['id','request_number','student_id','requested_by','current_path_json','target_path_json','target_university_id','target_college_id','target_department_id','target_phase_id','target_section_id','reason','evidence_text','risk_level','risk_reasons_json','required_approvals','status','resolved_by','resolved_at','resolution_note','created_at','updated_at'],
+  academicChangeReviews: ['id','request_id','reviewer_id','decision','scope_side','note','created_at'],
+  academicChangeLogs: ['id','request_id','request_number','student_id','student_name_snapshot','student_email_snapshot','action','by_user_id','actor_name_snapshot','actor_email_snapshot','status_snapshot','device_hash','details_json','at'],
+  academicChangeBatches: ['id','idempotency_key','actor_id','action','request_count','result_json','created_at'],
   userNotifications: ['id','user_id','notification_type','title','message','link','read_at','created_at'],
   ownerRecoveryOperations: ['operation_hash','user_id','consumed_at'],
 } as const;
