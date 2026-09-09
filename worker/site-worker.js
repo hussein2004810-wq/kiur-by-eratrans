@@ -21,6 +21,7 @@ import {handleGoogleAuth} from './google-auth.js';
 import {handleAcademicChangeApi} from './academic-change-api.js';
 import {handleStudentLearningApi} from './student-learning-api.js';
 import {handleStudentProfileApi} from './student-profile-api.js';
+import {awardAttemptPoints,handleGamificationApi} from './gamification-api.js';
 
 const files = new Map(/*__STATIC_FILES__*/);
 let schemaReady = false;
@@ -101,6 +102,7 @@ function validTest(value){
   if(value.status!==undefined&&!['draft','published'].includes(value.status))return 'حالة الاختبار غير صالحة';
   if(value.shuffleQuestions!==undefined&&typeof value.shuffleQuestions!=='boolean')return 'إعداد خلط الأسئلة غير صالح';
   if(value.shuffleOptions!==undefined&&typeof value.shuffleOptions!=='boolean')return 'إعداد خلط الخيارات غير صالح';
+  if(value.difficultyLevel!==undefined&&(!Number.isInteger(Number(value.difficultyLevel))||Number(value.difficultyLevel)<1||Number(value.difficultyLevel)>3))return 'مستوى صعوبة الاختبار غير صالح';
   if(!Array.isArray(value.questions)||value.questions.length<1||value.questions.length>200)return 'عدد الأسئلة يجب أن يكون بين 1 و200';
   for(const question of value.questions){
     if(typeof question?.text!=='string'||!question.text.trim()||question.text.trim().length>5000||!Array.isArray(question.options)||question.options.length<2||question.options.length>8)return 'بيانات أحد الأسئلة غير مكتملة أو تتجاوز الحدود';
@@ -138,6 +140,7 @@ function limitRule(request,url){
   if(path==='/api/me/avatar'&&!['GET','HEAD'].includes(request.method))return ['profile:avatar',6];
   if(path.startsWith('/api/me/sessions')&&!['GET','HEAD'].includes(request.method))return ['profile:sessions',12];
   if(path.startsWith('/api/me/favorites/')&&!['GET','HEAD'].includes(request.method))return ['favorites:write',60];
+  if(path.startsWith('/api/gamification')&&!['GET','HEAD'].includes(request.method))return ['gamification:write',12];
   if(path.startsWith('/api/admin/')&&!['GET','HEAD'].includes(request.method))return ['admin:write',30];
   if(path==='/api/admin/students'&&request.method==='GET')return ['admin:students',60];
   if(/^\/api\/admin\/(results(?:\/|$)|logs\/|student-bans(?:\/|$)|media(?:\/|$)|glimpses(?:\/|$))/.test(path)&&request.method==='GET')return ['admin:read',60];
@@ -150,7 +153,7 @@ async function finalizeAttempt(env,attempt){
   const maxScore=questions.results.reduce((sum,question)=>sum+Number(question.points||1),0);const score=questions.results.reduce((sum,question)=>sum+(answerCorrect(question)?Number(question.points||1):0),0);const percentage=maxScore?Math.round(score/maxScore*10000)/100:0;
   const updates=questions.results.filter(question=>question.selected_option!==null||question.answer_text!==null).map(question=>env.DB.prepare(`UPDATE attempt_answers SET is_correct=? WHERE attempt_id=? AND question_id=?`).bind(answerCorrect(question)?1:0,attempt.id,question.id));
   updates.push(env.DB.prepare(`UPDATE attempts SET status='submitted',score=?,max_score=?,percentage=?,finished_at=CURRENT_TIMESTAMP,last_saved_at=CURRENT_TIMESTAMP WHERE id=? AND status='in_progress'`).bind(score,maxScore,percentage,attempt.id));
-  await env.DB.batch(updates);const certificateTest=await env.DB.prepare(`SELECT a.user_id AS userId,a.test_id AS testId,t.subject_id AS subjectId,t.pass_percentage AS passPercentage,t.certificate_enabled AS certificateEnabled FROM attempts a JOIN tests t ON t.id=a.test_id WHERE a.id=?`).bind(attempt.id).first();if(certificateTest?.subjectId){try{const previous=await env.DB.prepare(`SELECT interval_days AS intervalDays FROM student_review_progress WHERE user_id=? AND subject_id=?`).bind(certificateTest.userId,certificateTest.subjectId).first();const interval=percentage>=80?Math.min(30,Math.max(2,Number(previous?.intervalDays||1)*2)):1;await env.DB.prepare(`INSERT INTO student_review_progress(user_id,subject_id,interval_days,last_score,last_reviewed_at,next_review_at) VALUES(?,?,?, ?,CURRENT_TIMESTAMP,datetime('now','+'||?||' day')) ON CONFLICT(user_id,subject_id) DO UPDATE SET interval_days=excluded.interval_days,last_score=excluded.last_score,last_reviewed_at=CURRENT_TIMESTAMP,next_review_at=excluded.next_review_at`).bind(certificateTest.userId,certificateTest.subjectId,interval,percentage,interval).run()}catch{/* لا ينبغي لتعذر ميزة المراجعة الاختيارية أن يمنع تسليم الامتحان. */}}let certificate=null;if(Number(certificateTest?.certificateEnabled)===1&&percentage>=Number(certificateTest?.passPercentage)){const id=crypto.randomUUID();const verificationCode=crypto.randomUUID().replace(/-/g,'');await env.DB.prepare(`INSERT OR IGNORE INTO certificates(id,attempt_id,user_id,test_id,verification_code) VALUES(?,?,?,?,?)`).bind(id,attempt.id,certificateTest.userId,certificateTest.testId,verificationCode).run();certificate=await env.DB.prepare(`SELECT id,verification_code AS verificationCode FROM certificates WHERE attempt_id=?`).bind(attempt.id).first()}return {score,maxScore,percentage,certificate};
+  await env.DB.batch(updates);const certificateTest=await env.DB.prepare(`SELECT a.user_id AS userId,a.test_id AS testId,t.subject_id AS subjectId,t.pass_percentage AS passPercentage,t.certificate_enabled AS certificateEnabled FROM attempts a JOIN tests t ON t.id=a.test_id WHERE a.id=?`).bind(attempt.id).first();if(certificateTest?.subjectId){try{const previous=await env.DB.prepare(`SELECT interval_days AS intervalDays FROM student_review_progress WHERE user_id=? AND subject_id=?`).bind(certificateTest.userId,certificateTest.subjectId).first();const interval=percentage>=80?Math.min(30,Math.max(2,Number(previous?.intervalDays||1)*2)):1;await env.DB.prepare(`INSERT INTO student_review_progress(user_id,subject_id,interval_days,last_score,last_reviewed_at,next_review_at) VALUES(?,?,?, ?,CURRENT_TIMESTAMP,datetime('now','+'||?||' day')) ON CONFLICT(user_id,subject_id) DO UPDATE SET interval_days=excluded.interval_days,last_score=excluded.last_score,last_reviewed_at=CURRENT_TIMESTAMP,next_review_at=excluded.next_review_at`).bind(certificateTest.userId,certificateTest.subjectId,interval,percentage,interval).run()}catch{/* لا ينبغي لتعذر ميزة المراجعة الاختيارية أن يمنع تسليم الامتحان. */}}let certificate=null;if(Number(certificateTest?.certificateEnabled)===1&&percentage>=Number(certificateTest?.passPercentage)){const id=crypto.randomUUID();const verificationCode=crypto.randomUUID().replace(/-/g,'');await env.DB.prepare(`INSERT OR IGNORE INTO certificates(id,attempt_id,user_id,test_id,verification_code) VALUES(?,?,?,?,?)`).bind(id,attempt.id,certificateTest.userId,certificateTest.testId,verificationCode).run();certificate=await env.DB.prepare(`SELECT id,verification_code AS verificationCode FROM certificates WHERE attempt_id=?`).bind(attempt.id).first()}let gamification=null;try{gamification=await awardAttemptPoints(env,attempt,{score,maxScore,percentage})}catch(error){if(!String(error instanceof Error?error.message:error).includes('no such table: gamification_'))console.warn('gamification_award_failed',{attemptId:attempt.id,message:error instanceof Error?error.message:'unknown'})}return {score,maxScore,percentage,certificate,gamification};
 }
 
 async function handleApi(request,env,url){
@@ -178,6 +181,9 @@ async function handleApi(request,env,url){
 
   const studentProfileResponse=await handleStudentProfileApi(request,env,url,user);
   if(studentProfileResponse)return studentProfileResponse;
+
+  const gamificationResponse=await handleGamificationApi(request,env,url,user);
+  if(gamificationResponse)return gamificationResponse;
 
   const glimpsesResponse=await handleClinicalGlimpsesApi(request,env,url,user);
   if(glimpsesResponse)return glimpsesResponse;
@@ -303,14 +309,14 @@ async function handleApi(request,env,url){
   }
   if(url.pathname==='/api/admin/tests'&&request.method==='GET'){
     const denied=requireAdmin(user);if(denied)return denied;
-    const tests=await env.DB.prepare(`SELECT t.id,t.title,t.subject,t.lecture,t.duration_minutes AS durationMinutes,t.pass_percentage AS passPercentage,t.shuffle_questions AS shuffleQuestions,t.shuffle_options AS shuffleOptions,t.status,t.updated_at AS updatedAt,count(q.id) AS questionCount FROM tests t LEFT JOIN questions q ON q.test_id=t.id WHERE t.status!='archived' GROUP BY t.id ORDER BY t.created_at DESC`).all();
+    const tests=await env.DB.prepare(`SELECT t.id,t.title,t.subject,t.lecture,t.duration_minutes AS durationMinutes,t.pass_percentage AS passPercentage,t.shuffle_questions AS shuffleQuestions,t.shuffle_options AS shuffleOptions,t.difficulty_level AS difficultyLevel,t.status,t.updated_at AS updatedAt,count(q.id) AS questionCount FROM tests t LEFT JOIN questions q ON q.test_id=t.id WHERE t.status!='archived' GROUP BY t.id ORDER BY t.created_at DESC`).all();
     return response({data:tests.results});
   }
   if(url.pathname==='/api/admin/tests'&&request.method==='POST'){
     const denied=requireAdmin(user);if(denied)return denied;
     const parsed=await body(request);if(parsed.error)return error(parsed.error.code,parsed.error.message,parsed.error.status);const value=parsed.value;const issue=validTest(value);if(issue)return error('VALIDATION',issue);
     const id=crypto.randomUUID();
-    const statements=[env.DB.prepare(`INSERT INTO tests(id,title,subject,lecture,duration_minutes,pass_percentage,shuffle_questions,shuffle_options,status,created_by) VALUES(?,?,?,?,?,?,?,?,?,?)`).bind(id,value.title.trim(),value.subject.trim(),value.lecture.trim(),Number(value.durationMinutes),Number(value.passPercentage??60),value.shuffleQuestions?1:0,value.shuffleOptions?1:0,value.status||'published',user.id)];
+    const statements=[env.DB.prepare(`INSERT INTO tests(id,title,subject,lecture,duration_minutes,pass_percentage,shuffle_questions,shuffle_options,difficulty_level,status,created_by) VALUES(?,?,?,?,?,?,?,?,?,?,?)`).bind(id,value.title.trim(),value.subject.trim(),value.lecture.trim(),Number(value.durationMinutes),Number(value.passPercentage??60),value.shuffleQuestions?1:0,value.shuffleOptions?1:0,Number(value.difficultyLevel||2),value.status||'published',user.id)];
     value.questions.forEach((q,index)=>statements.push(env.DB.prepare(`INSERT INTO questions(id,test_id,text,options_json,correct_option,explanation,position) VALUES(?,?,?,?,?,?,?)`).bind(crypto.randomUUID(),id,q.text.trim(),JSON.stringify(q.options.map(String)),Number(q.correctOption),q.explanation?.trim()||null,index+1)));
     statements.push(env.DB.prepare(`INSERT INTO audit_logs(entity,entity_id,action,by_user_id,details_json) VALUES('test',?,'create',?,?)`).bind(id,user.id,JSON.stringify({title:value.title})));
     await env.DB.batch(statements);return response({id},201);
@@ -318,7 +324,7 @@ async function handleApi(request,env,url){
   const adminTest=url.pathname.match(/^\/api\/admin\/tests\/([^/]+)$/);
   if(adminTest&&request.method==='GET'){
     const denied=requireAdmin(user);if(denied)return denied;
-    const test=await env.DB.prepare(`SELECT id,title,subject,lecture,duration_minutes AS durationMinutes,pass_percentage AS passPercentage,shuffle_questions AS shuffleQuestions,shuffle_options AS shuffleOptions,status FROM tests WHERE id=? AND status!='archived'`).bind(adminTest[1]).first();
+    const test=await env.DB.prepare(`SELECT id,title,subject,lecture,duration_minutes AS durationMinutes,pass_percentage AS passPercentage,shuffle_questions AS shuffleQuestions,shuffle_options AS shuffleOptions,difficulty_level AS difficultyLevel,status FROM tests WHERE id=? AND status!='archived'`).bind(adminTest[1]).first();
     if(!test)return error('NOT_FOUND','الاختبار غير موجود',404);
     const questions=await env.DB.prepare(`SELECT id,text,options_json,correct_option AS correctOption,explanation,position FROM questions WHERE test_id=? ORDER BY position`).bind(test.id).all();
     return response({...test,questions:questions.results.map(q=>({...q,options:JSON.parse(q.options_json)}))});
@@ -330,7 +336,7 @@ async function handleApi(request,env,url){
     if(!exists)return error('NOT_FOUND','الاختبار غير موجود',404);
     if(await env.DB.prepare(`SELECT 1 AS value FROM attempts WHERE test_id=? LIMIT 1`).bind(adminTest[1]).first())return error('TEST_LOCKED','لا يمكن تعديل اختبار بدأت عليه محاولات؛ أنشئ نسخة جديدة',409);
     const statements=[
-      env.DB.prepare(`UPDATE tests SET title=?,subject=?,lecture=?,duration_minutes=?,pass_percentage=?,shuffle_questions=?,shuffle_options=?,status=?,updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(value.title.trim(),value.subject.trim(),value.lecture.trim(),Number(value.durationMinutes),Number(value.passPercentage??60),value.shuffleQuestions?1:0,value.shuffleOptions?1:0,value.status||'published',adminTest[1]),
+      env.DB.prepare(`UPDATE tests SET title=?,subject=?,lecture=?,duration_minutes=?,pass_percentage=?,shuffle_questions=?,shuffle_options=?,difficulty_level=?,status=?,updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(value.title.trim(),value.subject.trim(),value.lecture.trim(),Number(value.durationMinutes),Number(value.passPercentage??60),value.shuffleQuestions?1:0,value.shuffleOptions?1:0,Number(value.difficultyLevel||2),value.status||'published',adminTest[1]),
       env.DB.prepare(`DELETE FROM questions WHERE test_id=?`).bind(adminTest[1])
     ];
     value.questions.forEach((q,index)=>statements.push(env.DB.prepare(`INSERT INTO questions(id,test_id,text,options_json,correct_option,explanation,position) VALUES(?,?,?,?,?,?,?)`).bind(crypto.randomUUID(),adminTest[1],q.text.trim(),JSON.stringify(q.options.map(String)),Number(q.correctOption),q.explanation?.trim()||null,index+1)));
