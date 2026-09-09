@@ -43,11 +43,28 @@ async function saveFirebaseLink(env,account,auth,emailVerified){
   ]);
 }
 
+async function reconcileFirebaseLink(env,account,auth,profile){
+  if(auth.uid===account.firebaseUid)return false;
+  if(!auth.uid||normalizeEmail(profile?.email)!==account.email)throw new Error('FIREBASE_IDENTITY_MISMATCH');
+  const [userConflict,identityConflict]=await Promise.all([
+    env.DB.prepare(`SELECT id FROM users WHERE firebase_uid=? AND id<>?`).bind(auth.uid,account.id).first(),
+    env.DB.prepare(`SELECT user_id AS id FROM user_identities WHERE provider='password' AND provider_user_id=? AND user_id<>?`).bind(auth.uid,account.id).first()
+  ]);
+  if(userConflict||identityConflict)throw new Error('FIREBASE_IDENTITY_CONFLICT');
+  await env.DB.batch([
+    env.DB.prepare(`UPDATE users SET firebase_uid=?,email_verified_at=CASE WHEN ?=1 THEN COALESCE(email_verified_at,CURRENT_TIMESTAMP) ELSE email_verified_at END,password_hash=NULL,password_salt=NULL,password_iterations=NULL,password_peppered=0,updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(auth.uid,profile.emailVerified?1:0,account.id),
+    env.DB.prepare(`DELETE FROM user_identities WHERE provider='password' AND user_id=?`).bind(account.id),
+    env.DB.prepare(`INSERT INTO user_identities(provider,provider_user_id,user_id,email) VALUES('password',?,?,?)`).bind(auth.uid,account.id,account.email)
+  ]);
+  account.firebaseUid=auth.uid;
+  return true;
+}
+
 async function authenticateWithFirebase(env,account,password){
   const locallyVerified=Boolean(account.emailVerifiedAt||account.legacyEmailVerifiedAt||account.inviteAcceptedAt);
   if(account.firebaseUid){
     if(!firebaseAuthConfigured(env))return {error:fail('FIREBASE_AUTH_UNAVAILABLE','تسجيل البريد متوقف مؤقتًا حتى اكتمال إعداد Firebase',503)};
-    let auth,profile;try{auth=await firebaseSignIn(env,account.email,password);if(auth.uid!==account.firebaseUid)throw new Error('FIREBASE_ID_MISMATCH');profile=await firebaseLookup(env,auth.idToken)}catch(error){if(isFirebaseError(error,'USER_DISABLED'))return {error:fail('ACCOUNT_SUSPENDED','الحساب موقوف؛ تواصل مع المشرف',403)};if(invalidFirebaseCredentials(error))return {invalid:true};return {error:fail('FIREBASE_AUTH_UNAVAILABLE','تعذر الاتصال بخدمة تسجيل الدخول؛ حاول لاحقًا',503)}}
+    let auth,profile,relinked=false;try{auth=await firebaseSignIn(env,account.email,password);profile=await firebaseLookup(env,auth.idToken);relinked=await reconcileFirebaseLink(env,account,auth,profile)}catch(error){if(isFirebaseError(error,'USER_DISABLED'))return {error:fail('ACCOUNT_SUSPENDED','الحساب موقوف؛ تواصل مع المشرف',403)};if(invalidFirebaseCredentials(error))return {invalid:true};return {error:fail('FIREBASE_AUTH_UNAVAILABLE','تعذر الاتصال بخدمة تسجيل الدخول؛ حاول لاحقًا',503)}}
     if(profile.disabled)return {error:fail('ACCOUNT_SUSPENDED','الحساب موقوف؛ تواصل مع المشرف',403)};
     const inviteProvesOwnership=account.account_role!=='student'&&Boolean(account.hasStaffInvite)&&!account.inviteAcceptedAt;
     const verified=profile.emailVerified||locallyVerified||inviteProvesOwnership;
@@ -55,7 +72,7 @@ async function authenticateWithFirebase(env,account,password){
       env.DB.prepare(`UPDATE users SET email_verified_at=COALESCE(email_verified_at,CURRENT_TIMESTAMP),updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(account.id),
       env.DB.prepare(`UPDATE staff_invites SET accepted_at=COALESCE(accepted_at,CURRENT_TIMESTAMP) WHERE user_id=?`).bind(account.id)
     ]);
-    return {auth,profile,emailVerified:verified,provider:'firebase'};
+    return {auth,profile,emailVerified:verified,provider:'firebase',migrated:relinked};
   }
 
   let legacyValid=false;if(account.password_hash)legacyValid=await verifyPassword(password,account,env);
@@ -189,8 +206,18 @@ export async function handleAuthApi(request,env,url,user){
       return fail('FIREBASE_AUTH_UNAVAILABLE','تعذر تغيير كلمة المرور؛ حاول مجددًا لاحقًا',503);
     }
     const resetEmail=normalizeEmail(reset.email||account?.email);
-    if(account)await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email:resetEmail,eventType:'password_reset_requested',details:{phase:'completed',sessionsRevoked:true}})
-    return json({reset:true,email:resetEmail,message:'تم تغيير كلمة المرور وإنهاء الجلسات السابقة. سجّل الدخول بكلمة المرور الجديدة'},200,{'set-cookie':clearSessionCookie()});
+    let session=null;
+    if(account){
+      try{
+        const auth=reset.uid&&reset.idToken?{uid:reset.uid,idToken:reset.idToken,email:resetEmail}:await firebaseSignIn(env,resetEmail,parsed.data.password);
+        const profile=await firebaseLookup(env,auth.idToken);
+        if(normalizeEmail(profile.email)!==resetEmail)throw new Error('FIREBASE_IDENTITY_MISMATCH');
+        await reconcileFirebaseLink(env,account,auth,profile);
+        session=await createSession(env,account.id,request);
+      }catch{return fail('ACCOUNT_RELINK_FAILED','تم تغيير كلمة المرور، لكن تعذر ربط الحساب تلقائيًا. حاول الدخول مجددًا أو تواصل مع الإدارة',503,{'set-cookie':clearSessionCookie()})}
+      await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email:resetEmail,eventType:'password_reset_requested',details:{phase:'completed',sessionsRevoked:true,sessionCreated:true}})
+    }
+    return json({reset:true,authenticated:Boolean(session),email:resetEmail,message:session?'تم تغيير كلمة المرور وفتح حسابك بأمان':'تم تغيير كلمة المرور. سجّل الدخول بالكلمة الجديدة'},200,{'set-cookie':session?.cookie||clearSessionCookie()});
   }
   if(url.pathname==='/api/auth/apply-email-action'&&request.method==='POST'){
     const ipKey=await authRateKey(request.headers.get('cf-connecting-ip')||'unknown');const limit=await enforceRateLimit(env,`auth:email-action:${ipKey}`,12,900);

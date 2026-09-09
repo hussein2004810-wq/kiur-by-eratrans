@@ -20,15 +20,25 @@ assert.equal(session.response.status,200);const oldCookie=session.response.heade
 let consumed=false;
 env.FIREBASE_AUTH.resetPassword=async({oobCode,newPassword})=>{
   if(oobCode!=='one-use-reset-code'||consumed)throw new FirebaseAuthError('INVALID_OOB_CODE');
-  if(newPassword){firebase.resetPassword('student@example.com',newPassword);consumed=true}
+  if(newPassword){
+    firebase.resetPassword('student@example.com',newPassword);consumed=true;
+    const signed=await firebase.api.signInWithPassword({email:'student@example.com',password:newPassword});
+    return {requestType:'PASSWORD_RESET',email:'student@example.com',localId:signed.localId,idToken:signed.idToken};
+  }
   return {requestType:'PASSWORD_RESET',email:'student@example.com'};
 };
 const externalContinue=await call('/api/auth/check-password-reset',{method:'POST',body:{mode:'resetPassword',oobCode:'one-use-reset-code',continueUrl:'https://evil.example/steal'}});assert.equal(externalContinue.response.status,400);assert.equal(consumed,false);
 const checkedReset=await call('/api/auth/check-password-reset',{method:'POST',body:{mode:'resetPassword',oobCode:'one-use-reset-code',continueUrl:'/tests?from=reset'}});assert.equal(checkedReset.response.status,200);assert.equal(checkedReset.data.valid,true);assert.equal(checkedReset.data.continuePath,'/tests?from=reset');assert.match(checkedReset.data.maskedEmail,/\*+@example\.com$/);assert.equal(consumed,false);
 const weakReset=await call('/api/auth/reset-password',{method:'POST',body:{oobCode:'one-use-reset-code',password:'1234567a'}});assert.equal(weakReset.response.status,400);assert.equal(consumed,false);
 const originalBatch=env.DB.batch.bind(env.DB);env.DB.batch=async()=>{throw new Error('simulated D1 outage')};const unsafeReset=await call('/api/auth/reset-password',{method:'POST',body:{oobCode:'one-use-reset-code',password:'87654321z'}});env.DB.batch=originalBatch;assert.equal(unsafeReset.response.status,503);assert.equal(unsafeReset.data.error.code,'SESSION_REVOCATION_FAILED');assert.equal(consumed,false);assert.equal((await call('/api/auth/session',{extraHeaders:{cookie:oldCookie}})).response.status,200);
+const originalStudentUid=sqlite.prepare(`SELECT firebase_uid FROM users WHERE email='student@example.com'`).get().firebase_uid;
+sqlite.prepare(`UPDATE users SET firebase_uid='stale-reset-uid' WHERE email='student@example.com'`).run();
 const reset=await call('/api/auth/reset-password',{method:'POST',body:{oobCode:'one-use-reset-code',password:'87654321z'}});assert.equal(reset.response.status,200);
 assert.equal(reset.data.email,'student@example.com');
+assert.equal(reset.data.authenticated,true);
+const resetCookie=reset.response.headers.get('set-cookie').split(';')[0];
+assert.equal((await call('/api/auth/session',{extraHeaders:{cookie:resetCookie}})).response.status,200);
+assert.equal(sqlite.prepare(`SELECT firebase_uid FROM users WHERE email='student@example.com'`).get().firebase_uid,originalStudentUid);
 assert.equal((await call('/api/auth/session',{extraHeaders:{cookie:oldCookie}})).response.status,401);
 assert.equal((await call('/api/auth/login',{method:'POST',body:{email:reset.data.email,password:'87654321z'}})).response.status,200);
 assert.equal((await call('/api/auth/login',{method:'POST',body:{email:reset.data.email,password:'12345678a'}})).response.status,401);

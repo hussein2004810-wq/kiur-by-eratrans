@@ -59,7 +59,7 @@ export async function firebaseCheckPasswordReset(env,oobCode){
 export async function firebaseResetPassword(env,oobCode,newPassword){
   const action=await firebaseCheckPasswordReset(env,oobCode);
   const result=await firebaseRequest(env,'resetPassword',{oobCode,newPassword});
-  return {email:String(result.email||action.email)};
+  return {email:String(result.email||action.email),uid:String(result.localId||''),idToken:String(result.idToken||'')};
 }
 
 export async function firebaseApplyEmailAction(env,oobCode){

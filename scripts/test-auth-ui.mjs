@@ -30,6 +30,7 @@ assert.match(source,/\/api\/auth\/check-password-reset/,'Password reset links mu
 assert.match(source,/resetState==='ready'/,'The new-password form must wait for a verified reset action code');
 assert.match(source,/data\.email\|\|form\.email/,'A successful reset must prefill the verified account email before login');
 assert.match(source,/rememberEmail\(accountEmail\)/,'The verified reset email must replace a stale remembered email');
+assert.match(source,/if\(data\.authenticated\)/,'A successful reset session must enter KIUR without a second manual login');
 assert.match(source,/جارٍ التحقق من صلاحية رابط الاستعادة/,'Password reset verification needs an explicit Arabic loading state');
 assert.match(source,/window\.location\.assign\(continuePath\)/,'Validated email-action continuation needs an explicit navigation path');
 assert.match(source,/verifyEmail','recoverEmail/,'Firebase verification and email-recovery links need a dedicated handler');
