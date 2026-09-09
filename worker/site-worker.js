@@ -20,6 +20,7 @@ import {handleNotificationsApi} from './notifications-api.js';
 import {handleGoogleAuth} from './google-auth.js';
 import {handleAcademicChangeApi} from './academic-change-api.js';
 import {handleStudentLearningApi} from './student-learning-api.js';
+import {handleStudentProfileApi} from './student-profile-api.js';
 
 const files = new Map(/*__STATIC_FILES__*/);
 let schemaReady = false;
@@ -133,6 +134,9 @@ function limitRule(request,url){
   if(path==='/api/tests'&&request.method==='GET')return ['tests:list',90];
   if(path==='/api/me'&&request.method==='GET')return ['me:read',60];
   if(path==='/api/me/profile'&&request.method==='PATCH')return ['profile:update',10];
+  if(path.startsWith('/api/me/profile-dashboard')&&!['GET','HEAD'].includes(request.method))return ['profile:write',20];
+  if(path==='/api/me/avatar'&&!['GET','HEAD'].includes(request.method))return ['profile:avatar',6];
+  if(path.startsWith('/api/me/sessions')&&!['GET','HEAD'].includes(request.method))return ['profile:sessions',12];
   if(path.startsWith('/api/me/favorites/')&&!['GET','HEAD'].includes(request.method))return ['favorites:write',60];
   if(path.startsWith('/api/admin/')&&!['GET','HEAD'].includes(request.method))return ['admin:write',30];
   if(path==='/api/admin/students'&&request.method==='GET')return ['admin:students',60];
@@ -171,6 +175,9 @@ async function handleApi(request,env,url){
 
   const academicChangeResponse=await handleAcademicChangeApi(request,env,url,user);
   if(academicChangeResponse)return academicChangeResponse;
+
+  const studentProfileResponse=await handleStudentProfileApi(request,env,url,user);
+  if(studentProfileResponse)return studentProfileResponse;
 
   const glimpsesResponse=await handleClinicalGlimpsesApi(request,env,url,user);
   if(glimpsesResponse)return glimpsesResponse;

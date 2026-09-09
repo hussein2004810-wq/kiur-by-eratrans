@@ -62,6 +62,7 @@ export async function createSession(env,userId,request){
   return {cookie:`${SESSION_COOKIE}=${encodeURIComponent(token)}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=${SESSION_SECONDS}`,expiresAt};
 }
 export async function revokeSession(env,request){const token=cookieValue(request,SESSION_COOKIE);if(!token)return;await env.DB.prepare(`UPDATE auth_sessions SET revoked_at=CURRENT_TIMESTAMP WHERE token_hash=? AND revoked_at IS NULL`).bind(await sha256(token)).run()}
+export async function currentSessionHash(request){const token=cookieValue(request,SESSION_COOKIE);return token?sha256(token):null}
 export async function revokeUserSessions(env,userId,statements=[]){return env.DB.batch([
   ...statements,
   env.DB.prepare(`UPDATE users SET auth_epoch=auth_epoch+1,updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(userId),
