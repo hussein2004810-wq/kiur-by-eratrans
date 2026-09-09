@@ -19,6 +19,7 @@ import {computeAttemptDeadline,deadlineSql,studentCanAccessTest} from './test-ac
 import {handleNotificationsApi} from './notifications-api.js';
 import {handleGoogleAuth} from './google-auth.js';
 import {handleAcademicChangeApi} from './academic-change-api.js';
+import {handleStudentLearningApi} from './student-learning-api.js';
 
 const files = new Map(/*__STATIC_FILES__*/);
 let schemaReady = false;
@@ -132,6 +133,7 @@ function limitRule(request,url){
   if(path==='/api/tests'&&request.method==='GET')return ['tests:list',90];
   if(path==='/api/me'&&request.method==='GET')return ['me:read',60];
   if(path==='/api/me/profile'&&request.method==='PATCH')return ['profile:update',10];
+  if(path.startsWith('/api/me/favorites/')&&!['GET','HEAD'].includes(request.method))return ['favorites:write',60];
   if(path.startsWith('/api/admin/')&&!['GET','HEAD'].includes(request.method))return ['admin:write',30];
   if(path==='/api/admin/students'&&request.method==='GET')return ['admin:students',60];
   if(/^\/api\/admin\/(results(?:\/|$)|logs\/|student-bans(?:\/|$)|media(?:\/|$)|glimpses(?:\/|$))/.test(path)&&request.method==='GET')return ['admin:read',60];
@@ -199,6 +201,9 @@ async function handleApi(request,env,url){
 
   const notificationsResponse=await handleNotificationsApi(request,env,url,user);
   if(notificationsResponse)return notificationsResponse;
+
+  const learningResponse=await handleStudentLearningApi(request,env,url,user);
+  if(learningResponse)return learningResponse;
 
   if(url.pathname==='/api/me'&&request.method==='GET'){
     if(!user)return error('UNAUTHENTICATED','سجّل الدخول للمتابعة',401);

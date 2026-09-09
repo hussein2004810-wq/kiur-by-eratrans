@@ -32,5 +32,6 @@ export const tables = {
   academicChangeLogs: ['id','request_id','request_number','student_id','student_name_snapshot','student_email_snapshot','action','by_user_id','actor_name_snapshot','actor_email_snapshot','status_snapshot','device_hash','details_json','at'],
   academicChangeBatches: ['id','idempotency_key','actor_id','action','request_count','result_json','created_at'],
   userNotifications: ['id','user_id','notification_type','title','message','link','read_at','created_at'],
+  studentFavorites: ['user_id','test_id','created_at'],
   ownerRecoveryOperations: ['operation_hash','user_id','consumed_at'],
 } as const;
