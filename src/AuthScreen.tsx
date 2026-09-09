@@ -2,6 +2,7 @@ import {useEffect,useMemo,useRef,useState} from 'react';
 import {BrainCircuit,Building2,CheckCircle2,ChevronLeft,Copy,ExternalLink,Eye,EyeOff,GraduationCap,HeartPulse,LoaderCircle,LockKeyhole,Mail,Microscope,ShieldCheck,Sparkles,UserRound} from 'lucide-react';
 import './auth.css';
 import {googleBrowserContext,prepareGoogleAuth,requestGoogleIdToken} from './firebaseGoogle';
+import {ThemeToggle} from './theme-preference';
 
 type Item={id:string;name:string;universityId?:string;collegeId?:string;departmentId?:string;phaseId?:string};
 type Catalog={universities:Item[];colleges:Item[];departments:Item[];phases:Item[];sections:Item[]};
@@ -45,7 +46,7 @@ export default function AuthScreen({backgroundVideoUrl=DEFAULT_BACKGROUND_VIDEO,
   const title=mode==='action'?(emailActionMode==='verifyEmail'?'توثيق البريد الإلكتروني':'استعادة البريد الإلكتروني'):mode==='reset'?'تعيين كلمة مرور جديدة':mode==='activate'?'تفعيل حساب الكادر':mode==='forgot'?'استعادة كلمة المرور':mode==='register'?'ابدأ مسارك في KIUR':'مرحبًا بعودتك';
   const subtitle=mode==='action'?'يجري التحقق من رابط Google وتطبيقه بصورة آمنة.':mode==='reset'?'استخدم 8 أرقام على الأقل مع حرف واحد على الأقل.':mode==='activate'?'عيّن كلمة مرور قوية لإكمال تفعيل حسابك.':mode==='forgot'?'سنرسل إلى بريدك رابطًا آمنًا لاستعادة الحساب.':mode==='register'?'أنشئ حسابك، ثم حدّد مسارك الأكاديمي بدقة.':'سجّل الدخول وتابع مسارك الطبي من حيث توقفت.';
   const submitText=mode==='reset'?'حفظ كلمة المرور':mode==='activate'?'تفعيل الحساب':mode==='forgot'?'إرسال رابط الاستعادة':mode==='register'?'إنشاء حساب الطالب':'الدخول إلى KIUR';
-  return <main className={'authPage authMode-'+mode} dir="rtl">
+  return <main className={'authPage authMode-'+mode} dir="rtl"><ThemeToggle compact/>
     <div className="authBackdrop" aria-hidden="true">
       {backgroundVideoUrl&&<video ref={videoRef} className={videoReady&&!reduceMotion?'ready':''} autoPlay={!reduceMotion} loop muted playsInline preload="metadata" onCanPlay={()=>setVideoReady(true)} onError={()=>setVideoReady(false)}><source src={backgroundVideoUrl} type="video/mp4"/></video>}
       <div className="authFallback"/><div className="authGrid"/><i className="authOrb orbOne"/><i className="authOrb orbTwo"/><i className="authOrb orbThree"/>

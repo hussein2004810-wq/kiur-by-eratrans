@@ -1,0 +1,56 @@
+html[data-kiur-theme="light"]{color-scheme:light;--ink:#17213b;--muted:#5d6982;--green:#6252c7;--green2:#2468c9;--mint:#ecebff;--cream:#f4f7ff;--line:#26375a20;--paper:#fff;--amber:#a66a05;--coral:#c44742;--kiur-bg:#f4f7ff;--kiur-bg-2:#edf3ff;--kiur-surface:#fffffff2;--kiur-surface-2:#f7f9ff;--kiur-surface-soft:#e9effd;--kiur-purple:#6552d4;--kiur-blue:#2468c9;--kiur-glow:#6552d426;--kiur-border:#34486b24;--kiur-focus:#245fc2;--text:var(--ink);--shadow:0 18px 48px #2e47751a}
+html[data-kiur-theme="light"] body{background:var(--kiur-bg);color:var(--ink)}
+html[data-kiur-theme="light"] .app{color-scheme:light;background:radial-gradient(circle at 8% 6%,#7556d917 0,transparent 30%),radial-gradient(circle at 92% 88%,#2d75d317 0,transparent 34%),linear-gradient(145deg,#f8faff,#edf3ff 58%,#f5f8ff)}
+html[data-kiur-theme="light"] .app main::before{opacity:.32;background-image:linear-gradient(#476a9d0e 1px,transparent 1px),linear-gradient(90deg,#476a9d0e 1px,transparent 1px)}
+html[data-kiur-theme="light"] .app .sidebar{background:linear-gradient(180deg,#fffffffa,#f2f5fffa);border-color:var(--kiur-border);box-shadow:-16px 0 55px #2c44751a;color:var(--ink)}
+html[data-kiur-theme="light"] .app .brand,html[data-kiur-theme="light"] .app .sidebar nav button:hover,html[data-kiur-theme="light"] .app .sidebar nav button.active{color:#18213a}
+html[data-kiur-theme="light"] .app .brand small,html[data-kiur-theme="light"] .app .navLabel,html[data-kiur-theme="light"] .app .miniProfile small,html[data-kiur-theme="light"] .app .sidebar nav button{color:#56627a}
+html[data-kiur-theme="light"] .app .sidebar nav button:hover{background:#e9edfb}
+html[data-kiur-theme="light"] .app .sidebar nav button.active{background:linear-gradient(110deg,#7660dc1f,#3474d11a);box-shadow:inset -3px 0 #6252c7}
+html[data-kiur-theme="light"] .app .miniProfile{background:#f3f5fd;border-color:var(--kiur-border)}
+html[data-kiur-theme="light"] .app .topbar{background:linear-gradient(to bottom,#f7f9fff2 36%,#f7f9ffcc 74%,transparent)}
+html[data-kiur-theme="light"] .app .search input,html[data-kiur-theme="light"] .app .bell,html[data-kiur-theme="light"] .app .menuBtn,html[data-kiur-theme="light"] .app .motionToggle,html[data-kiur-theme="light"] .themeToggle{background:#fffffff0;border-color:var(--kiur-border);color:var(--ink);box-shadow:0 8px 22px #29436e0d}
+html[data-kiur-theme="light"] .app .search input::placeholder{color:#707b91}
+html[data-kiur-theme="light"] .app .pageTitle h1{color:#17213b;text-shadow:none}
+html[data-kiur-theme="light"] .app .dateChip{background:#ffffffd9;color:#4e5b74;border-color:var(--kiur-border)}
+html[data-kiur-theme="light"] .app :where(.panel,.stat,.testCard,.exam,.empty,.studentDataState,.pathPanel,.shelfProfile,.shelfSubject,.shelfTest,.shelfEmpty,.accountProfileHero),html[data-kiur-theme="light"] .app .shelfLectures>button,html[data-kiur-theme="light"] .app :where(.accountStats,.banSummary,.catalogSummary,.studentStats)>article,html[data-kiur-theme="light"] .app :where(.catalogBox,.catalogTrash article,.glimpseCards article,.mediaGrid article){background:linear-gradient(145deg,#fff,#f8faff);border-color:var(--kiur-border);box-shadow:0 14px 38px #29436e12,inset 0 1px #fff}
+html[data-kiur-theme="light"] .app input:not([type=checkbox]):not([type=radio]):not([type=file]),html[data-kiur-theme="light"] .app select,html[data-kiur-theme="light"] .app textarea{color-scheme:light;background:#fff!important;color:var(--ink)!important;border-color:#34486b38!important}
+html[data-kiur-theme="light"] .app input::placeholder,html[data-kiur-theme="light"] .app textarea::placeholder{color:#737f95}
+html[data-kiur-theme="light"] .app input[type=file]{background:#f8faff!important;color:#31405f!important;border-color:#53668c55!important}
+html[data-kiur-theme="light"] .app th{background:#edf2fc;color:#485675}
+html[data-kiur-theme="light"] .app tbody tr:hover{background:#526ca90a}
+html[data-kiur-theme="light"] .app :where(.outline,.secondary,.shareButton,.shelfMore){background:#f8faff;border-color:#617398;color:#2d3b59}
+html[data-kiur-theme="light"] .app :where(.outline,.secondary,.shareButton,.shelfMore):hover{background:#edf0fb;color:#18213b}
+html[data-kiur-theme="light"] .app :where(.adminRail,.adminStageHead){background:linear-gradient(180deg,#fff,#f5f7ff);border-color:#6756bc55;box-shadow:0 18px 44px #324b7816}
+html[data-kiur-theme="light"] .app .adminTabs button{color:#4d5a74}
+html[data-kiur-theme="light"] .app .adminTabs button:hover{background:#e9edfa}
+html[data-kiur-theme="light"] .app .modal,html[data-kiur-theme="light"] .banReviewOverlay{background:#16244070}
+html[data-kiur-theme="light"] .app .modalCard,html[data-kiur-theme="light"] .app .editor,html[data-kiur-theme="light"] .banReviewDialog{background:linear-gradient(145deg,#fff,#f5f7ff);color:var(--ink);border-color:var(--kiur-border);box-shadow:0 32px 90px #1d315a30}
+html[data-kiur-theme="light"] .app :where(.questionEditor,.shuffleSettings,.shuffleOption,.optionEditor label,.options button,.inlineClinicalUpload){background:#f7f9ff;color:var(--ink);border-color:var(--kiur-border)}
+html[data-kiur-theme="light"] .app .notificationPanel{background:#fff;border-color:var(--kiur-border);box-shadow:0 22px 58px #253a6624}
+html[data-kiur-theme="light"] :where(.app .liquidNav,.liquidNav){background:#fffffff2;border-color:#53688f35;box-shadow:0 18px 50px #20376526,inset 0 1px #fff}
+html[data-kiur-theme="light"] .liquidNav button{color:#586580}
+html[data-kiur-theme="light"] :where(.loadingPage,.setupPage,.blockedPage,.verifyPage,.academicChangePage){color-scheme:light;color:#17213b;background:radial-gradient(circle at 15% 12%,#7656d91c 0,transparent 32%),radial-gradient(circle at 90% 85%,#2d75d31a 0,transparent 36%),linear-gradient(145deg,#f8faff,#edf3ff)}
+html[data-kiur-theme="light"] :where(.setupCard,.blockedCard,.verifyPage>section,.academicChangeCard){background:linear-gradient(145deg,#fff,#f5f8ff);border-color:#405a842b;color:#17213b;box-shadow:0 28px 80px #29436e20}
+html[data-kiur-theme="light"] :where(.setupPage,.academicChangePage,.authPage) :where(input,select,textarea){color-scheme:light;background:#fff!important;color:#17213b!important;border-color:#405a8448!important}
+html[data-kiur-theme="light"] :where(.setupPage,.academicChangePage,.authPage) :where(input,textarea)::placeholder{color:#6d7890!important}
+html[data-kiur-theme="light"] :where(.setupPage,.academicChangePage,.authPage) select option{background:#fff;color:#17213b}
+html[data-kiur-theme="light"] .authPage{color-scheme:light;background:#eef3ff;color:#17213b}
+html[data-kiur-theme="light"] .authBackdrop{background:#eef3ff}
+html[data-kiur-theme="light"] .authFallback{background:radial-gradient(circle at 18% 18%,#7656d929 0,transparent 34%),radial-gradient(circle at 82% 78%,#2d75d326 0,transparent 38%),linear-gradient(145deg,#f8faff 5%,#edf3ff 52%,#f5f8ff)}
+html[data-kiur-theme="light"] .authGrid{opacity:.35;background-image:linear-gradient(#45689514 1px,transparent 1px),linear-gradient(90deg,#45689514 1px,transparent 1px)}
+html[data-kiur-theme="light"] .hybridAuth.authCard{background:linear-gradient(145deg,#fffffff2,#f5f8fff2);border-color:#43597d28;box-shadow:0 28px 80px #29436e20,inset 0 1px #fff;color:#17213b}
+html[data-kiur-theme="light"] .hybridAuth .authBrand,html[data-kiur-theme="light"] .hybridAuth .authIntro h1{color:#17213b}
+html[data-kiur-theme="light"] .hybridAuth .authBrand small,html[data-kiur-theme="light"] .hybridAuth .authIntro p,html[data-kiur-theme="light"] .authField>span,html[data-kiur-theme="light"] .registrationPath label>span{color:#53617b}
+html[data-kiur-theme="light"] .hybridAuth .signinButton{background:#f8faff;border-color:#53698f35;color:#1d2a46;box-shadow:0 8px 22px #29436e0d}
+html[data-kiur-theme="light"] .authTabs{background:#e9eef9;border-color:#405a8420}
+html[data-kiur-theme="light"] .authTabs button{color:#5a6680}
+html[data-kiur-theme="light"] .authTabs button.active{background:linear-gradient(135deg,#7656d927,#2d75d322);color:#243153}
+html[data-kiur-theme="light"] .authField input,html[data-kiur-theme="light"] .registrationPath select{color-scheme:light;background:#fff;color:#17213b;border-color:#405a8438}
+html[data-kiur-theme="light"] .authNote,html[data-kiur-theme="light"] .authHint,html[data-kiur-theme="light"] .rememberChoice{color:#627089}
+html[data-kiur-theme="light"] .guestPortal{color-scheme:light;background:radial-gradient(circle at 12% 12%,#7656d91c,transparent 28%),radial-gradient(circle at 90% 82%,#2d75d31a,transparent 31%),linear-gradient(145deg,#f8faff,#edf3ff);color:#17213b}
+html[data-kiur-theme="light"] .guestPortal>header,html[data-kiur-theme="light"] .guestPath,html[data-kiur-theme="light"] .guestResults,html[data-kiur-theme="light"] .guestResults article{background:#fffffff0;border-color:#405a842b;box-shadow:0 15px 40px #29436e16}
+html[data-kiur-theme="light"] .guestPortal h1,html[data-kiur-theme="light"] .guestPortal h2,html[data-kiur-theme="light"] .guestPortal h3,html[data-kiur-theme="light"] .guestBrand{color:#17213b}
+html[data-kiur-theme="light"] .guestPortal p,html[data-kiur-theme="light"] .guestPortal small{color:#5d6982}
+html[data-kiur-theme="light"] .guestPortal input,html[data-kiur-theme="light"] .guestPortal select{color-scheme:light;background:#fff;color:#17213b;border-color:#405a8438}
+@media(max-width:720px){html[data-kiur-theme="light"] .app .topbar{background:#f7f9fff2}html[data-kiur-theme="light"] .app :where(.responsiveRecords,.banLog,.studentsTable,.logTable) tr{background:linear-gradient(145deg,#fff,#f5f7ff);box-shadow:0 9px 24px #29436e12}html[data-kiur-theme="light"] .app .studentFilters{background:#ffffffed;box-shadow:0 8px 24px #29436e18}html[data-kiur-theme="light"] .app .adminRail{background:linear-gradient(180deg,#fff,#f5f7ff)}}

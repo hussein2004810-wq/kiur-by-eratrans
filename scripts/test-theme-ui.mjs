@@ -9,6 +9,9 @@ const importCss=await readFile(new URL('../src/imports.css',import.meta.url),'ut
 const exportUi=await readFile(new URL('../src/ExportManager.tsx',import.meta.url),'utf8');
 const exportCss=await readFile(new URL('../src/exports.css',import.meta.url),'utf8');
 const html=await readFile(new URL('../index.html',import.meta.url),'utf8');
+const lightTheme=await readFile(new URL('../src/light-theme.css',import.meta.url),'utf8');
+const preference=await readFile(new URL('../src/theme-preference.tsx',import.meta.url),'utf8');
+const uiPreferencesApi=await readFile(new URL('../worker/ui-preferences-api.js',import.meta.url),'utf8');
 
 assert.ok(main.indexOf("import './styles.css'")<main.indexOf("import './theme.css'"),'Theme layer must load after the legacy styles');
 for(const token of ['--kiur-bg','--kiur-surface','--kiur-purple','--kiur-blue','--kiur-focus','--text','--z-modal','--z-critical'])assert.ok(theme.includes(token),`Missing theme token ${token}`);
@@ -27,6 +30,16 @@ assert.doesNotMatch(theme,/--green:#19b99b|--green2:#51cfb1/,'Legacy green brand
 assert.match(theme,/@media print[\s\S]*background:#fff!important/,'Printable outputs must stay light');
 assert.match(html,/viewport-fit=cover/,'Viewport metadata must support phone safe areas');
 assert.match(html,/theme-color" content="#080b1a"/,'Browser chrome must match the KIUR dark theme');
+assert.match(html,/localStorage\.getItem\('kiur-theme'\)/,'Theme must be selected before React renders to avoid a first-paint flash');
+assert.match(lightTheme,/data-kiur-theme="light"/,'A separately loaded light palette is required');
+assert.match(preference,/prefers-color-scheme: dark/,'The first visit must follow the operating-system theme');
+assert.match(preference,/prefers-reduced-motion: reduce/,'Theme transitions must respect reduced-motion');
+assert.match(preference,/\/api\/me\/ui-preferences/,'Authenticated theme choice must sync to the account');
+assert.match(uiPreferencesApi,/\['light','dark'\]\.includes/,'The server must allow only known theme values');
+assert.match(app,/<ThemeToggle\/>/,'The signed-in top bar must expose the theme control');
+assert.match(app,/aria-label="فتح حسابي" onClick=\{\(\)=>navigate\('profile'\)\}/,'The initials control must open the current user profile');
+assert.match(app,/\['points',Trophy,'نقاطي'\]/,'The points destination must use the clear My Points label');
+assert.doesNotMatch(app,/نبض الإنجاز|نبضي/,'Legacy points-system naming must not remain in the application shell');
 assert.match(html,/og:image[^>]*\/og\.png/,'The root page must expose the KIUR social preview');
 assert.match(html,/twitter:card" content="summary_large_image"/,'The social preview must use a large image card');
 assert.match(importUi,/className="templateDownload"/,'The official Excel template action must have a theme-safe class');

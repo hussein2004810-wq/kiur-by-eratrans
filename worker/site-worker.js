@@ -22,6 +22,7 @@ import {handleAcademicChangeApi} from './academic-change-api.js';
 import {handleStudentLearningApi} from './student-learning-api.js';
 import {handleStudentProfileApi} from './student-profile-api.js';
 import {awardAttemptPoints,handleGamificationApi} from './gamification-api.js';
+import {handleUiPreferencesApi} from './ui-preferences-api.js';
 
 const files = new Map(/*__STATIC_FILES__*/);
 let schemaReady = false;
@@ -137,6 +138,7 @@ function limitRule(request,url){
   if(path==='/api/me'&&request.method==='GET')return ['me:read',60];
   if(path==='/api/me/profile'&&request.method==='PATCH')return ['profile:update',10];
   if(path.startsWith('/api/me/profile-dashboard')&&!['GET','HEAD'].includes(request.method))return ['profile:write',20];
+  if(path==='/api/me/ui-preferences'&&request.method==='PATCH')return ['ui-preferences:write',20];
   if(path==='/api/me/avatar'&&!['GET','HEAD'].includes(request.method))return ['profile:avatar',6];
   if(path.startsWith('/api/me/sessions')&&!['GET','HEAD'].includes(request.method))return ['profile:sessions',12];
   if(path.startsWith('/api/me/favorites/')&&!['GET','HEAD'].includes(request.method))return ['favorites:write',60];
@@ -181,6 +183,9 @@ async function handleApi(request,env,url){
 
   const studentProfileResponse=await handleStudentProfileApi(request,env,url,user);
   if(studentProfileResponse)return studentProfileResponse;
+
+  const uiPreferencesResponse=await handleUiPreferencesApi(request,env,url,user);
+  if(uiPreferencesResponse)return uiPreferencesResponse;
 
   const gamificationResponse=await handleGamificationApi(request,env,url,user);
   if(gamificationResponse)return gamificationResponse;
