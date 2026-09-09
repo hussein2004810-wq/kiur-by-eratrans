@@ -95,31 +95,4 @@ ON gamification_missions(user_id,week_start,status);
 CREATE INDEX IF NOT EXISTS idx_gamification_goals_section
 ON gamification_section_goals(section_id,season_id,status);
 
-CREATE TRIGGER IF NOT EXISTS gamification_daily_cap_insert
-BEFORE INSERT ON gamification_point_ledger
-WHEN NEW.status='awarded' AND NEW.points>0
-BEGIN
-  SELECT CASE WHEN
-    COALESCE((SELECT sum(points) FROM gamification_point_ledger WHERE user_id=NEW.user_id AND status='awarded' AND date(created_at,'+3 hours')=date(NEW.created_at,'+3 hours')),0)+NEW.points
-    > COALESCE((SELECT total_daily_cap FROM gamification_settings WHERE id='platform'),350)
-    THEN RAISE(ABORT,'gamification_daily_cap') END;
-  SELECT CASE WHEN json_extract(NEW.metadata_json,'$.examMode')='practice' AND
-    COALESCE((SELECT sum(points) FROM gamification_point_ledger WHERE user_id=NEW.user_id AND status='awarded' AND json_extract(metadata_json,'$.examMode')='practice' AND date(created_at,'+3 hours')=date(NEW.created_at,'+3 hours')),0)+NEW.points
-    > COALESCE((SELECT practice_daily_cap FROM gamification_settings WHERE id='platform'),180)
-    THEN RAISE(ABORT,'gamification_practice_cap') END;
-END;
-
-CREATE TRIGGER IF NOT EXISTS gamification_daily_cap_approval
-BEFORE UPDATE OF status ON gamification_point_ledger
-WHEN OLD.status='pending_review' AND NEW.status='awarded' AND NEW.points>0
-BEGIN
-  SELECT CASE WHEN
-    COALESCE((SELECT sum(points) FROM gamification_point_ledger WHERE user_id=NEW.user_id AND status='awarded' AND date(created_at,'+3 hours')=date(NEW.created_at,'+3 hours')),0)+NEW.points
-    > COALESCE((SELECT total_daily_cap FROM gamification_settings WHERE id='platform'),350)
-    THEN RAISE(ABORT,'gamification_daily_cap') END;
-  SELECT CASE WHEN json_extract(NEW.metadata_json,'$.examMode')='practice' AND
-    COALESCE((SELECT sum(points) FROM gamification_point_ledger WHERE user_id=NEW.user_id AND status='awarded' AND json_extract(metadata_json,'$.examMode')='practice' AND date(created_at,'+3 hours')=date(NEW.created_at,'+3 hours')),0)+NEW.points
-    > COALESCE((SELECT practice_daily_cap FROM gamification_settings WHERE id='platform'),180)
-    THEN RAISE(ABORT,'gamification_practice_cap') END;
-END;
 PRAGMA optimize;
