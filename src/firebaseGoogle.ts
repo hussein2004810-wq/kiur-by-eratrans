@@ -25,6 +25,16 @@ export function prepareGoogleAuth(){
   return authPromise;
 }
 
+export type GoogleBrowserContext={embedded:boolean;ios:boolean;mobile:boolean};
+export function googleBrowserContext(userAgent=window.navigator.userAgent):GoogleBrowserContext{
+  const ios=/iPad|iPhone|iPod/i.test(userAgent);
+  const mobile=ios||/Android|Mobile/i.test(userAgent);
+  const namedEmbedded=/FBAN|FBAV|Instagram|Line\/|Telegram|Twitter|Snapchat/i.test(userAgent);
+  const iosWebView=ios&&!/Safari\//i.test(userAgent);
+  const androidWebView=/; wv\)|\bwv\b/i.test(userAgent);
+  return {embedded:namedEmbedded||iosWebView||androidWebView,ios,mobile};
+}
+
 export async function requestGoogleIdToken(){
   const auth=await prepareGoogleAuth();
   const provider=new GoogleAuthProvider();
@@ -34,7 +44,7 @@ export async function requestGoogleIdToken(){
     return await result.user.getIdToken(true);
   }catch(error){
     const code=String((error as {code?:unknown})?.code||'');
-    if(code.includes('popup-closed-by-user')||code.includes('cancelled-popup-request'))throw new Error('تم إلغاء دخول Google');
+    if(code.includes('popup-closed-by-user')||code.includes('cancelled-popup-request'))throw new Error('أُغلقت نافذة Google قبل اكتمال الدخول. أعد المحاولة ولا تغلقها');
     if(code.includes('popup-blocked'))throw new Error('اسمح بالنوافذ المنبثقة لهذا الموقع ثم حاول مجددًا');
     if(code.includes('unauthorized-domain'))throw new Error('نطاق KIUR غير مصرح له في Firebase');
     if(code.includes('operation-not-allowed'))throw new Error('تسجيل Google غير مفعّل في Firebase');

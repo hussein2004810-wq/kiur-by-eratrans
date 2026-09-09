@@ -81,9 +81,9 @@ export async function handleHierarchyApi(request,env,url,user,restriction=null){
 
   if(url.pathname==='/api/me/profile'&&request.method==='PATCH'){
     const denied=denyUser(user);if(denied)return denied;
-    if(user.role!=='student')return fail('FORBIDDEN','المسار الأكاديمي الذاتي متاح للطلاب فقط',403);
+    if(!['student','owner'].includes(user.role))return fail('FORBIDDEN','المسار الأكاديمي الذاتي غير متاح لهذا الحساب',403);
     const current=await env.DB.prepare(`SELECT university_id AS universityId,college_id AS collegeId,department_id AS departmentId,phase_id AS phaseId FROM users WHERE id=?`).bind(user.id).first();
-    if(studentProfileComplete(current))return fail('PROFILE_LOCKED','لا يمكن تغيير المسار الأكاديمي بعد حفظه؛ اطلب من المشرف تصحيحه',409);
+    if(user.role==='student'&&studentProfileComplete(current))return fail('PROFILE_LOCKED','لا يمكن تغيير المسار الأكاديمي بعد حفظه؛ أرسل طلب تغيير للمشرف',409);
     const parsed=await readBody(request);if(parsed.error)return fail(parsed.error.code,parsed.error.message,parsed.error.status);const value=parsed.value;
     const sectionId=value?.sectionId||null;const phase=await env.DB.prepare(`SELECT v.id AS universityId,c.id AS collegeId,d.id AS departmentId,p.id AS phaseId,x.id AS sectionId FROM phases p JOIN departments d ON d.id=p.department_id JOIN colleges c ON c.id=d.college_id JOIN universities v ON v.id=c.university_id LEFT JOIN sections x ON x.id=? AND x.phase_id=p.id WHERE p.id=? AND d.id=? AND c.id=? AND v.id=? AND (? IS NULL OR x.id IS NOT NULL) AND ${catalogVisible('university','v.id')} AND ${catalogVisible('college','c.id')} AND ${catalogVisible('department','d.id')} AND ${catalogVisible('phase','p.id')} AND (x.id IS NULL OR ${catalogVisible('section','x.id')})`).bind(sectionId,value?.phaseId||'',value?.departmentId||'',value?.collegeId||'',value?.universityId||'',sectionId).first();
     if(!phase)return fail('VALIDATION','اختر جامعة وكلية وقسمًا ومرحلة وشعبة صحيحة');

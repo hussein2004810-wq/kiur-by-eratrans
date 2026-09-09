@@ -40,3 +40,8 @@ assert.match(source,/\/api\/auth\/google\/start/,'Google sign-in must go through
 assert.match(source,/\/api\/auth\/google\/complete/,'Google identity tokens must be exchanged through the server-owned flow');
 assert.match(source,/requestGoogleIdToken/,'Google sign-in must use the Firebase hosted handler');
 assert.match(source,/if\(mode!=='register'\|\|catalog\)return/,'Login must not depend on loading the academic catalog');
+const googleSource=await readFile('src/firebaseGoogle.ts','utf8');
+assert.match(googleSource,/export function googleBrowserContext/,'Google auth must detect embedded mobile browsers');
+assert.match(source,/متصفح التطبيق الداخلي لا يسمح بدخول Google بصورة موثوقة/,'Embedded browsers need an actionable Google sign-in explanation');
+assert.match(source,/افتح KIUR في Safari/,'iPhone users need explicit Safari guidance');
+assert.match(source,/\/api\/auth\/google\/start[\s\S]*requestGoogleIdToken/,'The server-owned flow must be prepared before opening Google');

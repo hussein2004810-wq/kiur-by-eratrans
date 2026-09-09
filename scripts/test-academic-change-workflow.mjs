@@ -6,6 +6,10 @@ const ownerHeaders={'oai-authenticated-user-id':'owner-auth','oai-authenticated-
 const profile=await call('/api/me',{extraHeaders:studentHeaders});
 assert.equal(profile.response.status,200);
 const studentId=profile.data.user.id;
+const ownerFirstPath=await call('/api/me/profile',{method:'PATCH',extraHeaders:ownerHeaders,body:{universityId:'uni-eratrans',collegeId:'college-eratrans-medical',departmentId:'dep-anesthesia',phaseId:'pha-a3',sectionId:null}});
+assert.equal(ownerFirstPath.response.status,200);
+const ownerChangedPath=await call('/api/me/profile',{method:'PATCH',extraHeaders:ownerHeaders,body:{universityId:'uni-eratrans',collegeId:'college-eratrans-medical',departmentId:'dep-anesthesia',phaseId:'pha-a4',sectionId:null}});
+assert.equal(ownerChangedPath.response.status,200,'owner must be able to change their browsing path directly');
 assert.equal((await call('/api/me/profile',{method:'PATCH',extraHeaders:studentHeaders,body:{universityId:'uni-eratrans',collegeId:'college-eratrans-medical',departmentId:'dep-anesthesia',phaseId:'pha-a4',sectionId:null}})).response.status,200);
 sqlite.prepare(`INSERT OR IGNORE INTO sections(id,phase_id,name,sort_order) VALUES('academic-change-section','pha-a4','الشعبة التجريبية',99)`).run();
 const submitted=await call('/api/me/academic-change-requests',{method:'POST',extraHeaders:studentHeaders,body:{universityId:'uni-eratrans',collegeId:'college-eratrans-medical',departmentId:'dep-anesthesia',phaseId:'pha-a4',sectionId:'academic-change-section',reason:'تغيير الشعبة وفق السجل الأكاديمي المحدث'}});
