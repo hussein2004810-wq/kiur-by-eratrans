@@ -1,5 +1,5 @@
 import {useEffect, useId, useMemo, useRef, useState} from 'react';
-import {ArrowRight, BookOpen, CheckCircle2, ChevronLeft, ClipboardList, Clock3, Search, Star, Wifi, WifiOff, X} from 'lucide-react';
+import {ArrowRight, BookOpen, CheckCircle2, ChevronLeft, ClipboardList, Clock3, MessageCircleQuestion, Search, Star, Wifi, WifiOff, X} from 'lucide-react';
 import ShareButton from './ShareButton';
 import {buildStudyShelf, matchesStudySearch, studyTimestamp} from './study-shelf-model';
 import type {ShelfCatalog, ShelfHistory, ShelfTest} from './study-shelf-model';
@@ -66,9 +66,9 @@ export default function StudyShelf({catalog, tests, history, user, search, setSe
     <div className="shelfToolbar">
       <div><p className="shelfAcademic">{[user.departmentName, user.phaseName].filter(Boolean).join(' / ') || 'المحتوى الدراسي المتاح'}</p>
         <h2 id={headingId} ref={headingRef} tabIndex={-1}>{title}</h2></div>
-      <button type="button" className="shelfTextButton" aria-expanded={profileOpen} aria-controls={profileId} onClick={() => setProfileOpen(value => !value)}>بيانات مساري الدراسي</button>
+      <button type="button" className="shelfTextButton" aria-expanded={profileOpen} aria-controls={profileId} onClick={() => setProfileOpen(value => !value)}>مساري وطلبات التصحيح</button>
     </div>
-    {profileOpen && <section id={profileId} className="shelfProfile"><h3>مسارك المسجل</h3><p>{[user.universityName, user.collegeName, user.departmentName, user.phaseName, user.sectionName].filter(Boolean).join(' / ') || 'لم يكتمل المسار الدراسي'}</p><p>لتصحيح مسارك بعد تثبيته، تواصل مع إدارة المنصة.</p>{!user.phaseId && <button type="button" onClick={onChangeProfile}>استكمال بيانات المسار</button>}</section>}
+    {profileOpen && <section id={profileId} className="shelfProfile"><div><h3>مسارك المسجل</h3><p>{[user.universityName, user.collegeName, user.departmentName, user.phaseName, user.sectionName].filter(Boolean).join(' / ') || 'لم يكتمل المسار الدراسي'}</p><p>{user.phaseId?'إذا وجدت خطأ، أرسل طلب تصحيح إلى الإدارة وتابع قرار الطلب من المكان نفسه.':'أكمل بياناتك للوصول إلى اختبارات مرحلتك.'}</p></div><button type="button" className="pathCorrectionButton" onClick={onChangeProfile}><MessageCircleQuestion/>{user.phaseId?'طلب تصحيح المسار':'استكمال بيانات المسار'}</button></section>}
     <nav className="shelfBreadcrumb" aria-label="مسار الدراسة">
       <button type="button" onClick={() => choose()} aria-current={!subject && !showTests ? 'page' : undefined}>المواد</button>
       {(subject || showTests) && <ChevronLeft aria-hidden="true"/>}

@@ -28,7 +28,10 @@ const checkedReset=await call('/api/auth/check-password-reset',{method:'POST',bo
 const weakReset=await call('/api/auth/reset-password',{method:'POST',body:{oobCode:'one-use-reset-code',password:'1234567a'}});assert.equal(weakReset.response.status,400);assert.equal(consumed,false);
 const originalBatch=env.DB.batch.bind(env.DB);env.DB.batch=async()=>{throw new Error('simulated D1 outage')};const unsafeReset=await call('/api/auth/reset-password',{method:'POST',body:{oobCode:'one-use-reset-code',password:'87654321z'}});env.DB.batch=originalBatch;assert.equal(unsafeReset.response.status,503);assert.equal(unsafeReset.data.error.code,'SESSION_REVOCATION_FAILED');assert.equal(consumed,false);assert.equal((await call('/api/auth/session',{extraHeaders:{cookie:oldCookie}})).response.status,200);
 const reset=await call('/api/auth/reset-password',{method:'POST',body:{oobCode:'one-use-reset-code',password:'87654321z'}});assert.equal(reset.response.status,200);
+assert.equal(reset.data.email,'student@example.com');
 assert.equal((await call('/api/auth/session',{extraHeaders:{cookie:oldCookie}})).response.status,401);
+assert.equal((await call('/api/auth/login',{method:'POST',body:{email:reset.data.email,password:'87654321z'}})).response.status,200);
+assert.equal((await call('/api/auth/login',{method:'POST',body:{email:reset.data.email,password:'12345678a'}})).response.status,401);
 assert.equal((await call('/api/auth/reset-password',{method:'POST',body:{oobCode:'one-use-reset-code',password:'87654321z'}})).response.status,410);
 assert.equal((await call('/api/auth/check-password-reset',{method:'POST',body:{mode:'resetPassword',oobCode:'one-use-reset-code'}})).response.status,410);
 

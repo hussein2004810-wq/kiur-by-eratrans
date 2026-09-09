@@ -188,8 +188,9 @@ export async function handleAuthApi(request,env,url,user){
       if(['INVALID_OOB_CODE','EXPIRED_OOB_CODE','USER_DISABLED'].some(code=>isFirebaseError(error,code)))return fail('TOKEN_EXPIRED','رابط الاستعادة منتهي أو مستخدم؛ اطلب رابطًا جديدًا',410);
       return fail('FIREBASE_AUTH_UNAVAILABLE','تعذر تغيير كلمة المرور؛ حاول مجددًا لاحقًا',503);
     }
-    if(account)await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email:reset.email||account.email,eventType:'password_reset_requested',details:{phase:'completed',sessionsRevoked:true}})
-    return json({reset:true,message:'تم تغيير كلمة المرور وإنهاء الجلسات السابقة. سجّل الدخول بكلمة المرور الجديدة'},200,{'set-cookie':clearSessionCookie()});
+    const resetEmail=normalizeEmail(reset.email||account?.email);
+    if(account)await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email:resetEmail,eventType:'password_reset_requested',details:{phase:'completed',sessionsRevoked:true}})
+    return json({reset:true,email:resetEmail,message:'تم تغيير كلمة المرور وإنهاء الجلسات السابقة. سجّل الدخول بكلمة المرور الجديدة'},200,{'set-cookie':clearSessionCookie()});
   }
   if(url.pathname==='/api/auth/apply-email-action'&&request.method==='POST'){
     const ipKey=await authRateKey(request.headers.get('cf-connecting-ip')||'unknown');const limit=await enforceRateLimit(env,`auth:email-action:${ipKey}`,12,900);

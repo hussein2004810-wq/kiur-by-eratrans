@@ -64,6 +64,7 @@ const StudyShelf = compile('../src/StudyShelf.tsx', {'./ShareButton':share,'./st
 const props = {catalog,tests:[base],history,user:{role:'student',phaseId:'p1'},search:'',setSearch(){},onClearDirect(){},onStart(){throw new Error('Rendering must never create an attempt');},onChangeProfile(){},notify(){},startingId:null};
 const home = renderToStaticMarkup(React.createElement(StudyShelf,props));
 assert(home.includes('رفّي الدراسي') && home.includes('فتح المحاضرات'));
+assert(home.includes('مساري وطلبات التصحيح'),'The academic path contact entry must be discoverable');
 assert(home.includes('آخر نتيجة: 80%') && !home.includes('آخر نتيجة: 100%'));
 assert(!home.includes('آخر نتيجة: 99%'));
 const direct = renderToStaticMarkup(React.createElement(StudyShelf,{...props,directTarget:{kind:'test',id:'t1'},startingId:'t1'}));
