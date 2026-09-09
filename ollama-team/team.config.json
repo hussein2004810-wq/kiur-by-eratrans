@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "endpoint": "http://127.0.0.1:11434",
+  "ollama_executable": "C:\\Users\\PHANTOM X\\AppData\\Local\\Programs\\Ollama\\ollama.exe",
+  "request_timeout_seconds": 900,
+  "max_output_tokens": 420,
+  "billing_mode": "free_quota_only",
+  "allowed_models": [
+    "gpt-oss:20b-cloud",
+    "kiur-local:latest"
+  ],
+  "agents": [
+    {
+      "name": "lead",
+      "model": "gpt-oss:20b-cloud",
+      "fallback_model": "kiur-local:latest",
+      "purpose": "تحليل النطاق ووضع خطة قابلة للتحقق"
+    },
+    {
+      "name": "builder",
+      "model": "kiur-local:latest",
+      "fallback_model": "kiur-local:latest",
+      "purpose": "اقتراح التنفيذ والاختبارات دون تعديل الملفات"
+    },
+    {
+      "name": "reviewer",
+      "model": "kiur-local:latest",
+      "fallback_model": "kiur-local:latest",
+      "purpose": "مراجعة مستقلة محلية للمقترح والمخاطر"
+    }
+  ],
+  "privacy": {
+    "deny_file_names": [".env", ".env.local", ".env.production"],
+    "deny_extensions": [".pem", ".key", ".pfx", ".p12", ".sqlite", ".db"],
+    "max_context_characters": 40000
+  },
+  "stop_on_messages": [
+    "subscription",
+    "upgrade",
+    "payment required",
+    "insufficient credits",
+    "purchase credits",
+    "billing"
+  ]
+}
