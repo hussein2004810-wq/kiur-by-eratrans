@@ -4,7 +4,7 @@ import {resolve} from 'node:path';
 
 const database=new DatabaseSync(':memory:');
 database.exec('PRAGMA foreign_keys=ON');
-for(const file of ['drizzle/0000_medexam.sql','drizzle/0001_academic_hierarchy.sql','drizzle/0002_backfill_existing_tests.sql','drizzle/0003_scale_indexes.sql','drizzle/0004_attempt_shuffle.sql','drizzle/0005_security_hardening.sql','drizzle/0006_accounts_organizations_permissions.sql','drizzle/0007_exam_modes_question_types_files.sql','drizzle/0008_staff_titles_and_college_copy.sql','drizzle/0009_clinical_glimpses_library_logs.sql','drizzle/0010_student_bans.sql','drizzle/0011_security_hardening.sql','drizzle/0012_firebase_auth.sql','drizzle/0013_academic_trash_and_notifications.sql','drizzle/0014_media_access_indexes.sql','drizzle/0015_google_auth_flows.sql','drizzle/0016_auth_session_epoch.sql','drizzle/0017_academic_change_requests.sql','drizzle/0018_student_learning_hub.sql']){
+for(const file of ['drizzle/0000_medexam.sql','drizzle/0001_academic_hierarchy.sql','drizzle/0002_backfill_existing_tests.sql','drizzle/0003_scale_indexes.sql','drizzle/0004_attempt_shuffle.sql','drizzle/0005_security_hardening.sql','drizzle/0006_accounts_organizations_permissions.sql','drizzle/0007_exam_modes_question_types_files.sql','drizzle/0008_staff_titles_and_college_copy.sql','drizzle/0009_clinical_glimpses_library_logs.sql','drizzle/0010_student_bans.sql','drizzle/0011_security_hardening.sql','drizzle/0012_firebase_auth.sql','drizzle/0013_academic_trash_and_notifications.sql','drizzle/0014_media_access_indexes.sql','drizzle/0015_google_auth_flows.sql','drizzle/0016_auth_session_epoch.sql','drizzle/0017_academic_change_requests.sql','drizzle/0018_student_learning_hub.sql','drizzle/0019_spaced_review.sql']){
   database.exec(await readFile(resolve(file),'utf8'));
 }
 const counts={
@@ -37,4 +37,5 @@ if(academicChangeTables!==4||academicChangeIndexes!==5)throw new Error('Academic
 const learningTables=Number(database.prepare("SELECT count(*) AS count FROM sqlite_schema WHERE type='table' AND name='student_favorites'").get().count);
 const learningIndexes=Number(database.prepare("SELECT count(*) AS count FROM sqlite_schema WHERE type='index' AND name IN ('idx_student_favorites_recent','idx_attempt_answers_correctness')").get().count);
 if(learningTables!==1||learningIndexes!==2)throw new Error('Student learning hub migration verification failed');
+if(!database.prepare("SELECT 1 FROM sqlite_schema WHERE type='index' AND name='idx_student_review_due'").get())throw new Error('Spaced review index missing');
 console.log(JSON.stringify({ok:true,counts,demo,scaleIndexes,firebaseColumns,mediaIndexes,authEpochColumns,queryPlan:plan,imagePlan,activeAttemptPlan,revocationPlan}));

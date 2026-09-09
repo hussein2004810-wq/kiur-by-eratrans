@@ -1,6 +1,6 @@
 import ExamDateTime from './ExamDateTime';
 import {lazy,Suspense,useEffect,useMemo,useRef,useState} from 'react';
-import {Activity,ArrowLeftRight,BarChart3,Bell,BookOpen,CheckCircle2,ChevronLeft,ClipboardList,Clock3,FileQuestion,GraduationCap,HeartPulse,History,LayoutDashboard,Link2,LogOut,Menu,Plus,Save,Search,Settings2,ShieldCheck,Trash2,Users,X} from 'lucide-react';
+import {Activity,ArrowLeftRight,BarChart3,Bell,BookOpen,CheckCircle2,ChevronLeft,ClipboardList,Clock3,Contrast,FileQuestion,GraduationCap,HeartPulse,History,LayoutDashboard,Link2,LogOut,Menu,Plus,Save,Search,Settings2,ShieldCheck,SlidersHorizontal,Trash2,Type,Users,X} from 'lucide-react';
 import './real.css';
 import './admin-shell.css';
 import './mobile-records.css';
@@ -58,6 +58,7 @@ const emptyForm=(catalog:Catalog):FormTest=>({...firstPath(catalog),title:'',dur
 function parseDirectTarget():DirectTarget{const match=window.location.pathname.match(/^\/(test|lecture)\/([^/]+)$/);if(!match)return null;try{return {kind:match[1] as 'test'|'lecture',id:decodeURIComponent(match[2])}}catch{return null}}
 function motionPreference(){try{return localStorage.getItem('kiur-motion')!=='off'}catch{return true}}
 function saveMotionPreference(enabled:boolean){try{localStorage.setItem('kiur-motion',enabled?'on':'off')}catch{}}
+function savedVisualPreference(key:string,fallback:string){try{return localStorage.getItem(key)||fallback}catch{return fallback}}
 async function logoutFromProvider(_provider?:User['authProvider']){await api('/api/auth/logout',{method:'POST',body:'{}'});window.location.reload()}
 
 function MedicalVitals({compact=false}:{compact?:boolean}){return <div className={'medicalVitals '+(compact?'compact':'')} aria-hidden="true"><svg viewBox="0 0 320 74" preserveAspectRatio="none"><path className="ecgGhost" d="M0 39h320"/><path className="ecgLine" pathLength="1" d="M0 39h55l12-1 8-13 10 35 12-51 13 45 11-16h36l10-1 8-10 10 25 13-37 12 30 10-8h80"/></svg><span><i/>SpO₂ <b>98</b></span></div>}
@@ -66,15 +67,16 @@ function SectionLoading(){return <section className="panel sectionLoading"><Medi
 function Stat({icon,value,label,tone='mint'}:{icon:React.ReactNode;value:string|number;label:string;tone?:string}){return <article className="stat"><span className={'statIcon '+tone}>{icon}</span><div><b>{value}</b><small>{label}</small></div></article>}
 function Title({title,subtitle}:{title:string;subtitle:string}){return <div className="pageTitle"><div><h1>{title}</h1><p>{subtitle}</p></div><span className="dateChip">{new Intl.DateTimeFormat('ar-IQ',{dateStyle:'long'}).format(new Date())}</span></div>}
 type MainView='home'|'tests'|'glimpses'|'history'|'admin';
+function AccessibilityDock(){const[open,setOpen]=useState(false);const[size,setSize]=useState(()=>savedVisualPreference('kiur-font-size','normal'));const[contrast,setContrast]=useState(()=>savedVisualPreference('kiur-contrast','normal')==='high');useEffect(()=>{document.documentElement.dataset.kiurFont=size;document.documentElement.dataset.kiurContrast=contrast?'high':'normal';try{localStorage.setItem('kiur-font-size',size);localStorage.setItem('kiur-contrast',contrast?'high':'normal')}catch{}},[size,contrast]);return <div className="accessibilityDock"><button type="button" aria-label="إعدادات سهولة الاستخدام" aria-expanded={open} onClick={()=>setOpen(value=>!value)}><SlidersHorizontal/></button>{open&&<section aria-label="إعدادات سهولة الاستخدام"><header><b>سهولة الاستخدام</b><button type="button" onClick={()=>setOpen(false)} aria-label="إغلاق"><X/></button></header><label><span><Type/>حجم النص</span><select value={size} onChange={event=>setSize(event.target.value)}><option value="normal">اعتيادي</option><option value="large">كبير</option><option value="xlarge">كبير جدًا</option></select></label><button type="button" className={contrast?'active':''} aria-pressed={contrast} onClick={()=>setContrast(value=>!value)}><Contrast/>{contrast?'إيقاف التباين العالي':'تشغيل التباين العالي'}</button></section>}</div>}
 function LiquidNavigation({items,active,onSelect}:{items:readonly (readonly [MainView,React.ComponentType<any>,string,number?])[];active:MainView;onSelect:(view:MainView)=>void}){
-  return <nav className="liquidNav" aria-label="التنقل الرئيسي" style={{'--liquid-count':items.length} as React.CSSProperties}>
+  return <><AccessibilityDock/><nav className="liquidNav" aria-label="التنقل الرئيسي" style={{'--liquid-count':items.length} as React.CSSProperties}>
     <div className="liquidNavTrack">
       {items.map(([id,Icon,label,count])=><button type="button" key={id} className={active===id?'active':''} aria-current={active===id?'page':undefined} onClick={()=>onSelect(id)}>
         <span className="liquidNavShine" aria-hidden="true"/>
         <span className="liquidNavIcon"><Icon aria-hidden="true"/>{typeof count==='number'&&<b>{count}</b>}</span><span>{label}</span>
       </button>)}
     </div>
-  </nav>
+  </nav></>
 }
 
 function ProfileSetup({user,catalog,onSaved,notify}:{user:User;catalog:Catalog;onSaved:(user:User)=>void;notify:(message:string)=>void}){

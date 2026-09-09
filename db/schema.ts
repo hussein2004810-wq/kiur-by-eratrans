@@ -33,5 +33,6 @@ export const tables = {
   academicChangeBatches: ['id','idempotency_key','actor_id','action','request_count','result_json','created_at'],
   userNotifications: ['id','user_id','notification_type','title','message','link','read_at','created_at'],
   studentFavorites: ['user_id','test_id','created_at'],
+  studentReviewProgress: ['user_id','subject_id','interval_days','last_score','last_reviewed_at','next_review_at'],
   ownerRecoveryOperations: ['operation_hash','user_id','consumed_at'],
 } as const;
