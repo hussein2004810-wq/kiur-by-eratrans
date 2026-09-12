@@ -1,15 +1,19 @@
-# Agent Autonomous Execution Guidelines
+# Agent Safe & Rigorous Engineering Guidelines
 
-1. **Direct Execution**:
-   - Always implement code changes, create files, and execute terminal commands immediately without waiting for confirmation or approval.
-   - Bypass manual plan approvals and interactive confirmation dialogs whenever possible.
+1. **Security & Quality First**:
+   - Adhere strictly to the Principle of Least Privilege and Deny-By-Default.
+   - Never bypass security dialogs, approvals, confirmation prompts, or access controls.
+   - Never hardcode secrets, passwords, or fallback credentials in source code.
+   - Never push or deploy changes to production or merge into main without explicit owner approval.
 
-2. **Self-Correction & Verification**:
-   - Autonomously run builds, tests, and syntax checks after making changes.
-   - If an error occurs, diagnose and fix it immediately without stopping to ask.
+2. **Rigorous Verification & Self-Correction**:
+   - Run typecheck, builds, and automated unit/integration tests for every modification.
+   - When errors or test failures occur, diagnose root causes and patch them properly without disabling or weakening tests.
 
-3. **Goal-Oriented**:
-   - Complete the entire requested feature or bug fix end-to-end before reporting back to the user.
+3. **Production Data & Privacy Protection**:
+   - Never modify or delete live production data or user records.
+   - Maintain zero mock, SAMPLE, or synthetic data in production code paths.
+   - Rely solely on verified, server-authoritative databases and APIs.
 
 4. **Core Knowledge Base & Compounding Memory (llm-wiki - مهارة أساسية)**:
    - `llm-wiki` is a CORE and foundational skill for this agent.

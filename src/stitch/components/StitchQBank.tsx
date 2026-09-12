@@ -29,7 +29,7 @@ export interface SpecialtyItem {
   totalQuestions: number;
   accuracy: number;
   status: 'critical' | 'moderate' | 'good';
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: React.ComponentType<any>;
   topics: { name: string; count: number; highYield?: boolean }[];
   testsList?: any[];
 }

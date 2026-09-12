@@ -183,13 +183,13 @@ export function StitchPricing() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '10px' }}>
                   {p.features.map((feat, i) => (
                     <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '13px' }}>
-                      <Check size={16} color="var(--stitch-secondary)" style={{ shrink: 0, marginTop: '2px' }} />
+                      <Check size={16} color="var(--stitch-secondary)" style={{ flexShrink: 0, marginTop: '2px' }} />
                       <span style={{ color: 'var(--stitch-text-primary)', lineHeight: 1.5 }}>{feat}</span>
                     </div>
                   ))}
                   {p.excluded.map((ex, i) => (
                     <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '13px', opacity: 0.5 }}>
-                      <X size={16} color="var(--stitch-text-muted)" style={{ shrink: 0, marginTop: '2px' }} />
+                      <X size={16} color="var(--stitch-text-muted)" style={{ flexShrink: 0, marginTop: '2px' }} />
                       <span style={{ color: 'var(--stitch-text-muted)', textDecoration: 'line-through' }}>{ex}</span>
                     </div>
                   ))}

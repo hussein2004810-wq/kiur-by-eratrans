@@ -21,6 +21,9 @@ export interface StitchHistoryItem {
   percentage: number;
   finishedAt: string;
   passed: number;
+  score?: number;
+  maxScore?: number;
+  testId?: string;
 }
 
 export interface StitchContextValue {
@@ -40,7 +43,7 @@ export interface StitchContextValue {
   notifications: Array<{ id: string; title: string; message: string; createdAt: string; readAt?: string | null }>;
   notificationsOpen: boolean;
   setNotificationsOpen: (open: boolean) => void;
-  openSmartReview: (tab?: 'flashcards' | 'quiz' | 'stats') => void;
+  openSmartReview: (tab?: 'flashcards' | 'quiz' | 'quizBuilder' | 'stats') => void;
   commandPaletteOpen: boolean;
   setCommandPaletteOpen: (open: boolean) => void;
   sidebarOpen?: boolean;

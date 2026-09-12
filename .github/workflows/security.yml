@@ -8,9 +8,39 @@ on:
   workflow_dispatch:
 
 jobs:
+  quality-gate:
+    name: Build & Quality Gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable Corepack & Install Dependencies
+        run: |
+          corepack enable
+          pnpm install --frozen-lockfile
+
+      - name: TypeScript Static Typecheck
+        run: pnpm typecheck
+
+      - name: Production Bundle Build & Performance Budget
+        run: pnpm build
+
+      - name: Automated Node.js Test Suite (28 Suites)
+        run: pnpm test:node
+
+      - name: Production Security Audit
+        run: pnpm audit --prod
+
   strix-security-scan:
     name: Strix AI Pentest & Security Audit
     runs-on: ubuntu-latest
+    needs: [quality-gate]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4

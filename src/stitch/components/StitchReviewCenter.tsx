@@ -28,53 +28,6 @@ export interface IncorrectQuestionItem {
   pearl: string;
 }
 
-const SAMPLE_INCORRECT_ITEMS: IncorrectQuestionItem[] = [
-  {
-    id: 'inc-1',
-    code: 'Q-4821',
-    specialty: 'Cardiovascular System',
-    topic: 'Atrial Fibrillation — Rate vs Rhythm Control',
-    timesMissed: 2,
-    lastAttemptDate: 'اليوم، 10:45 ص',
-    distractorChosen: 'أدينوسين وريدياً (IV Adenosine)',
-    correctAnswer: 'ميتوبرولول وريدياً (IV Metoprolol)',
-    pearl: 'في الرجفان الأذيني: مستقر ديناميكياً؟ ابدأ بـ Rate Control (حاصرات بيتا أو قنوات الكالسيوم).'
-  },
-  {
-    id: 'inc-2',
-    code: 'Q-5119',
-    specialty: 'Nephrology & Endocrine',
-    topic: 'Severe Hypercalcemia of Malignancy',
-    timesMissed: 1,
-    lastAttemptDate: 'أمس، 04:20 م',
-    distractorChosen: 'فوروسيميد عاجل (Furosemide)',
-    correctAnswer: 'تسريب ملحي متساوي التوتر (Normal Saline 0.9%)',
-    pearl: 'فرط كالسيوم الدم الحاد: الإماهة الشديدة بالسوائل الوريدية تسبق دائماً أي مدرات بولية.'
-  },
-  {
-    id: 'inc-3',
-    code: 'Q-3920',
-    specialty: 'Respiratory Medicine',
-    topic: 'Acute Pulmonary Embolism Risk Stratification',
-    timesMissed: 2,
-    lastAttemptDate: 'منذ يومين',
-    distractorChosen: 'وارفارين فموي فوري (Oral Warfarin)',
-    correctAnswer: 'مضادات التخثر المباشرة / LMWH وريدياً',
-    pearl: 'علاج الانصمام الرئوي الحاد: البدء الفوري بمضادات التخثر السريعة (DOACs / LMWH) دون تأخير.'
-  },
-  {
-    id: 'inc-4',
-    code: 'Q-2294',
-    specialty: 'Pediatrics',
-    topic: 'Febrile Seizures vs Meningitis Red Flags',
-    timesMissed: 1,
-    lastAttemptDate: 'منذ 3 أيام',
-    distractorChosen: 'بزل قطني روتيني لجميع الحالات (LP for all)',
-    correctAnswer: 'فحص سريري دقيق وتطمينات إن كانت نوبة حموية بسيطة',
-    pearl: 'النوبة الحموية البسيطة (أقل من 15 دقيقة، معممة، بدون عجز بؤري) لا تستدعي بزلاً قطنياً روتينياً إلا بوجود علامات سحائية.'
-  }
-];
-
 export function StitchReviewCenter() {
   const { setView, openSmartReview, notify, history, startExam } = useStitch();
   const [activeTab, setActiveTab] = useState<'incorrect' | 'bookmarks' | 'remediation'>('incorrect');

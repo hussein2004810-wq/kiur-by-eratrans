@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ShieldAlert, 
   Settings2, 
@@ -57,11 +57,31 @@ export function StitchAdminSuite() {
     status: 'active' | 'frozen';
   } | null>(null);
 
-  const mockStudents = [
-    { id: 'MED-8841', name: 'علي محمد أحمد', email: 'ali.ahmed@kiur-iraq.com', university: 'جامعة بغداد — كلية الطب', phase: 'المرحلة الخامسة • تدريب سريري', accuracy: 78.4, completedExams: 34, licenseExpiry: '2026-12-31', status: 'active' as const },
-    { id: 'MED-9214', name: 'سارة خالد العبيدي', email: 'sara.obaidi@kiur-iraq.com', university: 'جامعات وكليات ERATRANS', phase: 'سنة التدريب السريري • البورد العراقي', accuracy: 82.1, completedExams: 48, licenseExpiry: '2026-10-15', status: 'active' as const },
-    { id: 'MED-7632', name: 'عمر فهد الجبوري', email: 'omar.jabouri@kiur-iraq.com', university: 'جامعة المستنصرية — كلية الطب', phase: 'المرحلة الرابعة • سريري', accuracy: 69.8, completedExams: 19, licenseExpiry: '2026-08-01', status: 'active' as const }
-  ];
+  const [students, setStudents] = useState<any[]>([]);
+  const [studentsTotal, setStudentsTotal] = useState<number>(0);
+  const [loadingStudents, setLoadingStudents] = useState<boolean>(true);
+
+  useEffect(() => {
+    let active = true;
+    fetch('/api/admin/students?limit=50')
+      .then(res => res.ok ? res.json() : Promise.reject())
+      .then((res: any) => {
+        if (active) {
+          setStudents(res.data || []);
+          setStudentsTotal(res.total || (res.data || []).length);
+        }
+      })
+      .catch(() => {
+        if (active) {
+          setStudents([]);
+          setStudentsTotal(0);
+        }
+      })
+      .finally(() => {
+        if (active) setLoadingStudents(false);
+      });
+    return () => { active = false; };
+  }, []);
 
   const handleSaveQuestion = () => {
     notify('تم حفظ وتحديث السؤال والمشتتات السريرية في بنك الأسئلة المعتمد.');
@@ -607,7 +627,9 @@ export function StitchAdminSuite() {
               <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 700, color: 'var(--stitch-text-primary)' }}>
                 سجل الطلاب والتراخيص الأكاديمية (Users Management)
               </h3>
-              <small style={{ color: 'var(--stitch-text-muted)' }}>45,210 طالب مسجل من 32 كلية طب</small>
+              <small style={{ color: 'var(--stitch-text-muted)' }}>
+                {loadingStudents ? 'جارٍ تحميل السجل...' : `${studentsTotal} طالب مسجل`}
+              </small>
             </div>
           </div>
 
@@ -625,37 +647,66 @@ export function StitchAdminSuite() {
               </tr>
             </thead>
             <tbody>
-              {mockStudents.map(st => (
-                <tr key={st.id} style={{ borderTop: '1px solid var(--stitch-border)' }}>
-                  <td style={{ padding: '12px 14px', fontWeight: 700, color: 'var(--stitch-primary)' }}>{st.id}</td>
-                  <td style={{ padding: '12px 14px', fontWeight: 600 }}>{st.name}</td>
-                  <td style={{ padding: '12px 14px', color: 'var(--stitch-text-secondary)' }}>
-                    <div>{st.university}</div>
-                    <small style={{ color: 'var(--stitch-text-muted)' }}>{st.phase}</small>
-                  </td>
-                  <td style={{ padding: '12px 14px', fontWeight: 700, color: 'var(--stitch-secondary)' }}>{st.accuracy}%</td>
-                  <td style={{ padding: '12px 14px' }}>{st.completedExams} اختباراً</td>
-                  <td style={{ padding: '12px 14px', color: 'var(--stitch-text-muted)' }}>{st.licenseExpiry}</td>
-                  <td style={{ padding: '12px 14px' }}>
-                    <button
-                      type="button"
-                      onClick={() => setSelectedStudent(st)}
-                      style={{
-                        background: 'var(--stitch-surface-container-high)',
-                        color: 'var(--stitch-primary)',
-                        border: 'none',
-                        padding: '6px 12px',
-                        borderRadius: 'var(--stitch-radius-md)',
-                        cursor: 'pointer',
-                        fontSize: '12px',
-                        fontWeight: 600
-                      }}
-                    >
-                      عرض الملف
-                    </button>
+              {loadingStudents ? (
+                <tr>
+                  <td colSpan={7} style={{ padding: '24px', textAlign: 'center', color: 'var(--stitch-text-muted)' }}>
+                    جارٍ تحميل سجل الطلاب...
                   </td>
                 </tr>
-              ))}
+              ) : students.length === 0 ? (
+                <tr>
+                  <td colSpan={7} style={{ padding: '24px', textAlign: 'center', color: 'var(--stitch-text-muted)' }}>
+                    لا يوجد طلاب مسجلون حالياً
+                  </td>
+                </tr>
+              ) : (
+                students.map(st => {
+                  const university = st.universityName || st.university || 'غير محدد';
+                  const phase = st.phaseName || st.phase || 'المسار الأكاديمي';
+                  const accuracy = Math.round(Number(st.averagePercentage ?? st.accuracy ?? 0));
+                  const exams = st.attempts ?? st.completedExams ?? 0;
+                  const expiry = st.licenseExpiry || (st.registeredAt ? new Date(st.registeredAt).toLocaleDateString('ar-IQ') : 'نشط');
+
+                  return (
+                    <tr key={st.id} style={{ borderTop: '1px solid var(--stitch-border)' }}>
+                      <td style={{ padding: '12px 14px', fontWeight: 700, color: 'var(--stitch-primary)' }}>{st.id}</td>
+                      <td style={{ padding: '12px 14px', fontWeight: 600 }}>{st.name}</td>
+                      <td style={{ padding: '12px 14px', color: 'var(--stitch-text-secondary)' }}>
+                        <div>{university}</div>
+                        <small style={{ color: 'var(--stitch-text-muted)' }}>{phase}</small>
+                      </td>
+                      <td style={{ padding: '12px 14px', fontWeight: 700, color: 'var(--stitch-secondary)' }}>{accuracy}%</td>
+                      <td style={{ padding: '12px 14px' }}>{exams} اختباراً</td>
+                      <td style={{ padding: '12px 14px', color: 'var(--stitch-text-muted)' }}>{expiry}</td>
+                      <td style={{ padding: '12px 14px' }}>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedStudent({
+                            ...st,
+                            university,
+                            phase,
+                            accuracy,
+                            completedExams: exams,
+                            licenseExpiry: expiry
+                          })}
+                          style={{
+                            background: 'var(--stitch-surface-container-high)',
+                            color: 'var(--stitch-primary)',
+                            border: 'none',
+                            padding: '6px 12px',
+                            borderRadius: 'var(--stitch-radius-md)',
+                            cursor: 'pointer',
+                            fontSize: '12px',
+                            fontWeight: 600
+                          }}
+                        >
+                          عرض الملف
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>

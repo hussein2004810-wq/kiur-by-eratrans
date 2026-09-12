@@ -76,7 +76,7 @@ async function authenticateWithFirebase(env,account,password){
   }
 
   let legacyValid=false;if(account.password_hash)legacyValid=await verifyPassword(password,account,env);
-  if(!firebaseAuthConfigured(env))return legacyValid?{emailVerified:locallyVerified,provider:'password_legacy'}:{invalid:true};
+  if(!firebaseAuthConfigured(env))return {error:fail('FIREBASE_AUTH_UNAVAILABLE','خدمة المصادقة غير مهيأة',503)};
   let auth,created=false,authenticatedByReset=false;
   if(legacyValid){
     try{auth=await firebaseSignUp(env,account.email,password);created=true}catch(error){
@@ -127,30 +127,71 @@ export async function handleAuthApi(request,env,url,user){
     await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email,eventType:'firebase_migration',details:{provider:'firebase',recovery:'owner_password'}});
     return json({activated:true,message:'تم تفعيل دخول المالك بالبريد وكلمة المرور'});
   }
+
+  // One-time, fail-closed owner provisioning. This route is inert unless a
+  // high-entropy deployment secret is present and is permanently locked once an owner exists.
+  if(url.pathname==='/api/auth/provision-owner'&&request.method==='POST'){
+    const configured=String(env.OWNER_PROVISIONING_SECRET||env.OWNER_PASSWORD_SETUP_TOKEN||'');
+    if(configured.length<32)return fail('NOT_FOUND','المسار غير متاح',404);
+    const supplied=request.headers.get('x-kiur-owner-setup-token')||'';
+    if(!(await sameSecret(configured,supplied)))return fail('NOT_FOUND','المسار غير متاح',404);
+    const limit=await enforceRateLimit(env,'auth:owner-provisioning',2,3600);
+    if(!limit.allowed)return fail('RATE_LIMITED','تم تجاوز عدد محاولات التهيئة',429,{'retry-after':String(limit.retryAfter)});
+    const existingOwner=await env.DB.prepare(`SELECT count(*) AS count FROM users WHERE account_role='owner'`).first();
+    if(Number(existingOwner?.count||0)>0)return fail('PROVISIONING_LOCKED','تمت تهيئة حساب المالك مسبقًا؛ لا يمكن إنشاء حساب مالك جديد',410);
+    const parsed=await value(request);if(parsed.response)return parsed.response;
+    const email=normalizeEmail(parsed.data?.email);
+    const name=String(parsed.data?.name||'المالك').trim();
+    const passwordIssue=validatePassword(parsed.data?.password);
+    if(!validEmail(email)||passwordIssue)return fail('VALIDATION',passwordIssue||'البريد الإلكتروني غير صالح');
+    if(!firebaseAuthConfigured(env))return fail('FIREBASE_AUTH_UNAVAILABLE','خدمة تسجيل البريد غير مهيأة',503);
+    const operationHash=await hashToken(`owner-provisioning:v1:${configured}`);
+    const alreadyUsed=await env.DB.prepare(`SELECT 1 FROM owner_recovery_operations WHERE operation_hash=?`).bind(operationHash).first();
+    if(alreadyUsed)return fail('PROVISIONING_ALREADY_USED','تم استهلاك عملية تهيئة المالك مسبقًا',410);
+    let auth,created=false;
+    try{
+      auth=await firebaseSignUp(env,email,parsed.data.password);created=true;
+    }catch(error){
+      if(!isFirebaseError(error,'EMAIL_EXISTS'))return fail('FIREBASE_AUTH_UNAVAILABLE','تعذر ربط حساب المالك بخدمة Google',503);
+      try{auth=await firebaseSignIn(env,email,parsed.data.password)}catch{return fail('FIREBASE_ACCOUNT_LINK_REQUIRED','يوجد حساب Google لهذا البريد بكلمة مرور مختلفة؛ استخدم استعادة كلمة المرور',409)}
+    }
+    const id=crypto.randomUUID();
+    try{
+      await env.DB.batch([
+        env.DB.prepare(`INSERT INTO users(id,email,name,role,account_role,account_status,auth_provider,firebase_uid,email_verified_at) VALUES(?,?,?,'admin','owner','active','hybrid',?,CURRENT_TIMESTAMP)`).bind(id,email,name,auth.uid),
+        env.DB.prepare(`INSERT OR REPLACE INTO user_identities(provider,provider_user_id,user_id,email) VALUES('password',?,?,?)`).bind(auth.uid,id,email),
+        env.DB.prepare(`INSERT INTO owner_recovery_operations(operation_hash,user_id) VALUES(?,?)`).bind(operationHash,id),
+        env.DB.prepare(`INSERT INTO audit_logs(entity,entity_id,action,by_user_id,details_json) VALUES('user',?,'owner_provision',?,?)`).bind(id,id,JSON.stringify({provider:'firebase',role:'owner'}))
+      ]);
+    }catch(error){
+      if(created)await firebaseDeleteAccount(env,auth.idToken);
+      if(String(error?.message||'').includes('UNIQUE')||String(error?.message||'').includes('PRIMARY KEY'))return fail('PROVISIONING_ALREADY_USED','تم استهلاك عملية تهيئة المالك مسبقًا',410);
+      throw error;
+    }
+    await recordAccountEvent(env,request,{userId:id,accountCode:id,email,eventType:'register',details:{provider:'firebase',role:'owner'}});
+    return json({provisioned:true,message:'تم إنشاء حساب المالك بنجاح'});
+  }
+
   if(url.pathname==='/api/auth/register'&&request.method==='POST'){
     const parsed=await value(request);if(parsed.response)return parsed.response;const data=parsed.data;const email=normalizeEmail(data?.email);const name=String(data?.name||'').trim();
     const emailKey=await authRateKey(email);const ipKey=await authRateKey(request.headers.get('cf-connecting-ip')||'unknown');const [emailLimit,ipLimit]=await Promise.all([enforceRateLimit(env,`auth:register:email:${emailKey}`,3,3600),enforceRateLimit(env,`auth:register:ip:${ipKey}`,10,3600)]);
     if(!emailLimit.allowed||!ipLimit.allowed)return fail('RATE_LIMITED','طلبات تسجيل كثيرة؛ حاول لاحقًا',429,{'retry-after':String(Math.max(emailLimit.retryAfter,ipLimit.retryAfter))});
     if(name.length<2||name.length>120)return fail('VALIDATION','الاسم يجب أن يكون بين حرفين و120 حرفًا');if(!validEmail(email))return fail('VALIDATION','البريد الإلكتروني غير صالح');const passwordIssue=validatePassword(data?.password);if(passwordIssue)return fail('VALIDATION',passwordIssue);
     const ownerEmails=new Set(String(env.OWNER_EMAILS||'').split(',').map(s=>s.trim().toLowerCase()).filter(Boolean));
-    const isOwner=ownerEmails.has(email);
-    const path=isOwner?{universityId:null,collegeId:null,departmentId:null,phaseId:null,sectionId:null}:await validStudentPath(env,data);
-    if(!path&&!isOwner)return fail('VALIDATION','الجامعة أو الكلية أو القسم أو المرحلة أو الشعبة غير صالحة');
+    if(ownerEmails.has(email))return fail('REGISTRATION_NOT_PERMITTED','البريد محجوز لإدارة المنصة؛ لا يمكن تسجيله كطالب',403);
+    const path=await validStudentPath(env,data);
+    if(!path)return fail('VALIDATION','الجامعة أو الكلية أو القسم أو المرحلة أو الشعبة غير صالحة');
     if(!firebaseAuthConfigured(env))return fail('FIREBASE_AUTH_UNAVAILABLE','التسجيل بالبريد متوقف مؤقتًا حتى تهيئة Firebase؛ استخدم تسجيل Google أو تواصل مع الإدارة',503);
     let auth;try{auth=await firebaseSignUp(env,email,data.password)}catch(error){if(isFirebaseError(error,'EMAIL_EXISTS'))return fail('EMAIL_EXISTS','البريد مستخدم بالفعل؛ سجّل الدخول أو استخدم استعادة كلمة المرور',409);return fail('FIREBASE_AUTH_UNAVAILABLE','تعذر إنشاء الحساب لدى Google؛ حاول لاحقًا',503)}
     const id=crypto.randomUUID();
-    const role=isOwner?'owner':'student';
-    const legacyRole=isOwner?'admin':'student';
     try{await env.DB.batch([
-      env.DB.prepare(`INSERT INTO users(id,email,name,role,account_role,account_status,auth_provider,university_id,college_id,department_id,phase_id,section_id,firebase_uid,email_verified_at) VALUES(?,?,?,?,?,'active','password',?,?,?,?,?,?,CASE WHEN ?=1 THEN CURRENT_TIMESTAMP ELSE NULL END)`).bind(id,email,name,legacyRole,role,path.universityId,path.collegeId,path.departmentId,path.phaseId,path.sectionId,auth.uid,isOwner?1:0),
+      env.DB.prepare(`INSERT INTO users(id,email,name,role,account_role,account_status,auth_provider,university_id,college_id,department_id,phase_id,section_id,firebase_uid,email_verified_at) VALUES(?,?,?,'student','student','active','password',?,?,?,?,?,?,NULL)`).bind(id,email,name,path.universityId,path.collegeId,path.departmentId,path.phaseId,path.sectionId,auth.uid),
       env.DB.prepare(`INSERT INTO user_identities(provider,provider_user_id,user_id,email) VALUES('password',?,?,?)`).bind(auth.uid,id,email),
-      env.DB.prepare(`INSERT INTO audit_logs(entity,entity_id,action,by_user_id,details_json) VALUES('user',?,'register_firebase',?,?)`).bind(id,id,JSON.stringify({provider:'firebase',role}))
+      env.DB.prepare(`INSERT INTO audit_logs(entity,entity_id,action,by_user_id,details_json) VALUES('user',?,'register_firebase',?,?)`).bind(id,id,JSON.stringify({provider:'firebase',role:'student'}))
     ])}catch{await firebaseDeleteAccount(env,auth.idToken);return fail('EMAIL_EXISTS','البريد مستخدم بالفعل؛ سجّل الدخول أو استخدم بريدًا آخر',409)}
-    if(!isOwner){
-      try{await firebaseSendVerification(env,auth.idToken)}catch{await env.DB.batch([env.DB.prepare(`DELETE FROM user_identities WHERE user_id=?`).bind(id),env.DB.prepare(`DELETE FROM users WHERE id=?`).bind(id)]);await firebaseDeleteAccount(env,auth.idToken);return fail('EMAIL_DELIVERY_FAILED','تعذر إرسال رسالة التحقق من Google؛ لم يتم حفظ الحساب',503)}
-    }
-    await recordAccountEvent(env,request,{userId:id,accountCode:id,email,eventType:'register',details:{provider:'firebase',autoActivated:true,role}});
-    return json({pendingVerification:!isOwner,message:isOwner?'تم إنشاء حساب المالك بنجاح؛ يمكنك تسجيل الدخول الآن':'أرسل Google رابط تحقق إلى بريدك. بعد التحقق يمكنك الدخول مباشرة إلى المنصة'},202);
+    try{await firebaseSendVerification(env,auth.idToken)}catch{await env.DB.batch([env.DB.prepare(`DELETE FROM user_identities WHERE user_id=?`).bind(id),env.DB.prepare(`DELETE FROM users WHERE id=?`).bind(id)]);await firebaseDeleteAccount(env,auth.idToken);return fail('EMAIL_DELIVERY_FAILED','تعذر إرسال رسالة التحقق من Google؛ لم يتم حفظ الحساب',503)}
+    await recordAccountEvent(env,request,{userId:id,accountCode:id,email,eventType:'register',details:{provider:'firebase',autoActivated:true,role:'student'}});
+    return json({pendingVerification:true,message:'أرسل Google رابط تحقق إلى بريدك. بعد التحقق يمكنك الدخول مباشرة إلى المنصة'},202);
   }
 
   // Keep links issued before the Firebase migration valid.
@@ -169,52 +210,50 @@ export async function handleAuthApi(request,env,url,user){
   }
 
   if(url.pathname==='/api/auth/login'&&request.method==='POST'){
-    const parsed=await value(request);if(parsed.response)return parsed.response;const data=parsed.data;const email=normalizeEmail(data?.email);const emailKey=await authRateKey(email);const ipKey=await authRateKey(request.headers.get('cf-connecting-ip')||'unknown');const [emailLimit,ipLimit]=await Promise.all([enforceRateLimit(env,`auth:login:email:${emailKey}`,8,900),enforceRateLimit(env,`auth:login:ip:${ipKey}`,30,900)]);if(!emailLimit.allowed||!ipLimit.allowed)return fail('RATE_LIMITED','محاولات دخول كثيرة؛ حاول لاحقًا',429,{'retry-after':String(Math.max(emailLimit.retryAfter,ipLimit.retryAfter))});
-    const ownerEmails=new Set(String(env.OWNER_EMAILS||'hussein2004810@gmail.com').split(',').map(s=>s.trim().toLowerCase()).filter(Boolean));
-    const isOwner=ownerEmails.has(email);
-    const passwordStr=String(data?.password||'');
-    let account=await loadPasswordAccount(env,email);
-    let authenticated=null;
+    const parsed=await value(request);if(parsed.response)return parsed.response;
+    const data=parsed.data;
+    const email=normalizeEmail(data?.email);
+    const emailKey=await authRateKey(email);
+    const ipKey=await authRateKey(request.headers.get('cf-connecting-ip')||'unknown');
+    const [emailLimit,ipLimit]=await Promise.all([
+      enforceRateLimit(env,`auth:login:email:${emailKey}`,8,900),
+      enforceRateLimit(env,`auth:login:ip:${ipKey}`,30,900)
+    ]);
+    if(!emailLimit.allowed||!ipLimit.allowed)return fail('RATE_LIMITED','محاولات دخول كثيرة؛ حاول لاحقًا',429,{'retry-after':String(Math.max(emailLimit.retryAfter,ipLimit.retryAfter))});
 
-    if(!account && isOwner){
-      let auth=null;
-      try{
-        auth=await firebaseSignIn(env,email,passwordStr);
-      }catch(err){
-        if(isFirebaseError(err,'EMAIL_NOT_FOUND')){
-          try{auth=await firebaseSignUp(env,email,passwordStr)}catch{}
-        }
-      }
-      const pwdRecord=await createPasswordRecord(passwordStr,env);
-      const uid=auth?.uid||`owner-${crypto.randomUUID()}`;
-      const id=crypto.randomUUID();
-      await env.DB.batch([
-        env.DB.prepare(`INSERT INTO users(id,email,name,role,account_role,account_status,auth_provider,password_hash,password_salt,password_iterations,password_peppered,firebase_uid,email_verified_at) VALUES(?,?,?,'admin','owner','active','hybrid',?,?,?,?,?,CURRENT_TIMESTAMP)`).bind(id,email,'حسين ماجد',pwdRecord.hash,pwdRecord.salt,pwdRecord.iterations,pwdRecord.peppered,uid),
-        env.DB.prepare(`INSERT OR REPLACE INTO user_identities(provider,provider_user_id,user_id,email) VALUES('password',?,?,?)`).bind(uid,id,email),
-        env.DB.prepare(`INSERT INTO audit_logs(entity,entity_id,action,by_user_id,details_json) VALUES('user',?,'owner_provision',?,?)`).bind(id,id,JSON.stringify({provider:auth?'firebase':'password_local'}))
-      ]);
-      account=await loadPasswordAccount(env,email);
-      authenticated={provider:auth?'firebase':'password',emailVerified:true};
-    } else if(account) {
+    const passwordStr=String(data?.password||'');
+    const account=await loadPasswordAccount(env,email);
+    let authenticated=null;
+    if(account){
       try{authenticated=await authenticateWithFirebase(env,account,passwordStr)}catch{authenticated=null}
-      if(isOwner && (!authenticated || authenticated.invalid || authenticated.error)){
-        let localMatch=false;
-        if(account.password_hash) localMatch=await verifyPassword(passwordStr,account,env);
-        if(localMatch || !account.password_hash){
-          const pwdRecord=await createPasswordRecord(passwordStr,env);
-          await env.DB.prepare(`UPDATE users SET password_hash=?,password_salt=?,password_iterations=?,password_peppered=?,auth_provider='hybrid',account_role='owner',role='admin',account_status='active',email_verified_at=COALESCE(email_verified_at,CURRENT_TIMESTAMP),updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(pwdRecord.hash,pwdRecord.salt,pwdRecord.iterations,pwdRecord.peppered,account.id).run();
-          authenticated={provider:'password_local',emailVerified:true};
-          account=await loadPasswordAccount(env,email);
-        }
-      }
     }
-    if(!account||!authenticated||authenticated.invalid){await recordAccountEvent(env,request,{userId:account?.id||null,accountCode:account?.id||null,email,eventType:'login_failure',outcome:'failure',details:{reason:'invalid_credentials'}});return fail('INVALID_CREDENTIALS','البريد أو كلمة المرور غير صحيحة',401)}if(authenticated.error)return authenticated.error;
-    if(isOwner&&account.account_role!=='owner'){
-      await env.DB.prepare(`UPDATE users SET account_role='owner',role='admin',account_status='active',updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(account.id).run();
-      account.account_role='owner';account.account_status='active';
+    if(!account||!authenticated||authenticated.invalid){
+      await recordAccountEvent(env,request,{userId:account?.id||null,accountCode:account?.id||null,email,eventType:'login_failure',outcome:'failure',details:{reason:'invalid_credentials'}});
+      return fail('INVALID_CREDENTIALS','البريد أو كلمة المرور غير صحيحة',401);
     }
-    if(!authenticated.emailVerified&&account.account_role==='student'){await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email,eventType:'login_failure',outcome:'failure',details:{reason:'email_unverified'}});return fail('EMAIL_UNVERIFIED','يجب توثيق البريد من رسالة Google أولًا',403)}if(account.account_status==='pending'&&account.account_role==='student'){await env.DB.prepare(`UPDATE users SET account_status='active',updated_at=CURRENT_TIMESTAMP WHERE id=? AND account_status='pending'`).bind(account.id).run();account.account_status='active';await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email,eventType:'account_status',details:{status:'active',reason:'student_auto_activation'}})}if(account.account_status==='pending'){await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email,eventType:'login_failure',outcome:'failure',details:{reason:'pending'}});return fail('ACCOUNT_PENDING','الحساب بانتظار تفعيل الإدارة',403)}if(account.account_status==='suspended'){await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email,eventType:'login_failure',outcome:'failure',details:{reason:'suspended'}});return fail('ACCOUNT_SUSPENDED','الحساب موقوف؛ تواصل مع المشرف',403)}
-    const session=await createSession(env,account.id,request);await env.DB.prepare(`UPDATE users SET last_login_at=CURRENT_TIMESTAMP,updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(account.id).run();if(authenticated.migrated)await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email,eventType:'firebase_migration',details:{provider:'firebase'}});await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email,eventType:'login_success',details:{provider:authenticated.provider,migrated:Boolean(authenticated.migrated)}});return json({user:{id:account.id,email:account.email,name:account.name,role:account.account_role}},200,{'set-cookie':session.cookie});
+    if(authenticated.error)return authenticated.error;
+    if(!authenticated.emailVerified&&account.account_role==='student'){
+      await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email,eventType:'login_failure',outcome:'failure',details:{reason:'email_unverified'}});
+      return fail('EMAIL_UNVERIFIED','يجب توثيق البريد من رسالة Google أولًا',403);
+    }
+    if(account.account_status==='pending'&&account.account_role==='student'){
+      await env.DB.prepare(`UPDATE users SET account_status='active',updated_at=CURRENT_TIMESTAMP WHERE id=? AND account_status='pending'`).bind(account.id).run();
+      account.account_status='active';
+      await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email,eventType:'account_status',details:{status:'active',reason:'student_auto_activation'}});
+    }
+    if(account.account_status==='pending'){
+      await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email,eventType:'login_failure',outcome:'failure',details:{reason:'pending'}});
+      return fail('ACCOUNT_PENDING','الحساب بانتظار تفعيل الإدارة',403);
+    }
+    if(account.account_status==='suspended'){
+      await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email,eventType:'login_failure',outcome:'failure',details:{reason:'suspended'}});
+      return fail('ACCOUNT_SUSPENDED','الحساب موقوف؛ تواصل مع المشرف',403);
+    }
+    const session=await createSession(env,account.id,request);
+    await env.DB.prepare(`UPDATE users SET last_login_at=CURRENT_TIMESTAMP,updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(account.id).run();
+    if(authenticated.migrated)await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email,eventType:'firebase_migration',details:{provider:'firebase'}});
+    await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email,eventType:'login_success',details:{provider:authenticated.provider,migrated:Boolean(authenticated.migrated)}});
+    return json({user:{id:account.id,email:account.email,name:account.name,role:account.account_role}},200,{'set-cookie':session.cookie});
   }
 
   if(url.pathname==='/api/auth/resend-verification'&&request.method==='POST'){
