@@ -4,5 +4,4 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './RealAppV2';
 import './styles.css';
 import './theme.css';
-import './light-theme.css';
 ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><BrowserRouter><App/></BrowserRouter></React.StrictMode>);
