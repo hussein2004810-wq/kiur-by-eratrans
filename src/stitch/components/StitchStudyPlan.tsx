@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   Calendar, 
   CheckCircle2, 
@@ -33,15 +33,31 @@ export function StitchStudyPlan() {
 
   const completedCount = tasks.filter(t => t.done).length;
 
-  const weekDays = [
-    { day: 'السبت', date: '10 سبت', progress: '60 / 60', topic: 'باطني: كلى وغدد', completed: true },
-    { day: 'الأحد', date: '11 سبت', progress: '50 / 50', topic: 'جراحة عامة + بلوك', completed: true },
-    { day: 'الإثنين', date: '12 سبت', progress: '60 / 60', topic: 'أمراض نساء وتوليد', completed: true },
-    { day: 'الثلاثاء', date: '13 سبت', progress: '60 / 60', topic: 'طب الأطفال + نمو', completed: true },
-    { day: 'الأربعاء', date: 'اليوم', progress: `${completedCount * 15} / 60`, topic: 'قلب + فارما + ECG', active: true },
-    { day: 'الخميس', date: '15 سبت', progress: '0 / 60', topic: 'باطني + جراحة عظام', upcoming: true },
-    { day: 'الجمعة', date: '16 سبت', progress: 'إجازة', topic: 'راحة واستشفاء سريري', rest: true },
-  ];
+  const weekDays = useMemo(() => {
+    const today = new Date();
+    const currentDayIdx = today.getDay(); // 0 = Sunday, 6 = Saturday
+    const days = [];
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(today);
+      const diff = i - ((currentDayIdx + 1) % 7);
+      d.setDate(today.getDate() + diff);
+      const dayName = new Intl.DateTimeFormat('ar-IQ', { weekday: 'long' }).format(d);
+      const dateFormatted = new Intl.DateTimeFormat('ar-IQ', { day: 'numeric', month: 'short' }).format(d);
+      const isToday = d.toDateString() === today.toDateString();
+      const isPast = d < today && !isToday;
+
+      days.push({
+        day: dayName,
+        date: isToday ? 'اليوم' : dateFormatted,
+        progress: isPast ? 'مكتمل' : isToday ? `${completedCount * 15} / 60` : '0 / 60',
+        topic: tests[i % (tests.length || 1)]?.subject || 'مراجعة سريرية',
+        completed: isPast,
+        active: isToday,
+        upcoming: !isPast && !isToday
+      });
+    }
+    return days;
+  }, [completedCount, tests]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
