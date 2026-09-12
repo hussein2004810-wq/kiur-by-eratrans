@@ -14,7 +14,6 @@ import StitchReviewCenter from './components/StitchReviewCenter';
 import StitchRemediationPlan from './components/StitchRemediationPlan';
 import StitchAnalytics from './components/StitchAnalytics';
 import StitchPricing from './components/StitchPricing';
-import StitchAdminSuite from './components/StitchAdminSuite';
 import StitchPublicLanding from './components/StitchPublicLanding';
 import { ClinicalGlimpsesLibrary, ClinicalGlimpsesSpotlight } from '../ClinicalGlimpses';
 import { HeartPulse } from 'lucide-react';
@@ -158,17 +157,7 @@ export function StitchApp({
         {view === 'history' && historyElement}
         {view === 'points' && pointsElement}
         {view === 'profile' && profileElement}
-        {view === 'admin' && (
-          <div style={{ marginTop: '12px' }}>
-            <StitchAdminSuite />
-            {adminElement && (
-              <div style={{ marginTop: '32px' }}>
-                <h4 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '12px' }}>سجلات النظام وإدارة الاستيراد المباشر:</h4>
-                {adminElement}
-              </div>
-            )}
-          </div>
-        )}
+        {view === 'admin' && adminElement}
       </main>
 
       {/* Global Modals & Overlays */}

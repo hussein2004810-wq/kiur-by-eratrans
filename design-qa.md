@@ -59,3 +59,17 @@ A separate crop was not required: the full mobile image clearly resolves every n
 - Authenticated visual capture is blocked in the local Sites preview because its local identity did not establish an application account; the browser remained at the sign-in gate. No production deployment was used as a workaround because this iteration is awaiting owner approval.
 
 final result: blocked
+
+## Google Stitch administration workspace — 2026-09-13
+
+- Replaced the duplicated administration experience with one real-data workspace. The decorative `StitchAdminSuite` and the former `admin-shell.css` navigation were removed.
+- The new responsive workspace uses the same Google Stitch surface, primary, outline, typography, radius, and elevation tokens as the public application.
+- Owner, admin, and academic-staff destinations are generated from the existing role and permission checks. Hidden destinations are not invented or exposed by the visual shell.
+- The overview reads the real `/api/admin/tests`, `/api/admin/metrics`, and `/api/admin/audit` responses. Non-owner metrics display an honest unavailable state instead of synthetic values.
+- All existing real managers remain wired: tests, imports, academic catalog, students and exports, academic-path requests, gamification, clinical glimpses, media library, accounts, bans, and logs.
+- A scoped compatibility layer maps older manager controls to the Stitch light/dark tokens, including inputs, tables, cards, destructive actions, success/error states, and export/import actions.
+- Current-run browser QA covered the operational overview, navigation into test management, light theme, dark theme, and a 390×844 iframe viewport. No horizontal overflow was reported in the dark desktop check, and the phone layout reduced to a sticky vertical section picker with two-column metrics and one-column actions.
+- Accessibility review confirmed named navigation, current-page state, announced mobile expansion state, 44px primary controls, semantic headings, and reduced-motion support. A nested `main` landmark found during QA was replaced with a named region.
+- TypeScript, production build, performance budget, 500-concurrent-request coverage, security, authentication, scoped authorization, governance, catalog, bans, gamification, academic-change, and Stitch contract suites passed.
+
+final result: passed

@@ -11,7 +11,7 @@ const requiredFiles = [
   'src/stitch/components/StitchRemediationPlan.tsx',
   'src/stitch/components/StitchAnalytics.tsx',
   'src/stitch/components/StitchPricing.tsx',
-  'src/stitch/components/StitchAdminSuite.tsx',
+  'src/stitch/components/StitchAdminWorkspace.tsx',
   'src/stitch/components/StitchOnboardingModal.tsx',
   'src/stitch/components/StitchPublicLanding.tsx',
   'src/stitch/components/StitchSidebar.tsx',

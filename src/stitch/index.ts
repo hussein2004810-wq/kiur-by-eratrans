@@ -13,6 +13,6 @@ export * from './components/StitchReviewCenter';
 export * from './components/StitchRemediationPlan';
 export * from './components/StitchAnalytics';
 export * from './components/StitchPricing';
-export * from './components/StitchAdminSuite';
+export * from './components/StitchAdminWorkspace';
 export * from './components/StitchPublicLanding';
 export * from './components/StitchOnboardingModal';
