@@ -56,10 +56,10 @@ export function StitchDashboard() {
 
           {/* 3 Quick Action Cards */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px' }}>
-            {/* Card 1: Custom Session */}
+            {/* Card 1: Q-Bank Session Builder */}
             <button
               type="button"
-              onClick={() => openSmartReview('custom')}
+              onClick={() => setView('qbank')}
               style={{
                 padding: '16px',
                 borderRadius: 'var(--stitch-radius-lg)',
@@ -89,18 +89,18 @@ export function StitchDashboard() {
               </div>
               <div>
                 <b style={{ display: 'block', fontSize: '13px', color: 'var(--stitch-text-primary)', marginBottom: '3px' }}>
-                  جلسة مخصصة جديدة
+                  بنك الأسئلة والمحاكاة
                 </b>
                 <small style={{ fontSize: '11px', color: 'var(--stitch-text-muted)', lineHeight: '1.4' }}>
-                  تحديد التخصص وعدد الأسئلة والوقت
+                  تخصيص البلوك وتحديد التخصص والنمط
                 </small>
               </div>
             </button>
 
-            {/* Card 2: Review Incorrect */}
+            {/* Card 2: Review Center & Remediation */}
             <button
               type="button"
-              onClick={() => openSmartReview('flashcards')}
+              onClick={() => setView('review-center')}
               style={{
                 padding: '16px',
                 borderRadius: 'var(--stitch-radius-lg)',
@@ -136,23 +136,23 @@ export function StitchDashboard() {
                   background: 'var(--stitch-error)',
                   color: '#fff'
                 }}>
-                  18 سؤالاً
+                  13 ثغرة
                 </span>
               </div>
               <div>
                 <b style={{ display: 'block', fontSize: '13px', color: 'var(--stitch-text-primary)', marginBottom: '3px' }}>
-                  مراجعة أخطاء الأمس
+                  مركز مراجعة الأخطاء
                 </b>
                 <small style={{ fontSize: '11px', color: 'var(--stitch-text-muted)', lineHeight: '1.4' }}>
-                  أسئلة أخطأت بها في المحاولات السابقة
+                  خطة تعافي سريري موجهة لسد الثغرات
                 </small>
               </div>
             </button>
 
-            {/* Card 3: Daily Study Tasks */}
+            {/* Card 3: SMLE Mock Exam */}
             <button
               type="button"
-              onClick={() => setView('study-plan')}
+              onClick={() => setView('exam-player')}
               style={{
                 padding: '16px',
                 borderRadius: 'var(--stitch-radius-lg)',
@@ -181,10 +181,50 @@ export function StitchDashboard() {
               </div>
               <div>
                 <b style={{ display: 'block', fontSize: '13px', color: 'var(--stitch-text-primary)', marginBottom: '3px' }}>
-                  مهام خطة اليوم
+                  محاكاة SMLE الموقوتة
                 </b>
                 <small style={{ fontSize: '11px', color: 'var(--stitch-text-muted)', lineHeight: '1.4' }}>
-                  3 مهام دراسية إكلينيكية مجدولة
+                  بلوك تجريبي 40 سؤالاً ببيئة Prometric
+                </small>
+              </div>
+            </button>
+
+            {/* Card 4: Analytics */}
+            <button
+              type="button"
+              onClick={() => setView('analytics')}
+              style={{
+                padding: '16px',
+                borderRadius: 'var(--stitch-radius-lg)',
+                background: 'var(--stitch-bg-surface)',
+                border: '1px solid var(--stitch-border)',
+                textAlign: 'right',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                gap: '14px',
+                cursor: 'pointer',
+                boxShadow: 'var(--stitch-shadow-sm)',
+                minHeight: '140px'
+              }}
+            >
+              <div style={{
+                width: '38px',
+                height: '38px',
+                borderRadius: '10px',
+                background: 'var(--stitch-surface-container-high)',
+                color: 'var(--stitch-primary)',
+                display: 'grid',
+                placeItems: 'center'
+              }}>
+                <BarChart3 size={20} />
+              </div>
+              <div>
+                <b style={{ display: 'block', fontSize: '13px', color: 'var(--stitch-text-primary)', marginBottom: '3px' }}>
+                  تحليلات الأداء والجاهزية
+                </b>
+                <small style={{ fontSize: '11px', color: 'var(--stitch-text-muted)', lineHeight: '1.4' }}>
+                  مقارنة مع الدفعة والمئين التنافسي
                 </small>
               </div>
             </button>

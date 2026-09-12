@@ -69,34 +69,37 @@ export function StitchHero() {
           <button
             type="button"
             className="stitchHeroResumeBtn"
-            onClick={() => {
-              if (firstTest) {
-                startExam(firstTest.id);
-              } else {
-                setView('tests');
-              }
-            }}
+            onClick={() => setView('exam-player')}
           >
             <Play size={18} fill="currentColor" />
-            <span>{firstTest ? `بدء اختبار: ${firstTest.title.slice(0, 28)}...` : 'استئناف الجلسة الحالية (22/40)'}</span>
+            <span>استئناف بلوك SMLE المحاكي الموقوت</span>
           </button>
 
           <button
             type="button"
             className="stitchHeroSecondaryBtn"
-            onClick={() => openSmartReview('flashcards')}
-          >
-            <Brain size={16} />
-            <span>المراجعة الذكية والتكرار (SM-2)</span>
-          </button>
-
-          <button
-            type="button"
-            className="stitchHeroSecondaryBtn"
-            onClick={() => setView('tests')}
+            onClick={() => setView('qbank')}
           >
             <ClipboardList size={16} />
-            <span>بنك الأسئلة الشامل ({tests.length})</span>
+            <span>بنك الأسئلة الطبي (Q-Bank)</span>
+          </button>
+
+          <button
+            type="button"
+            className="stitchHeroSecondaryBtn"
+            onClick={() => setView('tutor-player')}
+          >
+            <Brain size={16} />
+            <span>وضع التدريب السريري</span>
+          </button>
+
+          <button
+            type="button"
+            className="stitchHeroSecondaryBtn"
+            onClick={() => setView('remediation')}
+          >
+            <Sparkles size={16} />
+            <span>خطة التعافي وسد الثغرات</span>
           </button>
         </div>
       </div>

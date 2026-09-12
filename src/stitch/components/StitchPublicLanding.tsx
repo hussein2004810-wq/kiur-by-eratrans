@@ -73,39 +73,41 @@ export type GuestPath = {
 };
 
 interface StitchPublicLandingProps {
-  onStartAuth: () => void;
-  catalog: Catalog | null;
-  tests: PublicTest[];
-  path: GuestPath;
-  onSelectPath: (key: keyof GuestPath, value: string) => void;
-  search: string;
-  onSearchChange: (value: string) => void;
-  visibleTests: PublicTest[];
-  loading: boolean;
-  onStartTest: (id: string) => void;
+  onStartAuth?: () => void;
+  onStart?: () => void;
+  catalog?: Catalog | null;
+  tests?: PublicTest[];
+  path?: GuestPath;
+  onSelectPath?: (key: keyof GuestPath, value: string) => void;
+  search?: string;
+  onSearchChange?: (value: string) => void;
+  visibleTests?: PublicTest[];
+  loading?: boolean;
+  onStartTest?: (id: string) => void;
 }
 
 export default function StitchPublicLanding({
   onStartAuth,
-  catalog,
-  tests,
-  path,
-  onSelectPath,
-  search,
-  onSearchChange,
-  visibleTests,
-  loading,
-  onStartTest,
+  onStart,
+  catalog = null,
+  tests = [],
+  path = { universityId: '', collegeId: '', departmentId: '', phaseId: '', sectionId: '', subjectId: '', lectureId: '' },
+  onSelectPath = () => {},
+  search = '',
+  onSearchChange = () => {},
+  visibleTests = [],
+  loading = false,
+  onStartTest = () => {},
 }: StitchPublicLandingProps) {
   const [vignetteAnswer, setVignetteAnswer] = useState<'A' | 'B' | null>('B');
   const [faqOpen, setFaqOpen] = useState<number | null>(0);
 
-  const colleges = catalog?.colleges.filter(x => x.universityId === path.universityId) || [];
-  const departments = catalog?.departments.filter(x => x.collegeId === path.collegeId) || [];
-  const phases = catalog?.phases.filter(x => x.departmentId === path.departmentId) || [];
-  const sections = catalog?.sections.filter(x => x.phaseId === path.phaseId) || [];
-  const subjects = catalog?.subjects.filter(x => x.phaseId === path.phaseId) || [];
-  const lectures = catalog?.lectures.filter(x => x.subjectId === path.subjectId) || [];
+  const colleges = catalog?.colleges?.filter(x => x.universityId === path.universityId) || [];
+  const departments = catalog?.departments?.filter(x => x.collegeId === path.collegeId) || [];
+  const phases = catalog?.phases?.filter(x => x.departmentId === path.departmentId) || [];
+  const sections = catalog?.sections?.filter(x => x.phaseId === path.phaseId) || [];
+  const subjects = catalog?.subjects?.filter(x => x.phaseId === path.phaseId) || [];
+  const lectures = catalog?.lectures?.filter(x => x.subjectId === path.subjectId) || [];
 
   const faqs = [
     {
@@ -179,14 +181,14 @@ export default function StitchPublicLanding({
             <button
               type="button"
               className="stitchBtn stitchBtnGhost"
-              onClick={onStartAuth}
+              onClick={() => onStart ? onStart() : onStartAuth?.()}
             >
               تسجيل الدخول
             </button>
             <button
               type="button"
               className="stitchBtn stitchBtnPrimary"
-              onClick={onStartAuth}
+              onClick={() => onStart ? onStart() : onStartAuth?.()}
             >
               <Sparkles size={16} />
               <span>ابدأ مجاناً</span>
@@ -216,7 +218,7 @@ export default function StitchPublicLanding({
               <button
                 type="button"
                 className="stitchBtn stitchBtnLgPrimary"
-                onClick={onStartAuth}
+                onClick={() => onStart ? onStart() : onStartAuth?.()}
               >
                 <span>ابدأ مجاناً الآن</span>
                 <ChevronLeft size={20} />

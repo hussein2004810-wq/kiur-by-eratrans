@@ -6,4 +6,13 @@ export * from './components/StitchHero';
 export * from './components/StitchDashboard';
 export * from './components/StitchStudyPlan';
 export * from './components/StitchNotes';
-
+export * from './components/StitchQBank';
+export * from './components/StitchTutorPlayer';
+export * from './components/StitchExamPlayer';
+export * from './components/StitchReviewCenter';
+export * from './components/StitchRemediationPlan';
+export * from './components/StitchAnalytics';
+export * from './components/StitchPricing';
+export * from './components/StitchAdminSuite';
+export * from './components/StitchPublicLanding';
+export * from './components/StitchOnboardingModal';

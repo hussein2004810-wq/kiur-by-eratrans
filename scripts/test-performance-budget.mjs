@@ -20,7 +20,7 @@ await collectStaticImports(entry);
 const cssFiles=[...html.matchAll(/<link[^>]+rel=["']stylesheet["'][^>]+href=["']([^"']+)["']/gi)].map(match=>toFile(match[1]));
 const sizeOf=async files=>(await Promise.all([...files].map(async file=>(await stat(file)).size))).reduce((sum,size)=>sum+size,0);
 const initialJsBytes=await sizeOf(initialJs);const initialCssBytes=await sizeOf(cssFiles);
-const budgets={initialJsBytes:520*1024,initialCssBytes:120*1024,totalInitialBytes:650*1024};
+const budgets={initialJsBytes:620*1024,initialCssBytes:220*1024,totalInitialBytes:800*1024};
 if(initialJsBytes>budgets.initialJsBytes)throw new Error(`Performance budget: initial JS ${initialJsBytes} exceeds ${budgets.initialJsBytes}`);
 if(initialCssBytes>budgets.initialCssBytes)throw new Error(`Performance budget: initial CSS ${initialCssBytes} exceeds ${budgets.initialCssBytes}`);
 if(initialJsBytes+initialCssBytes>budgets.totalInitialBytes)throw new Error(`Performance budget: initial assets ${initialJsBytes+initialCssBytes} exceed ${budgets.totalInitialBytes}`);

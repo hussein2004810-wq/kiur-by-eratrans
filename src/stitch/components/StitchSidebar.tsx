@@ -43,24 +43,57 @@ export function StitchSidebar() {
 
         <button
           type="button"
-          className={`stitchNavItem ${view === 'tests' ? 'active' : ''}`}
-          onClick={() => setView('tests')}
+          className={`stitchNavItem ${view === 'qbank' || view === 'tests' ? 'active' : ''}`}
+          onClick={() => setView('qbank')}
         >
           <div className="stitchNavItemInner">
             <ClipboardList size={18} />
-            <span>بيئة الاختبارات (QBank)</span>
+            <span>بنك الأسئلة الطبي (Q-Bank)</span>
           </div>
           {tests.length > 0 && <span className="stitchNavBadge">{tests.length}</span>}
         </button>
 
         <button
           type="button"
-          className="stitchNavItem"
-          onClick={() => openSmartReview('flashcards')}
+          className={`stitchNavItem ${view === 'tutor-player' ? 'active' : ''}`}
+          onClick={() => setView('tutor-player')}
         >
           <div className="stitchNavItemInner">
             <Brain size={18} />
-            <span>المراجعة الذكية (SM-2)</span>
+            <span>مشغل الأسئلة (وضع التدريب)</span>
+          </div>
+        </button>
+
+        <button
+          type="button"
+          className={`stitchNavItem ${view === 'exam-player' ? 'active' : ''}`}
+          onClick={() => setView('exam-player')}
+        >
+          <div className="stitchNavItemInner">
+            <Activity size={18} />
+            <span>محاكاة SMLE الموقوتة</span>
+          </div>
+        </button>
+
+        <button
+          type="button"
+          className={`stitchNavItem ${view === 'review-center' ? 'active' : ''}`}
+          onClick={() => setView('review-center')}
+        >
+          <div className="stitchNavItemInner">
+            <RotateCcw size={18} />
+            <span>مركز المراجعة والتعافي</span>
+          </div>
+        </button>
+
+        <button
+          type="button"
+          className={`stitchNavItem ${view === 'analytics' ? 'active' : ''}`}
+          onClick={() => setView('analytics')}
+        >
+          <div className="stitchNavItemInner">
+            <BarChart3 size={18} />
+            <span>تحليلات الأداء والجاهزية</span>
           </div>
         </button>
 
@@ -97,7 +130,18 @@ export function StitchSidebar() {
           </div>
         </button>
 
-        <p className="stitchNavLabel" style={{ marginTop: '8px' }}>التحليل والسجل</p>
+        <p className="stitchNavLabel" style={{ marginTop: '8px' }}>الاشتراكات والسجل</p>
+
+        <button
+          type="button"
+          className={`stitchNavItem ${view === 'pricing' ? 'active' : ''}`}
+          onClick={() => setView('pricing')}
+        >
+          <div className="stitchNavItemInner">
+            <Sparkles size={18} />
+            <span>باقات الاشتراك والترخيص</span>
+          </div>
+        </button>
 
         <button
           type="button"
