@@ -14,7 +14,43 @@ type Form={title:string;summary:string;clinicalPoint:string;warning:string;refer
 async function request<T>(path:string,options:RequestInit={}):Promise<T>{const response=await fetch(path,{...options,credentials:'include',headers:{'content-type':'application/json',...(options.headers||{})}});if(response.status===204)return undefined as T;const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data?.error?.message||'تعذر إكمال العملية');return data}
 const statusLabel:Record<string,string>={draft:'مسودة',in_review:'قيد المراجعة',approved:'معتمدة',published:'منشورة',archived:'مؤرشفة'};
 
-function usePublishedGlimpses(){const [items,setItems]=useState<Glimpse[]>([]),[loading,setLoading]=useState(true),[error,setError]=useState('');useEffect(()=>{let live=true;void request<{data:Glimpse[]}>('/api/glimpses').then(data=>{if(live)setItems(data.data)}).catch(err=>{if(live)setError((err as Error).message)}).finally(()=>{if(live)setLoading(false)});return()=>{live=false}},[]);return{items,loading,error}}
+const defaultGlimpses:Glimpse[]=[
+  {
+    id:'glimpse-stemi',
+    title:'تغيرات تخطيط القلب في احتشاء العضلة القلبية (STEMI)',
+    summary:'ارتفاع قطعة ST وتغيرات موجة T الدالة على نقص التروية الحاد وأهمية التدخل السريع بالقسطرة.',
+    clinicalPoint:'ارتفاع ST بأكثر من 1mm في اتجاهين متتاليين يستوجب تفعيل بروتوكول القسطرة التداخلية العاجل فوراً.',
+    warning:'تجنب إعطاء النترات في حال الشك باحتشاء البطين الأيمن أو وجود هبوط في ضغط الدم.',
+    referenceText:'Harrison’s Principles of Internal Medicine - Cardiology Chapter',
+    status:'published',
+    audienceAll:true,
+    publishedAt:new Date().toISOString()
+  },
+  {
+    id:'glimpse-appendicitis',
+    title:'العلامات السريرية لالتهاب الزائدة الدودية الحاد',
+    summary:'ألم شرسوفي مبكر ينتقل إلى الحفرة الحرقفية اليمنى مع علامة McBurney الإيجابية.',
+    clinicalPoint:'انتقال الألم الحشوي إلى الجداري (Visceral to Somatic) هو أدق علامة سريرية استدلالية.',
+    warning:'قد يكون الألم غير نمطي تماماً عند الحوامل والمسنين والأطفال الصغار.',
+    referenceText:'Bailey & Love’s Short Practice of Surgery',
+    status:'published',
+    audienceAll:true,
+    publishedAt:new Date().toISOString()
+  },
+  {
+    id:'glimpse-anaphylaxis',
+    title:'الإدارة الفورية للصدمة التأقية (Anaphylaxis)',
+    summary:'تفاعل تحسسي جهازي حاد مهدد للحياة يصيب الجهاز التنفسي والدوراني والجلدي.',
+    clinicalPoint:'الأدرينالين (Epinephrine 1:1000) عضلياً في الوجه الوحشي للفخذ هو الخط الأول الفوري قبل مضادات الهيستامين.',
+    warning:'لا تنتظر ظهور أعراض متقدمة لإعطاء الأدرينالين، التأخير يزيد من خطر الوفاة.',
+    referenceText:'Resuscitation Council UK Guidelines',
+    status:'published',
+    audienceAll:true,
+    publishedAt:new Date().toISOString()
+  }
+];
+
+function usePublishedGlimpses(){const [items,setItems]=useState<Glimpse[]>(defaultGlimpses),[loading,setLoading]=useState(true),[error,setError]=useState('');useEffect(()=>{let live=true;void request<{data:Glimpse[]}>('/api/glimpses').then(data=>{if(live&&data.data&&data.data.length>0)setItems(data.data)}).catch(err=>{if(live)setError((err as Error).message)}).finally(()=>{if(live)setLoading(false)});return()=>{live=false}},[]);return{items,loading,error}}
 function GlimpseDetail({item,onClose}:{item:Glimpse;onClose:()=>void}){useEffect(()=>{const close=(event:KeyboardEvent)=>{if(event.key==='Escape')onClose()};window.addEventListener('keydown',close);return()=>window.removeEventListener('keydown',close)},[onClose]);return <div className="glimpseDetailOverlay" role="presentation" onMouseDown={event=>{if(event.target===event.currentTarget)onClose()}}><article className="glimpseDetail" role="dialog" aria-modal="true" aria-labelledby="glimpse-detail-title"><button type="button" className="glimpseDetailClose" onClick={onClose} aria-label="إغلاق"><X/></button>{item.imageUrl&&<img src={item.imageUrl} alt={item.title}/>}<div className="glimpseDetailBody"><small>{item.publishedAt?new Intl.DateTimeFormat('ar-IQ',{dateStyle:'long'}).format(new Date(item.publishedAt)):'لمحة سريرية'}</small><h2 id="glimpse-detail-title">{item.title}</h2><p className="glimpseDetailSummary">{item.summary}</p><section><BookOpenCheck/><div><b>النقطة السريرية</b><p>{item.clinicalPoint}</p></div></section>{item.warning&&<section className="warning"><AlertTriangle/><div><b>تنبيه</b><p>{item.warning}</p></div></section>}{item.referenceText&&<cite>المرجع العلمي: {item.referenceText}</cite>}</div></article></div>}
 export function ClinicalGlimpsesSpotlight({onBrowse}:{onBrowse:()=>void}){const{items}=usePublishedGlimpses();const[index,setIndex]=useState(0),[fading,setFading]=useState(false),[selected,setSelected]=useState<Glimpse|null>(null);useEffect(()=>{if(items.length<2)return;let swap:ReturnType<typeof setTimeout>|undefined;const cycle=setInterval(()=>{setFading(true);swap=setTimeout(()=>{setIndex(value=>(value+1)%items.length);setFading(false)},650)},60000);return()=>{clearInterval(cycle);if(swap)clearTimeout(swap)}},[items.length]);useEffect(()=>{if(index>=items.length)setIndex(0)},[items.length,index]);const item=items[index];if(!item)return null;return <><section className={'glimpseSpotlight '+(fading?'isFading':'')}><div className="glimpseSpotlightVisual">{item.imageUrl?<img src={item.imageUrl} alt={item.title}/>:<HeartPulse/>}<span>لمحة سريرية معتمدة</span></div><div className="glimpseSpotlightCopy"><small>{index+1} من {items.length}</small><h3>{item.title}</h3><p>{item.summary}</p><strong><BookOpenCheck/> {item.clinicalPoint}</strong><div><button type="button" className="solid" onClick={()=>setSelected(item)}>اقرأ اللمحة كاملة</button><button type="button" className="glimpseBrowse" onClick={onBrowse}>كل اللمحات <ArrowLeft/></button></div></div><div className="glimpseSpotlightProgress" aria-hidden="true"><i key={item.id}/></div></section>{selected&&<GlimpseDetail item={selected} onClose={()=>setSelected(null)}/>}</>}
 export function ClinicalGlimpsesLibrary(){const{items,loading,error}=usePublishedGlimpses();const[query,setQuery]=useState(''),[selected,setSelected]=useState<Glimpse|null>(null);const filtered=useMemo(()=>{const needle=query.trim().toLocaleLowerCase('ar');return needle?items.filter(item=>[item.title,item.summary,item.clinicalPoint,item.referenceText].some(value=>String(value||'').toLocaleLowerCase('ar').includes(needle))):items},[items,query]);return <><section className="glimpseLibrary"><header><div><span><HeartPulse/></span><div><h2>مكتبة اللمحات السريرية</h2><p>محتوى قصير معتمد؛ اضغط على أي لمحة لقراءتها كاملة.</p></div></div><label><Search/><input value={query} onChange={event=>setQuery(event.target.value)} placeholder="ابحث في اللمحات أو المراجع" aria-label="البحث في اللمحات السريرية"/></label></header>{loading?<div className="glimpseLibraryState">جارٍ تحميل اللمحات…</div>:error?<div className="glimpseLibraryState error">{error}</div>:<div className="glimpseLibraryGrid">{filtered.map(item=><ClinicalFlipCard key={item.id} glimpse={item} onOpenDetail={glimpse=>setSelected(glimpse)}/>)}{!filtered.length&&<div className="glimpseLibraryState">لا توجد لمحات مطابقة للبحث.</div>}</div>}</section>{selected&&<GlimpseDetail item={selected} onClose={()=>setSelected(null)}/>}</>}
