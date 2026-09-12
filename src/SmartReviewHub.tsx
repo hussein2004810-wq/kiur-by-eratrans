@@ -264,9 +264,9 @@ export default function SmartReviewHub({
                             <img src={currentCard.imageUrl} alt="فحص سريري مصور" />
                           </div>
                         )}
-                        {currentCard.buzzwords.length > 0 && (
+                        {(currentCard.buzzwords || []).length > 0 && (
                           <div className="buzzwordsList">
-                            {currentCard.buzzwords.map(bw => (
+                            {(currentCard.buzzwords || []).map(bw => (
                               <span key={bw} className="buzzwordPill">
                                 <Sparkles size={11} /> {bw}
                               </span>

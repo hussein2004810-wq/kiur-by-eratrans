@@ -165,18 +165,22 @@ function ExamRunner({test,attemptId,onClose,onDone,notify}:{test:TestDetail;atte
     if(seconds===0&&!result)void submit();
   },[seconds]);
 
-  const question=test.questions[current];
+  const question=test.questions&&test.questions.length>0?test.questions[current]:undefined;
 
   const choose=(index:number)=>{
-    setAnswers(value=>({...value,[question.id!]:index}));
-    dirtyRef.current.add(question.id!);
+    if(!question)return;
+    const qId=question.id||`q-${current}`;
+    setAnswers(value=>({...value,[qId]:index}));
+    dirtyRef.current.add(qId);
     scheduleFlush();
   };
 
   const fill=(value:string)=>{
-    setAnswers(currentAnswers=>({...currentAnswers,[question.id!]:value}));
+    if(!question)return;
+    const qId=question.id||`q-${current}`;
+    setAnswers(currentAnswers=>({...currentAnswers,[qId]:value}));
     if(!value.trim())return;
-    dirtyRef.current.add(question.id!);
+    dirtyRef.current.add(qId);
     scheduleFlush();
   };
 
@@ -185,7 +189,7 @@ function ExamRunner({test,attemptId,onClose,onDone,notify}:{test:TestDetail;atte
       if(event.key==='Escape'&&!busy){onClose();return}
       const tag=(event.target as HTMLElement)?.tagName?.toLowerCase();
       if(tag==='input'||tag==='textarea')return;
-      if(question&&question.questionType!=='fill_blank'){
+      if(question&&question.questionType!=='fill_blank'&&Array.isArray(question.options)){
         const num=parseInt(event.key,10);
         if(!isNaN(num)&&num>=1&&num<=question.options.length){
           event.preventDefault();
@@ -250,7 +254,7 @@ function ExamRunner({test,attemptId,onClose,onDone,notify}:{test:TestDetail;atte
         </article>)}
       </section>:<div className="perfectResult"><CheckCircle2/> جميع إجاباتك صحيحة.</div>}
       <button className="solid" onClick={onClose}>العودة إلى المنصة</button>
-    </div>:<div className="modalBody">
+    </div>:!question?<div className="modalBody"><div className="empty small"><FileQuestion/><p>لا توجد أسئلة متاحة في هذا الاختبار.</p><button className="solid" onClick={onClose}>العودة للمنصة</button></div></div>:<div className="modalBody">
       <div className="questionProgress">
         <span>السؤال {current+1} من {test.questions.length}</span>
         <div className="bar" role="progressbar" aria-label="تقدم الاختبار" aria-valuemin={1} aria-valuemax={test.questions.length} aria-valuenow={current+1}>
@@ -265,9 +269,9 @@ function ExamRunner({test,attemptId,onClose,onDone,notify}:{test:TestDetail;atte
           <h2>{question.text}</h2>
           {question.questionType==='fill_blank'?<label className="fillAnswer">
             <span>اكتب الإجابة</span>
-            <input value={String(answers[question.id!]||'')} onChange={event=>fill(event.target.value)} maxLength={500}/>
+            <input value={String(answers[question.id||`q-${current}`]||'')} onChange={event=>fill(event.target.value)} maxLength={500}/>
           </label>:<div className="options" role="radiogroup" aria-label="خيارات الإجابة">
-            {question.options.map((option,index)=><button key={index} role="radio" aria-checked={answers[question.id!]===index} className={answers[question.id!]===index?'selected':''} onClick={()=>choose(index)}>
+            {(question.options||[]).map((option,index)=><button key={index} role="radio" aria-checked={answers[question.id||`q-${current}`]===index} className={answers[question.id||`q-${current}`]===index?'selected':''} onClick={()=>choose(index)}>
               <span className="optionHotkey">{index+1}</span><i aria-hidden="true"/>{option}
             </button>)}
           </div>}
@@ -276,9 +280,9 @@ function ExamRunner({test,attemptId,onClose,onDone,notify}:{test:TestDetail;atte
         <h2>{question.text}</h2>
         {question.questionType==='fill_blank'?<label className="fillAnswer">
           <span>اكتب الإجابة</span>
-          <input value={String(answers[question.id!]||'')} onChange={event=>fill(event.target.value)} maxLength={500}/>
+          <input value={String(answers[question.id||`q-${current}`]||'')} onChange={event=>fill(event.target.value)} maxLength={500}/>
         </label>:<div className="options" role="radiogroup" aria-label="خيارات الإجابة">
-          {question.options.map((option,index)=><button key={index} role="radio" aria-checked={answers[question.id!]===index} className={answers[question.id!]===index?'selected':''} onClick={()=>choose(index)}>
+          {(question.options||[]).map((option,index)=><button key={index} role="radio" aria-checked={answers[question.id||`q-${current}`]===index} className={answers[question.id||`q-${current}`]===index?'selected':''} onClick={()=>choose(index)}>
             <span className="optionHotkey">{index+1}</span><i aria-hidden="true"/>{option}
           </button>)}
         </div>}
@@ -286,7 +290,7 @@ function ExamRunner({test,attemptId,onClose,onDone,notify}:{test:TestDetail;atte
       <footer>
         <button className="secondary" onClick={onClose}>حفظ وخروج</button>
         <button className="secondary" disabled={current===0} onClick={()=>navigateStep(-1)}>السابق</button>
-        <button className="solid" disabled={answers[question.id!]===undefined||answers[question.id!]===''||busy} onClick={()=>current===test.questions.length-1?void submit():navigateStep(1)}>
+        <button className="solid" disabled={answers[question.id||`q-${current}`]===undefined||answers[question.id||`q-${current}`]===''||busy} onClick={()=>current===test.questions.length-1?void submit():navigateStep(1)}>
           {current===test.questions.length-1?'إنهاء وتسليم':'التالي'}
         </button>
       </footer>

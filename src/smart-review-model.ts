@@ -88,7 +88,19 @@ export function extractBuzzwords(text: string): string[] {
 export function getStoredCards(): Record<string, SpacedCard> {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : {};
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object') return {};
+    for (const key of Object.keys(parsed)) {
+      const card = parsed[key];
+      if (card && typeof card === 'object') {
+        if (!Array.isArray(card.buzzwords)) card.buzzwords = [];
+        if (typeof card.interval !== 'number') card.interval = 0;
+        if (typeof card.easeFactor !== 'number') card.easeFactor = DEFAULT_EASE_FACTOR;
+        if (typeof card.repetitions !== 'number') card.repetitions = 0;
+      }
+    }
+    return parsed;
   } catch {
     return {};
   }
@@ -113,7 +125,7 @@ export function syncCardsFromTests(
     questions?: Array<{
       id?: string;
       text: string;
-      options: string[];
+      options?: string[];
       correctOption: number;
       explanation?: string;
       imageUrl?: string;
@@ -126,7 +138,7 @@ export function syncCardsFromTests(
   let updated = false;
 
   for (const test of tests) {
-    if (!test.questions) continue;
+    if (!test || !Array.isArray(test.questions)) continue;
     const sub = test.subjectName || test.subject || 'مادة سريرية';
     const lec = test.lectureName || test.lecture || 'محاضرة سريرية';
 
@@ -136,7 +148,7 @@ export function syncCardsFromTests(
         const correctText =
           q.questionType === 'fill_blank'
             ? (q.acceptedAnswers && q.acceptedAnswers[0]) || 'إجابة نموذجية'
-            : q.options[q.correctOption] || 'إجابة صحيحة';
+            : (Array.isArray(q.options) && q.options[q.correctOption]) || 'إجابة صحيحة';
 
         existing[q.id] = {
           id: `card-${q.id}`,
@@ -244,7 +256,7 @@ export function buildCustomQuiz(
       pool.push({
         id: q.id,
         text: q.text,
-        options: [...q.options],
+        options: Array.isArray(q.options) ? [...q.options] : [],
         correctOption: q.correctOption,
         explanation: q.explanation,
         imageUrl: q.imageUrl,

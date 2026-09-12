@@ -14,7 +14,13 @@ export async function serveSharePage(request,env,url,indexResponse){
     if(lecture){title=`${lecture.lectureName} | KIUR by ERATRANS`;description=`${lecture.subjectName} — ${lecture.departmentName}، ${lecture.phaseName}. ${lecture.testCount} اختبارات متاحة.`}
   }
   let publicOrigin=DEFAULT_PUBLIC_ORIGIN;try{const configured=new URL(env.PUBLIC_ORIGIN||DEFAULT_PUBLIC_ORIGIN);if(configured.protocol==='https:')publicOrigin=configured.origin}catch{}const canonical=`${publicOrigin}/${match[1]}/${encodeURIComponent(id)}`;const imageUrl=`${publicOrigin}/og.png`;const safeTitle=escapeHtml(title);const safeDescription=escapeHtml(description);const safeCanonical=escapeHtml(canonical);const safeImage=escapeHtml(imageUrl);
-  let html=await indexResponse.text();html=html.replace(/<title>[^<]*<\/title>/i,`<title>${safeTitle}</title>`).replace(/<meta name="description"[^>]*>/i,`<meta name="description" content="${safeDescription}"/>`).replace(/<meta property="og:[^>]*>/gi,'').replace(/<meta name="twitter:[^>]*>/gi,'').replace(/<link rel="canonical"[^>]*>/gi,'');
+  let html='';let baseHeaders={};
+  if(indexResponse&&typeof indexResponse.text==='function'){
+    html=await indexResponse.text();baseHeaders=indexResponse.headers;
+  }else{
+    html=`<!doctype html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>${safeTitle}</title></head><body><div id="root"></div></body></html>`;
+  }
+  html=html.replace(/<title>[^<]*<\/title>/i,`<title>${safeTitle}</title>`).replace(/<meta name="description"[^>]*>/i,`<meta name="description" content="${safeDescription}"/>`).replace(/<meta property="og:[^>]*>/gi,'').replace(/<meta name="twitter:[^>]*>/gi,'').replace(/<link rel="canonical"[^>]*>/gi,'');
   const social=`<link rel="canonical" href="${safeCanonical}"/><meta property="og:type" content="website"/><meta property="og:title" content="${safeTitle}"/><meta property="og:description" content="${safeDescription}"/><meta property="og:url" content="${safeCanonical}"/><meta property="og:image" content="${safeImage}"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content="${safeTitle}"/><meta name="twitter:description" content="${safeDescription}"/><meta name="twitter:image" content="${safeImage}"/>`;
-  html=html.replace('</head>',`${social}</head>`);const headers=new Headers(indexResponse.headers);headers.set('content-type','text/html; charset=utf-8');headers.set('cache-control','public, max-age=300');headers.delete('content-length');return new Response(request.method==='HEAD'?null:html,{status:200,headers});
+  html=html.includes('</head>')?html.replace('</head>',`${social}</head>`):`<head>${social}</head>${html}`;const headers=new Headers(baseHeaders);headers.set('content-type','text/html; charset=utf-8');headers.set('cache-control','public, max-age=300');headers.delete('content-length');return new Response(request.method==='HEAD'?null:html,{status:200,headers});
 }

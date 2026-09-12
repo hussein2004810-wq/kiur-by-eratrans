@@ -40,11 +40,11 @@ export default function StudyShelf({catalog, tests, history, user, search, setSe
   const lecture = subject?.lectures.find(item => item.id === selection.lectureId);
   const searching = Boolean(search.trim()) && !directTarget;
   const recent = useMemo(() => shelf.filter(item => item.latest)
-    .sort((a, b) => studyTimestamp(b.latest!.finishedAt) - studyTimestamp(a.latest!.finishedAt))[0], [shelf]);
+    .sort((a, b) => studyTimestamp(b.latest?.finishedAt) - studyTimestamp(a.latest?.finishedAt))[0], [shelf]);
   const selectedTests = useMemo(() => {
     if (directTarget?.kind === 'test') return visibleTests.filter(test => test.id === directTarget.id);
     if (directTarget?.kind === 'lecture') return visibleTests.filter(test => test.lectureId === directTarget.id);
-    const candidates=searching ? visibleTests.filter(test => matchesStudySearch(search, test.title, test.subjectName, test.subject, test.lectureName, test.lecture, test.departmentName, test.phaseName)) : lecture ? subject!.tests.filter(test => test.lectureId === lecture.id) : [];
+    const candidates=searching ? visibleTests.filter(test => matchesStudySearch(search, test.title, test.subjectName, test.subject, test.lectureName, test.lecture, test.departmentName, test.phaseName)) : lecture ? (subject?.tests || []).filter(test => test.lectureId === lecture.id) : [];
     return favoritesOnly?candidates.filter(test=>favoriteIds.includes(test.id)):candidates;
   }, [visibleTests, directTarget, searching, search, lecture, subject, favoritesOnly, favoriteIds]);
   const matchedLectures = useMemo(() => searching ? shelf.flatMap(item => item.lectures
@@ -124,7 +124,7 @@ export default function StudyShelf({catalog, tests, history, user, search, setSe
     {searching && matchedLectures.length > 0 && <details className="shelfLectureMatches" open><summary>المحاضرات المطابقة ({matchedLectures.length})</summary><div className="shelfLectures">{matchedLectures.map(item => <button type="button" key={item.id} onClick={() => choose(item.subjectId, item.id)}><BookOpen aria-hidden="true"/><span><b>{item.name}</b><small>{item.subjectName} — {item.count} اختبار</small></span><ChevronLeft aria-hidden="true"/></button>)}</div></details>}
     {showTests && <>
       <div className="shelfSectionHead"><p>{selectedTests.length} اختبار متاح. يُحفظ التقدم تلقائيًا بعد فتح الاختبار.</p>
-        <div className="shelfFilters"><button type="button" className={favoritesOnly?'active':''} aria-pressed={favoritesOnly} onClick={()=>setFavoritesOnly(value=>!value)}><Star/> المفضلة فقط</button>{(lecture || directTarget?.kind === 'lecture') && <ShareButton kind="lecture" id={directTarget?.kind === 'lecture' ? directTarget.id : lecture!.id} title={lecture?.name || selectedTests[0]?.lectureName || 'محاضرة KIUR'} label="مشاركة المحاضرة" notify={notify}/>}</div>
+        <div className="shelfFilters"><button type="button" className={favoritesOnly?'active':''} aria-pressed={favoritesOnly} onClick={()=>setFavoritesOnly(value=>!value)}><Star/> المفضلة فقط</button>{(lecture || directTarget?.kind === 'lecture') && <ShareButton kind="lecture" id={directTarget?.kind === 'lecture' ? directTarget.id : (lecture?.id || '')} title={lecture?.name || selectedTests[0]?.lectureName || 'محاضرة KIUR'} label="مشاركة المحاضرة" notify={notify}/>}</div>
       </div>
       <div className="shelfTests">{selectedTests.slice(0, visibleCount).map(test => <article className="shelfTest" key={test.id}>
         <div className="shelfTestKind"><ClipboardList aria-hidden="true"/>{test.examMode === 'formal' ? 'امتحان رسمي' : 'اختبار تدريبي'}</div>
