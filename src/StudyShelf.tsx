@@ -37,7 +37,7 @@ export default function StudyShelf({catalog, tests, history, user, search, setSe
   const visibleTests = useMemo(() => tests.filter(test => !test.status || test.status === 'published'), [tests]);
   const shelf = useMemo(() => buildStudyShelf(catalog, visibleTests, history, user.phaseId || ''), [catalog, visibleTests, history, user.phaseId]);
   const subject = shelf.find(item => item.id === selection.subjectId);
-  const lecture = subject?.lectures.find(item => item.id === selection.lectureId);
+  const lecture = subject?.lectures?.find(item => item.id === selection.lectureId);
   const searching = Boolean(search.trim()) && !directTarget;
   const recent = useMemo(() => shelf.filter(item => item.latest)
     .sort((a, b) => studyTimestamp(b.latest?.finishedAt) - studyTimestamp(a.latest?.finishedAt))[0], [shelf]);

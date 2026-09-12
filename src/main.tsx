@@ -42,6 +42,14 @@ class RootErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState
     window.location.reload();
   };
 
+  handleResetAndReload = () => {
+    try {
+      localStorage.clear();
+      sessionStorage.clear();
+    } catch {}
+    window.location.href = '/';
+  };
+
   render() {
     if (this.state.hasError) {
       return (
@@ -59,7 +67,8 @@ class RootErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState
           textAlign: 'center'
         }}>
           <div style={{
-            maxWidth: '480px',
+            maxWidth: '520px',
+            width: '100%',
             background: 'var(--stitch-bg-surface, #0f182e)',
             border: '1px solid var(--stitch-border, rgba(148, 163, 184, 0.2))',
             borderRadius: '16px',
@@ -84,26 +93,64 @@ class RootErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState
             </div>
             <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 800 }}>تحديث بيئة التعلم السريري</h2>
             <p style={{ margin: 0, fontSize: '14px', color: 'var(--stitch-text-secondary, #cbd5e1)', lineHeight: 1.6 }}>
-              تم إطلاق تحديث جديد للواجهة أو حدث انقطاع مؤقت في الاتصال. اضغط على الزر أدناه لإعادة تحميل المنصة بأحدث إصدار.
+              تم إطلاق تحديث جديد للواجهة أو حدث انقطاع مؤقت في الاتصال. يمكنك إعادة التحميل أو إعادة تعيين التخزين المؤقت للمتابعة.
             </p>
-            <button
-              type="button"
-              onClick={this.handleReload}
-              style={{
-                marginTop: '8px',
-                padding: '12px 28px',
-                borderRadius: '10px',
-                background: '#0d9488',
-                color: '#ffffff',
-                border: 'none',
-                fontWeight: 700,
-                fontSize: '14px',
-                cursor: 'pointer',
-                boxShadow: '0 4px 14px rgba(13, 148, 136, 0.4)'
-              }}
-            >
-              تحديث الصفحة الآن ↻
-            </button>
+
+            {this.state.error && (
+              <div style={{
+                width: '100%',
+                padding: '10px 14px',
+                background: 'rgba(239, 68, 68, 0.1)',
+                border: '1px solid rgba(239, 68, 68, 0.3)',
+                borderRadius: '8px',
+                fontSize: '12px',
+                color: '#f87171',
+                textAlign: 'right',
+                direction: 'ltr',
+                fontFamily: 'monospace',
+                overflowWrap: 'break-word',
+                maxHeight: '100px',
+                overflowY: 'auto'
+              }}>
+                {this.state.error.message || String(this.state.error)}
+              </div>
+            )}
+
+            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '8px' }}>
+              <button
+                type="button"
+                onClick={this.handleReload}
+                style={{
+                  padding: '12px 24px',
+                  borderRadius: '10px',
+                  background: '#0d9488',
+                  color: '#ffffff',
+                  border: 'none',
+                  fontWeight: 700,
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 14px rgba(13, 148, 136, 0.4)'
+                }}
+              >
+                تحديث الصفحة الآن ↻
+              </button>
+              <button
+                type="button"
+                onClick={this.handleResetAndReload}
+                style={{
+                  padding: '12px 20px',
+                  borderRadius: '10px',
+                  background: 'rgba(148, 163, 184, 0.15)',
+                  color: '#cbd5e1',
+                  border: '1px solid rgba(148, 163, 184, 0.3)',
+                  fontWeight: 600,
+                  fontSize: '14px',
+                  cursor: 'pointer'
+                }}
+              >
+                مسح التخزين المؤقت وإعادة الضبط
+              </button>
+            </div>
           </div>
         </div>
       );

@@ -278,7 +278,7 @@ export default function StitchPublicLanding({
                   <Award size={16} className="text-secondary" />
                 </div>
                 <div className="stitchMetricTileValue">
-                  <h3>{tests.reduce((acc, t) => acc + (t.questionCount || 0), 0) || '6,500+'}</h3>
+                  <h3>{tests.reduce((acc, t) => acc + (t.questionCount || 0), 0) || tests.length}</h3>
                   <span className="stitchPositiveTrend">سؤال سريري وتدريبي</span>
                 </div>
                 <div className="stitchMetricProgressTrack">
@@ -306,7 +306,7 @@ export default function StitchPublicLanding({
                   <BookOpen size={16} />
                 </div>
                 <div className="stitchMetricTileValue">
-                  <h3>{catalog?.subjects?.length || '24+'}</h3>
+                  <h3>{catalog?.subjects?.length || 0}</h3>
                   <span className="stitchMutedSub">مادة سريرية وأكاديمية</span>
                 </div>
                 <span className="stitchMetricTagSuccess">محدثة حسب متطلبات العام</span>
@@ -372,7 +372,7 @@ export default function StitchPublicLanding({
                 <Stethoscope size={24} />
               </div>
               <h3>بنك أسئلة سريري تفاعلي</h3>
-              <p>أكثر من 6,500 سيناريو علاجي محكّم ومحدث لعام 2026، متوافق مع مناهج كليات الطب وامتحانات البورد والتراخيص المهنية.</p>
+              <p>سيناريوهات علاجية محكّمة ومحدثة لعام 2026، متوافقة مع مناهج كليات الطب وامتحانات البورد والتراخيص المهنية وفق المحتوى الأكاديمي المعتمد.</p>
               <span className="stitchPillarNote">تحديث أسبوعي للحالات السريرية</span>
             </div>
 
@@ -499,7 +499,7 @@ export default function StitchPublicLanding({
                 onChange={e => onSelectPath('universityId', e.target.value)}
               >
                 <option value="">كل الجامعات</option>
-                {catalog?.universities.map(u => (
+                {(catalog?.universities || []).map(u => (
                   <option key={u.id} value={u.id}>{u.name}</option>
                 ))}
               </select>
@@ -728,7 +728,7 @@ export default function StitchPublicLanding({
             <div className="stitchFooterCol">
               <h5>التراخيص والامتحانات</h5>
               <a href="#catalog-section">البورد العراقي</a>
-              <a href="#catalog-section">امتحان الترخيص السعودي SMLE</a>
+              <a href="#catalog-section">الامتحانات التقويمية والسريرية المعتمدة</a>
               <a href="#catalog-section">امتحانات IFOM السريرية</a>
               <a href="#catalog-section">التقييم الشامل لخريجي الطب</a>
             </div>

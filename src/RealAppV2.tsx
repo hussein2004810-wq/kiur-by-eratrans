@@ -367,6 +367,7 @@ export default function RealAppV2(){
   const [smartReviewOpen,setSmartReviewOpen]=useState(false);const [smartReviewTab,setSmartReviewTab]=useState<'flashcards'|'quizBuilder'|'stats'>('flashcards');
   const [studyLoading,setStudyLoading]=useState(true);const [studyError,setStudyError]=useState('');const studyLoadSequence=useRef(0);const [startingId,setStartingId]=useState<string|null>(null);const startLock=useRef(false);const [learningHub,setLearningHub]=useState<LearningHub|null>(null);
   const [students,setStudents]=useState<StudentRow[]>([]);const [studentsTotal,setStudentsTotal]=useState(0);const [studentSearch,setStudentSearch]=useState('');const [studentFilters,setStudentFilters]=useState<StudentFilters>({universityId:'',collegeId:'',departmentId:'',phaseId:'',sectionId:''});const [studentsLoading,setStudentsLoading]=useState(false);const studentsLoadSequence=useRef(0);const [motionEnabled,setMotionEnabled]=useState(motionPreference);const [notifications,setNotifications]=useState<UserNotification[]>([]);const [notificationsOpen,setNotificationsOpen]=useState(false);
+  const [sidebarOpen,setSidebarOpen]=useState(false);
   const notify=(message:string)=>{if(toastTimer.current)clearTimeout(toastTimer.current);setToast(message);toastTimer.current=setTimeout(()=>{setToast('');toastTimer.current=null},2800)};
   const loadTests=async()=>{const data=await api<{data:Test[]}>('/api/tests');setTests(data.data)};
   const loadHistory=async()=>{const data=await api<{data:HistoryItem[];summary:{attempts:number;averagePercentage:number}}>('/api/me/history');setHistory(data.data);setSummary(data.summary)};
@@ -397,7 +398,6 @@ export default function RealAppV2(){
   const adminMeta={tests:[ClipboardList,'إدارة الاختبارات','إنشاء الاختبارات ونشرها ومتابعتها'],imports:[FileQuestion,'استيراد الأسئلة','رفع Excel وWord مع مراجعة الأخطاء'],catalog:[GraduationCap,'الهيكل الأكاديمي','الجامعات والكليات والأقسام والمواد'],students:[Users,'سجل الطلاب','الأداء الاكاديمي والبحث والتصفية'],academicChanges:[ArrowLeftRight,'تغييرات المسار','مراجعة طلبات الطلاب الفردية والدفعية'],gamification:[Trophy,'نظام النقاط','السياسة العامة ومراجعة النقاط غير المعتادة'],glimpses:[HeartPulse,'اللمحات السريرية','إعداد المحتوى السريري ومراجعته'],library:[BookOpen,'المكتبة الطبية','الصور السريرية وسجل استخدامها'],accounts:[ShieldCheck,'الحسابات والصلاحيات','الكوادر والمشرفون ونطاقات العمل'],bans:[ShieldCheck,'حظر الطلاب','الطلبات والمراجعات وسجل القرارات'],logs:[History,'السجلات','التدقيق والحسابات والأحداث']} as const;
   const [ActiveAdminIcon,activeAdminTitle,activeAdminDescription]=adminMeta[adminTab];
   const selectAdminTab=(tab:typeof adminTab)=>{setAdminTab(tab);setAdminMenuOpen(false)};
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const stitchContextValue: StitchContextValue = {
     user,

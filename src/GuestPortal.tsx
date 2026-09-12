@@ -32,35 +32,35 @@ export default function GuestPortal(){
 
   useEffect(()=>{try{localStorage.setItem('kiur-guest-path',JSON.stringify(path))}catch{}},[path]);
 
-  const colleges=catalog?.colleges.filter(x=>x.universityId===path.universityId)||[];
-  const departments=catalog?.departments.filter(x=>x.collegeId===path.collegeId)||[];
-  const phases=catalog?.phases.filter(x=>x.departmentId===path.departmentId)||[];
-  const sections=catalog?.sections.filter(x=>x.phaseId===path.phaseId)||[];
-  const subjects=catalog?.subjects.filter(x=>x.phaseId===path.phaseId)||[];
-  const lectures=catalog?.lectures.filter(x=>x.subjectId===path.subjectId)||[];
+  const colleges=catalog?.colleges?.filter(x=>x.universityId===path.universityId)||[];
+  const departments=catalog?.departments?.filter(x=>x.collegeId===path.collegeId)||[];
+  const phases=catalog?.phases?.filter(x=>x.departmentId===path.departmentId)||[];
+  const sections=catalog?.sections?.filter(x=>x.phaseId===path.phaseId)||[];
+  const subjects=catalog?.subjects?.filter(x=>x.phaseId===path.phaseId)||[];
+  const lectures=catalog?.lectures?.filter(x=>x.subjectId===path.subjectId)||[];
 
   const choose=(key:keyof typeof path,value:string)=>setPath(current=>{
     const next={...current,[key]:value};
     if(key==='universityId'){
-      const collegeId=value?(catalog?.colleges.find(x=>x.universityId===value)?.id||''):'';
-      const departmentId=collegeId?(catalog?.departments.find(x=>x.collegeId===collegeId)?.id||''):'';
-      const phaseId=departmentId?(catalog?.phases.find(x=>x.departmentId===departmentId)?.id||''):'';
+      const collegeId=value?(catalog?.colleges?.find(x=>x.universityId===value)?.id||''):'';
+      const departmentId=collegeId?(catalog?.departments?.find(x=>x.collegeId===collegeId)?.id||''):'';
+      const phaseId=departmentId?(catalog?.phases?.find(x=>x.departmentId===departmentId)?.id||''):'';
       Object.assign(next,{collegeId,departmentId,phaseId,sectionId:'',subjectId:'',lectureId:''});
     }
     if(key==='collegeId'){
-      const departmentId=value?(catalog?.departments.find(x=>x.collegeId===value)?.id||''):'';
-      const phaseId=departmentId?(catalog?.phases.find(x=>x.departmentId===departmentId)?.id||''):'';
+      const departmentId=value?(catalog?.departments?.find(x=>x.collegeId===value)?.id||''):'';
+      const phaseId=departmentId?(catalog?.phases?.find(x=>x.departmentId===departmentId)?.id||''):'';
       Object.assign(next,{departmentId,phaseId,sectionId:'',subjectId:'',lectureId:''});
     }
     if(key==='departmentId'){
-      const phaseId=value?(catalog?.phases.find(x=>x.departmentId===value)?.id||''):'';
+      const phaseId=value?(catalog?.phases?.find(x=>x.departmentId===value)?.id||''):'';
       Object.assign(next,{phaseId,sectionId:'',subjectId:'',lectureId:''});
     }
     if(key==='phaseId'){
-      const subjectId=value?(catalog?.subjects.find(x=>x.phaseId===value)?.id||''):'';
+      const subjectId=value?(catalog?.subjects?.find(x=>x.phaseId===value)?.id||''):'';
       Object.assign(next,{sectionId:'',subjectId,lectureId:''});
     }
-    if(key==='subjectId')next.lectureId=value?(catalog?.lectures.find(x=>x.subjectId===value)?.id||''):'';
+    if(key==='subjectId')next.lectureId=value?(catalog?.lectures?.find(x=>x.subjectId===value)?.id||''):'';
     return next;
   });
 
