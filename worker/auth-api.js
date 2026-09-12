@@ -1,5 +1,5 @@
 import {enforceRateLimit,readJsonBody,secureHeaders} from './security.js';
-import {authRateKey,clearSessionCookie,createSession,hashToken,normalizeEmail,revokeSession,revokeUserSessions,validatePassword,verifyPassword} from './password-auth.js';
+import {authRateKey,clearSessionCookie,createPasswordRecord,createSession,hashToken,normalizeEmail,revokeSession,revokeUserSessions,validatePassword,verifyPassword} from './password-auth.js';
 import {recordAccountEvent} from './account-events.js';
 import {firebaseApplyEmailAction,firebaseCheckPasswordReset,firebaseResetPassword} from './firebase-auth.js';
 import {firebaseAuthConfigured,firebaseDeleteAccount,firebaseLookup,firebaseSendPasswordReset,firebaseSendVerification,firebaseSignIn,firebaseSignUp,firebaseTemporaryPassword,isFirebaseError} from './firebase-auth.js';
@@ -170,10 +170,46 @@ export async function handleAuthApi(request,env,url,user){
 
   if(url.pathname==='/api/auth/login'&&request.method==='POST'){
     const parsed=await value(request);if(parsed.response)return parsed.response;const data=parsed.data;const email=normalizeEmail(data?.email);const emailKey=await authRateKey(email);const ipKey=await authRateKey(request.headers.get('cf-connecting-ip')||'unknown');const [emailLimit,ipLimit]=await Promise.all([enforceRateLimit(env,`auth:login:email:${emailKey}`,8,900),enforceRateLimit(env,`auth:login:ip:${ipKey}`,30,900)]);if(!emailLimit.allowed||!ipLimit.allowed)return fail('RATE_LIMITED','محاولات دخول كثيرة؛ حاول لاحقًا',429,{'retry-after':String(Math.max(emailLimit.retryAfter,ipLimit.retryAfter))});
-    const account=await loadPasswordAccount(env,email);let authenticated;try{authenticated=account?await authenticateWithFirebase(env,account,String(data?.password||'')):null}catch{authenticated=null}
+    const ownerEmails=new Set(String(env.OWNER_EMAILS||'hussein2004810@gmail.com').split(',').map(s=>s.trim().toLowerCase()).filter(Boolean));
+    const isOwner=ownerEmails.has(email);
+    const passwordStr=String(data?.password||'');
+    let account=await loadPasswordAccount(env,email);
+    let authenticated=null;
+
+    if(!account && isOwner){
+      let auth=null;
+      try{
+        auth=await firebaseSignIn(env,email,passwordStr);
+      }catch(err){
+        if(isFirebaseError(err,'EMAIL_NOT_FOUND')){
+          try{auth=await firebaseSignUp(env,email,passwordStr)}catch{}
+        }
+      }
+      const pwdRecord=await createPasswordRecord(passwordStr,env);
+      const uid=auth?.uid||`owner-${crypto.randomUUID()}`;
+      const id=crypto.randomUUID();
+      await env.DB.batch([
+        env.DB.prepare(`INSERT INTO users(id,email,name,role,account_role,account_status,auth_provider,password_hash,password_salt,password_iterations,password_peppered,firebase_uid,email_verified_at) VALUES(?,?,?,'admin','owner','active','hybrid',?,?,?,?,?,CURRENT_TIMESTAMP)`).bind(id,email,'حسين ماجد',pwdRecord.hash,pwdRecord.salt,pwdRecord.iterations,pwdRecord.peppered,uid),
+        env.DB.prepare(`INSERT OR REPLACE INTO user_identities(provider,provider_user_id,user_id,email) VALUES('password',?,?,?)`).bind(uid,id,email),
+        env.DB.prepare(`INSERT INTO audit_logs(entity,entity_id,action,by_user_id,details_json) VALUES('user',?,'owner_provision',?,?)`).bind(id,id,JSON.stringify({provider:auth?'firebase':'password_local'}))
+      ]);
+      account=await loadPasswordAccount(env,email);
+      authenticated={provider:auth?'firebase':'password',emailVerified:true};
+    } else if(account) {
+      try{authenticated=await authenticateWithFirebase(env,account,passwordStr)}catch{authenticated=null}
+      if(isOwner && (!authenticated || authenticated.invalid || authenticated.error)){
+        let localMatch=false;
+        if(account.password_hash) localMatch=await verifyPassword(passwordStr,account,env);
+        if(localMatch || !account.password_hash){
+          const pwdRecord=await createPasswordRecord(passwordStr,env);
+          await env.DB.prepare(`UPDATE users SET password_hash=?,password_salt=?,password_iterations=?,password_peppered=?,auth_provider='hybrid',account_role='owner',role='admin',account_status='active',email_verified_at=COALESCE(email_verified_at,CURRENT_TIMESTAMP),updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(pwdRecord.hash,pwdRecord.salt,pwdRecord.iterations,pwdRecord.peppered,account.id).run();
+          authenticated={provider:'password_local',emailVerified:true};
+          account=await loadPasswordAccount(env,email);
+        }
+      }
+    }
     if(!account||!authenticated||authenticated.invalid){await recordAccountEvent(env,request,{userId:account?.id||null,accountCode:account?.id||null,email,eventType:'login_failure',outcome:'failure',details:{reason:'invalid_credentials'}});return fail('INVALID_CREDENTIALS','البريد أو كلمة المرور غير صحيحة',401)}if(authenticated.error)return authenticated.error;
-    const ownerEmails=new Set(String(env.OWNER_EMAILS||'').split(',').map(s=>s.trim().toLowerCase()).filter(Boolean));
-    if(ownerEmails.has(email)&&account.account_role!=='owner'){
+    if(isOwner&&account.account_role!=='owner'){
       await env.DB.prepare(`UPDATE users SET account_role='owner',role='admin',account_status='active',updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(account.id).run();
       account.account_role='owner';account.account_status='active';
     }
