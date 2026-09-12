@@ -96,6 +96,7 @@
 .shelfReviewBtnSecondary:hover{background:rgba(255,255,255,0.12);color:#fff}
 
 /* Light Mode Support */
+html[data-kiur-theme="light"] .smartReviewModal{background:rgba(15,23,42,0.45);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 html[data-kiur-theme="light"] .smartReviewCard{background:linear-gradient(180deg,#ffffff,#f8fafc);border-color:#cbd5e1;box-shadow:0 30px 90px rgba(15,23,42,0.15);color:#0f172a}
 html[data-kiur-theme="light"] .smartReviewTabs{background:#f1f5f9;border-bottom-color:#e2e8f0}
 html[data-kiur-theme="light"] .smartReviewTabs button{color:#64748b}
@@ -105,7 +106,7 @@ html[data-kiur-theme="light"] .flashcardBack{background:linear-gradient(145deg,#
 html[data-kiur-theme="light"] .flashcardPrompt{color:#0f172a}
 html[data-kiur-theme="light"] .flashcardAnswer{color:#0f766e}
 html[data-kiur-theme="light"] .flashcardExplanation{color:#475569;border-top-color:#cbd5e1}
-html[data-kiur-theme="light"] .buzzwordPill{background:#f1f5f9;border-color:#cbd5e1;color:#334155}
+html[data-kiur-theme="light"] .buzzwordPill{background:#f0fdfa;border-color:#99f6e4;color:#0f766e;font-weight:700}
 html[data-kiur-theme="light"] .quizBuilderCard{background:#ffffff;border-color:#cbd5e1}
 html[data-kiur-theme="light"] .quizBuilderCard h4{color:#0f172a}
 html[data-kiur-theme="light"] .quizBuilderFields label{color:#334155}
@@ -121,6 +122,10 @@ html[data-kiur-theme="light"] .shelfReviewText p{color:#475569}
 html[data-kiur-theme="light"] .shelfReviewBtnSecondary{background:#ffffff;border-color:#cbd5e1;color:#334155}
 html[data-kiur-theme="light"] .shelfReviewBtnSecondary:hover{background:#f8fafc;color:#0f172a}
 
+@media(max-width:1024px) and (min-width:681px){
+  .retentionStatsGrid{grid-template-columns:repeat(2,1fr)}
+}
+
 @media(max-width:680px){
   .quizBuilderFields{grid-template-columns:1fr}
   .flashcardGrading{grid-template-columns:1fr 1fr}
@@ -128,4 +133,16 @@ html[data-kiur-theme="light"] .shelfReviewBtnSecondary:hover{background:#f8fafc;
   .shelfReviewBanner{flex-direction:column;align-items:flex-start}
   .shelfReviewActions{width:100%}
   .shelfReviewBtn,.shelfReviewBtnSecondary{flex:1;justify-content:center}
+}
+
+@media(max-width:600px){
+  .smartReviewModal{padding:10px}
+  .smartReviewHead{padding:14px 16px}
+  .smartReviewTabs{padding:10px 14px}
+  .smartReviewBody{padding:16px 12px}
+  .flashcardBox,.flashcardInner{min-height:280px}
+  .flashcardFace{padding:20px 14px;min-height:280px}
+  .flashcardPrompt{font-size:15px;line-height:1.6}
+  .flashcardAnswer{font-size:17px}
+  .flashcardExplanation{font-size:11px}
 }

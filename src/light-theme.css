@@ -310,6 +310,10 @@ html[data-kiur-theme="light"] .commandFooter kbd{background:#ffffff!important;bo
 /* Exam Split View Light Mode */
 html[data-kiur-theme="light"] .clinicalCasePane{background:#f8fafc!important;border-color:#cbd5e1!important}
 html[data-kiur-theme="light"] .optionHotkey{background:#f1f5f9!important;color:#334155!important;border:1px solid #cbd5e1!important}
+html[data-kiur-theme="light"] .mistakeReview article>b{color:#0f172a!important}
+html[data-kiur-theme="light"] .studentAnswer{color:#b91c1c!important;font-weight:700}
+html[data-kiur-theme="light"] .correctAnswer{color:#0f766e!important;font-weight:800}
+html[data-kiur-theme="light"] .perfectResult{background:#ccfbf1!important;color:#0f766e!important;border:1px solid #99f6e4!important}
 
 /* Study Shelf Light Mode */
 html[data-kiur-theme="light"] .shelfRecent{background:rgba(13,148,136,0.06)!important}

@@ -164,7 +164,13 @@ body{background:var(--kiur-bg);color:var(--ink)}::selection{background:#0d9488;c
 .examQuestionPane{display:grid;gap:14px}
 .optionHotkey{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;background:rgba(255,255,255,0.1);font-size:10px;font-weight:800;margin-inline-end:8px}
 
-@media(max-width:900px){
+@media(max-width:1024px) and (min-width:681px){
+  .bentoSpan8{grid-column:span 7}
+  .bentoSpan4{grid-column:span 5}
+  .bentoHero{flex-direction:column;align-items:flex-start}
+  .bentoHeroVitals{align-items:flex-start}
+}
+@media(max-width:680px){
   .bentoCard{grid-column:span 12}
   .bentoSpan8,.bentoSpan6,.bentoSpan4{grid-column:span 12}
   .bentoStatsGrid{grid-template-columns:repeat(2,1fr)}
@@ -172,5 +178,6 @@ body{background:var(--kiur-bg);color:var(--ink)}::selection{background:#0d9488;c
 }
 @media(max-width:540px){
   .bentoStatsGrid{grid-template-columns:1fr}
+  .clinicalCasePane img{max-height:220px}
 }
 
