@@ -37,7 +37,19 @@ export default function AccountManager({catalog,currentRole,notify}:{catalog:Cat
   useEffect(()=>{const timer=setTimeout(()=>void load().catch(error=>notify(error.message)),200);return()=>clearTimeout(timer)},[query]);
   useEffect(()=>{if(!scopeItems.some(item=>item.id===form.scopeId))setForm(value=>({...value,scopeId:scopeItems[0]?.id||''}))},[form.scopeType,scopeItems]);
   const toggle=(permission:string)=>setForm(value=>({...value,permissions:value.permissions.includes(permission)?value.permissions.filter(item=>item!==permission):[...value.permissions,permission]}));
-  const chooseAccountType=(value:string)=>setForm(current=>value==='admin'?{...current,role:'admin'}:{...current,role:'teacher',staffTitle:value as StaffTitle});
+  const defaultPermsForRole=(role:string,title?:string):string[]=>{
+    if(role==='admin')return permissions.map(p=>p[0]);
+    if(title==='department_head')return ['manage_catalog','manage_tests','manage_students','manage_teachers','view_reports','import_questions','use_media','manage_glimpses','view_student_log','view_audit_log','request_student_ban','review_student_ban','review_academic_changes','export_results'];
+    if(title==='department_coordinator')return ['manage_catalog','manage_tests','manage_students','view_reports','import_questions','use_media','view_student_log','request_student_ban','export_results'];
+    if(title==='university_professor'||title==='university_doctor')return ['manage_tests','import_questions','use_media','manage_glimpses','export_results','view_reports'];
+    return ['manage_tests','view_reports'];
+  };
+  const chooseAccountType=(value:string)=>setForm(current=>{
+    const nextRole=value==='admin'?'admin':'teacher';
+    const nextTitle=value==='admin'?current.staffTitle:(value as StaffTitle);
+    const autoPermissions=defaultPermsForRole(nextRole,nextTitle);
+    return value==='admin'?{...current,role:'admin',permissions:autoPermissions}:{...current,role:'teacher',staffTitle:nextTitle,permissions:autoPermissions};
+  });
   const reset=()=>{setEditing(null);setExisting(null);setForm(initialForm())};
   const saveAccount=async(linkExisting=false)=>{const grants=[{scopeType:form.scopeType,scopeId:form.scopeType==='platform'?'platform':form.scopeId,permissions:form.permissions}];const payload={...form,staffTitle:form.role==='teacher'?form.staffTitle:null,grants,...(linkExisting&&existing?{linkExisting:true,existingUserId:existing.id}: {})};if(editing)await request(`/api/admin/users/${editing.id}/grants`,{method:'PUT',body:JSON.stringify(payload)});else await request('/api/admin/users',{method:'POST',body:JSON.stringify(payload)})};
   const submit=async(event:React.FormEvent)=>{event.preventDefault();setExisting(null);setBusy(true);try{await saveAccount();notify(editing?'تم تحديث صفة الكادر والصلاحيات':'تم إنشاء الحساب وإرسال دعوة التفعيل الآمنة');reset();await load()}catch(error){const issue=error as ApiError;if(issue.code==='ACCOUNT_EXISTS'&&issue.details?.account)setExisting({...issue.details.account,canLink:Boolean(issue.details.canLink)});notify(issue.message)}finally{setBusy(false)}};
