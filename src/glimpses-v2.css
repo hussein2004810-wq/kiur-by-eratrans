@@ -3,3 +3,66 @@
 .glimpseList>header button.active{background:#2b2756!important;color:#c5b8ff!important}
 .glimpseRowActions button.publish{background:linear-gradient(120deg,#7255d7,#3975d4)!important;color:#fff!important}
 .glimpseRowActions button.danger{border-color:#8c4853!important;background:#3e242d!important;color:#ffaaa3!important}
+
+/* 3D Clinical Flip Card Architecture */
+.clinicalFlipCard{position:relative;perspective:1100px;background:transparent;cursor:pointer;border-radius:20px;outline:0;text-align:right;height:340px}
+.clinicalFlipCardInner{position:relative;width:100%;height:100%;text-align:right;transition:transform 0.75s cubic-bezier(0.34,1.4,0.64,1);transform-style:preserve-3d}
+.clinicalFlipCard.isFlipped .clinicalFlipCardInner,.clinicalFlipCard:hover .clinicalFlipCardInner{transform:rotateY(180deg)}
+.clinicalFlipCard:focus-visible .clinicalFlipCardInner{transform:rotateY(180deg);box-shadow:0 0 0 3px var(--kiur-focus)}
+
+.clinicalFlipCardFace{position:absolute;inset:0;width:100%;height:100%;display:flex;flex-direction:column;justify-content:space-between;padding:18px;border-radius:20px;border:1px solid rgba(148,163,184,0.2);box-shadow:0 14px 40px rgba(0,0,0,0.4),inset 0 1px rgba(255,255,255,0.06);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.clinicalFlipCardFront{background:linear-gradient(155deg,#121b30,#0b1021);color:var(--ink)}
+.clinicalFlipCardBack{background:linear-gradient(155deg,#062b2b,#081b29 70%,#0c1424);border-color:rgba(45,212,191,0.4);color:#f8fafc;transform:rotateY(180deg)}
+
+.clinicalFlipVisual{position:relative;width:100%;height:130px;border-radius:14px;overflow:hidden;background:linear-gradient(135deg,#1a2642,#101a30);display:grid;place-items:center}
+.clinicalFlipVisual img{width:100%;height:100%;object-fit:cover}
+.clinicalFlipIconPlaceholder{color:#2dd4bf}
+.clinicalFlipDateBadge{position:absolute;top:8px;right:8px;padding:3px 8px;border-radius:12px;background:rgba(8,13,26,0.75);backdrop-filter:blur(6px);color:#94a3b8;font-size:10px;font-weight:600}
+
+.clinicalFlipContent{margin:10px 0 auto}
+.clinicalFlipTitle{margin:0 0 6px;font-size:15px;font-weight:800;color:var(--ink);line-height:1.4}
+.clinicalFlipSummary{margin:0;font-size:11px;color:var(--muted);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+
+.clinicalFlipFooter{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid rgba(148,163,184,0.14)}
+.clinicalFlipHint{display:inline-flex;align-items:center;gap:5px;font-size:10px;color:#2dd4bf;font-weight:700}
+.clinicalFlipTag{display:inline-flex;align-items:center;gap:4px;font-size:10px;color:#94a3b8}
+
+.clinicalFlipBackHead{display:flex;flex-direction:column;gap:3px;padding-bottom:10px;border-bottom:1px solid rgba(45,212,191,0.2)}
+.clinicalFlipBackBadge{display:inline-flex;align-items:center;gap:6px;color:#2dd4bf;font-size:12px;font-weight:800}
+.clinicalFlipBackHead small{color:#94a3b8;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.clinicalFlipBackBody{margin:auto 0;display:grid;gap:8px}
+.clinicalPearlBox{padding:10px;border-radius:12px;background:rgba(13,148,136,0.12);border:1px solid rgba(45,212,191,0.25)}
+.clinicalPearlBox strong{display:block;font-size:11px;color:#5eead4;margin-bottom:4px}
+.clinicalPearlBox p{margin:0;font-size:11px;line-height:1.6;color:#e2e8f0}
+.clinicalWarningBox{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:10px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);color:#fcd34d;font-size:10px}
+.clinicalRefText{font-size:9px;color:#94a3b8;font-style:normal;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.clinicalFlipBackFooter{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:10px;border-top:1px solid rgba(45,212,191,0.2)}
+.clinicalFlipDetailBtn{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:10px;border:0;background:linear-gradient(120deg,#0d9488,#0284c7);color:#fff;font-size:11px;font-weight:800;cursor:pointer;transition:.18s ease}
+.clinicalFlipDetailBtn:hover{filter:brightness(1.1);transform:translateX(-2px)}
+.clinicalFlipLeaveHint{font-size:10px;color:#64748b}
+
+/* Light Mode Overrides */
+html[data-kiur-theme="light"] .clinicalFlipCardFace{box-shadow:0 10px 25px rgba(15,23,42,0.08);border-color:#cbd5e1}
+html[data-kiur-theme="light"] .clinicalFlipCardFront{background:linear-gradient(155deg,#ffffff,#f8fafc);color:#0f172a}
+html[data-kiur-theme="light"] .clinicalFlipCardBack{background:linear-gradient(155deg,#f0fdfa,#ecfeff 75%,#f8fafc);border-color:#99f6e4;color:#0f172a}
+html[data-kiur-theme="light"] .clinicalFlipVisual{background:linear-gradient(135deg,#f1f5f9,#e2e8f0)}
+html[data-kiur-theme="light"] .clinicalFlipDateBadge{background:rgba(255,255,255,0.85);color:#475569}
+html[data-kiur-theme="light"] .clinicalFlipTitle{color:#0f172a}
+html[data-kiur-theme="light"] .clinicalFlipSummary{color:#475569}
+html[data-kiur-theme="light"] .clinicalFlipHint{color:#0f766e}
+html[data-kiur-theme="light"] .clinicalFlipBackBadge{color:#0f766e}
+html[data-kiur-theme="light"] .clinicalPearlBox{background:#ffffff;border-color:#99f6e4}
+html[data-kiur-theme="light"] .clinicalPearlBox strong{color:#0f766e}
+html[data-kiur-theme="light"] .clinicalPearlBox p{color:#334155}
+html[data-kiur-theme="light"] .clinicalWarningBox{background:#fffbeb;border-color:#fde68a;color:#92400e}
+html[data-kiur-theme="light"] .clinicalRefText{color:#64748b}
+
+@media(prefers-reduced-motion:reduce){
+  .clinicalFlipCardInner{transition:none!important}
+}
+@media(max-width:680px){
+  .clinicalFlipCard{height:320px}
+  .clinicalFlipVisual{height:115px}
+}
