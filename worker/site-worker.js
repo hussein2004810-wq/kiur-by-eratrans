@@ -274,18 +274,33 @@ async function handleApi(request,env,url){
   if(saveAnswer&&request.method==='PATCH'){
     const denied=requireUser(user);if(denied)return denied;
     const parsed=await body(request);if(parsed.error)return error(parsed.error.code,parsed.error.message,parsed.error.status);const value=parsed.value;
-    if(!value?.questionId)return error('VALIDATION','الإجابة غير صالحة');
+    const items=Array.isArray(value?.answers)?value.answers:(value?.questionId?[value]:[]);
+    if(!items.length)return error('VALIDATION','الإجابة غير صالحة');
     const answerDeadline=deadlineSql('a');const attempt=await env.DB.prepare(`SELECT a.id,a.test_id,a.option_orders_json AS optionOrders,CASE WHEN unixepoch('now')>unixepoch(${answerDeadline}) THEN 1 ELSE 0 END AS expired FROM attempts a JOIN tests t ON t.id=a.test_id WHERE a.id=? AND a.user_id=? AND a.status='in_progress'`).bind(saveAnswer[1],user.id).first();
     if(!attempt)return error('NOT_EDITABLE','المحاولة غير قابلة للتعديل',409);
     if(isExpired(attempt)){await finalizeAttempt(env,attempt);return error('ATTEMPT_EXPIRED','انتهت مدة الاختبار وتم تسليم الإجابات المحفوظة',409)}
-    const question=await env.DB.prepare(`SELECT id,options_json,question_type AS questionType FROM questions WHERE id=? AND test_id=?`).bind(value.questionId,attempt.test_id).first();
-    if(!question)return error('BAD_QUESTION','السؤال لا يتبع الاختبار',400);
-    question.options=JSON.parse(question.options_json);let selectedOption=0;let answerText=null;if(question.questionType==='fill_blank'){answerText=String(value.answerText||'').trim();if(!answerText||answerText.length>500)return error('VALIDATION','إجابة الفراغ يجب أن تكون بين حرف و500 حرف')}else{if(!Number.isInteger(Number(value.selectedOption)))return error('VALIDATION','الإجابة غير صالحة');selectedOption=toOriginalOption(Number(value.selectedOption),question,parseOptionOrders(attempt.optionOrders));if(selectedOption<0)return error('VALIDATION','الإجابة غير صالحة')}
-    await env.DB.batch([
-      env.DB.prepare(`INSERT INTO attempt_answers(attempt_id,question_id,selected_option,answer_text) VALUES(?,?,?,?) ON CONFLICT(attempt_id,question_id) DO UPDATE SET selected_option=excluded.selected_option,answer_text=excluded.answer_text,answered_at=CURRENT_TIMESTAMP`).bind(attempt.id,value.questionId,selectedOption,answerText),
-      env.DB.prepare(`UPDATE attempts SET last_saved_at=CURRENT_TIMESTAMP WHERE id=?`).bind(attempt.id)
-    ]);
-    return response({saved:true});
+    const questionsRows=await env.DB.prepare(`SELECT id,options_json,question_type AS questionType FROM questions WHERE test_id=?`).bind(attempt.test_id).all();
+    const questionMap=new Map(questionsRows.results.map(q=>[q.id,{...q,options:JSON.parse(q.options_json)}]));
+    const optionOrders=parseOptionOrders(attempt.optionOrders);
+    const dbStatements=[];
+    for(const item of items){
+      const question=questionMap.get(item.questionId);
+      if(!question)continue;
+      let selectedOption=0;let answerText=null;
+      if(question.questionType==='fill_blank'){
+        answerText=String(item.answerText||'').trim();
+        if(!answerText||answerText.length>500)continue;
+      }else{
+        if(!Number.isInteger(Number(item.selectedOption)))continue;
+        selectedOption=toOriginalOption(Number(item.selectedOption),question,optionOrders);
+        if(selectedOption<0)continue;
+      }
+      dbStatements.push(env.DB.prepare(`INSERT INTO attempt_answers(attempt_id,question_id,selected_option,answer_text) VALUES(?,?,?,?) ON CONFLICT(attempt_id,question_id) DO UPDATE SET selected_option=excluded.selected_option,answer_text=excluded.answer_text,answered_at=CURRENT_TIMESTAMP`).bind(attempt.id,item.questionId,selectedOption,answerText));
+    }
+    if(!dbStatements.length)return error('VALIDATION','الإجابة غير صالحة');
+    dbStatements.push(env.DB.prepare(`UPDATE attempts SET last_saved_at=CURRENT_TIMESTAMP WHERE id=?`).bind(attempt.id));
+    await env.DB.batch(dbStatements);
+    return response({saved:true,count:dbStatements.length-1});
   }
   const submit=url.pathname.match(/^\/api\/attempts\/([^/]+)\/submit$/);
   if(submit&&request.method==='POST'){
