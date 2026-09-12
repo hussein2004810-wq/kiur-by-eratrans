@@ -38,7 +38,7 @@ export function StitchSidebar() {
       {/* Target Examination Context Pill */}
       <div className="stitchTargetExamPill">
         <span>الاختبار المستهدف</span>
-        <strong>{user.phaseName || 'SMLE 2025'}</strong>
+        <strong>{user.phaseName || 'البورد العراقي والامتحان التقويمي'}</strong>
       </div>
 
       {/* Navigation */}

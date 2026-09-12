@@ -162,7 +162,7 @@ export function StitchQBank({
             fontWeight: 600
           }}>
             <Sparkles size={14} />
-            <span>معتمد وفق موازين الهيئة السعودية والمجلس الوطني (SMLE / IFOM)</span>
+            <span>معتمد وفق معايير التقييم السريري والبورد العراقي</span>
           </div>
         </div>
 
@@ -554,7 +554,7 @@ export function StitchQBank({
                   <span>وضع الامتحان</span>
                 </div>
                 <small style={{ color: 'var(--stitch-text-muted)', fontSize: '11px', lineHeight: 1.4 }}>
-                  موقوت بدون كشف الإجابات، محاكاة بيئة Prometric / SMLE.
+                  موقوت بدون كشف الإجابات، محاكاة بيئة الامتحانات السريرية الرسمية.
                 </small>
               </div>
             </div>
@@ -670,7 +670,7 @@ export function StitchQBank({
                 }}
               >
                 <Clock size={16} />
-                <span>بدء بلوك SMLE الوطني الكامل (40 سؤالاً)</span>
+                <span>بدء الاختبار السريري التقويمي الكامل (40 سؤالاً)</span>
               </button>
             )}
           </div>

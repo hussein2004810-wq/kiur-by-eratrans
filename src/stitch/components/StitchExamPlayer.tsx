@@ -164,7 +164,7 @@ export function StitchExamPlayer({ onFinishExam }: { onFinishExam?: () => void }
                 fontSize: '12px',
                 fontWeight: 700
               }}>
-                SMLE Mock Exam Block 1 — مكتمل
+                الاختبار السريري المحاكي 1 — مكتمل
               </span>
               <span style={{ fontSize: '12px', color: 'var(--stitch-text-muted)' }}>
                 تم التوثيق والاعتماد الأكاديمي
@@ -344,7 +344,7 @@ export function StitchExamPlayer({ onFinishExam }: { onFinishExam?: () => void }
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '15px', fontWeight: 700, color: 'var(--stitch-text-primary)' }}>
-                محاكاة الاختبار الشامل (SMLE Mock Block 1)
+                محاكاة الاختبار السريري الشامل (Clinical Mock Block 1)
               </span>
               <span style={{
                 fontSize: '11px',
@@ -927,7 +927,7 @@ export function StitchExamPlayer({ onFinishExam }: { onFinishExam?: () => void }
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <strong style={{ fontSize: '16px', color: 'var(--stitch-text-primary)' }}>
-                القيم المخبرية المرجعية المعتمدة (SMLE Laboratory Reference Sheet)
+                القيم المخبرية المرجعية المعتمدة (Clinical Laboratory Reference Sheet)
               </strong>
               <button
                 type="button"

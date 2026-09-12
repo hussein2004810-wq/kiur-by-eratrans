@@ -144,7 +144,7 @@ const SAMPLE_TUTOR_QUESTION: QuestionData = {
       }
     ],
     pearl: 'في الرجفان الأذيني (AF)، القاعدة الذهبية للاختبارات والممارسة السريرية: مستقر ديناميكياً؟ ← ابدأ دائماً بـ Rate Control (حاصرات بيتا أو قنوات الكالسيوم). غير مستقر ديناميكياً؟ (Hypotension, AMS, Ischemic Chest Pain, Pulmonary Edema) ← توجه فوراً إلى Synchronized Cardioversion بغض النظر عن مدة الرجفان.',
-    references: 'AHA/ACC/HRS Guidelines for the Management of Patients With Atrial Fibrillation • UpToDate 2025 • SMLE / USMLE Step 2 CK Yield: High'
+    references: 'AHA/ACC/HRS Guidelines for the Management of Patients With Atrial Fibrillation • UpToDate 2025 • Clinical Board Yield: High'
   }
 };
 
@@ -858,7 +858,7 @@ export function StitchTutorPlayer({ onExit }: { onExit?: () => void }) {
                   borderRadius: '4px',
                   fontWeight: 700
                 }}>
-                  SMLE / IFOM Yield: High
+                  Clinical Board Yield: High
                 </span>
               </div>
             </div>

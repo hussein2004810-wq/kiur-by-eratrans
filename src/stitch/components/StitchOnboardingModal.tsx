@@ -29,9 +29,9 @@ export function StitchOnboardingModal({
   const [step, setStep] = useState<number>(1);
 
   // Onboarding fields
-  const [selectedUni, setSelectedUni] = useState('جامعة الملك سعود — كلية الطب');
-  const [selectedExam, setSelectedExam] = useState('SMLE 2025 (Saudi Medical Licensing Examination)');
-  const [selectedPhase, setSelectedPhase] = useState('سنة الامتياز (Medical Internship)');
+  const [selectedUni, setSelectedUni] = useState('جامعات وكليات العراق (ERATRANS)');
+  const [selectedExam, setSelectedExam] = useState('البورد العراقي والامتحان التقويمي');
+  const [selectedPhase, setSelectedPhase] = useState('المرحلة السريرية • تدريب سريري');
 
   // Auth fields
   const [email, setEmail] = useState('');
@@ -146,11 +146,11 @@ export function StitchOnboardingModal({
                     outline: 'none'
                   }}
                 >
-                  <option value="جامعة الملك سعود — كلية الطب">جامعة الملك سعود — كلية الطب البشري</option>
-                  <option value="جامعة الملك عبد العزيز — كلية الطب">جامعة الملك عبد العزيز — كلية الطب</option>
-                  <option value="جامعة الإمام محمد بن سعود — كلية الطب">جامعة الإمام محمد بن سعود — كلية الطب</option>
+                  <option value="جامعات وكليات العراق (ERATRANS)">جامعات وكليات العراق (منظومة ERATRANS الأكاديمية)</option>
                   <option value="جامعة بغداد — كلية الطب">جامعة بغداد — كلية الطب</option>
-                  <option value="جامعة الفيصل — كلية الطب">جامعة الفيصل — كلية الطب</option>
+                  <option value="جامعة المستنصرية — كلية الطب">جامعة المستنصرية — كلية الطب</option>
+                  <option value="جامعة النهرين — كلية الطب">جامعة النهرين — كلية الطب</option>
+                  <option value="جامعة بابل — كلية الطب">جامعة بابل — كلية الطب</option>
                 </select>
 
                 <div style={{
@@ -208,10 +208,10 @@ export function StitchOnboardingModal({
                     outline: 'none'
                   }}
                 >
-                  <option value="SMLE 2025 (Saudi Medical Licensing Examination)">SMLE 2025 (اختبار رخصة الممارسة السعودية)</option>
+                  <option value="البورد العراقي والامتحان التقويمي">البورد العراقي والامتحان التقويمي الوطني</option>
+                  <option value="امتحانات الكفاءة والترخيص السريري">امتحانات الكفاءة والترخيص السريري الشامل</option>
                   <option value="IFOM Clinical Sciences Examination">IFOM CSE (اختبار العلوم السريرية الدولي)</option>
-                  <option value="Saudi Board Part 1 (Internal Medicine)">Saudi Board Part 1 (البورد السعودي - الجزء الأول)</option>
-                  <option value="Medical Finals (الامتحانات النهائية للكلية)">الامتحانات النهائية للكلية (Final Clinical Exams)</option>
+                  <option value="Medical Finals (الامتحانات النهائية للكلية)">الامتحانات السريرية والنهائية للكلية</option>
                 </select>
 
                 <label style={{ fontSize: '13px', fontWeight: 700, color: 'var(--stitch-text-primary)' }}>

@@ -5,11 +5,15 @@ import { useStitch } from '../StitchContext';
 export function StitchHero() {
   const { user, setView, openSmartReview, tests, history, summary, startExam } = useStitch();
 
-  // Metrics calculations
+  // Real dynamic metrics calculations
   const totalCompleted = history.length;
   const passedCount = history.filter(h => h.passed).length;
-  const avgAccuracy = summary.averagePercentage > 0 ? summary.averagePercentage : 72.4;
-  const targetExam = user.phaseName || 'SMLE 2025 / البورد العراقي';
+  const avgAccuracy = summary.averagePercentage > 0 ? summary.averagePercentage : 0;
+  const targetExam = user.phaseName || 'البورد العراقي والامتحان التقويمي';
+  const totalBankQuestions = tests.reduce((acc, t) => acc + (t.questionCount || 0), 0) || (tests.length * 10);
+  const totalAnsweredQuestions = history.reduce((acc, h) => acc + (h.maxScore || 10), 0);
+  const dailyTarget = 20;
+  const todayProgress = Math.min(dailyTarget, totalCompleted * 5);
 
   const firstTest = tests[0];
 
@@ -25,7 +29,7 @@ export function StitchHero() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <h2 className="stitchDoctorName">{user.name}</h2>
               <span className="stitchDoctorPill">
-                {user.role === 'student' ? (user.phaseName || 'سنة 5 - إكلينيكي') : 'كادر أكاديمي'}
+                {user.role === 'student' ? (user.phaseName || 'طالب سريري') : 'كادر أكاديمي'}
               </span>
             </div>
             <p className="stitchDoctorSub">
@@ -36,7 +40,7 @@ export function StitchHero() {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span className="stitchEngineBadge">
-            <Sparkles size={13} /> واجهة Google Stitch المعتمدة
+            <Sparkles size={13} /> المنظومة السريرية المعتمدة
           </span>
         </div>
       </div>
@@ -48,40 +52,40 @@ export function StitchHero() {
         <div className="stitchHeroTopRow">
           <span className="stitchHeroActivePill">
             <span className="stitchHeroPulseDot" />
-            جلسة نشطة جاهزة للاستئناف
+            جاهزية الاختبارات السريرية
           </span>
           <span className="stitchHeroTopic">
-            {firstTest ? `${firstTest.subject} • ${firstTest.lecture}` : 'الباطنة العامة • الجولة المسائية'}
+            {firstTest ? `${firstTest.subject} • ${firstTest.lecture}` : (user.departmentName || 'المسار الأكاديمي')}
           </span>
         </div>
 
         <h1 className="stitchHeroTitle">
-          موعد الاختبار المستهدف: متبقي <span className="stitchHeroCountdownHighlight">24 يوماً</span>
+          المسار المستهدف: <span className="stitchHeroCountdownHighlight">{targetExam}</span>
         </h1>
 
         <p className="stitchHeroDesc">
           {firstTest
-            ? `اختبارك القادم بعنوان "${firstTest.title}" يضم ${firstTest.questionCount} سؤالاً سريرياً موقوتاً مع تفسير فوري للمشتتات.`
-            : 'لديك جلسة قيد التقدم مكونة من 40 سؤالاً في "أمراض القلب والجهاز الدوري". قطعت 22 سؤالاً وبقي 18 للمراجعة الفورية.'}
+            ? `اختبارك القادم بعنوان "${firstTest.title}" يضم ${firstTest.questionCount} سؤالاً سريرياً موقوتاً مع تصحيح وتحليل فوري.`
+            : `يتوفر في مسارك الأكاديمي ${tests.length} اختباراً سريرياً جاهزاً للبدء والتدريب المباشر.`}
         </p>
 
         <div className="stitchHeroActions">
           <button
             type="button"
             className="stitchHeroResumeBtn"
-            onClick={() => setView('exam-player')}
+            onClick={() => firstTest ? (startExam ? startExam(firstTest.id) : setView('exam-player')) : setView('tests')}
           >
             <Play size={18} fill="currentColor" />
-            <span>استئناف بلوك SMLE المحاكي الموقوت</span>
+            <span>{firstTest ? `بدء اختبار: ${firstTest.title}` : 'استكشاف بنك الاختبارات'}</span>
           </button>
 
           <button
             type="button"
             className="stitchHeroSecondaryBtn"
-            onClick={() => setView('qbank')}
+            onClick={() => setView('tests')}
           >
             <ClipboardList size={16} />
-            <span>بنك الأسئلة الطبي (Q-Bank)</span>
+            <span>بنك الاختبارات ({tests.length})</span>
           </button>
 
           <button
@@ -109,14 +113,14 @@ export function StitchHero() {
         {/* Card 1: Daily Target Ring */}
         <div className="stitchMetricCard">
           <div className="stitchMetricInfo">
-            <span className="stitchMetricLabel">الهدف اليومي المنجز</span>
+            <span className="stitchMetricLabel">التقدم في الأسئلة</span>
             <div className="stitchMetricValues">
-              <b>{totalCompleted > 0 ? totalCompleted : 48}</b>
-              <span>/ 60 سؤالاً</span>
+              <b>{todayProgress}</b>
+              <span>/ {dailyTarget} سؤالاً</span>
             </div>
             <span className="stitchMetricFootnote">
               <CheckCircle2 size={14} />
-              متبقي {Math.max(0, 60 - totalCompleted)} أسئلة فقط
+              متبقي {Math.max(0, dailyTarget - todayProgress)} أسئلة للهدف اليومي
             </span>
           </div>
 
@@ -135,12 +139,12 @@ export function StitchHero() {
                 stroke="var(--stitch-primary-container)"
                 strokeWidth="6"
                 strokeDasharray="163.36"
-                strokeDashoffset={163.36 * (1 - Math.min(1, Math.max(0.2, totalCompleted / 60)))}
+                strokeDashoffset={163.36 * (1 - Math.min(1, todayProgress / dailyTarget))}
                 strokeLinecap="round"
               />
             </svg>
             <span style={{ position: 'absolute', fontSize: '11px', fontWeight: 800, color: 'var(--stitch-primary-container)' }}>
-              {Math.min(100, Math.round((totalCompleted || 48) / 60 * 100))}%
+              {Math.round(Math.min(100, (todayProgress / dailyTarget) * 100))}%
             </span>
           </div>
         </div>
@@ -151,10 +155,10 @@ export function StitchHero() {
             <span className="stitchMetricLabel">معدل الدقة الإجمالي</span>
             <div className="stitchMetricValues">
               <b>{avgAccuracy}%</b>
-              <span className="stitchMetricPill">+3.2%</span>
+              <span className="stitchMetricPill">{passedCount} ناجح</span>
             </div>
             <span style={{ fontSize: '11px', color: 'var(--stitch-text-muted)' }}>
-              أعلى من متوسط الدفعة (64%)
+              {totalCompleted > 0 ? `من واقع ${totalCompleted} محاولة مكتملة` : 'ابدأ أول اختبار لاحتساب الدقة'}
             </span>
           </div>
           <div className="stitchMetricIconSquare">
@@ -165,13 +169,13 @@ export function StitchHero() {
         {/* Card 3: Questions Completed Total */}
         <div className="stitchMetricCard">
           <div className="stitchMetricInfo">
-            <span className="stitchMetricLabel">الأسئلة المنجزة كلياً</span>
+            <span className="stitchMetricLabel">إجمالي الأسئلة المحلولة</span>
             <div className="stitchMetricValues">
-              <b>{totalCompleted > 0 ? totalCompleted * 15 : 1842}</b>
-              <span>/ 2,450</span>
+              <b>{totalAnsweredQuestions}</b>
+              <span>/ {totalBankQuestions || 100}</span>
             </div>
             <span style={{ fontSize: '11px', color: 'var(--stitch-primary)', fontWeight: 600 }}>
-              75.1% من بنك الأسئلة
+              {totalBankQuestions > 0 ? Math.round((totalAnsweredQuestions / totalBankQuestions) * 100) : 0}% من بنك الأسئلة المتاح
             </span>
           </div>
           <div className="stitchMetricIconSquare">
@@ -182,14 +186,14 @@ export function StitchHero() {
         {/* Card 4: Study Streak */}
         <div className="stitchMetricCard">
           <div className="stitchMetricInfo">
-            <span className="stitchMetricLabel">سلسلة الالتزام السريري</span>
+            <span className="stitchMetricLabel">المحاولات السريرية الناجحة</span>
             <div className="stitchMetricValues">
-              <b>14</b>
-              <span>يوماً متواصلاً</span>
+              <b>{passedCount}</b>
+              <span>اختباراً مجتازاً</span>
             </div>
             <span className="stitchMetricFootnote" style={{ color: 'var(--stitch-secondary)' }}>
               <Flame size={14} color="#f59e0b" fill="#f59e0b" />
-              أداء منضبط ومستقر
+              {passedCount > 0 ? 'أداء أكاديمي ممتاز' : 'بانتظار أول محاولة ناجحة'}
             </span>
           </div>
           <div className="stitchMetricIconSquare" style={{ color: '#f59e0b' }}>

@@ -35,13 +35,13 @@ export function StitchPricing() {
       ],
       excluded: [
         'امتحانات المحاكاة الموقوتة غير المحدودة (Mock Blocks)',
-        'حاسبة التنبؤ بدرجة SMLE الوطنية التنافسية',
+        'حاسبة التنبؤ بالدرجة التنافسية للامتحانات السريرية والتقويمية',
         'خطة التعافي السريري الموجه لسد الثغرات'
       ]
     },
     {
       id: 'smle-pro',
-      name: 'باقة التحضير الوطني المكثف (SMLE Pro)',
+      name: 'باقة التحضير الوطني السريري المكثف (Clinical Pro)',
       price: '249',
       period: 'لكل 3 أشهر',
       popular: true,
@@ -274,7 +274,7 @@ export function StitchPricing() {
             }}>
               <span>الخطة المختارة:</span>
               <strong style={{ color: 'var(--stitch-primary)' }}>
-                {selectedPlan === 'smle-pro' ? 'SMLE Pro (249 ر.س / 3 أشهر)' : 'باقة التدريب (99 ر.س)'}
+                {selectedPlan === 'smle-pro' ? 'Clinical Pro (الباقة الاحترافية)' : 'باقة التدريب الأساسية'}
               </strong>
             </div>
 

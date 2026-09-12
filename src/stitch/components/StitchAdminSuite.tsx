@@ -58,9 +58,9 @@ export function StitchAdminSuite() {
   } | null>(null);
 
   const mockStudents = [
-    { id: 'MED-8841', name: 'علي محمد أحمد', email: 'ali.ahmed@ksu.edu.sa', university: 'جامعة الملك سعود', phase: 'السنة الخامسة • طب بشري', accuracy: 72.4, completedExams: 34, licenseExpiry: '2026-12-31', status: 'active' as const },
-    { id: 'MED-9214', name: 'سارة خالد العتيبي', email: 'sara.otaibi@kau.edu.sa', university: 'جامعة الملك عبد العزيز', phase: 'سنة الامتياز • SMLE Prep', accuracy: 78.1, completedExams: 48, licenseExpiry: '2026-10-15', status: 'active' as const },
-    { id: 'MED-7632', name: 'عمر فهد الشمري', email: 'omar.shammari@imamu.edu.sa', university: 'جامعة الإمام محمد بن سعود', phase: 'السنة الرابعة • سريري', accuracy: 64.8, completedExams: 19, licenseExpiry: '2026-08-01', status: 'active' as const }
+    { id: 'MED-8841', name: 'علي محمد أحمد', email: 'ali.ahmed@kiur-iraq.com', university: 'جامعة بغداد — كلية الطب', phase: 'المرحلة الخامسة • تدريب سريري', accuracy: 78.4, completedExams: 34, licenseExpiry: '2026-12-31', status: 'active' as const },
+    { id: 'MED-9214', name: 'سارة خالد العبيدي', email: 'sara.obaidi@kiur-iraq.com', university: 'جامعات وكليات ERATRANS', phase: 'سنة التدريب السريري • البورد العراقي', accuracy: 82.1, completedExams: 48, licenseExpiry: '2026-10-15', status: 'active' as const },
+    { id: 'MED-7632', name: 'عمر فهد الجبوري', email: 'omar.jabouri@kiur-iraq.com', university: 'جامعة المستنصرية — كلية الطب', phase: 'المرحلة الرابعة • سريري', accuracy: 69.8, completedExams: 19, licenseExpiry: '2026-08-01', status: 'active' as const }
   ];
 
   const handleSaveQuestion = () => {
