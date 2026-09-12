@@ -1,5 +1,5 @@
 import React from 'react';
-import { HeartPulse, ClipboardList, BookOpen, Brain, History, Trophy, UserRound, LogOut, Settings2, FileText, Activity } from 'lucide-react';
+import { HeartPulse, ClipboardList, BookOpen, Brain, History, Trophy, UserRound, LogOut, Settings2, FileText, Activity, Calendar, BookMarked } from 'lucide-react';
 import { useStitch } from '../StitchContext';
 
 export function StitchSidebar() {
@@ -61,6 +61,28 @@ export function StitchSidebar() {
           <div className="stitchNavItemInner">
             <Brain size={18} />
             <span>المراجعة الذكية (SM-2)</span>
+          </div>
+        </button>
+
+        <button
+          type="button"
+          className={`stitchNavItem ${view === 'study-plan' ? 'active' : ''}`}
+          onClick={() => setView('study-plan')}
+        >
+          <div className="stitchNavItemInner">
+            <Calendar size={18} />
+            <span>خطة المذاكرة اليومية</span>
+          </div>
+        </button>
+
+        <button
+          type="button"
+          className={`stitchNavItem ${view === 'notes' ? 'active' : ''}`}
+          onClick={() => setView('notes')}
+        >
+          <div className="stitchNavItemInner">
+            <BookMarked size={18} />
+            <span>اللآلئ السريرية (Pearls)</span>
           </div>
         </button>
 

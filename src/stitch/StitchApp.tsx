@@ -1,9 +1,12 @@
-﻿import React, { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import './stitch.css';
 import { useStitch } from './StitchContext';
 import StitchSidebar from './components/StitchSidebar';
 import StitchTopbar from './components/StitchTopbar';
 import StitchHero from './components/StitchHero';
+import StitchDashboard from './components/StitchDashboard';
+import StitchStudyPlan from './components/StitchStudyPlan';
+import StitchNotes from './components/StitchNotes';
 import { ClinicalGlimpsesLibrary, ClinicalGlimpsesSpotlight } from '../ClinicalGlimpses';
 import { HeartPulse } from 'lucide-react';
 
@@ -43,9 +46,24 @@ export function StitchApp({
         {view === 'home' && (
           <>
             <StitchHero />
-            {studyContent}
+            <StitchDashboard />
+            <div style={{ marginTop: '24px' }}>
+              {studyContent}
+            </div>
             <ClinicalGlimpsesSpotlight onBrowse={() => setView('glimpses')} />
           </>
+        )}
+
+        {view === 'study-plan' && (
+          <div style={{ marginTop: '12px' }}>
+            <StitchStudyPlan />
+          </div>
+        )}
+
+        {view === 'notes' && (
+          <div style={{ marginTop: '12px' }}>
+            <StitchNotes />
+          </div>
         )}
 
         {view === 'tests' && studyContent}
