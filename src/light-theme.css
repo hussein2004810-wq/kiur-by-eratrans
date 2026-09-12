@@ -278,6 +278,30 @@ html[data-kiur-theme="light"] .accessibilityDock select{background:#ffffff!impor
 html[data-kiur-theme="light"] .accessibilityDock section>button{background:#f8fafc!important;color:#334155!important;border-color:#cbd5e1!important}
 html[data-kiur-theme="light"] .accessibilityDock section>button.active{background:linear-gradient(110deg,#0d9488,#0284c7)!important;color:#ffffff!important;border-color:transparent!important}
 
+/* Bento Grid Light Mode */
+html[data-kiur-theme="light"] .bentoCard{background:#ffffff!important;border-color:#cbd5e1!important;box-shadow:0 10px 30px rgba(15,23,42,0.06)!important}
+html[data-kiur-theme="light"] .bentoCard:hover{border-color:#0d9488!important;box-shadow:0 18px 45px rgba(15,23,42,0.1),0 0 20px rgba(13,148,136,0.1)!important}
+html[data-kiur-theme="light"] .bentoHero{background:linear-gradient(135deg,#ffffff,#f0fdfa)!important;border-color:#cbd5e1!important;box-shadow:0 14px 40px rgba(15,23,42,0.08)!important}
+html[data-kiur-theme="light"] .bentoStatCard{background:#ffffff!important;border-color:#cbd5e1!important}
+
+/* Command Palette Light Mode */
+html[data-kiur-theme="light"] .commandPaletteBackdrop{background:rgba(15,23,42,0.5)!important}
+html[data-kiur-theme="light"] .commandPaletteModal{background:linear-gradient(180deg,#ffffff,#f8fafc)!important;border-color:#cbd5e1!important;box-shadow:0 30px 90px rgba(15,23,42,0.2)!important;color:#0f172a!important}
+html[data-kiur-theme="light"] .commandInputWrap{background:#f8fafc!important;border-bottom-color:#e2e8f0!important}
+html[data-kiur-theme="light"] .commandSearchIcon{color:#0d9488!important}
+html[data-kiur-theme="light"] .commandInput{color:#0f172a!important}
+html[data-kiur-theme="light"] .commandKbd{background:#f1f5f9!important;border-color:#cbd5e1!important;color:#475569!important}
+html[data-kiur-theme="light"] .commandItem{color:#0f172a!important}
+html[data-kiur-theme="light"] .commandItem:hover,html[data-kiur-theme="light"] .commandItem.active{background:#f0fdfa!important;box-shadow:inset -3px 0 #0d9488!important}
+html[data-kiur-theme="light"] .commandItemIcon{background:#ccfbf1!important;color:#0f766e!important}
+html[data-kiur-theme="light"] .commandFooter{background:#f8fafc!important;border-top-color:#e2e8f0!important;color:#64748b!important}
+html[data-kiur-theme="light"] .commandFooter kbd{background:#ffffff!important;border-color:#cbd5e1!important;color:#334155!important}
+
+/* Exam Split View Light Mode */
+html[data-kiur-theme="light"] .clinicalCasePane{background:#f8fafc!important;border-color:#cbd5e1!important}
+html[data-kiur-theme="light"] .optionHotkey{background:#f1f5f9!important;color:#334155!important;border:1px solid #cbd5e1!important}
+
+
 @media(max-width:720px){
   html[data-kiur-theme="light"] .app .topbar{background:rgba(248,250,252,0.96)}
   html[data-kiur-theme="light"] .app :where(.responsiveRecords,.banLog,.studentsTable,.logTable) tr{background:linear-gradient(145deg,#fff,#f8fafc);box-shadow:0 6px 18px rgba(15,23,42,0.06)}

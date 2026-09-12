@@ -121,3 +121,62 @@ body{background:var(--kiur-bg);color:var(--ink)}::selection{background:#0d9488;c
 /* Standalone forms use the same readable midnight controls as the app shell. */
 .setupPage :where(input,select,textarea),.academicChangePage :where(input,select,textarea),.authPage :where(input,select,textarea){color-scheme:dark;background:#09101d!important;color:#f8fafc!important;border-color:rgba(148,163,184,0.25)!important}.setupPage :where(input,select,textarea)::placeholder,.academicChangePage :where(input,select,textarea)::placeholder,.authPage :where(input,select,textarea)::placeholder{color:#64748b!important;opacity:1}.setupPage select option,.academicChangePage select option,.authPage select option{background:#09101d;color:#f8fafc}.setupPage button:disabled,.academicChangePage button:disabled,.authPage button:disabled,.app button:disabled{opacity:.48;cursor:not-allowed;filter:saturate(.55)}.setupPage :where(button,a,input,select,textarea):focus-visible,.academicChangePage :where(button,a,input,select,textarea):focus-visible,.authPage :where(button,a,input,select,textarea):focus-visible{outline:3px solid #38bdf8;outline-offset:2px}
 .authPage>.themeToggle,.loadingPage>.themeToggle,.setupPage>.themeToggle,.academicChangePage>.themeToggle,.blockedPage>.themeToggle{position:fixed;top:max(14px,env(safe-area-inset-top));left:14px;z-index:1201}
+
+/* Bento Grid Layout System */
+.bentoGrid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px;margin:20px 0}
+.bentoCard{grid-column:span 4;background:var(--kiur-surface);border:1px solid var(--kiur-border);border-radius:18px;padding:22px;box-shadow:var(--shadow);backdrop-filter:blur(16px);transition:transform .2s cubic-bezier(.16,1,.3,1),box-shadow .2s ease,border-color .2s ease;overflow:hidden;position:relative}
+.bentoCard:hover{transform:translateY(-2px);border-color:rgba(13,148,136,0.4);box-shadow:0 18px 45px rgba(0,0,0,0.5),0 0 20px rgba(13,148,136,0.15)}
+.bentoSpan12{grid-column:span 12}
+.bentoSpan8{grid-column:span 8}
+.bentoSpan6{grid-column:span 6}
+.bentoSpan4{grid-column:span 4}
+.bentoHero{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:26px;background:radial-gradient(circle at 15% 15%,rgba(13,148,136,0.18),transparent 38%),linear-gradient(135deg,rgba(17,26,46,0.95),rgba(10,16,29,0.98))}
+.bentoStatsGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.bentoStatCard{display:flex;align-items:center;gap:14px;padding:16px;border-radius:16px;background:var(--kiur-surface);border:1px solid var(--kiur-border)}
+.bentoStatCard b{font-size:22px;font-variant-numeric:tabular-nums;line-height:1}
+.bentoStatCard small{color:var(--muted);font-size:11px}
+
+/* Command Palette (Cmd+K) */
+.commandPaletteBackdrop{position:fixed;inset:0;z-index:var(--z-critical);display:grid;place-items:start center;padding:clamp(20px,10vh,80px) 16px;background:rgba(4,8,18,0.75);backdrop-filter:blur(14px);animation:paletteFadeIn .18s ease}
+.commandPaletteModal{width:min(640px,100%);background:linear-gradient(180deg,#111a2e,#0a1020);border:1px solid rgba(148,163,184,0.22);border-radius:20px;box-shadow:0 30px 100px rgba(0,0,0,0.75),0 0 35px rgba(13,148,136,0.2);overflow:hidden;animation:paletteScaleIn .2s cubic-bezier(.16,1,.3,1)}
+.commandInputWrap{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid rgba(148,163,184,0.16);background:rgba(255,255,255,0.03)}
+.commandSearchIcon{color:#2dd4bf;flex-shrink:0}
+.commandInput{flex:1;background:transparent!important;border:0!important;outline:0!important;box-shadow:none!important;font-size:15px;color:var(--ink)!important;padding:0}
+.commandKbd{padding:3px 8px;border-radius:7px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);font-size:10px;font-weight:700;color:var(--muted)}
+.app .topbar .search{cursor:pointer;position:relative}
+.app .topbar .search input{padding-left:52px}
+.app .topbar .search .commandKbd{position:absolute;left:12px;top:50%;transform:translateY(-50%);cursor:pointer;user-select:none;pointer-events:auto}
+.commandCloseBtn{background:transparent;border:0;color:var(--muted);cursor:pointer;display:grid;place-items:center;padding:4px}
+.commandCloseBtn:hover{color:#fff}
+.commandResults{max-height:min(380px,50vh);overflow-y:auto;padding:8px}
+.commandItem{display:flex;align-items:center;gap:14px;width:100%;padding:12px 14px;border:0;border-radius:12px;background:transparent;color:var(--ink);cursor:pointer;text-align:start;transition:background .15s ease,transform .15s ease}
+.commandItem:hover,.commandItem.active{background:rgba(13,148,136,0.14);box-shadow:inset -3px 0 #14b8a6}
+.commandItemIcon{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:rgba(13,148,136,0.18);color:#2dd4bf;flex-shrink:0}
+.commandItemContent{flex:1;min-width:0;display:grid;gap:2px}
+.commandItemTitle{font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.commandItemCategory{font-size:10px;color:var(--muted)}
+.commandItemArrow{color:var(--muted);opacity:0;transition:opacity .15s ease,transform .15s ease}
+.commandItem:hover .commandItemArrow,.commandItem.active .commandItemArrow{opacity:1;transform:translateX(-3px)}
+.commandEmpty{padding:32px;text-align:center;color:var(--muted);display:grid;place-items:center;gap:8px}
+.commandFooter{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-top:1px solid rgba(148,163,184,0.14);background:rgba(0,0,0,0.2);font-size:11px;color:var(--muted)}
+.commandFooter kbd{padding:2px 6px;border-radius:5px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);font-size:10px;font-family:inherit}
+@keyframes paletteFadeIn{from{opacity:0}to{opacity:1}}
+@keyframes paletteScaleIn{from{opacity:0;transform:scale(0.97)}to{opacity:1;transform:scale(1)}}
+
+/* Exam Split View for Clinical Cases */
+.examSplitView{display:grid;grid-template-columns:minmax(280px,1.1fr) minmax(320px,1.4fr);gap:22px;align-items:start}
+.clinicalCasePane{position:sticky;top:0;display:grid;gap:12px;padding:16px;background:rgba(0,0,0,0.25);border:1px solid var(--kiur-border);border-radius:16px}
+.clinicalCasePane img{width:100%;max-height:360px;object-fit:contain;border-radius:12px;background:#050814}
+.examQuestionPane{display:grid;gap:14px}
+.optionHotkey{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;background:rgba(255,255,255,0.1);font-size:10px;font-weight:800;margin-inline-end:8px}
+
+@media(max-width:900px){
+  .bentoCard{grid-column:span 12}
+  .bentoSpan8,.bentoSpan6,.bentoSpan4{grid-column:span 12}
+  .bentoStatsGrid{grid-template-columns:repeat(2,1fr)}
+  .examSplitView{grid-template-columns:1fr}
+}
+@media(max-width:540px){
+  .bentoStatsGrid{grid-template-columns:1fr}
+}
+

@@ -19,6 +19,7 @@ import AcademicChangeManager,{AcademicChangeStudent} from './AcademicChangeManag
 import GuestPortal from './GuestPortal';
 import AccountProfile from './AccountProfile';
 import {hydrateAccountTheme,ThemeToggle} from './theme-preference';
+import {CommandPalette} from './CommandPalette';
 
 const ImportManager=lazy(()=>import('./ImportManager'));
 const MediaManager=lazy(()=>import('./MediaManager'));
@@ -39,8 +40,8 @@ type Phase={id:string;departmentId:string;name:string;sortOrder:number};
 type Section={id:string;phaseId:string;name:string;sortOrder:number};
 type Subject={id:string;phaseId:string;name:string;sortOrder:number};
 type Lecture={id:string;subjectId:string;name:string;sortOrder:number};
-type Catalog={universities:University[];colleges:College[];departments:Department[];phases:Phase[];sections:Section[];subjects:Subject[];lectures:Lecture[]};
-type Test={examMode?:string;availableFrom?:string|null;availableUntil?:string|null;maxAttempts?:number;difficultyLevel?:number;id:string;title:string;subject:string;lecture:string;durationMinutes:number;passPercentage:number;questionCount:number;shuffleQuestions?:boolean|number;shuffleOptions?:boolean|number;status?:string;updatedAt?:string;universityId?:string;collegeId?:string;departmentId?:string;phaseId?:string;sectionId?:string;subjectId?:string;lectureId?:string;universityName?:string;collegeName?:string;departmentName?:string;phaseName?:string;sectionName?:string;subjectName?:string;lectureName?:string};
+export type Catalog={universities:University[];colleges:College[];departments:Department[];phases:Phase[];sections:Section[];subjects:Subject[];lectures:Lecture[]};
+export type Test={examMode?:string;availableFrom?:string|null;availableUntil?:string|null;maxAttempts?:number;difficultyLevel?:number;id:string;title:string;subject:string;lecture:string;durationMinutes:number;passPercentage:number;questionCount:number;shuffleQuestions?:boolean|number;shuffleOptions?:boolean|number;status?:string;updatedAt?:string;universityId?:string;collegeId?:string;departmentId?:string;phaseId?:string;sectionId?:string;subjectId?:string;lectureId?:string;universityName?:string;collegeName?:string;departmentName?:string;phaseName?:string;sectionName?:string;subjectName?:string;lectureName?:string};
 type Question={id?:string;text:string;options:string[];correctOption?:number;explanation?:string;position?:number;questionType?:'mcq'|'true_false'|'fill_blank'|'clinical_case';acceptedAnswers?:string[];imageId?:string|null;imageUrl?:string|null;points?:number};
 type TestDetail=Test&{questions:Question[];savedAnswers?:Record<string,number|string>;remainingSeconds?:number};
 type HistoryItem={testId?:string;id:string;title:string;subject:string;score:number;maxScore:number;percentage:number;finishedAt:string;passed:number};
@@ -71,7 +72,7 @@ function Loading(){return <div className="loadingPage"><ThemeToggle compact/><He
 function SectionLoading(){return <section className="panel sectionLoading"><MedicalVitals compact/><p>جارٍ تحميل أدوات هذا القسم...</p></section>}
 function Stat({icon,value,label,tone='mint'}:{icon:React.ReactNode;value:string|number;label:string;tone?:string}){return <article className="stat"><span className={'statIcon '+tone}>{icon}</span><div><b>{value}</b><small>{label}</small></div></article>}
 function Title({title,subtitle}:{title:string;subtitle:string}){return <div className="pageTitle"><div><h1>{title}</h1><p>{subtitle}</p></div><span className="dateChip">{new Intl.DateTimeFormat('ar-IQ',{dateStyle:'long'}).format(new Date())}</span></div>}
-type MainView='home'|'tests'|'glimpses'|'history'|'points'|'profile'|'admin';
+export type MainView='home'|'tests'|'glimpses'|'history'|'points'|'profile'|'admin';
 function AccessibilityDock(){const[open,setOpen]=useState(false);const[size,setSize]=useState(()=>savedVisualPreference('kiur-font-size','normal'));const[contrast,setContrast]=useState(()=>savedVisualPreference('kiur-contrast','normal')==='high');useEffect(()=>{document.documentElement.dataset.kiurFont=size;document.documentElement.dataset.kiurContrast=contrast?'high':'normal';try{localStorage.setItem('kiur-font-size',size);localStorage.setItem('kiur-contrast',contrast?'high':'normal')}catch{}},[size,contrast]);return <div className="accessibilityDock"><button type="button" aria-label="إعدادات سهولة الاستخدام" aria-expanded={open} onClick={()=>setOpen(value=>!value)}><SlidersHorizontal/></button>{open&&<section aria-label="إعدادات سهولة الاستخدام"><header><b>سهولة الاستخدام</b><button type="button" onClick={()=>setOpen(false)} aria-label="إغلاق"><X/></button></header><label><span><Type/>حجم النص</span><select value={size} onChange={event=>setSize(event.target.value)}><option value="normal">اعتيادي</option><option value="large">كبير</option><option value="xlarge">كبير جدًا</option></select></label><button type="button" className={contrast?'active':''} aria-pressed={contrast} onClick={()=>setContrast(value=>!value)}><Contrast/>{contrast?'إيقاف التباين العالي':'تشغيل التباين العالي'}</button></section>}</div>}
 function LiquidNavigation({items,active,onSelect}:{items:readonly (readonly [MainView,React.ComponentType<any>,string,number?])[];active:MainView;onSelect:(view:MainView)=>void}){
   return <><AccessibilityDock/><nav className="liquidNav" aria-label="التنقل الرئيسي" style={{'--liquid-count':items.length} as React.CSSProperties}>
@@ -150,11 +151,7 @@ function ExamRunner({test,attemptId,onClose,onDone,notify}:{test:TestDetail;atte
     flushTimerRef.current=setTimeout(()=>{void flushDirty()},1500);
   };
 
-  useEffect(()=>{
-    const handleKey=(event:KeyboardEvent)=>{if(event.key==='Escape'&&!busy)onClose()};
-    window.addEventListener('keydown',handleKey);
-    return()=>window.removeEventListener('keydown',handleKey);
-  },[onClose,busy]);
+
 
   useEffect(()=>{
     if(result)return;
@@ -180,6 +177,23 @@ function ExamRunner({test,attemptId,onClose,onDone,notify}:{test:TestDetail;atte
     dirtyRef.current.add(question.id!);
     scheduleFlush();
   };
+
+  useEffect(()=>{
+    const handleKey=(event:KeyboardEvent)=>{
+      if(event.key==='Escape'&&!busy){onClose();return}
+      const tag=(event.target as HTMLElement)?.tagName?.toLowerCase();
+      if(tag==='input'||tag==='textarea')return;
+      if(question&&question.questionType!=='fill_blank'){
+        const num=parseInt(event.key,10);
+        if(!isNaN(num)&&num>=1&&num<=question.options.length){
+          event.preventDefault();
+          choose(num-1);
+        }
+      }
+    };
+    window.addEventListener('keydown',handleKey);
+    return()=>window.removeEventListener('keydown',handleKey);
+  },[onClose,busy,question]);
 
   const navigateStep=(step:number)=>{
     void flushDirty();
@@ -241,16 +255,32 @@ function ExamRunner({test,attemptId,onClose,onDone,notify}:{test:TestDetail;atte
           <i style={{width:(current+1)/test.questions.length*100+'%'}}/>
         </div>
       </div>
-      {question.imageUrl&&<img className="clinicalImage" src={question.imageUrl} alt="صورة الحالة السريرية"/>}
-      <h2>{question.text}</h2>
-      {question.questionType==='fill_blank'?<label className="fillAnswer">
-        <span>اكتب الإجابة</span>
-        <input value={String(answers[question.id!]||'')} onChange={event=>fill(event.target.value)} maxLength={500}/>
-      </label>:<div className="options" role="radiogroup" aria-label="خيارات الإجابة">
-        {question.options.map((option,index)=><button key={index} role="radio" aria-checked={answers[question.id!]===index} className={answers[question.id!]===index?'selected':''} onClick={()=>choose(index)}>
-          <i aria-hidden="true"/>{option}
-        </button>)}
-      </div>}
+      {question.imageUrl?<div className="examSplitView">
+        <aside className="clinicalCasePane">
+          <img className="clinicalImage" src={question.imageUrl} alt="صورة الحالة السريرية"/>
+        </aside>
+        <div className="examQuestionPane">
+          <h2>{question.text}</h2>
+          {question.questionType==='fill_blank'?<label className="fillAnswer">
+            <span>اكتب الإجابة</span>
+            <input value={String(answers[question.id!]||'')} onChange={event=>fill(event.target.value)} maxLength={500}/>
+          </label>:<div className="options" role="radiogroup" aria-label="خيارات الإجابة">
+            {question.options.map((option,index)=><button key={index} role="radio" aria-checked={answers[question.id!]===index} className={answers[question.id!]===index?'selected':''} onClick={()=>choose(index)}>
+              <span className="optionHotkey">{index+1}</span><i aria-hidden="true"/>{option}
+            </button>)}
+          </div>}
+        </div>
+      </div>:<>
+        <h2>{question.text}</h2>
+        {question.questionType==='fill_blank'?<label className="fillAnswer">
+          <span>اكتب الإجابة</span>
+          <input value={String(answers[question.id!]||'')} onChange={event=>fill(event.target.value)} maxLength={500}/>
+        </label>:<div className="options" role="radiogroup" aria-label="خيارات الإجابة">
+          {question.options.map((option,index)=><button key={index} role="radio" aria-checked={answers[question.id!]===index} className={answers[question.id!]===index?'selected':''} onClick={()=>choose(index)}>
+            <span className="optionHotkey">{index+1}</span><i aria-hidden="true"/>{option}
+          </button>)}
+        </div>}
+      </>}
       <footer>
         <button className="secondary" onClick={onClose}>حفظ وخروج</button>
         <button className="secondary" disabled={current===0} onClick={()=>navigateStep(-1)}>السابق</button>
@@ -324,7 +354,7 @@ export default function RealAppV2(){
   const verificationCode=window.location.pathname.match(/^\/verify\/([a-f0-9]{32})$/i)?.[1]||'';
   const authPreview=['127.0.0.1','localhost'].includes(window.location.hostname)&&new URLSearchParams(window.location.search).has('auth-preview');
   const [directTarget,setDirectTarget]=useState<DirectTarget>(()=>parseDirectTarget());
-  const [adminMenuOpen,setAdminMenuOpen]=useState(false);const [user,setUser]=useState<User|null>(null);const [loading,setLoading]=useState(true);const [catalog,setCatalog]=useState<Catalog|null>(null);const [profileSetup,setProfileSetup]=useState(false);const [view,setView]=useState<MainView>(directTarget?'tests':'home');const [adminTab,setAdminTab]=useState<'tests'|'catalog'|'students'|'academicChanges'|'accounts'|'imports'|'library'|'glimpses'|'logs'|'bans'|'gamification'>('tests');const [menu,setMenu]=useState(false);const [tests,setTests]=useState<Test[]>([]);const [adminTests,setAdminTests]=useState<Test[]>([]);const [history,setHistory]=useState<HistoryItem[]>([]);const [summary,setSummary]=useState({attempts:0,averagePercentage:0});const [metrics,setMetrics]=useState<any>(null);const [audit,setAudit]=useState<any[]>([]);const [runner,setRunner]=useState<{test:TestDetail;attemptId:string}|null>(null);const [editor,setEditor]=useState<FormTest|'new'|null>(null);const [search,setSearch]=useState('');const [toast,setToast]=useState('');const toastTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
+  const [adminMenuOpen,setAdminMenuOpen]=useState(false);const [user,setUser]=useState<User|null>(null);const [loading,setLoading]=useState(true);const [catalog,setCatalog]=useState<Catalog|null>(null);const [profileSetup,setProfileSetup]=useState(false);const [view,setView]=useState<MainView>(directTarget?'tests':'home');const [adminTab,setAdminTab]=useState<'tests'|'catalog'|'students'|'academicChanges'|'accounts'|'imports'|'library'|'glimpses'|'logs'|'bans'|'gamification'>('tests');const [menu,setMenu]=useState(false);const [tests,setTests]=useState<Test[]>([]);const [adminTests,setAdminTests]=useState<Test[]>([]);const [history,setHistory]=useState<HistoryItem[]>([]);const [summary,setSummary]=useState({attempts:0,averagePercentage:0});const [metrics,setMetrics]=useState<any>(null);const [audit,setAudit]=useState<any[]>([]);const [runner,setRunner]=useState<{test:TestDetail;attemptId:string}|null>(null);const [editor,setEditor]=useState<FormTest|'new'|null>(null);  const [search,setSearch]=useState('');const [commandPaletteOpen,setCommandPaletteOpen]=useState(false);const [toast,setToast]=useState('');const toastTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
   const [studyLoading,setStudyLoading]=useState(true);const [studyError,setStudyError]=useState('');const studyLoadSequence=useRef(0);const [startingId,setStartingId]=useState<string|null>(null);const startLock=useRef(false);const [learningHub,setLearningHub]=useState<LearningHub|null>(null);
   const [students,setStudents]=useState<StudentRow[]>([]);const [studentsTotal,setStudentsTotal]=useState(0);const [studentSearch,setStudentSearch]=useState('');const [studentFilters,setStudentFilters]=useState<StudentFilters>({universityId:'',collegeId:'',departmentId:'',phaseId:'',sectionId:''});const [studentsLoading,setStudentsLoading]=useState(false);const studentsLoadSequence=useRef(0);const [motionEnabled,setMotionEnabled]=useState(motionPreference);const [notifications,setNotifications]=useState<UserNotification[]>([]);const [notificationsOpen,setNotificationsOpen]=useState(false);
   const notify=(message:string)=>{if(toastTimer.current)clearTimeout(toastTimer.current);setToast(message);toastTimer.current=setTimeout(()=>{setToast('');toastTimer.current=null},2800)};
@@ -336,6 +366,7 @@ export default function RealAppV2(){
   const reloadCatalog=async()=>{const taxonomy=await api<Catalog>('/api/catalog');setCatalog(taxonomy);return taxonomy};
   const loadStudents=async(query='',filters=studentFilters,signal?:AbortSignal)=>{const sequence=++studentsLoadSequence.current;setStudentsLoading(true);try{const params=new URLSearchParams({limit:'200',q:query,...filters});const data=await api<{data:StudentRow[];total:number}>('/api/admin/students?'+params.toString(),{signal});if(sequence!==studentsLoadSequence.current)return;setStudents(data.data);setStudentsTotal(data.total)}finally{if(sequence===studentsLoadSequence.current)setStudentsLoading(false)}};
   useEffect(()=>()=>{if(toastTimer.current)clearTimeout(toastTimer.current)},[]);
+  useEffect(()=>{const handleCmdK=(e:KeyboardEvent)=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();setCommandPaletteOpen(open=>!open)}};window.addEventListener('keydown',handleCmdK);return()=>window.removeEventListener('keydown',handleCmdK)},[]);
   useEffect(()=>{api<{user:User}>('/api/me').then(async data=>{setUser(data.user);void hydrateAccountTheme();if(data.user.restriction)return;const taxonomy=await api<Catalog>('/api/catalog');setCatalog(taxonomy);if(data.user.role==='student'&&(!data.user.universityId||!data.user.collegeId||!data.user.departmentId||!data.user.phaseId))setProfileSetup(true)}).catch(()=>setUser(null)).finally(()=>setLoading(false))},[]);
   useEffect(()=>{if(!user||!catalog||profileSetup)return;void loadStudy();return()=>{studyLoadSequence.current++}},[user,catalog,profileSetup]);
   useEffect(()=>{if(!user||user.restriction)return;void api<{data:UserNotification[]}>('/api/notifications').then(result=>setNotifications(result.data)).catch(()=>undefined)},[user]);
@@ -357,7 +388,7 @@ export default function RealAppV2(){
   const [ActiveAdminIcon,activeAdminTitle,activeAdminDescription]=adminMeta[adminTab];
   const selectAdminTab=(tab:typeof adminTab)=>{setAdminTab(tab);setAdminMenuOpen(false)};
   const studyContent=studyLoading?<section className="studentDataState" role="status" aria-live="polite"><p>جارٍ تحميل رفّك الدراسي ونتائجك…</p></section>:studyError?<section className="studentDataState" role="alert"><p>{studyError}</p><button className="solid" onClick={()=>void loadStudy()}>إعادة المحاولة</button></section>:<StudyShelf catalog={catalog} user={user} tests={tests} history={history} search={search} setSearch={setSearch} onStart={id=>void start(id)} startingId={startingId} onChangeProfile={()=>setProfileSetup(true)} directTarget={directTarget} onClearDirect={clearDirectLink} notify={notify} learningHub={learningHub} favoriteIds={learningHub?.favorites.map(item=>item.id)||[]} onToggleFavorite={toggleFavorite}/>;
-  return <div className={'app '+(motionEnabled?'':'motion-off')}><a className="skipLink" href="#main-content">تجاوز القائمة إلى المحتوى</a><aside className={menu?'sidebar open':'sidebar'}><div className="brand"><span><HeartPulse/></span><div>KIUR<small>BY ERATRANS</small></div></div><p className="navLabel">القائمة الرئيسية</p><nav>{links.map(([id,Icon,label])=><button key={id} className={view===id?'active':''} onClick={()=>navigate(id)}><Icon/>{label}{id==='tests'&&<b>{tests.length}</b>}</button>)}</nav>{staff&&<><p className="navLabel adminLabel">الإدارة</p><nav><button className={view==='admin'?'active':''} onClick={()=>navigate('admin')}><Settings2/>{user.role==='teacher'?'لوحة الكادر الأكاديمي':'لوحة الإشراف'}</button></nav></>}<div className="miniProfile"><button className="miniProfileAvatar" onClick={()=>navigate('profile')} aria-label="فتح حسابي">{user.name.slice(0,2)}</button><div><b>{user.name}</b><small>{roleLabel}</small></div><button onClick={()=>void logout()} aria-label="تسجيل الخروج"><LogOut/></button></div></aside><main id="main-content" tabIndex={-1}><header className="topbar"><button className="menuBtn" aria-label="فتح القائمة" aria-expanded={menu} onClick={()=>setMenu(true)}><Menu/></button><div className="search"><Search/><input value={search} onChange={event=>{clearDirectLink();setSearch(event.target.value);if(event.target.value)setView('tests')}} placeholder="ابحث عن اختبار أو محاضرة..." aria-label="بحث"/></div><ThemeToggle/><button className={'motionToggle '+(motionEnabled?'active':'')} title={motionEnabled?'إيقاف المؤثرات الطبية':'تشغيل المؤثرات الطبية'} aria-label={motionEnabled?'إيقاف المؤثرات الطبية':'تشغيل المؤثرات الطبية'} onClick={()=>setMotionEnabled(value=>{const next=!value;saveMotionPreference(next);return next})}><Activity/></button><div className="notificationArea"><button className="bell" aria-label="الإشعارات" aria-expanded={notificationsOpen} aria-controls="kiur-notifications" onClick={toggleNotifications}><Bell/>{notifications.some(item=>!item.readAt)&&<i/>}</button>{notificationsOpen&&<section id="kiur-notifications" className="notificationPanel" aria-live="polite"><header><b>الإشعارات</b><small>{notifications.length} إشعارًا حديثًا</small></header>{notifications.slice(0,8).map(item=><article key={item.id}><b>{item.title}</b><p>{item.message}</p><small>{new Intl.DateTimeFormat('ar-IQ',{dateStyle:'short',timeStyle:'short'}).format(new Date(item.createdAt))}</small></article>)}{!notifications.length&&<div className="notificationEmpty">لا توجد إشعارات جديدة.</div>}</section>}</div><button className="avatar avatarButton" aria-label="فتح حسابي" onClick={()=>navigate('profile')}>{user.name.slice(0,2)}</button></header>
+  return <div className={'app '+(motionEnabled?'':'motion-off')}><a className="skipLink" href="#main-content">تجاوز القائمة إلى المحتوى</a><aside className={menu?'sidebar open':'sidebar'}><div className="brand"><span><HeartPulse/></span><div>KIUR<small>BY ERATRANS</small></div></div><p className="navLabel">القائمة الرئيسية</p><nav>{links.map(([id,Icon,label])=><button key={id} className={view===id?'active':''} onClick={()=>navigate(id)}><Icon/>{label}{id==='tests'&&<b>{tests.length}</b>}</button>)}</nav>{staff&&<><p className="navLabel adminLabel">الإدارة</p><nav><button className={view==='admin'?'active':''} onClick={()=>navigate('admin')}><Settings2/>{user.role==='teacher'?'لوحة الكادر الأكاديمي':'لوحة الإشراف'}</button></nav></>}<div className="miniProfile"><button className="miniProfileAvatar" onClick={()=>navigate('profile')} aria-label="فتح حسابي">{user.name.slice(0,2)}</button><div><b>{user.name}</b><small>{roleLabel}</small></div><button onClick={()=>void logout()} aria-label="تسجيل الخروج"><LogOut/></button></div></aside><main id="main-content" tabIndex={-1}><header className="topbar"><button className="menuBtn" aria-label="فتح القائمة" aria-expanded={menu} onClick={()=>setMenu(true)}><Menu/></button><div className="search" onClick={()=>setCommandPaletteOpen(true)}><Search/><input value={search} onChange={event=>{clearDirectLink();setSearch(event.target.value);if(event.target.value)setView('tests')}} placeholder="ابحث أو اضغط ⌘K..." aria-label="بحث"/><kbd className="commandKbd" onClick={e=>{e.stopPropagation();setCommandPaletteOpen(true)}}>⌘K</kbd></div><ThemeToggle/><button className={'motionToggle '+(motionEnabled?'active':'')} title={motionEnabled?'إيقاف المؤثرات الطبية':'تشغيل المؤثرات الطبية'} aria-label={motionEnabled?'إيقاف المؤثرات الطبية':'تشغيل المؤثرات الطبية'} onClick={()=>setMotionEnabled(value=>{const next=!value;saveMotionPreference(next);return next})}><Activity/></button><div className="notificationArea"><button className="bell" aria-label="الإشعارات" aria-expanded={notificationsOpen} aria-controls="kiur-notifications" onClick={toggleNotifications}><Bell/>{notifications.some(item=>!item.readAt)&&<i/>}</button>{notificationsOpen&&<section id="kiur-notifications" className="notificationPanel" aria-live="polite"><header><b>الإشعارات</b><small>{notifications.length} إشعارًا حديثًا</small></header>{notifications.slice(0,8).map(item=><article key={item.id}><b>{item.title}</b><p>{item.message}</p><small>{new Intl.DateTimeFormat('ar-IQ',{dateStyle:'short',timeStyle:'short'}).format(new Date(item.createdAt))}</small></article>)}{!notifications.length&&<div className="notificationEmpty">لا توجد إشعارات جديدة.</div>}</section>}</div><button className="avatar avatarButton" aria-label="فتح حسابي" onClick={()=>navigate('profile')}>{user.name.slice(0,2)}</button></header>
   {view==='home'&&<><Title title={'أهلًا '+user.name} subtitle="مادتك، محاضرتك، ثم اختبارك — KIUR التابعة لقناة ERATRANS"/>{studyContent}<ClinicalGlimpsesSpotlight onBrowse={()=>navigate('glimpses')}/>{!studyLoading&&!studyError&&<div className="stats"><Stat icon={<CheckCircle2/>} value={completed} label="محاولات مكتملة في السجل"/><Stat icon={<BarChart3/>} value={summary.averagePercentage+'%'} label="متوسط النتائج المسجلة" tone="amber"/><Stat icon={<ShieldCheck/>} value={passed} label="محاولات ناجحة في السجل" tone="blue"/><Stat icon={<BookOpen/>} value={tests.length} label="اختبارات متاحة" tone="coral"/></div>}</>}
   {view==='tests'&&<><Title title="المواد والاختبارات" subtitle="اختر محاضرتك؛ فتح الاختبار يستأنف محاولتك الحالية إن وجدت."/>{studyContent}</>}
   {view==='glimpses'&&<><Title title="اللمحات السريرية" subtitle="مكتبة معرفية قصيرة ومعتمدة لجميع الطلبة."/><ClinicalGlimpsesLibrary/></>}
@@ -399,5 +430,5 @@ export default function RealAppV2(){
     </div>
   </section>
 </>}
- </main>{!runner&&<LiquidNavigation active={view} onSelect={navigate} items={liquidItems}/>}{menu&&<button className="scrim" aria-label="إغلاق القائمة" onClick={()=>setMenu(false)}/>}<div className={'toast '+(toast?'show':'')} role="status" aria-live="polite" aria-atomic="true">{toast}</div>{runner&&<ExamRunner test={runner.test} attemptId={runner.attemptId} notify={notify} onDone={()=>{void loadHistory();void loadLearningHub()}} onClose={()=>setRunner(null)}/>} {editor&&<TestForm catalog={catalog} initial={editor==='new'?undefined:editor} notify={notify} onClose={()=>setEditor(null)} onSaved={async()=>{setEditor(null);await Promise.all([loadAdmin(),loadTests()])}}/>}</div>
+ </main>{!runner&&<LiquidNavigation active={view} onSelect={navigate} items={liquidItems}/>}{menu&&<button className="scrim" aria-label="إغلاق القائمة" onClick={()=>setMenu(false)}/>}<div className={'toast '+(toast?'show':'')} role="status" aria-live="polite" aria-atomic="true">{toast}</div>{runner&&<ExamRunner test={runner.test} attemptId={runner.attemptId} notify={notify} onDone={()=>{void loadHistory();void loadLearningHub()}} onClose={()=>setRunner(null)}/>} {editor&&<TestForm catalog={catalog} initial={editor==='new'?undefined:editor} notify={notify} onClose={()=>setEditor(null)} onSaved={async()=>{setEditor(null);await Promise.all([loadAdmin(),loadTests()])}}/>}<CommandPalette open={commandPaletteOpen} onClose={()=>setCommandPaletteOpen(false)} onNavigate={navigate} onSelectTest={id=>void start(id)} tests={tests} catalog={catalog} userRole={user?.role}/></div>
 }
