@@ -31,6 +31,7 @@ export function CommandPalette({
   onClose,
   onNavigate,
   onSelectTest,
+  onOpenSmartReview,
   tests,
   catalog,
   userRole

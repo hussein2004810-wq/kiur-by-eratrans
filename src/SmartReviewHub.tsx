@@ -29,23 +29,25 @@ import {
 } from './smart-review-model';
 
 export interface SmartReviewHubProps {
-  open: boolean;
+  open?: boolean;
   onClose: () => void;
   tests: any[];
   catalog: any;
   history: any[];
   onLaunchCustomQuiz: (quiz: any) => void;
   initialTab?: 'flashcards' | 'quizBuilder' | 'stats';
+  notify?: (message: string) => void;
 }
 
 export default function SmartReviewHub({
-  open,
+  open = true,
   onClose,
   tests,
   catalog,
   history,
   onLaunchCustomQuiz,
-  initialTab = 'flashcards'
+  initialTab = 'flashcards',
+  notify
 }: SmartReviewHubProps) {
   const [tab, setTab] = useState<'flashcards' | 'quizBuilder' | 'stats'>(initialTab);
   const [cards, setCards] = useState<SpacedCard[]>([]);
@@ -137,8 +139,10 @@ export default function SmartReviewHub({
         questionCount: 10,
         durationMinutes: 15
       });
+      notify?.('بدء اختبار تدريبي عام لعدم توفر أخطاء مسجلة حاليًا');
       onLaunchCustomQuiz(fallbackQuiz);
     } else {
+      notify?.(`تم تجهيز اختبار الأخطاء السابقة (${quiz.questions.length} أسئلة)`);
       onLaunchCustomQuiz(quiz);
     }
     onClose();
@@ -155,6 +159,11 @@ export default function SmartReviewHub({
       durationMinutes: Number(durationMinutes) || 0
     };
     const quiz = buildCustomQuiz(tests, mistakeQuestionIds, filter);
+    if (!quiz.questions.length) {
+      notify?.('لا توجد أسئلة مطابقة للشروط المحددة');
+      return;
+    }
+    notify?.(`تم إنشاء الاختبار التدريبي بنجاح (${quiz.questions.length} أسئلة)`);
     onLaunchCustomQuiz(quiz);
     onClose();
   };
