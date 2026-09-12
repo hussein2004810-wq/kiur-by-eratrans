@@ -25,7 +25,7 @@ export function applyTheme(theme:KiurTheme,{persist=false}:{persist?:boolean}={}
   if(animate){document.documentElement.classList.add('kiur-theme-transition');window.setTimeout(()=>document.documentElement.classList.remove('kiur-theme-transition'),220)}
   document.documentElement.dataset.kiurTheme=theme;
   document.documentElement.style.colorScheme=theme;
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content',theme==='dark'?'#080b1a':'#f4f7ff');
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content',theme==='dark'?'#080b1a':'#f8fafc');
   if(persist){try{localStorage.setItem(STORAGE_KEY,theme)}catch{}}
   window.dispatchEvent(new CustomEvent<KiurTheme>(CHANGE_EVENT,{detail:theme}));
 }
