@@ -1,4 +1,4 @@
-const DEFAULT_PUBLIC_ORIGIN='https://medexam-iraq-2026.hussein2004810.chatgpt.site';
+const DEFAULT_PUBLIC_ORIGIN='https://kiur-iraq.pages.dev';
 function escapeHtml(value){return String(value||'').replace(/[&<>"']/g,character=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]))}
 
 export async function serveSharePage(request,env,url,indexResponse){
