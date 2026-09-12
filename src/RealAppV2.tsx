@@ -6,6 +6,7 @@ import './admin-shell.css';
 import './mobile-records.css';
 import './accessibility.css';
 import './hierarchy.css';
+import './stitch/stitch.css';
 import {CertificateButton,VerifyScreen} from './Certificate';
 import type {StudentFilters,StudentRow} from './StudentManager';
 import ShareButton from './ShareButton';

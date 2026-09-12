@@ -65,7 +65,7 @@
   --stitch-shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.05);
   --stitch-shadow-md: 0 4px 12px rgba(15, 23, 42, 0.07);
   --stitch-shadow-lg: 0 12px 30px rgba(15, 23, 42, 0.1);
-  --stitch-font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --stitch-font-family: 'Noto Sans Arabic', 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 /* Dark Mode Tokens (Calibrated for Low-strain Night Study) */
@@ -562,6 +562,18 @@ html[data-kiur-theme="dark"] .stitchMetricIconSquare {
   font-family: var(--stitch-font-family);
   direction: rtl;
   overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+.stitchLanding *,
+.stitchLanding *::before,
+.stitchLanding *::after {
+  box-sizing: border-box;
+}
+
+.stitchLanding a {
+  text-decoration: none;
+  color: inherit;
 }
 
 .stitchStatusBanner {
@@ -1971,6 +1983,25 @@ html[data-kiur-theme="dark"] .stitchTestSubjectTag {
   .stitchBtnLgPrimary,
   .stitchBtnLgSecondary {
     width: 100%;
+  }
+  .stitchStatusBanner {
+    font-size: 11px;
+    padding: 6px 0;
+  }
+  .stitchStatusContainer {
+    padding: 0 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .stitchLandingHeaderInner {
+    padding: 10px 16px;
+  }
+  .stitchLandingContainer {
+    padding: 0 16px;
+  }
+  .stitchBrandTexts .stitchBrandSub {
+    display: none;
   }
 }
 

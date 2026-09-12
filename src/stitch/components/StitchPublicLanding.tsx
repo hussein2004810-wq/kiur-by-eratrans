@@ -22,6 +22,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { ThemeToggle } from '../../theme-preference';
+import '../stitch.css';
 
 export type CatalogItem = {
   id: string;

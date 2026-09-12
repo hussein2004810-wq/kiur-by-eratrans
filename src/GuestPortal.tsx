@@ -1,6 +1,7 @@
 import {useEffect,useMemo,useState} from 'react';
 import AuthScreen from './AuthScreen';
 import StitchPublicLanding from './stitch/components/StitchPublicLanding';
+import './stitch/stitch.css';
 
 
 type Item={id:string;name:string;universityId?:string;collegeId?:string;departmentId?:string;phaseId?:string;subjectId?:string};
