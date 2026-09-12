@@ -1,5 +1,4 @@
-import React from 'react';
-import { HeartPulse, ClipboardList, BookOpen, Brain, History, Trophy, UserRound, LogOut, Settings2, FileText, Activity, Calendar, BookMarked, X } from 'lucide-react';
+import { HeartPulse, ClipboardList, BookOpen, Brain, History, Trophy, UserRound, LogOut, Settings2, FileText, Activity, Calendar, BookMarked, X, LayoutDashboard, RotateCcw, BarChart3 } from 'lucide-react';
 import { useStitch } from '../StitchContext';
 
 export function StitchSidebar() {
@@ -52,43 +51,21 @@ export function StitchSidebar() {
           onClick={() => handleNavigate('home')}
         >
           <div className="stitchNavItemInner">
-            <BookOpen size={18} />
-            <span>لوحة المتابعة</span>
+            <LayoutDashboard size={18} />
+            <span>لوحة المتابعة الرئيسية</span>
           </div>
         </button>
 
         <button
           type="button"
           className={`stitchNavItem ${view === 'qbank' || view === 'tests' ? 'active' : ''}`}
-          onClick={() => handleNavigate('qbank')}
+          onClick={() => handleNavigate('tests')}
         >
           <div className="stitchNavItemInner">
             <ClipboardList size={18} />
-            <span>بنك الأسئلة الطبي (Q-Bank)</span>
+            <span>بنك الاختبارات والمحاضرات</span>
           </div>
           {tests.length > 0 && <span className="stitchNavBadge">{tests.length}</span>}
-        </button>
-
-        <button
-          type="button"
-          className={`stitchNavItem ${view === 'tutor-player' ? 'active' : ''}`}
-          onClick={() => handleNavigate('tutor-player')}
-        >
-          <div className="stitchNavItemInner">
-            <Brain size={18} />
-            <span>مشغل الأسئلة (وضع التدريب)</span>
-          </div>
-        </button>
-
-        <button
-          type="button"
-          className={`stitchNavItem ${view === 'exam-player' ? 'active' : ''}`}
-          onClick={() => handleNavigate('exam-player')}
-        >
-          <div className="stitchNavItemInner">
-            <Activity size={18} />
-            <span>محاكاة SMLE الموقوتة</span>
-          </div>
         </button>
 
         <button
@@ -99,17 +76,6 @@ export function StitchSidebar() {
           <div className="stitchNavItemInner">
             <RotateCcw size={18} />
             <span>مركز المراجعة والتعافي</span>
-          </div>
-        </button>
-
-        <button
-          type="button"
-          className={`stitchNavItem ${view === 'analytics' ? 'active' : ''}`}
-          onClick={() => handleNavigate('analytics')}
-        >
-          <div className="stitchNavItemInner">
-            <BarChart3 size={18} />
-            <span>تحليلات الأداء والجاهزية</span>
           </div>
         </button>
 
@@ -126,38 +92,27 @@ export function StitchSidebar() {
 
         <button
           type="button"
-          className={`stitchNavItem ${view === 'notes' ? 'active' : ''}`}
-          onClick={() => handleNavigate('notes')}
-        >
-          <div className="stitchNavItemInner">
-            <BookMarked size={18} />
-            <span>اللآلئ السريرية (Pearls)</span>
-          </div>
-        </button>
-
-        <button
-          type="button"
-          className={`stitchNavItem ${view === 'glimpses' ? 'active' : ''}`}
+          className={`stitchNavItem ${view === 'notes' || view === 'glimpses' ? 'active' : ''}`}
           onClick={() => handleNavigate('glimpses')}
         >
           <div className="stitchNavItemInner">
-            <HeartPulse size={18} />
-            <span>اللمحات السريرية 3D</span>
+            <BookMarked size={18} />
+            <span>اللآلئ واللمحات السريرية</span>
           </div>
         </button>
-
-        <p className="stitchNavLabel" style={{ marginTop: '8px' }}>الاشتراكات والسجل</p>
 
         <button
           type="button"
-          className={`stitchNavItem ${view === 'pricing' ? 'active' : ''}`}
-          onClick={() => handleNavigate('pricing')}
+          className={`stitchNavItem ${view === 'analytics' ? 'active' : ''}`}
+          onClick={() => handleNavigate('analytics')}
         >
           <div className="stitchNavItemInner">
-            <Sparkles size={18} />
-            <span>باقات الاشتراك والترخيص</span>
+            <BarChart3 size={18} />
+            <span>تحليلات الأداء والجاهزية</span>
           </div>
         </button>
+
+        <p className="stitchNavLabel" style={{ marginTop: '12px' }}>الإنجاز والحساب</p>
 
         <button
           type="button"
@@ -178,7 +133,7 @@ export function StitchSidebar() {
           >
             <div className="stitchNavItemInner">
               <Trophy size={18} />
-              <span>نقاطي والتحصيل</span>
+              <span>نقاطي والتنافس</span>
             </div>
           </button>
         )}

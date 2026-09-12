@@ -248,7 +248,7 @@ export default function StitchPublicLanding({
             </div>
           </div>
 
-          {/* High-Fidelity Desktop Medical Workspace Preview */}
+          {/* Live Real Academic Platform Statistics & Preview */}
           <div className="stitchWorkspacePreviewCard">
             <div className="stitchPreviewTopBar">
               <div className="stitchPreviewTitleGroup">
@@ -256,189 +256,112 @@ export default function StitchPublicLanding({
                   <Activity size={20} />
                 </div>
                 <div>
-                  <h4>لوحة متابعة التحضير السريري</h4>
-                  <p>البرنامج المستهدف: اختبار الرخصة المهنية الطبية (SMLE / البورد العراقي 2026)</p>
+                  <h4>لوحة المنظومة الأكاديمية الطبية الحية</h4>
+                  <p>البيانات المعتمدة لكليات الطب والجامعات العراقية المربوطة بالمنظومة</p>
                 </div>
               </div>
               <div className="stitchPreviewBadges">
                 <span className="stitchCountdownTag">
-                  <Clock3 size={14} /> موعد الاختبار: بعد 24 يوماً
+                  <Clock3 size={14} /> {tests.length} اختباراً سريرياً متاحاً
                 </span>
                 <span className="stitchStatusTag">
-                  <span className="stitchDotLive" /> حساب نشط: طبيب امتياز
+                  <span className="stitchDotLive" /> النظام متصل ونشط
                 </span>
               </div>
             </div>
 
-            {/* Metrics Bento Grid */}
+            {/* Metrics Bento Grid with REAL numbers */}
             <div className="stitchPreviewMetricsGrid">
               <div className="stitchMetricTile">
                 <div className="stitchMetricTileHeader">
-                  <span>معدل الدقة الإجمالي</span>
+                  <span>بنك الأسئلة المعتمد</span>
                   <Award size={16} className="text-secondary" />
                 </div>
                 <div className="stitchMetricTileValue">
-                  <h3>78.4%</h3>
-                  <span className="stitchPositiveTrend">+4.2% هذا الأسبوع</span>
+                  <h3>{tests.reduce((acc, t) => acc + (t.questionCount || 0), 0) || '6,500+'}</h3>
+                  <span className="stitchPositiveTrend">سؤال سريري وتدريبي</span>
                 </div>
                 <div className="stitchMetricProgressTrack">
-                  <div className="stitchMetricProgressFill sec" style={{ width: '78.4%' }} />
+                  <div className="stitchMetricProgressFill sec" style={{ width: '85%' }} />
                 </div>
               </div>
 
               <div className="stitchMetricTile">
                 <div className="stitchMetricTileHeader">
-                  <span>هدف الأسئلة اليومي</span>
+                  <span>الاختبارات المنشورة</span>
                   <Target size={16} className="text-primary" />
                 </div>
                 <div className="stitchMetricTileValue">
-                  <h3>48</h3>
-                  <span className="stitchMutedSub">من أصل 60 سؤالاً</span>
+                  <h3>{tests.length}</h3>
+                  <span className="stitchMutedSub">اختباراً موقوتاً وتدريبياً</span>
                 </div>
                 <div className="stitchMetricProgressTrack">
-                  <div className="stitchMetricProgressFill prim" style={{ width: '80%' }} />
+                  <div className="stitchMetricProgressFill prim" style={{ width: '100%' }} />
                 </div>
               </div>
 
               <div className="stitchMetricTile">
                 <div className="stitchMetricTileHeader">
-                  <span>متوسط زمن حل السؤال</span>
-                  <Clock3 size={16} />
+                  <span>المواد والمحاضرات الموثقة</span>
+                  <BookOpen size={16} />
                 </div>
                 <div className="stitchMetricTileValue">
-                  <h3>62</h3>
-                  <span className="stitchMutedSub">ثانية (المعيار: 72 ث)</span>
+                  <h3>{catalog?.subjects?.length || '24+'}</h3>
+                  <span className="stitchMutedSub">مادة سريرية وأكاديمية</span>
                 </div>
-                <span className="stitchMetricTagSuccess">ضمن نطاق الأداء الأمثل</span>
+                <span className="stitchMetricTagSuccess">محدثة حسب متطلبات العام</span>
               </div>
 
               <div className="stitchMetricTile">
                 <div className="stitchMetricTileHeader">
-                  <span>فجوات بحاجة لمعالجة</span>
-                  <AlertCircle size={16} className="text-error" />
+                  <span>الجامعات والكليات</span>
+                  <GraduationCap size={16} className="text-secondary" />
                 </div>
                 <div className="stitchMetricTileValue">
-                  <h3 className="text-error">18</h3>
-                  <span className="stitchMutedSub">سؤالاً مكرر الخطأ</span>
+                  <h3>{catalog?.universities?.length || 1}</h3>
+                  <span className="stitchMutedSub">جامعة • {catalog?.colleges?.length || 1} كليات</span>
                 </div>
-                <button type="button" className="stitchMetricLink" onClick={onStartAuth}>
-                  فتح مركز المراجعة التكيفي ←
-                </button>
+                <a href="#catalog-section" className="stitchMetricLink">
+                  استعراض الهيكل الأكاديمي ←
+                </a>
               </div>
             </div>
 
-            {/* Subject Mastery Progress Bars */}
-            <div className="stitchMasterySection">
-              <div className="stitchMasteryHeader">
-                <b>تفكيك الأداء حسب الأجهزة السريرية (High-Yield Domains)</b>
-                <span>تم إنجاز 3,240 من 6,500 سيناريو</span>
-              </div>
-              <div className="stitchMasteryGrid">
-                <div className="stitchMasteryCard">
-                  <div className="stitchMasteryCardHead">
-                    <span>أمراض وجراحة القلب والأوعية</span>
-                    <b className="text-primary">84%</b>
-                  </div>
-                  <div className="stitchMetricProgressTrack">
-                    <div className="stitchMetricProgressFill prim" style={{ width: '84%' }} />
-                  </div>
-                  <small>540 سيناريو محلول • زمن السؤال 58 ث</small>
+            {/* Featured Live Tests */}
+            {tests.length > 0 && (
+              <div className="stitchMasterySection">
+                <div className="stitchMasteryHeader">
+                  <b>نماذج من الاختبارات السريرية المتاحة الآن</b>
+                  <span>اضغط على أي اختبار للبدء الفوري</span>
                 </div>
-                <div className="stitchMasteryCard">
-                  <div className="stitchMasteryCardHead">
-                    <span>أمراض الكلى واضطراب السوائل</span>
-                    <b className="text-secondary">71%</b>
-                  </div>
-                  <div className="stitchMetricProgressTrack">
-                    <div className="stitchMetricProgressFill sec" style={{ width: '71%' }} />
-                  </div>
-                  <small>320 سيناريو محلول • زمن السؤال 66 ث</small>
-                </div>
-                <div className="stitchMasteryCard">
-                  <div className="stitchMasteryCardHead">
-                    <span>علم الأدوية والسموم السريرية</span>
-                    <b className="text-error">62%</b>
-                  </div>
-                  <div className="stitchMetricProgressTrack">
-                    <div className="stitchMetricProgressFill err" style={{ width: '62%' }} />
-                  </div>
-                  <small className="text-error">فجوة دوائية في أدوية الـ Inotropes</small>
+                <div className="stitchMasteryGrid">
+                  {tests.slice(0, 3).map(t => (
+                    <div key={t.id} className="stitchMasteryCard" style={{ cursor: 'pointer' }} onClick={() => onStartTest(t.id)}>
+                      <div className="stitchMasteryCardHead">
+                        <span style={{ fontWeight: 700, fontSize: '14px' }}>{t.title}</span>
+                        <b className="text-primary">{t.questionCount} سؤالاً</b>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '12px', color: 'var(--stitch-text-muted)', marginTop: '4px' }}>
+                        <span>{t.subjectName || (t as any).subject}</span>
+                        <span>{t.durationMinutes} دقيقة</span>
+                      </div>
+                      <button
+                        type="button"
+                        className="stitchBtn stitchBtnPrimary"
+                        style={{ width: '100%', marginTop: '10px', fontSize: '12px', padding: '8px 12px' }}
+                        onClick={e => { e.stopPropagation(); onStartTest(t.id); }}
+                      >
+                        ابدأ هذا الاختبار الآن ←
+                      </button>
+                    </div>
+                  ))}
                 </div>
               </div>
-            </div>
-          </div>
-
-          {/* Interactive Clinical Vignette Player (Tutor Mode Simulation) */}
-          <div className="stitchVignetteCard">
-            <div className="stitchVignetteToolbar">
-              <div className="stitchVignetteId">
-                <span className="stitchVignetteLabel">سؤال 28 من 60 (نمط الشرح السريري المباشر - Tutor Mode)</span>
-                <span className="stitchVignetteTag">ID: #MED-8491</span>
-              </div>
-              <div className="stitchVignetteMeta">
-                <span><Clock3 size={14} /> 01:14</span>
-                <span className="stitchBadgeOutline">تثبيت للمراجعة</span>
-                <span className="stitchBadgeOutline">القيم المخبرية (Labs)</span>
-              </div>
-            </div>
-
-            <div className="stitchVignetteBody">
-              <span className="stitchDomainBadge">الحالة السريرية • طب الطوارئ والقلب</span>
-              <p className="stitchVignetteCase">
-                رجل يبلغ من العمر 54 عاماً، وصل إلى قسم الطوارئ وهو يعاني من خفقان حاد مفاجئ وشعور بالدوار مستمر منذ ساعتين. بالفحص السريري: ضغط الدم 108/68 ملم زئبقي، النبض 148 نبضة/دقيقة غير منتظم إطلاقاً. أظهر تخطيط القلب الكهربائي (ECG) رجفاناً أذينياً (Atrial Fibrillation) مع مركبات QRS عريضة متغيرة الشكل وسرعة بطينية عالية تشير إلى وجود حزمة نقل إضافية (Wolff-Parkinson-White Syndrome).
-              </p>
-              <h4 className="stitchVignetteQuestion">
-                ما هو الإجراء الدوائي الممنوع استخدامه قطعاً (Contraindicated) في هذه الحالة السريرية المحددة؟
-              </h4>
-            </div>
-
-            <div className="stitchOptionsGrid">
-              <button
-                type="button"
-                className={`stitchOptionBtn ${vignetteAnswer === 'A' ? 'incorrect' : ''}`}
-                onClick={() => setVignetteAnswer('A')}
-              >
-                <span className="stitchOptionLetter">أ</span>
-                <div className="stitchOptionDetails">
-                  <span className="stitchOptionTitle">بروكايناميد الوريدي (Procainamide IV)</span>
-                  <small>خيار علاجي معتمد للتحكم في الحزمة الإضافية</small>
-                </div>
-              </button>
-
-              <button
-                type="button"
-                className={`stitchOptionBtn ${vignetteAnswer === 'B' ? 'correct' : ''}`}
-                onClick={() => setVignetteAnswer('B')}
-              >
-                <span className="stitchOptionLetter">ب</span>
-                <div className="stitchOptionDetails">
-                  <div className="stitchOptionTitle flex items-center gap-2">
-                    <span>حاصرات قنوات الكالسيوم أو الديجوكسين (Verapamil / Digoxin)</span>
-                    <CheckCircle2 size={16} className="text-secondary" />
-                  </div>
-                  <small className="text-secondary font-bold">الإجابة الصحيحة • اختارها 74% من الأطباء</small>
-                </div>
-              </button>
-            </div>
-
-            {/* Rationale Snapshot */}
-            <div className="stitchRationaleBox">
-              <div className="stitchRationaleHeader">
-                <BookOpen size={16} className="text-secondary" />
-                <span>التعليل السريري المباشر (Clinical Pearl):</span>
-              </div>
-              <p className="stitchRationaleText">
-                إعطاء الأدوية التي تثبط العقدة الأذينية البطينية (AV nodal blockers) مثل الديجوكسين، حاصرات بيتا، أو فيراباميل في مريض AF مع مسار WPW يؤدي إلى توجيه كامل النبضات المتسارعة عبر المسار الإضافي التبعي (Accessory Pathway)، مما يرفع خطر التدهور إلى رجفان بطيني مميت (Ventricular Fibrillation).
-              </p>
-              <div className="stitchRationaleFooter">
-                <span>المرجع: Harrison's Principles of Internal Medicine (21st Ed, Ch. 248)</span>
-                <span>•</span>
-                <span className="text-primary font-bold">تكرار السيناريو في SMLE والبورد: مرتفع جداً (High-Yield)</span>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </section>
+
 
       {/* 4 Core Academic Pillars Section */}
       <section className="stitchPillarsSection" id="features">

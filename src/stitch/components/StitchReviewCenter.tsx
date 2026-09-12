@@ -76,11 +76,13 @@ const SAMPLE_INCORRECT_ITEMS: IncorrectQuestionItem[] = [
 ];
 
 export function StitchReviewCenter() {
-  const { setView, openSmartReview, notify } = useStitch();
+  const { setView, openSmartReview, notify, history, startExam } = useStitch();
   const [activeTab, setActiveTab] = useState<'incorrect' | 'bookmarks' | 'remediation'>('incorrect');
 
+  const failedAttempts = history.filter(h => !h.passed);
+
   const handleLaunchTargetedRecovery = () => {
-    setView('remediation');
+    openSmartReview('quizBuilder');
   };
 
   return (
@@ -103,14 +105,14 @@ export function StitchReviewCenter() {
             <span style={{ color: 'var(--stitch-primary)', fontWeight: 600 }}>مركز المراجعة والتعافي السريري</span>
           </div>
           <span style={{
-            background: 'var(--stitch-error-container)',
-            color: 'var(--stitch-on-error-container)',
+            background: failedAttempts.length > 0 ? 'var(--stitch-error-container)' : 'var(--stitch-secondary-container)',
+            color: failedAttempts.length > 0 ? 'var(--stitch-on-error-container)' : 'var(--stitch-on-secondary-container)',
             padding: '4px 12px',
             borderRadius: '9999px',
             fontSize: '12px',
             fontWeight: 700
           }}>
-            13 فجوة معرفية تحتاج معالجة استباقية
+            {failedAttempts.length > 0 ? `${failedAttempts.length} اختبارات تحتاج إعادة ومراجعة` : 'لا توجد اختبارات غير مجتازة'}
           </span>
         </div>
 
@@ -207,111 +209,136 @@ export function StitchReviewCenter() {
 
       {/* Main Incorrect Items Vault List */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-        {SAMPLE_INCORRECT_ITEMS.map(item => (
-          <div
-            key={item.id}
-            style={{
-              background: 'var(--stitch-surface-container-lowest)',
-              border: '1px solid var(--stitch-border)',
-              borderRadius: 'var(--stitch-radius-lg)',
-              padding: '20px',
-              boxShadow: 'var(--stitch-shadow-sm)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '12px'
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{
-                  background: 'var(--stitch-error-container)',
-                  color: 'var(--stitch-on-error-container)',
-                  padding: '2px 8px',
-                  borderRadius: '4px',
-                  fontSize: '12px',
-                  fontWeight: 700
-                }}>
-                  {item.code}
-                </span>
-                <strong style={{ fontSize: '15px', color: 'var(--stitch-text-primary)' }}>
-                  {item.topic}
-                </strong>
-                <span style={{ fontSize: '12px', color: 'var(--stitch-text-muted)' }}>({item.specialty})</span>
-              </div>
-              <span style={{ fontSize: '12px', color: 'var(--stitch-text-muted)' }}>
-                آخر محاولة: {item.lastAttemptDate}
-              </span>
-            </div>
-
-            {/* Error vs Correction Strip */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap: '12px'
-            }}>
-              <div style={{
-                background: 'var(--stitch-error-container)',
+        {failedAttempts.length === 0 ? (
+          <div style={{
+            background: 'var(--stitch-surface-container-lowest)',
+            border: '1px solid var(--stitch-border)',
+            borderRadius: 'var(--stitch-radius-lg)',
+            padding: '40px 20px',
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '12px'
+          }}>
+            <CheckCircle2 size={48} color="var(--stitch-primary)" />
+            <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 700, color: 'var(--stitch-text-primary)' }}>
+              سجلّك خالٍ من الاختبارات غير المجتازة!
+            </h3>
+            <p style={{ margin: 0, color: 'var(--stitch-text-secondary)', fontSize: '14px', maxWidth: '480px' }}>
+              جميع الاختبارات التي أنهيتها حققت فيها نسبة الاجتياز المطلوبة. يمكنك متابعة التدريب أو المراجعة الذكية للبطاقات.
+            </p>
+            <button
+              type="button"
+              onClick={() => openSmartReview('flashcards')}
+              style={{
+                marginTop: '8px',
+                padding: '10px 20px',
+                background: 'var(--stitch-primary)',
+                color: '#fff',
+                border: 'none',
                 borderRadius: 'var(--stitch-radius-md)',
-                padding: '10px 14px',
-                fontSize: '13px'
-              }}>
-                <span style={{ color: 'var(--stitch-error)', fontWeight: 700, display: 'block', fontSize: '11px' }}>
-                  اختيارك الخاطئ السابق:
-                </span>
-                <strong style={{ color: 'var(--stitch-text-primary)' }}>{item.distractorChosen}</strong>
-              </div>
-
-              <div style={{
-                background: 'var(--stitch-secondary-container)',
-                borderRadius: 'var(--stitch-radius-md)',
-                padding: '10px 14px',
-                fontSize: '13px'
-              }}>
-                <span style={{ color: 'var(--stitch-on-secondary-container)', fontWeight: 700, display: 'block', fontSize: '11px' }}>
-                  الإجابة السريرية الصحيحة:
-                </span>
-                <strong style={{ color: 'var(--stitch-text-primary)' }}>{item.correctAnswer}</strong>
-              </div>
-            </div>
-
-            {/* Pearl Callout */}
-            <div style={{
-              background: 'var(--stitch-surface-container-low)',
-              borderRight: '3px solid var(--stitch-primary)',
-              padding: '10px 14px',
-              borderRadius: 'var(--stitch-radius-md)',
-              fontSize: '13px',
-              color: 'var(--stitch-text-secondary)'
-            }}>
-              <strong style={{ color: 'var(--stitch-primary)' }}>اللؤلؤة العلاجية: </strong>
-              <span>{item.pearl}</span>
-            </div>
-
-            {/* Retest Single Question Button */}
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '4px' }}>
-              <button
-                type="button"
-                onClick={() => setView('tutor-player')}
-                style={{
-                  background: 'var(--stitch-surface-container-high)',
-                  color: 'var(--stitch-primary)',
-                  border: 'none',
-                  borderRadius: 'var(--stitch-radius-md)',
-                  padding: '8px 16px',
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px'
-                }}
-              >
-                <RotateCcw size={13} />
-                <span>إعادة التدريب الفوري على هذا السؤال</span>
-              </button>
-            </div>
+                fontWeight: 700,
+                cursor: 'pointer'
+              }}
+            >
+              فتح مراجعة البطاقات الذكية
+            </button>
           </div>
-        ))}
+        ) : (
+          failedAttempts.map(item => (
+            <div
+              key={item.id}
+              style={{
+                background: 'var(--stitch-surface-container-lowest)',
+                border: '1px solid var(--stitch-border)',
+                borderRadius: 'var(--stitch-radius-lg)',
+                padding: '20px',
+                boxShadow: 'var(--stitch-shadow-sm)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{
+                    background: 'var(--stitch-error-container)',
+                    color: 'var(--stitch-on-error-container)',
+                    padding: '2px 8px',
+                    borderRadius: '4px',
+                    fontSize: '12px',
+                    fontWeight: 700
+                  }}>
+                    {item.percentage}%
+                  </span>
+                  <strong style={{ fontSize: '15px', color: 'var(--stitch-text-primary)' }}>
+                    {item.title}
+                  </strong>
+                  <span style={{ fontSize: '12px', color: 'var(--stitch-text-muted)' }}>({item.subject})</span>
+                </div>
+                <span style={{ fontSize: '12px', color: 'var(--stitch-text-muted)' }}>
+                  تاريخ المحاولة: {new Intl.DateTimeFormat('ar-IQ').format(new Date(item.finishedAt))}
+                </span>
+              </div>
+
+              {/* Error vs Correction Strip */}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                gap: '12px'
+              }}>
+                <div style={{
+                  background: 'var(--stitch-error-container)',
+                  borderRadius: 'var(--stitch-radius-md)',
+                  padding: '10px 14px',
+                  fontSize: '13px'
+                }}>
+                  <span style={{ color: 'var(--stitch-error)', fontWeight: 700, display: 'block', fontSize: '11px' }}>
+                    الدرجة المحققة:
+                  </span>
+                  <strong style={{ color: 'var(--stitch-text-primary)' }}>{item.percentage}% (دون حد الاجتياز)</strong>
+                </div>
+
+                <div style={{
+                  background: 'var(--stitch-secondary-container)',
+                  borderRadius: 'var(--stitch-radius-md)',
+                  padding: '10px 14px',
+                  fontSize: '13px'
+                }}>
+                  <span style={{ color: 'var(--stitch-on-secondary-container)', fontWeight: 700, display: 'block', fontSize: '11px' }}>
+                    حالة السجل:
+                  </span>
+                  <strong style={{ color: 'var(--stitch-text-primary)' }}>إعادة الاختبار مطلوبة لإصدار الشهادة</strong>
+                </div>
+              </div>
+
+              {/* Retest Single Question Button */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '4px' }}>
+                <button
+                  type="button"
+                  onClick={() => startExam(item.testId || item.id)}
+                  style={{
+                    background: 'var(--stitch-primary)',
+                    color: '#ffffff',
+                    border: 'none',
+                    borderRadius: 'var(--stitch-radius-md)',
+                    padding: '8px 18px',
+                    fontSize: '13px',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <RotateCcw size={14} />
+                  <span>إعادة هذا الاختبار الآن</span>
+                </button>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

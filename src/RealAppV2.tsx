@@ -429,6 +429,27 @@ export default function RealAppV2(){
     notify
   };
 
+  const studyContent = (
+    <StudyShelf
+      catalog={catalog}
+      tests={tests}
+      history={history}
+      user={user}
+      search={search}
+      setSearch={setSearch}
+      directTarget={directTarget}
+      onClearDirect={clearDirectLink}
+      onStart={id => void start(id)}
+      onChangeProfile={() => setProfileSetup(true)}
+      notify={notify}
+      startingId={startingId}
+      learningHub={learningHub}
+      favoriteIds={learningHub?.favorites?.map(f => f.id) || []}
+      onToggleFavorite={toggleFavorite}
+      onOpenSmartReview={tab => { setSmartReviewTab(tab); setSmartReviewOpen(true); }}
+    />
+  );
+
   return (
     <StitchProvider value={stitchContextValue}>
       <div className="visually-hidden" aria-hidden="true" style={{ display: 'none' }}>

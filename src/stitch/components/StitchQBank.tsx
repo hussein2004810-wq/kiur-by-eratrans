@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   HeartPulse, 
   Stethoscope, 
@@ -14,11 +14,11 @@ import {
   Sparkles, 
   Clock, 
   ShieldAlert, 
-  ArrowRight,
-  Filter,
-  Check,
-  Zap,
-  BookOpen
+  ArrowRight, 
+  Filter, 
+  Check, 
+  Zap, 
+  BookOpen 
 } from 'lucide-react';
 import { useStitch } from '../StitchContext';
 
@@ -31,98 +31,8 @@ export interface SpecialtyItem {
   status: 'critical' | 'moderate' | 'good';
   icon: React.ComponentType<{ size?: number; className?: string }>;
   topics: { name: string; count: number; highYield?: boolean }[];
+  testsList?: any[];
 }
-
-const SPECIALTIES: SpecialtyItem[] = [
-  {
-    id: 'cardiology',
-    nameEn: 'Cardiovascular System',
-    nameAr: 'أمراض القلب والأوعية الدموية',
-    totalQuestions: 145,
-    accuracy: 58,
-    status: 'critical',
-    icon: HeartPulse,
-    topics: [
-      { name: 'اضطرابات النظم والكهربائية (Arrhythmias & WPW)', count: 42, highYield: true },
-      { name: 'نقص التروية واحتشاء العضلة (ACS & CAD)', count: 38, highYield: true },
-      { name: 'قصور القلب واعتلال العضلة (Heart Failure)', count: 35 },
-      { name: 'اعتلال الصمامات والتهاب الشغاف (Valvular & Endocarditis)', count: 30 }
-    ]
-  },
-  {
-    id: 'renal',
-    nameEn: 'Nephrology & Renal Pharm',
-    nameAr: 'أمراض الكلى وعلم الأدوية الكلوي',
-    totalQuestions: 110,
-    accuracy: 62,
-    status: 'critical',
-    icon: Stethoscope,
-    topics: [
-      { name: 'القصور الكلوي الحاد والمزمن (AKI & CKD)', count: 35, highYield: true },
-      { name: 'اضطرابات الأملاح والتوازن الحمضي (Electrolytes)', count: 45, highYield: true },
-      { name: 'التهاب كبيبات الكلى (Glomerulonephritis)', count: 30 }
-    ]
-  },
-  {
-    id: 'respiratory',
-    nameEn: 'Respiratory Pathophysiology',
-    nameAr: 'أمراض الجهاز التنفسي والتهوية',
-    totalQuestions: 128,
-    accuracy: 69,
-    status: 'moderate',
-    icon: Activity,
-    topics: [
-      { name: 'الربو والداء الرئوي الانسدادي (Asthma & COPD)', count: 44, highYield: true },
-      { name: 'الانصمام الرئوي وفرط الضغط (PE & Pulmonary HTN)', count: 36, highYield: true },
-      { name: 'التهابات الرئة والسل (Pneumonia & TB)', count: 48 }
-    ]
-  },
-  {
-    id: 'neurology',
-    nameEn: 'Neurology & Neurosciences',
-    nameAr: 'طب الأعصاب والعلوم العصبية',
-    totalQuestions: 160,
-    accuracy: 74,
-    status: 'good',
-    icon: Brain,
-    topics: [
-      { name: 'السكتات الدماغية والنزف (Stroke & Hemorrhage)', count: 52, highYield: true },
-      { name: 'الصرع واضطرابات الوعي (Epilepsy & Seizures)', count: 40 },
-      { name: 'التصلب المتعدد واعتلال الأعصاب (MS & Neuropathy)', count: 38 },
-      { name: 'الصداع وآلام الرأس السريرية (Headache Syndromes)', count: 30 }
-    ]
-  },
-  {
-    id: 'pediatrics',
-    nameEn: 'Pediatrics & Neonatology',
-    nameAr: 'طب الأطفال وحديثي الولادة',
-    totalQuestions: 135,
-    accuracy: 71,
-    status: 'moderate',
-    icon: Baby,
-    topics: [
-      { name: 'إنعاش الوليد والخدج (Neonatal Resuscitation)', count: 32, highYield: true },
-      { name: 'التطعيمات والنمو والتطور (Milestones & Vaccines)', count: 41, highYield: true },
-      { name: 'الأمراض الانتانية عند الأطفال (Pediatric Infections)', count: 38 },
-      { name: 'أمراض الدم والأورام للأطفال (Pediatric Heme/Onc)', count: 24 }
-    ]
-  },
-  {
-    id: 'surgery',
-    nameEn: 'General & Emergency Surgery',
-    nameAr: 'الجراحة العامة وطوارئ الإصابات',
-    totalQuestions: 170,
-    accuracy: 68,
-    status: 'moderate',
-    icon: Scissors,
-    topics: [
-      { name: 'البطن الجراحي الحاد (Acute Abdomen)', count: 55, highYield: true },
-      { name: 'رضوض الحوادث وتدبير الصدمات (ATLS & Trauma)', count: 48, highYield: true },
-      { name: 'جراحة الأورام والغدد الصماء (Surgical Oncology)', count: 37 },
-      { name: 'العناية المحيطة بالجراحة (Perioperative Care)', count: 30 }
-    ]
-  }
-];
 
 export function StitchQBank({ 
   onStartCustomSession,
@@ -131,8 +41,65 @@ export function StitchQBank({
   onStartCustomSession?: (specialty: string, count: number, mode: 'tutor' | 'exam') => void;
   onLaunchExamBlock?: () => void;
 }) {
-  const { setView } = useStitch();
-  const [selectedSpecialty, setSelectedSpecialty] = useState<string>('cardiology');
+  const { setView, catalog, tests, history, startExam, openSmartReview } = useStitch();
+
+  const specialties = useMemo<SpecialtyItem[]>(() => {
+    const subjectList = catalog?.subjects?.length 
+      ? catalog.subjects.map(s => ({ id: s.id, name: s.name }))
+      : Array.from(new Set(tests.map(t => t.subjectName || t.subject).filter(Boolean))).map((name, i) => ({ id: `subj-${i}`, name }));
+
+    if (subjectList.length === 0) {
+      return [{
+        id: 'general',
+        nameEn: 'General Medicine',
+        nameAr: 'العلوم الطبية والسريرية',
+        totalQuestions: tests.reduce((sum, t) => sum + (t.questionCount || 0), 0),
+        accuracy: 0,
+        status: 'moderate',
+        icon: HeartPulse,
+        topics: [{ name: 'الاختبارات المنشورة والمقررات', count: tests.length, highYield: true }],
+        testsList: tests
+      }];
+    }
+
+    const icons = [HeartPulse, Stethoscope, Activity, Brain, Baby, Scissors];
+
+    return subjectList.map((subj, idx) => {
+      const subjectTests = tests.filter(t => t.subjectId === subj.id || (t.subjectName || t.subject) === subj.name);
+      const totalQuestions = subjectTests.reduce((sum, t) => sum + (t.questionCount || 0), 0);
+      const subjectHistory = history.filter(h => h.subject === subj.name);
+      const done = subjectHistory.length;
+      const accuracy = done > 0 ? Math.round(subjectHistory.reduce((sum, h) => sum + h.percentage, 0) / done) : 0;
+      const status: 'critical' | 'moderate' | 'good' = accuracy >= 75 ? 'good' : accuracy >= 50 ? 'moderate' : 'critical';
+
+      const lectures = catalog?.lectures?.filter(l => l.subjectId === subj.id) || [];
+      const topics = lectures.length > 0
+        ? lectures.map(l => ({
+            name: l.name,
+            count: subjectTests.filter(t => t.lectureId === l.id).reduce((sum, t) => sum + (t.questionCount || 0), 0) || 10,
+            highYield: true
+          }))
+        : subjectTests.map(t => ({
+            name: t.title,
+            count: t.questionCount,
+            highYield: true
+          }));
+
+      return {
+        id: subj.id,
+        nameEn: subj.name,
+        nameAr: subj.name,
+        totalQuestions: totalQuestions || (subjectTests.length * 10),
+        accuracy,
+        status,
+        icon: icons[idx % icons.length],
+        topics: topics.length > 0 ? topics : [{ name: 'المفاهيم السريرية الأساسية', count: totalQuestions || 10, highYield: true }],
+        testsList: subjectTests
+      };
+    });
+  }, [catalog, tests, history]);
+
+  const [selectedSpecialty, setSelectedSpecialty] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedMode, setSelectedMode] = useState<'tutor' | 'exam'>('tutor');
   const [questionCount, setQuestionCount] = useState<number>(20);
@@ -142,20 +109,24 @@ export function StitchQBank({
   const [includeMarked, setIncludeMarked] = useState(false);
   const [highYieldOnly, setHighYieldOnly] = useState(true);
 
-  const activeSpecialty = SPECIALTIES.find(s => s.id === selectedSpecialty) || SPECIALTIES[0];
+  const activeSpecialty = specialties.find(s => s.id === selectedSpecialty) || specialties[0];
 
   const handleStart = () => {
     if (selectedMode === 'tutor') {
-      if (onStartCustomSession) {
-        onStartCustomSession(selectedSpecialty, questionCount, 'tutor');
+      if (openSmartReview) {
+        openSmartReview('quizBuilder');
+      } else if (onStartCustomSession) {
+        onStartCustomSession(activeSpecialty.id, questionCount, 'tutor');
       } else {
-        setView('tutor-player');
+        setView('tests');
       }
     } else {
-      if (onStartCustomSession) {
-        onStartCustomSession(selectedSpecialty, questionCount, 'exam');
+      if (activeSpecialty.testsList && activeSpecialty.testsList.length > 0) {
+        startExam(activeSpecialty.testsList[0].id);
+      } else if (tests.length > 0) {
+        startExam(tests[0].id);
       } else {
-        setView('exam-player');
+        setView('tests');
       }
     }
   };
@@ -327,7 +298,9 @@ export function StitchQBank({
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '12px' }}>
-              {SPECIALTIES.map(item => {
+              {specialties
+                .filter(item => !searchQuery || item.nameAr.includes(searchQuery) || item.nameEn.toLowerCase().includes(searchQuery.toLowerCase()))
+                .map(item => {
                 const Icon = item.icon;
                 const isSelected = selectedSpecialty === item.id;
                 return (
@@ -465,6 +438,48 @@ export function StitchQBank({
                 </div>
               ))}
             </div>
+
+            {activeSpecialty.testsList && activeSpecialty.testsList.length > 0 && (
+              <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--stitch-text-primary)' }}>
+                  الاختبارات المتاحة للبدء المباشر:
+                </span>
+                {activeSpecialty.testsList.map((t: any) => (
+                  <div key={t.id} style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '12px 14px',
+                    background: 'var(--stitch-surface-container-lowest)',
+                    border: '1px solid var(--stitch-border)',
+                    borderRadius: 'var(--stitch-radius-md)'
+                  }}>
+                    <div>
+                      <strong style={{ fontSize: '13px', color: 'var(--stitch-text-primary)' }}>{t.title}</strong>
+                      <small style={{ display: 'block', color: 'var(--stitch-text-muted)', fontSize: '11px' }}>
+                        {t.lectureName || t.lecture} • {t.durationMinutes} دقيقة • {t.questionCount} أسئلة
+                      </small>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => startExam(t.id)}
+                      style={{
+                        padding: '6px 14px',
+                        background: 'var(--stitch-primary)',
+                        color: '#fff',
+                        border: 'none',
+                        borderRadius: 'var(--stitch-radius-md)',
+                        fontSize: '12px',
+                        fontWeight: 700,
+                        cursor: 'pointer'
+                      }}
+                    >
+                      بدء الاختبار
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { 
   BarChart3, 
   TrendingUp, 
@@ -16,17 +16,45 @@ import {
 import { useStitch } from '../StitchContext';
 
 export function StitchAnalytics() {
-  const { setView } = useStitch();
+  const { setView, tests, history, summary, catalog } = useStitch();
 
-  const systemsData = [
-    { name: 'الطب الباطني (Internal Medicine)', done: 620, total: 850, accuracy: 74, status: 'good' },
-    { name: 'الجراحة العامة (General Surgery)', done: 410, total: 600, accuracy: 68, status: 'moderate' },
-    { name: 'طب الأطفال (Pediatrics)', done: 320, total: 420, accuracy: 76, status: 'good' },
-    { name: 'النساء والتوليد (OB/GYN)', done: 280, total: 380, accuracy: 71, status: 'moderate' },
-    { name: 'الطب النفسي (Psychiatry)', done: 120, total: 150, accuracy: 82, status: 'good' },
-    { name: 'أمراض القلب (Cardiology Subsystem)', done: 115, total: 145, accuracy: 58, status: 'critical' },
-    { name: 'علم الأدوية الكلوي (Renal Pharmacology)', done: 85, total: 110, accuracy: 62, status: 'critical' }
-  ];
+  const totalAvailableQuestions = tests.reduce((acc, t) => acc + (t.questionCount || 0), 0);
+  const completedAttempts = history.length;
+  const passedAttempts = history.filter(h => h.passed).length;
+  const passRate = completedAttempts > 0 ? Math.round((passedAttempts / completedAttempts) * 100) : 0;
+  const avgAccuracy = summary.averagePercentage || 0;
+
+  const systemsData = useMemo(() => {
+    const subjectNames = Array.from(new Set([
+      ...(catalog?.subjects?.map(s => s.name) || []),
+      ...tests.map(t => t.subjectName || t.subject).filter(Boolean)
+    ]));
+
+    if (subjectNames.length === 0) {
+      return [
+        { name: 'العلوم الطبية التأسيسية والسريرية', done: completedAttempts, total: totalAvailableQuestions, accuracy: avgAccuracy, status: 'good' }
+      ];
+    }
+
+    return subjectNames.map(name => {
+      const subjectTests = tests.filter(t => (t.subjectName || t.subject) === name);
+      const subjectQuestions = subjectTests.reduce((acc, t) => acc + (t.questionCount || 0), 0);
+      const subjectHistory = history.filter(h => h.subject === name);
+      const done = subjectHistory.length;
+      const accuracy = done > 0 
+        ? Math.round(subjectHistory.reduce((acc, h) => acc + (h.percentage || 0), 0) / done) 
+        : 0;
+      const status: 'good' | 'moderate' | 'critical' = accuracy >= 75 ? 'good' : accuracy >= 50 ? 'moderate' : 'critical';
+
+      return {
+        name,
+        done,
+        total: subjectQuestions || (subjectTests.length * 10),
+        accuracy,
+        status
+      };
+    });
+  }, [catalog, tests, history, completedAttempts, totalAvailableQuestions, avgAccuracy]);
 
   return (
     <div className="stitchAnalyticsContainer" dir="rtl" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -55,16 +83,16 @@ export function StitchAnalytics() {
             fontSize: '12px',
             fontWeight: 700
           }}>
-            تحديث فوري متزامن مع بنك الأسئلة
+            تحديث فوري متزامن مع نتائجك
           </span>
         </div>
 
         <div>
           <h1 style={{ margin: 0, fontSize: '24px', fontWeight: 800, color: 'var(--stitch-text-primary)' }}>
-            تحليلات الأداء السريري والجاهزية للاختبار الوطني
+            تحليلات الأداء والجاهزية الأكاديمية
           </h1>
           <p style={{ margin: '4px 0 0', color: 'var(--stitch-text-secondary)', fontSize: '14px' }}>
-            تقييم تراكمي موضوعي لنسبة الدقة، سرعة الإجابة، ونقاط القوة والضعف مقارنة بمتوسط الدفعة الوطنية.
+            تقييم تراكمي حقيقي لنسبة الإتقان ومعدل الدرجات والاختبارات المنجزة في مسارك الدراسي.
           </p>
         </div>
       </div>
@@ -86,17 +114,17 @@ export function StitchAnalytics() {
           gap: '6px'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '13px', color: 'var(--stitch-text-muted)' }}>الدقة التراكمية العامة</span>
+            <span style={{ fontSize: '13px', color: 'var(--stitch-text-muted)' }}>المتوسط العام للدرجات</span>
             <TrendingUp size={18} color="var(--stitch-secondary)" />
           </div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-            <strong style={{ fontSize: '32px', color: 'var(--stitch-primary)', fontWeight: 800 }}>72.4%</strong>
-            <span style={{ fontSize: '12px', color: 'var(--stitch-secondary)', fontWeight: 600 }}>
-              +8.3% أعلى من متوسط الأقران (64.1%)
+            <strong style={{ fontSize: '32px', color: 'var(--stitch-primary)', fontWeight: 800 }}>{avgAccuracy}%</strong>
+            <span style={{ fontSize: '12px', color: avgAccuracy >= 60 ? 'var(--stitch-secondary)' : 'var(--stitch-error)', fontWeight: 600 }}>
+              {avgAccuracy >= 60 ? 'أداء مؤهل للاجتياز' : 'يحتاج تعزيز ومراجعة'}
             </span>
           </div>
           <small style={{ color: 'var(--stitch-text-muted)', fontSize: '11px' }}>
-            محسوبة على مدار 1,842 سؤالاً معتمداً
+            محسوبة بناءً على {completedAttempts} محاولة مسجلة
           </small>
         </div>
 
@@ -111,17 +139,17 @@ export function StitchAnalytics() {
           gap: '6px'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '13px', color: 'var(--stitch-text-muted)' }}>الدرجة التقديرية (SMLE Score)</span>
+            <span style={{ fontSize: '13px', color: 'var(--stitch-text-muted)' }}>الاختبارات الناجحة</span>
             <Award size={18} color="var(--stitch-primary)" />
           </div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-            <strong style={{ fontSize: '32px', color: 'var(--stitch-secondary)', fontWeight: 800 }}>685</strong>
+            <strong style={{ fontSize: '32px', color: 'var(--stitch-secondary)', fontWeight: 800 }}>{passedAttempts}</strong>
             <span style={{ fontSize: '12px', color: 'var(--stitch-primary)', fontWeight: 600 }}>
-              (مجال الثقة: 660 - 710)
+              من أصل {completedAttempts} محاولة
             </span>
           </div>
           <small style={{ color: 'var(--stitch-text-muted)', fontSize: '11px' }}>
-            حد الاجتياز الأدنى: 560 • الهدف التنافسي: 650+
+            نسبة النجاح الإجمالية: {passRate}%
           </small>
         </div>
 
@@ -136,17 +164,17 @@ export function StitchAnalytics() {
           gap: '6px'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '13px', color: 'var(--stitch-text-muted)' }}>التقدم في بنك الأسئلة</span>
+            <span style={{ fontSize: '13px', color: 'var(--stitch-text-muted)' }}>بنك الاختبارات المتاحة</span>
             <BookOpen size={18} color="var(--stitch-primary)" />
           </div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-            <strong style={{ fontSize: '32px', color: 'var(--stitch-text-primary)', fontWeight: 800 }}>75.2%</strong>
+            <strong style={{ fontSize: '32px', color: 'var(--stitch-text-primary)', fontWeight: 800 }}>{tests.length}</strong>
             <span style={{ fontSize: '12px', color: 'var(--stitch-text-muted)' }}>
-              1,842 من 2,450
+              اختبار منشور
             </span>
           </div>
           <small style={{ color: 'var(--stitch-text-muted)', fontSize: '11px' }}>
-            608 أسئلة متبقية قبل إتمام البنك كاملاً
+            إجمالي {totalAvailableQuestions} سؤالاً معتمداً في المنصة
           </small>
         </div>
 
@@ -161,17 +189,17 @@ export function StitchAnalytics() {
           gap: '6px'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '13px', color: 'var(--stitch-text-muted)' }}>متوسط سرعة الإجابة</span>
-            <Clock size={18} color="var(--stitch-primary)" />
+            <span style={{ fontSize: '13px', color: 'var(--stitch-text-muted)' }}>معدل الإنجاز</span>
+            <CheckCircle2 size={18} color="var(--stitch-secondary)" />
           </div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-            <strong style={{ fontSize: '32px', color: 'var(--stitch-text-primary)', fontWeight: 800 }}>68s</strong>
+            <strong style={{ fontSize: '32px', color: 'var(--stitch-text-primary)', fontWeight: 800 }}>{passRate}%</strong>
             <span style={{ fontSize: '12px', color: 'var(--stitch-secondary)', fontWeight: 600 }}>
-              ممتاز (&lt; 90s)
+              {passRate >= 70 ? 'ممتاز' : 'مستمر'}
             </span>
           </div>
           <small style={{ color: 'var(--stitch-text-muted)', fontSize: '11px' }}>
-            يوفر نحو 16 دقيقة إضافية للمراجعة في كل بلوك
+            شهادات الإنجاز الصادرة: {passedAttempts}
           </small>
         </div>
       </div>

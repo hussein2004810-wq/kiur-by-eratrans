@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   Sparkles, 
   SlidersHorizontal, 
@@ -15,21 +15,71 @@ import {
   CheckCircle2, 
   ArrowRight,
   BookOpen,
-  Calendar
+  Calendar,
+  Brain
 } from 'lucide-react';
 import { useStitch } from '../StitchContext';
 
 export function StitchDashboard() {
-  const { user, tests, history, startExam, openSmartReview, setView } = useStitch();
+  const { user, catalog, tests, history, startExam, openSmartReview, setView } = useStitch();
   const [selectedSpecialty, setSelectedSpecialty] = useState<string | null>(null);
 
-  // Derive specialties from available tests or standard SCFHS / Iraqi curriculum
-  const specialties = [
-    { id: 'internal', name: 'الطب الباطني (Internal Medicine)', icon: Stethoscope, progress: 78, answered: 610, total: 780, tone: 'primary', level: 'مستوى متقدم' },
-    { id: 'surgery', name: 'الجراحة العامة (General Surgery)', icon: Activity, progress: 64, answered: 390, total: 610, tone: 'secondary', level: 'مستوى متوسط' },
-    { id: 'pediatrics', name: 'طب الأطفال (Pediatrics)', icon: Baby, progress: 81, answered: 312, total: 385, tone: 'tertiary', level: 'مستوى ممتاز' },
-    { id: 'obgyn', name: 'النساء والتوليد (OB/GYN)', icon: HeartPulse, progress: 54, answered: 180, total: 330, tone: 'error', level: 'يحتاج تعزيز' }
-  ];
+  // Derive real specialties dynamically from catalog and tests
+  const specialties = useMemo(() => {
+    const subjectNames = Array.from(new Set([
+      ...(catalog?.subjects?.map(s => s.name) || []),
+      ...tests.map(t => t.subjectName || t.subject).filter(Boolean)
+    ]));
+
+    if (subjectNames.length === 0) {
+      return [
+        { id: 'general', name: 'العلوم الطبية والسريرية', icon: Stethoscope, progress: 0, answered: 0, total: tests.reduce((acc, t) => acc + (t.questionCount || 0), 0), tone: 'primary', level: 'لم يُختبر بعد' }
+      ];
+    }
+
+    return subjectNames.slice(0, 6).map((name, idx) => {
+      const subjectTests = tests.filter(t => (t.subjectName || t.subject) === name);
+      const totalQuestions = subjectTests.reduce((acc, t) => acc + (t.questionCount || 0), 0);
+      const subjectHistory = history.filter(h => h.subject === name);
+      const answeredCount = subjectHistory.length;
+      
+      let progress = 0;
+      let level = 'لم يُختبر بعد';
+      let tone = 'primary';
+      
+      if (answeredCount > 0) {
+        const avg = Math.round(subjectHistory.reduce((acc, h) => acc + (h.percentage || 0), 0) / answeredCount);
+        progress = avg;
+        if (avg >= 80) {
+          level = 'مستوى ممتاز';
+          tone = 'tertiary';
+        } else if (avg >= 60) {
+          level = 'مستوى متقدم';
+          tone = 'secondary';
+        } else {
+          level = 'يحتاج تعزيز';
+          tone = 'error';
+        }
+      }
+
+      const icons = [Stethoscope, Activity, Baby, HeartPulse, Brain, BookOpen];
+      const icon = icons[idx % icons.length];
+
+      return {
+        id: `subj-${idx}`,
+        name,
+        icon,
+        progress,
+        answered: answeredCount,
+        total: totalQuestions || (subjectTests.length * 10),
+        tone,
+        level
+      };
+    });
+  }, [catalog, tests, history]);
+
+  const failedAttempts = history.filter(h => !h.passed);
+  const failedCount = failedAttempts.length;
 
   // High-yield pearl of the day
   const pearlQuestion = tests[0];
@@ -121,8 +171,8 @@ export function StitchDashboard() {
                   width: '38px',
                   height: '38px',
                   borderRadius: '10px',
-                  background: 'var(--stitch-error)',
-                  color: '#fff',
+                  background: failedCount > 0 ? 'var(--stitch-error)' : 'var(--stitch-secondary-container)',
+                  color: failedCount > 0 ? '#fff' : 'var(--stitch-on-secondary-container)',
                   display: 'grid',
                   placeItems: 'center'
                 }}>
@@ -133,10 +183,10 @@ export function StitchDashboard() {
                   fontWeight: 700,
                   padding: '2px 8px',
                   borderRadius: '999px',
-                  background: 'var(--stitch-error)',
+                  background: failedCount > 0 ? 'var(--stitch-error)' : 'var(--stitch-primary)',
                   color: '#fff'
                 }}>
-                  13 ثغرة
+                  {failedCount > 0 ? `${failedCount} ثغرة` : 'جاهزية تامة'}
                 </span>
               </div>
               <div>
@@ -144,15 +194,22 @@ export function StitchDashboard() {
                   مركز مراجعة الأخطاء
                 </b>
                 <small style={{ fontSize: '11px', color: 'var(--stitch-text-muted)', lineHeight: '1.4' }}>
-                  خطة تعافي سريري موجهة لسد الثغرات
+                  {failedCount > 0 ? 'خطة تعافي سريري موجهة لسد الثغرات' : 'لا توجد أخطاء حالية في سجلّك'}
                 </small>
               </div>
             </button>
 
-            {/* Card 3: SMLE Mock Exam */}
+            {/* Card 3: Timed Exam */}
             <button
               type="button"
-              onClick={() => setView('exam-player')}
+              onClick={() => {
+                if (tests.length > 0) {
+                  const formalTest = tests.find(t => t.examMode === 'formal') || tests[0];
+                  startExam(formalTest.id);
+                } else {
+                  setView('tests');
+                }
+              }}
               style={{
                 padding: '16px',
                 borderRadius: 'var(--stitch-radius-lg)',
@@ -181,10 +238,10 @@ export function StitchDashboard() {
               </div>
               <div>
                 <b style={{ display: 'block', fontSize: '13px', color: 'var(--stitch-text-primary)', marginBottom: '3px' }}>
-                  محاكاة SMLE الموقوتة
+                  محاكاة الاختبارات الموقوتة
                 </b>
                 <small style={{ fontSize: '11px', color: 'var(--stitch-text-muted)', lineHeight: '1.4' }}>
-                  بلوك تجريبي 40 سؤالاً ببيئة Prometric
+                  {tests.length > 0 ? `${tests.length} اختبارات معتمدة ببيئة إلكترونية` : 'ابدأ جلستك التدريبية'}
                 </small>
               </div>
             </button>
@@ -224,7 +281,7 @@ export function StitchDashboard() {
                   تحليلات الأداء والجاهزية
                 </b>
                 <small style={{ fontSize: '11px', color: 'var(--stitch-text-muted)', lineHeight: '1.4' }}>
-                  مقارنة مع الدفعة والمئين التنافسي
+                  سجل المحاولات ومستوى التقدّم
                 </small>
               </div>
             </button>
@@ -253,21 +310,29 @@ export function StitchDashboard() {
                 سؤال اليوم عالي الأهمية (High-Yield Pearl)
               </span>
               <span style={{ fontSize: '11px', color: 'var(--stitch-text-muted)', fontFamily: 'monospace' }}>
-                Case ID: #8921
+                {pearlQuestion ? `ID: #${pearlQuestion.id.slice(0, 6).toUpperCase()}` : 'ID: #KIUR-01'}
               </span>
             </div>
 
-            <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 800, color: 'var(--stitch-text-primary)', lineHeight: '1.5' }}>
-              {pearlQuestion
-                ? `حالة سريرية: ${pearlQuestion.title} — ${pearlQuestion.subject}`
-                : 'حالة سريرية: رجل يبلغ 54 عاماً يعاني من ضيق تنفس جهدي ونفخة انقباضية'}
-            </h4>
-
-            <p style={{ margin: 0, fontSize: '13px', color: 'var(--stitch-text-secondary)', lineHeight: '1.6' }}>
-              {pearlQuestion
-                ? `محاضرة ${pearlQuestion.lecture}. يشمل الاختبار ${pearlQuestion.questionCount} أسئلة سريرية محكمة مع تفسير كامل للمشتتات.`
-                : 'راجع مريض غرفة الطوارئ بأعراض متزايدة على مدى أسبوعين. يظهر تخطيط القلب تضخماً في البطين الأيسر. ما هي الخطوة التشخيصية الأكثر دقة؟'}
-            </p>
+            {pearlQuestion ? (
+              <>
+                <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 800, color: 'var(--stitch-text-primary)', lineHeight: '1.5' }}>
+                  حالة سريرية: {pearlQuestion.title} — {pearlQuestion.subjectName || pearlQuestion.subject}
+                </h4>
+                <p style={{ margin: 0, fontSize: '13px', color: 'var(--stitch-text-secondary)', lineHeight: '1.6' }}>
+                  محاضرة {pearlQuestion.lectureName || pearlQuestion.lecture}. يشمل الاختبار {pearlQuestion.questionCount} أسئلة سريرية محكمة مع مراجعة تصحيحية فورية.
+                </p>
+              </>
+            ) : (
+              <>
+                <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 800, color: 'var(--stitch-text-primary)', lineHeight: '1.5' }}>
+                  حالة سريرية ومراجعة فورية
+                </h4>
+                <p style={{ margin: 0, fontSize: '13px', color: 'var(--stitch-text-secondary)', lineHeight: '1.6' }}>
+                  اختر أحد الاختبارات المتاحة في مسارك الأكاديمي لبدء المراجعة والتدريب السريري التفاعلي.
+                </p>
+              </>
+            )}
 
             <div style={{
               display: 'flex',
@@ -279,10 +344,10 @@ export function StitchDashboard() {
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px', fontSize: '12px', color: 'var(--stitch-text-muted)' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <Timer size={15} /> دقيقة واحدة
+                  <Timer size={15} /> {pearlQuestion ? `${pearlQuestion.durationMinutes} دقيقة` : '15 دقيقة'}
                 </span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <Users size={15} /> أجاب عليه 84% من الطلبة
+                  <CheckCircle2 size={15} /> {pearlQuestion ? `${pearlQuestion.questionCount} سؤال` : 'محتوى معتمد'}
                 </span>
               </div>
 
