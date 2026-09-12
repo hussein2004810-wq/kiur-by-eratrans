@@ -33,6 +33,8 @@ const StudentProfile=lazy(()=>import('./StudentProfile'));
 const StudentPoints=lazy(()=>import('./StudentPoints'));
 const GamificationManager=lazy(()=>import('./GamificationManager'));
 const SmartReviewHub=lazy(()=>import('./SmartReviewHub'));
+const StitchApp=lazy(()=>import('./stitch/StitchApp'));
+import {StitchProvider,type StitchContextValue} from './stitch/StitchContext';
 
 type User={id:string;email:string;name:string;role:'student'|'teacher'|'admin'|'owner';permissions?:string[];staffTitle?:'department_head'|'department_coordinator'|'university_doctor'|'university_professor'|null;authProvider?:'chatgpt'|'password'|'hybrid';universityId?:string|null;collegeId?:string|null;departmentId?:string|null;phaseId?:string|null;sectionId?:string|null;universityName?:string|null;collegeName?:string|null;departmentName?:string|null;phaseName?:string|null;sectionName?:string|null;banStatus?:'none'|'precaution'|'temporary'|'permanent';restriction?:{requestId?:string;banId?:string;requestNumber?:string;banType?:string;reason?:string;endsAt?:string|null}|null};
 type University={id:string;name:string;sortOrder:number};
@@ -394,7 +396,44 @@ export default function RealAppV2(){
   const adminMeta={tests:[ClipboardList,'إدارة الاختبارات','إنشاء الاختبارات ونشرها ومتابعتها'],imports:[FileQuestion,'استيراد الأسئلة','رفع Excel وWord مع مراجعة الأخطاء'],catalog:[GraduationCap,'الهيكل الأكاديمي','الجامعات والكليات والأقسام والمواد'],students:[Users,'سجل الطلاب','الأداء الاكاديمي والبحث والتصفية'],academicChanges:[ArrowLeftRight,'تغييرات المسار','مراجعة طلبات الطلاب الفردية والدفعية'],gamification:[Trophy,'نظام النقاط','السياسة العامة ومراجعة النقاط غير المعتادة'],glimpses:[HeartPulse,'اللمحات السريرية','إعداد المحتوى السريري ومراجعته'],library:[BookOpen,'المكتبة الطبية','الصور السريرية وسجل استخدامها'],accounts:[ShieldCheck,'الحسابات والصلاحيات','الكوادر والمشرفون ونطاقات العمل'],bans:[ShieldCheck,'حظر الطلاب','الطلبات والمراجعات وسجل القرارات'],logs:[History,'السجلات','التدقيق والحسابات والأحداث']} as const;
   const [ActiveAdminIcon,activeAdminTitle,activeAdminDescription]=adminMeta[adminTab];
   const selectAdminTab=(tab:typeof adminTab)=>{setAdminTab(tab);setAdminMenuOpen(false)};
-  const studyContent=studyLoading?<section className="studentDataState" role="status" aria-live="polite"><p>جارٍ تحميل رفّك الدراسي ونتائجك…</p></section>:studyError?<section className="studentDataState" role="alert"><p>{studyError}</p><button className="solid" onClick={()=>void loadStudy()}>إعادة المحاولة</button></section>:<StudyShelf catalog={catalog} user={user} tests={tests} history={history} search={search} setSearch={setSearch} onStart={id=>void start(id)} startingId={startingId} onChangeProfile={()=>setProfileSetup(true)} directTarget={directTarget} onClearDirect={clearDirectLink} notify={notify} learningHub={learningHub} favoriteIds={learningHub?.favorites.map(item=>item.id)||[]} onToggleFavorite={toggleFavorite} onOpenSmartReview={tab=>{setSmartReviewTab(tab||'flashcards');setSmartReviewOpen(true)}}/>;
+  const [uiEngine,setUiEngine]=useState<'stitch'|'classic'>(()=>{
+    try{
+      const param=new URLSearchParams(window.location.search).get('ui');
+      if(param==='stitch'||param==='classic')return param;
+      return (localStorage.getItem('kiur-ui-engine') as 'stitch'|'classic')||'stitch';
+    }catch{return 'stitch'}
+  });
+
+  const stitchContextValue:StitchContextValue={
+    user,catalog,tests,history,summary,view,
+    setView:navigate,search,setSearch,startExam:id=>void start(id),
+    startingId,
+    theme:(document.documentElement.getAttribute('data-kiur-theme') as 'dark'|'light')||'dark',
+    toggleTheme:()=>{
+      const next=document.documentElement.getAttribute('data-kiur-theme')==='light'?'dark':'light';
+      document.documentElement.setAttribute('data-kiur-theme',next);
+      localStorage.setItem('kiur-theme',next);
+    },
+    notifications,notificationsOpen,setNotificationsOpen,
+    openSmartReview:tab=>{setSmartReviewTab(tab||'flashcards');setSmartReviewOpen(true)},
+    commandPaletteOpen,setCommandPaletteOpen,logout:()=>logoutCurrent(),notify
+  };
+
+  if(uiEngine==='stitch'&&!runner){
+    return <StitchProvider value={stitchContextValue}>
+      <Suspense fallback={<Loading/>}>
+        <StitchApp
+          studyContent={studyContent}
+          smartReviewElement={smartReviewOpen?<Suspense fallback={<Loading/>}><SmartReviewHub tests={tests} catalog={catalog} history={history} initialTab={smartReviewTab} onClose={()=>setSmartReviewOpen(false)} notify={notify} onLaunchCustomQuiz={quiz=>{setRunner({test:{...quiz,id:'custom-quiz-'+Date.now(),subject:'المراجعة السريرية المخصصة',lecture:'تدريب الأخطاء والتكرار',passPercentage:60,durationMinutes:quiz.durationMinutes||15,questionCount:quiz.questions.length,status:'published'} as any,attemptId:'custom-attempt-'+Date.now()});setSmartReviewOpen(false)}}/></Suspense>:undefined}
+          commandPaletteElement={<CommandPalette open={commandPaletteOpen} onClose={()=>setCommandPaletteOpen(false)} onNavigate={navigate} onSelectTest={id=>void start(id)} onOpenSmartReview={tab=>{setCommandPaletteOpen(false);setSmartReviewTab(tab||'flashcards');setSmartReviewOpen(true)}} tests={tests} catalog={catalog} userRole={user?.role}/>}
+          historyElement={<><Title title="سجل النتائج" subtitle="كل محاولاتك ودرجاتك وشهاداتك محفوظة في حسابك."/><div className="stats"><Stat icon={<ClipboardList/>} value={completed} label="إجمالي المحاولات"/><Stat icon={<CheckCircle2/>} value={passed} label="اختبارات ناجحة" tone="amber"/><Stat icon={<BarChart3/>} value={summary.averagePercentage+'%'} label="المتوسط العام" tone="blue"/><Stat icon={<ShieldCheck/>} value={completed?Math.round(passed/completed*100)+'%':'0%'} label="نسبة النجاح" tone="coral"/></div><section className="panel tableWrap responsiveRecordWrap"><table className="responsiveRecords historyRecords"><thead><tr><th>الاختبار</th><th>المادة</th><th>التاريخ</th><th>النتيجة</th><th>الحالة</th><th>الشهادة</th></tr></thead><tbody>{history.map(item=><tr key={item.id}><td data-label="الاختبار">{item.title}</td><td data-label="المادة">{item.subject}</td><td data-label="التاريخ">{new Intl.DateTimeFormat('ar-IQ').format(new Date(item.finishedAt))}</td><td data-label="النتيجة" className={item.passed?'good':'low'}>{item.percentage}%</td><td data-label="الحالة"><span className={item.passed?'success':'retry'}>{item.passed?'ناجح':'إعادة مطلوبة'}</span></td><td data-label="الشهادة">{item.passed?<CertificateButton attemptId={item.id} notify={notify}/>:null}</td></tr>)}</tbody></table>{!history.length&&<div className="empty small"><History/><p>لم تُكمل أي اختبار بعد.</p></div>}</section></>}
+          pointsElement={user.role==='student'?<><Title title="نقاطي" subtitle="نقاطك وإنجازاتك وتقدمك الدراسي في مساحة تنافسية هادئة."/><Suspense fallback={<SectionLoading/>}><StudentPoints notify={notify}/></Suspense></>:null}
+          profileElement={user.role==='student'?<><Title title="حسابي" subtitle="هويتك الدراسية، تقدمك، شهاداتك وأمان حسابك في مكان واحد."/><Suspense fallback={<SectionLoading/>}><StudentProfile learningHub={learningHub} notify={notify} onCorrectPath={()=>setProfileSetup(true)} onLogout={()=>void logoutCurrent()}/></Suspense></>:<><Title title="حسابي" subtitle="بيانات حسابك ونطاق عملك داخل KIUR."/><AccountProfile user={user} onLogout={()=>void logoutCurrent()}/></>}
+        />
+      </Suspense>
+    </StitchProvider>;
+  }
+
   return <div className={'app '+(motionEnabled?'':'motion-off')}><a className="skipLink" href="#main-content">تجاوز القائمة إلى المحتوى</a><aside className={menu?'sidebar open':'sidebar'}><div className="brand"><span><HeartPulse/></span><div>KIUR<small>BY ERATRANS</small></div></div><p className="navLabel">القائمة الرئيسية</p><nav>{links.map(([id,Icon,label])=><button key={id} className={view===id?'active':''} onClick={()=>navigate(id)}><Icon/>{label}{id==='tests'&&<b>{tests.length}</b>}</button>)}</nav>{staff&&<><p className="navLabel adminLabel">الإدارة</p><nav><button className={view==='admin'?'active':''} onClick={()=>navigate('admin')}><Settings2/>{user.role==='teacher'?'لوحة الكادر الأكاديمي':'لوحة الإشراف'}</button></nav></>}<div className="miniProfile"><button className="miniProfileAvatar" onClick={()=>navigate('profile')} aria-label="فتح حسابي">{user.name.slice(0,2)}</button><div><b>{user.name}</b><small>{roleLabel}</small></div><button onClick={()=>void logout()} aria-label="تسجيل الخروج"><LogOut/></button></div></aside><main id="main-content" tabIndex={-1}><header className="topbar"><button className="menuBtn" aria-label="فتح القائمة" aria-expanded={menu} onClick={()=>setMenu(true)}><Menu/></button><div className="search" onClick={()=>setCommandPaletteOpen(true)}><Search/><input value={search} onChange={event=>{clearDirectLink();setSearch(event.target.value);if(event.target.value)setView('tests')}} placeholder="ابحث أو اضغط ⌘K..." aria-label="بحث"/><kbd className="commandKbd" onClick={e=>{e.stopPropagation();setCommandPaletteOpen(true)}}>⌘K</kbd></div><ThemeToggle/><button className={'motionToggle '+(motionEnabled?'active':'')} title={motionEnabled?'إيقاف المؤثرات الطبية':'تشغيل المؤثرات الطبية'} aria-label={motionEnabled?'إيقاف المؤثرات الطبية':'تشغيل المؤثرات الطبية'} onClick={()=>setMotionEnabled(value=>{const next=!value;saveMotionPreference(next);return next})}><Activity/></button><div className="notificationArea"><button className="bell" aria-label="الإشعارات" aria-expanded={notificationsOpen} aria-controls="kiur-notifications" onClick={toggleNotifications}><Bell/>{notifications.some(item=>!item.readAt)&&<i/>}</button>{notificationsOpen&&<section id="kiur-notifications" className="notificationPanel" aria-live="polite"><header><b>الإشعارات</b><small>{notifications.length} إشعارًا حديثًا</small></header>{notifications.slice(0,8).map(item=><article key={item.id}><b>{item.title}</b><p>{item.message}</p><small>{new Intl.DateTimeFormat('ar-IQ',{dateStyle:'short',timeStyle:'short'}).format(new Date(item.createdAt))}</small></article>)}{!notifications.length&&<div className="notificationEmpty">لا توجد إشعارات جديدة.</div>}</section>}</div><button className="avatar avatarButton" aria-label="فتح حسابي" onClick={()=>navigate('profile')}>{user.name.slice(0,2)}</button></header>
   {view==='home'&&<><div className="bentoGrid">
     <article className="bentoCard bentoSpan8 bentoHero">
