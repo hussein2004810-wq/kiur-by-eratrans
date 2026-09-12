@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "secondary-container": "#99efe5",
+          "on-tertiary-fixed-variant": "#661aa3",
+          "surface": "#faf8ff",
+          "inverse-surface": "#283044",
+          "tertiary-container": "#5f0d9c",
+          "surface-container-lowest": "#ffffff",
+          "surface-bright": "#faf8ff",
+          "surface-container-high": "#e2e7ff",
+          "inverse-on-surface": "#eef0ff",
+          "error": "#ba1a1a",
+          "on-surface": "#131b2e",
+          "on-primary": "#ffffff",
+          "on-primary-fixed-variant": "#264191",
+          "background": "#faf8ff",
+          "primary-container": "#1e3a8a",
+          "on-tertiary": "#ffffff",
+          "surface-dim": "#d2d9f4",
+          "surface-container": "#eaedff",
+          "on-background": "#131b2e",
+          "tertiary-fixed-dim": "#dfb7ff",
+          "on-tertiary-fixed": "#2d0050",
+          "tertiary": "#410070",
+          "secondary-fixed": "#9cf2e8",
+          "outline": "#757682",
+          "on-surface-variant": "#444651",
+          "on-secondary-fixed": "#00201d",
+          "tertiary-fixed": "#f1dbff",
+          "on-secondary": "#ffffff",
+          "on-secondary-fixed-variant": "#00504a",
+          "on-primary-fixed": "#00164e",
+          "primary": "#00236f",
+          "surface-container-highest": "#dae2fd",
+          "secondary-fixed-dim": "#80d5cb",
+          "on-error-container": "#93000a",
+          "surface-variant": "#dae2fd",
+          "error-container": "#ffdad6",
+          "primary-fixed": "#dce1ff",
+          "outline-variant": "#c5c5d3",
+          "on-tertiary-container": "#cc93ff",
+          "on-error": "#ffffff",
+          "on-primary-container": "#90a8ff",
+          "inverse-primary": "#b6c4ff",
+          "secondary": "#006a63",
+          "surface-tint": "#4059aa",
+          "primary-fixed-dim": "#b6c4ff",
+          "surface-container-low": "#f2f3ff",
+          "on-secondary-container": "#006f67"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+        "spacing": {
+          "space-lg": "1.5rem",
+          "space-sm": "0.5rem",
+          "margin": "2rem",
+          "gutter-mobile": "0.75rem",
+          "space-xs": "0.25rem",
+          "space-xl": "2rem",
+          "gutter": "1.5rem",
+          "margin-mobile": "1rem",
+          "space-md": "1rem"
+        },
+        "fontFamily": {
+          "headline-xl-mobile": [
+            "Noto Sans"
+          ],
+          "headline-sm": [
+            "Noto Sans"
+          ],
+          "headline-lg": [
+            "Noto Sans"
+          ],
+          "label-caps": [
+            "Inter"
+          ],
+          "headline-xl": [
+            "Noto Sans"
+          ],
+          "body-md": [
+            "Noto Sans"
+          ],
+          "body-sm": [
+            "Noto Sans"
+          ],
+          "data-metric": [
+            "Inter"
+          ],
+          "option-label": [
+            "Inter"
+          ],
+          "vignette-text": [
+            "Noto Sans"
+          ]
+        },
+        "fontSize": {
+          "headline-xl-mobile": [
+            "24px",
+            {
+              "lineHeight": "38px",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-sm": [
+            "18px",
+            {
+              "lineHeight": "30px",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-lg": [
+            "22px",
+            {
+              "lineHeight": "36px",
+              "fontWeight": "600"
+            }
+          ],
+          "label-caps": [
+            "11px",
+            {
+              "lineHeight": "16px",
+              "letterSpacing": "0.05em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-xl": [
+            "30px",
+            {
+              "lineHeight": "48px",
+              "fontWeight": "700"
+            }
+          ],
+          "body-md": [
+            "15px",
+            {
+              "lineHeight": "26px",
+              "fontWeight": "400"
+            }
+          ],
+          "body-sm": [
+            "13px",
+            {
+              "lineHeight": "22px",
+              "fontWeight": "400"
+            }
+          ],
+          "data-metric": [
+            "13px",
+            {
+              "lineHeight": "18px",
+              "letterSpacing": "0.02em",
+              "fontWeight": "500"
+            }
+          ],
+          "option-label": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "fontWeight": "700"
+            }
+          ],
+          "vignette-text": [
+            "17px",
+            {
+              "lineHeight": "32px",
+              "fontWeight": "400"
+            }
+          ]
+        }
+      },
+    },
+  }</script></head><body class="bg-background font-body-md text-on-surface"><aside class="fixed right-0 top-0 h-full w-72 bg-surface-container-lowest z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="h-16 px-space-md flex items-center justify-between gap-space-sm bg-surface-container-low/50"><div class="flex items-center gap-space-sm"><div class="w-9 h-9 rounded-xl bg-primary-container text-on-primary flex items-center justify-center"><span class="material-symbols-outlined text-[20px]">vital_signs</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary tracking-tight">منصة نبض الطبية</span><span class="font-label-caps text-label-caps text-on-surface-variant uppercase">MedPulse Academic</span></div></div></div><div class="px-space-md py-space-sm"><div class="px-space-xs py-space-xs"><span class="font-label-caps text-label-caps text-on-surface-variant uppercase">الوحدات الأكاديمية</span></div><nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary font-headline-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="main-dashboard" href="#"><span class="material-symbols-outlined text-[20px]">dashboard</span><span class="font-body-md text-body-md">الرئيسية</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl transition-all bg-primary-container text-on-primary font-headline-sm" data-path="question-bank" href="#"><span class="material-symbols-outlined text-[20px]">quiz</span><span class="font-body-md text-body-md">بنك الأسئلة</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="mock-exams" href="#"><span class="material-symbols-outlined text-[20px]">assignment</span><span class="font-body-md text-body-md">الاختبارات</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="performance-analytics" href="#"><span class="material-symbols-outlined text-[20px]">monitoring</span><span class="font-body-md text-body-md">الأداء والتحصيل</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="study-planner" href="#"><span class="material-symbols-outlined text-[20px]">calendar_month</span><span class="font-body-md text-body-md">خطة الدراسة</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="clinical-review" href="#"><span class="material-symbols-outlined text-[20px]">clinical_notes</span><span class="font-body-md text-body-md">المراجعة السريرية</span></a></nav></div><div class="px-space-md py-space-xs"><div class="px-space-xs py-space-xs"><span class="font-label-caps text-label-caps text-on-surface-variant uppercase">الأدوات والمراجع</span></div><nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary font-headline-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="bookmarks-vault" href="#"><span class="material-symbols-outlined text-[20px]">bookmark</span><span class="font-body-md text-body-md">المحفوظات</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="clinical-notes" href="#"><span class="material-symbols-outlined text-[20px]">edit_note</span><span class="font-body-md text-body-md">الملاحظات</span></a></nav></div></div><div class="flex flex-col gap-space-xs p-space-md bg-surface-container-low/40"><nav class="flex flex-col gap-1 mb-space-xs" data-active-classes="bg-primary-container text-on-primary font-headline-sm"><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="help-center" href="#"><span class="material-symbols-outlined text-[18px]">help_outline</span><span class="font-body-sm text-body-sm">المساعدة والدعم</span></a><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="system-settings" href="#"><span class="material-symbols-outlined text-[18px]">settings</span><span class="font-body-sm text-body-sm">الإعدادات</span></a></nav><div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col"><span class="font-headline-sm text-[13px] leading-tight text-on-surface font-semibold">علي أحمد</span><span class="font-label-caps text-[10px] text-on-surface-variant">طالب طب • مرحلة 5</span></div></div><button aria-label="تسجيل الخروج" class="p-space-xs text-on-surface-variant hover:text-primary transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">logout</span></button></div></div></aside><div class="pr-72"><header class="fixed top-0 right-72 left-0 h-16 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-xl"><div class="flex items-center gap-space-md flex-1 max-w-xl"><div class="relative w-full"><span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span><input class="w-full bg-surface-container-lowest text-on-surface font-body-sm text-body-sm pr-10 pl-space-md py-space-xs rounded-full outline-none ring-0 placeholder:text-on-surface-variant/70 shadow-[0_1px_8px_rgba(0,0,0,0.04)] focus:bg-surface-container-low transition-all" placeholder="ابحث في الأسئلة، المواضيع، والامتحانات..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="hidden md:flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-secondary-container/40 text-on-secondary-container font-data-metric text-[12px]"><span class="material-symbols-outlined text-[16px]">cloud_done</span><span>تم الحفظ المتزامن</span></div><button class="px-space-sm py-1 rounded-full bg-surface-container-high text-on-surface font-label-caps text-label-caps hover:bg-surface-container-highest transition-colors" type="button">EN</button><div class="relative flex items-center"><button aria-label="الإشعارات" class="p-space-xs rounded-full text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all relative" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-error"></span></button></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="relative pt-16 bg-background min-h-screen px-space-xl py-space-lg"><div class="flex flex-col w-full">
+<!-- سياق الجلسة والشريط العلوي -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md mb-space-lg">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-caps text-label-caps">
+<a class="hover:text-primary transition-colors" href="#">الاختبارات والتقييمات</a>
+<span class="material-symbols-outlined text-[14px]">chevron_left</span>
+<a class="hover:text-primary transition-colors" href="#">نتائج الجلسات</a>
+<span class="material-symbols-outlined text-[14px]">chevron_left</span>
+<span class="text-on-surface font-semibold">محاكاة بلوك SMLE #1</span>
+</div>
+<div class="flex items-center gap-space-sm flex-wrap">
+<h1 class="font-headline-xl text-headline-xl text-primary tracking-tight">محاكاة بلوك اختباري شامل</h1>
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">(SMLE Mock Block 1 — Internal Medicine &amp; Multi-System)</span>
+</div>
+<div class="flex items-center gap-space-md text-on-surface-variant font-body-sm text-body-sm mt-1">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px] text-secondary">timer</span>
+<span>وضع الاختبار المحاكي الموقوت (Exam Mode)</span>
+</div>
+<span class="inline-block w-1 h-1 rounded-full bg-outline-variant"></span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span>12 أكتوبر 2026 • 10:45 صباحاً</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-space-sm">
+<div class="flex items-center gap-space-xs px-space-md py-space-xs rounded-xl bg-surface-container text-on-surface font-data-metric text-data-metric shadow-sm">
+<span class="material-symbols-outlined text-[18px] text-secondary">trending_up</span>
+<span>+5.5% مقارنة بآخر بلوك تجريبي (72.0%)</span>
+</div>
+<div class="flex items-center gap-space-xs px-space-md py-space-xs rounded-xl bg-secondary-container/40 text-on-secondary-container font-label-caps text-label-caps">
+<span class="material-symbols-outlined text-[18px] text-secondary">verified</span>
+<span>مكتملة ومحفوظة سحابياً</span>
+</div>
+</div>
+</div>
+<!-- وحدة النتيجة والملخص المحوري (Hero Diagnostic Breakdown) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm mb-space-lg">
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg items-center">
+<!-- المؤشر الأكاديمي الدقيق -->
+<div class="xl:col-span-4 flex flex-col items-center justify-center p-space-md bg-surface-container-low rounded-xl">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant mb-space-xs">معدل الدقة الكلي (Exam Score)</span>
+<div class="relative w-44 h-44 flex items-center justify-center my-space-xs">
+<svg class="w-full h-full -rotate-90" viewbox="0 0 120 120">
+<circle class="text-surface-container-high" cx="60" cy="60" fill="transparent" r="50" stroke="currentColor" stroke-width="10"></circle>
+<!-- 77.5% = 243.47 stroke-dasharray based on 314.16 circumference -->
+<circle class="text-primary-container" cx="60" cy="60" fill="transparent" r="50" stroke="currentColor" stroke-dasharray="314.16" stroke-dashoffset="70.68" stroke-linecap="round" stroke-width="10"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+<span class="font-data-metric text-[34px] leading-tight font-bold text-primary">77.5%</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">31 من 40 صائبة</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs mt-space-xs px-space-sm py-1 bg-surface-container-lowest rounded-lg text-secondary font-body-sm text-[12px] font-medium">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span>حد الاجتياز التجريبي للبلوك: 60% (+17.5%)</span>
+</div>
+</div>
+<!-- تفصيل النسب والبطاقات الإحصائية -->
+<div class="xl:col-span-8 flex flex-col justify-between h-full gap-space-md">
+<!-- الشريط التوزيعي المكدس بنسب حقيقية رياضياً -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between text-on-surface font-headline-sm text-headline-sm">
+<span>توزيع إجابات البلوك (40 سؤالاً)</span>
+<span class="font-data-metric text-data-metric text-on-surface-variant">زمن الإنجاز: 52:18 دقيقة</span>
+</div>
+<!-- شريط مكدس -->
+<div class="w-full h-4 rounded-full bg-surface-container-high flex overflow-hidden">
+<div class="bg-secondary h-full" style="width: 77.5%;" title="31 إجابة صحيحة (77.5%)"></div>
+<div class="bg-error h-full" style="width: 17.5%;" title="7 إجابات خاطئة (17.5%)"></div>
+<div class="bg-outline h-full" style="width: 5.0%;" title="2 بدون إجابة (5.0%)"></div>
+</div>
+<!-- المفاتيح التوضيحية للنسب -->
+<div class="flex items-center justify-start gap-space-lg text-body-sm font-body-sm pt-1">
+<div class="flex items-center gap-space-xs">
+<span class="w-3 h-3 rounded-full bg-secondary"></span>
+<span class="font-semibold text-on-surface">31 صحيحة</span>
+<span class="text-on-surface-variant font-data-metric">(77.5%)</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="w-3 h-3 rounded-full bg-error"></span>
+<span class="font-semibold text-on-surface">7 خاطئة</span>
+<span class="text-on-surface-variant font-data-metric">(17.5%)</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="w-3 h-3 rounded-full bg-outline"></span>
+<span class="font-semibold text-on-surface">2 غير مجابة</span>
+<span class="text-on-surface-variant font-data-metric">(5.0%)</span>
+</div>
+</div>
+</div>
+<!-- بطاقات المقاييس السريعة -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-sm pt-space-xs">
+<div class="p-space-sm bg-surface-container-low rounded-xl flex flex-col">
+<span class="text-on-surface-variant font-label-caps text-label-caps">الإجابات الصحيحة</span>
+<span class="font-data-metric text-[20px] font-bold text-secondary mt-1">31 <span class="text-[13px] text-on-surface-variant font-normal">/ 40</span></span>
+<span class="text-[11px] text-on-surface-variant font-body-sm mt-0.5">معدل نجاح ثابت</span>
+</div>
+<div class="p-space-sm bg-surface-container-low rounded-xl flex flex-col">
+<span class="text-on-surface-variant font-label-caps text-label-caps">الإجابات الخاطئة</span>
+<span class="font-data-metric text-[20px] font-bold text-error mt-1">7 <span class="text-[13px] text-on-surface-variant font-normal">أسئلة</span></span>
+<span class="text-[11px] text-on-surface-variant font-body-sm mt-0.5">تتطلب مراجعة فورية</span>
+</div>
+<div class="p-space-sm bg-surface-container-low rounded-xl flex flex-col">
+<span class="text-on-surface-variant font-label-caps text-label-caps">الوقت المستغرق</span>
+<span class="font-data-metric text-[20px] font-bold text-primary mt-1">52:18</span>
+<span class="text-[11px] text-on-surface-variant font-body-sm mt-0.5">من أصل 60:00 دقيقة</span>
+</div>
+<div class="p-space-sm bg-surface-container-low rounded-xl flex flex-col">
+<span class="text-on-surface-variant font-label-caps text-label-caps">متوسط وقت السؤال</span>
+<span class="font-data-metric text-[20px] font-bold text-on-surface mt-1">1:18 <span class="text-[13px] text-on-surface-variant font-normal">دقيقة</span></span>
+<span class="text-[11px] text-secondary font-body-sm mt-0.5">أسرع بـ 12ث من المعيار</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- خطوتك التالية الموصى بها سريرياً (Actionable Next Steps) -->
+<div class="bg-surface-container rounded-xl p-space-lg mb-space-lg shadow-sm">
+<div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md max-w-3xl">
+<div class="w-12 h-12 rounded-xl bg-primary-container text-on-primary flex items-center justify-center shrink-0 mt-1">
+<span class="material-symbols-outlined text-[26px]">medical_services</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="px-space-xs py-0.5 bg-primary/10 text-primary rounded font-label-caps text-label-caps">الأولوية الأكاديمية القصوى</span>
+<span class="font-headline-sm text-headline-sm text-primary">خطوتك التالية الموصى بها سريرياً</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface mt-1 leading-relaxed">
+            راجع الـ <span class="font-bold text-error">7 أسئلة</span> التي أخطأت بها أولاً لتثبيت المفاهيم والتشخيص التفريقي، ثم ابدأ جلسة تدريبية مركزة مكونة من 20 سؤالاً في <span class="font-semibold text-primary">أمراض الكلى (Nephrology)</span> لتغطية الفجوة الإكلينيكية الأكبر في هذا البلوك.
+          </p>
+</div>
+</div>
+<!-- الإجراءات المباشرة -->
+<div class="flex flex-wrap items-center gap-space-sm w-full lg:w-auto justify-end">
+<button class="w-full sm:w-auto px-space-lg py-space-sm bg-primary-container text-on-primary font-headline-sm text-[15px] rounded-xl hover:bg-primary transition-all flex items-center justify-center gap-space-xs shadow-sm" type="button">
+<span class="material-symbols-outlined text-[20px]">assignment_late</span>
+<span>مراجعة الـ 7 أسئلة الخاطئة</span>
+</button>
+<button class="px-space-md py-space-sm bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors font-body-md text-body-md rounded-xl flex items-center gap-space-xs shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">rule</span>
+<span>مراجعة الـ 40 سؤالاً</span>
+</button>
+<button class="px-space-md py-space-sm bg-surface-container-lowest text-on-surface hover:bg-surface-container-high transition-colors font-body-md text-body-md rounded-xl flex items-center gap-space-xs shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">quiz</span>
+<span>السؤالين المتروكين (2)</span>
+</button>
+</div>
+</div>
+</div>
+<!-- شبكة التحليل المزدوجة: الأداء حسب المواد + نقاط الضعف الدقيقة -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg mb-space-lg">
+<!-- الأداء حسب المواد السريرية (7 cols) -->
+<div class="lg:col-span-7 bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">category</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">الأداء حسب المواد السريرية</h2>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant">5 تخصصات مُمثلة</span>
+</div>
+<div class="flex flex-col gap-space-md">
+<!-- تخصص 1: أمراض القلب -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="font-semibold text-on-surface">أمراض القلب والأوعية (Cardiology)</span>
+<div class="flex items-center gap-space-sm">
+<span class="text-on-surface-variant font-data-metric">9 من 11 سؤالاً</span>
+<span class="font-data-metric font-bold text-secondary">82%</span>
+</div>
+</div>
+<div class="w-full h-2.5 rounded-full bg-surface-container-high overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 82%;"></div>
+</div>
+</div>
+<!-- تخصص 2: الجهاز التنفسي -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="font-semibold text-on-surface">الجهاز التنفسي (Respiratory Medicine)</span>
+<div class="flex items-center gap-space-sm">
+<span class="text-on-surface-variant font-data-metric">6 من 8 أسئلة</span>
+<span class="font-data-metric font-bold text-secondary">75%</span>
+</div>
+</div>
+<div class="w-full h-2.5 rounded-full bg-surface-container-high overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 75%;"></div>
+</div>
+</div>
+<!-- تخصص 3: الجهاز الهضمي -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="font-semibold text-on-surface">الجهاز الهضمي والكبد (Gastroenterology)</span>
+<div class="flex items-center gap-space-sm">
+<span class="text-on-surface-variant font-data-metric">7 من 10 أسئلة</span>
+<span class="font-data-metric font-bold text-on-surface">70%</span>
+</div>
+</div>
+<div class="w-full h-2.5 rounded-full bg-surface-container-high overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 70%;"></div>
+</div>
+</div>
+<!-- تخصص 4: أمراض الكلى وضغط الدم (ضعيف) -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<div class="flex items-center gap-space-xs">
+<span class="font-semibold text-on-surface">أمراض الكلى وضغط الدم (Nephrology)</span>
+<span class="px-1.5 py-0.5 rounded bg-error-container text-on-error-container font-label-caps text-[10px]">نقطة تركيز</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="text-on-surface-variant font-data-metric">5 من 8 أسئلة</span>
+<span class="font-data-metric font-bold text-error">62%</span>
+</div>
+</div>
+<div class="w-full h-2.5 rounded-full bg-surface-container-high overflow-hidden">
+<div class="bg-error h-full rounded-full" style="width: 62%;"></div>
+</div>
+</div>
+<!-- تخصص 5: الطوارئ والعناية المركزة -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<div class="flex items-center gap-space-xs">
+<span class="font-semibold text-on-surface">طب الطوارئ والعناية المركزة (Emergency/ICU)</span>
+<span class="text-on-surface-variant text-[11px]">(عينة محدودة)</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="text-on-surface-variant font-data-metric">2 من 3 أسئلة</span>
+<span class="font-data-metric font-bold text-on-surface">67%</span>
+</div>
+</div>
+<div class="w-full h-2.5 rounded-full bg-surface-container-high overflow-hidden">
+<div class="bg-surface-tint h-full rounded-full" style="width: 67%;"></div>
+</div>
+</div>
+</div>
+<div class="pt-space-md mt-space-sm text-on-surface-variant font-body-sm text-[12px] flex items-center justify-between">
+<span>مبني على تصنيف الامتحان الوطني للهيئة السعودية للتخصصات الصحية (SCFHS)</span>
+<button class="text-primary hover:underline font-medium" type="button">عرض تفاصيل المنهج</button>
+</div>
+</div>
+<!-- تحليل المواضيع الفرعية ونقاط الضعف السريرية (5 cols) -->
+<div class="lg:col-span-5 bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">troubleshoot</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">المواضيع الحرجة والتدريب الموجه</h2>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">info</span>
+</div>
+<div class="flex flex-col gap-space-sm">
+<!-- بطاقة موضوع 1 -->
+<div class="p-space-sm bg-surface-container-low rounded-xl flex items-center justify-between gap-space-sm">
+<div class="flex flex-col">
+<span class="font-headline-sm text-[14px] text-on-surface font-semibold">Acute Kidney Injury &amp; Electrolytes</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">أمراض الكلى • 2 إجابات خاطئة من أصل 4</span>
+<div class="flex items-center gap-space-xs mt-1">
+<span class="px-1.5 py-0.5 bg-error/10 text-error rounded font-data-metric text-[11px] font-bold">50% دقة</span>
+<span class="text-on-surface-variant text-[11px]">فجوة تشخيصية</span>
+</div>
+</div>
+<button class="shrink-0 px-space-sm py-1.5 bg-surface-container-highest text-primary hover:bg-primary hover:text-on-primary transition-colors rounded-lg font-body-sm text-[12px] font-medium" type="button">
+              تدرب على 15 س
+            </button>
+</div>
+<!-- بطاقة موضوع 2 -->
+<div class="p-space-sm bg-surface-container-low rounded-xl flex items-center justify-between gap-space-sm">
+<div class="flex flex-col">
+<span class="font-headline-sm text-[14px] text-on-surface font-semibold">Ischemic Heart Disease &amp; ACS</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">القلب • 3 إجابات خاطئة من أصل 7</span>
+<div class="flex items-center gap-space-xs mt-1">
+<span class="px-1.5 py-0.5 bg-error/10 text-error rounded font-data-metric text-[11px] font-bold">58% دقة</span>
+<span class="text-on-surface-variant text-[11px]">معايير ECG والتدبير</span>
+</div>
+</div>
+<button class="shrink-0 px-space-sm py-1.5 bg-surface-container-highest text-primary hover:bg-primary hover:text-on-primary transition-colors rounded-lg font-body-sm text-[12px] font-medium" type="button">
+              تدرب على 20 س
+            </button>
+</div>
+<!-- بطاقة موضوع 3 (إتقان) -->
+<div class="p-space-sm bg-surface-container-low rounded-xl flex items-center justify-between gap-space-sm">
+<div class="flex flex-col">
+<span class="font-headline-sm text-[14px] text-on-surface font-semibold">Cardiac Arrhythmias &amp; Conduction</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">القلب • 4 من 4 إجابات صحيحة</span>
+<div class="flex items-center gap-space-xs mt-1">
+<span class="px-1.5 py-0.5 bg-secondary/15 text-secondary rounded font-data-metric text-[11px] font-bold">100% إتقان</span>
+<span class="text-on-surface-variant text-[11px]">أداء مستقر في هذا البلوك</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary text-[24px]">verified</span>
+</div>
+</div>
+</div>
+<button class="w-full mt-space-md py-space-xs bg-surface-container-high text-primary hover:bg-surface-container-highest rounded-xl font-body-sm text-body-sm font-semibold transition-colors flex items-center justify-center gap-1" type="button">
+<span>إنشاء جلسة تقوية مخصصة للنقاط الضعيفة</span>
+<span class="material-symbols-outlined text-[16px]">arrow_left</span>
+</button>
+</div>
+</div>
+<!-- قسم إدارة الوقت والسرعة السريرية (Clinical Time Management) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm mb-space-lg">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs mb-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">avg_pace</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">إدارة الوقت والسرعة السريرية</h2>
+</div>
+<div class="flex items-center gap-space-md text-body-sm font-body-sm text-on-surface-variant">
+<span>المعدل الموصى به: <strong class="text-on-surface font-data-metric">1:30 د</strong> لكل سؤال</span>
+<span>متوسط البلوك: <strong class="text-secondary font-data-metric">1:18 د</strong></span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<div class="p-space-md bg-surface-container-low rounded-xl flex flex-col justify-between">
+<div>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">الوتيرة العامة للبلوك</span>
+<p class="font-headline-sm text-headline-sm text-on-surface mt-1">إيقاع سريع ومنضبط</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 leading-relaxed">
+            أنهيت الـ 40 سؤالاً قبل انتهاء الوقت بـ 7 دقائق و42 ثانية، مما منحك هامشاً مناسباً دون إفراط في التسرع.
+          </p>
+</div>
+<div class="mt-space-md flex items-center gap-space-xs text-secondary font-data-metric text-data-metric">
+<span class="material-symbols-outlined text-[18px]">speed</span>
+<span>وفّرت إجمالاً: 462 ثانية</span>
+</div>
+</div>
+<!-- أكثر سؤالين استغرقا وقتاً -->
+<div class="p-space-md bg-surface-container-low rounded-xl flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">أطول سؤال زمناً #1</span>
+<span class="px-2 py-0.5 rounded bg-error-container text-on-error-container font-data-metric text-[12px] font-bold">3:12 د</span>
+</div>
+<p class="font-headline-sm text-[15px] text-on-surface font-semibold mt-1">السؤال رقم 14: اضطراب التوازن الحمضي القلوي</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+            استغرق 3 دقائق و12 ثانية (حسابات الفجوة الأنيونية Anion Gap). النتيجة: إجابة خاطئة.
+          </p>
+</div>
+<button class="mt-space-sm text-primary hover:underline font-body-sm text-[13px] font-medium flex items-center gap-0.5" type="button">
+<span>معاينة السؤال وحل المسألة</span>
+<span class="material-symbols-outlined text-[14px]">arrow_left</span>
+</button>
+</div>
+<div class="p-space-md bg-surface-container-low rounded-xl flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">أطول سؤال زمناً #2</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-primary font-data-metric text-[12px] font-bold">2:45 د</span>
+</div>
+<p class="font-headline-sm text-[15px] text-on-surface font-semibold mt-1">السؤال رقم 28: تفسير صورة أشعة الصدر CXR</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+            استغرق دقيقتين و45 ثانية في فحص التكثف الرئوي الفصي. النتيجة: إجابة صحيحة.
+          </p>
+</div>
+<button class="mt-space-sm text-primary hover:underline font-body-sm text-[13px] font-medium flex items-center gap-0.5" type="button">
+<span>معاينة السؤال وبيانات الأشعة</span>
+<span class="material-symbols-outlined text-[14px]">arrow_left</span>
+</button>
+</div>
+</div>
+</div>
+<!-- معاينة موجزة ومقتضبة للأسئلة الخاطئة (Mistakes Quick Preview) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm mb-space-lg">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs mb-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-error text-[22px]">cancel</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">معاينة سريعة للأسئلة الخاطئة (7 أسئلة)</h2>
+</div>
+<button class="text-primary hover:text-primary-container font-headline-sm text-[14px] flex items-center gap-1 font-semibold" type="button">
+<span>فتح صفحة الشرح المفصل لجميع الأخطاء</span>
+<span class="material-symbols-outlined text-[18px]">open_in_new</span>
+</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-right border-collapse font-body-sm text-body-sm">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant font-label-caps text-label-caps">
+<th class="py-space-sm px-space-md rounded-r-lg">رقم السؤال</th>
+<th class="py-space-sm px-space-md">التخصص السريري</th>
+<th class="py-space-sm px-space-md">الموضوع التفصيلي</th>
+<th class="py-space-sm px-space-md">إجابتك المسجلة</th>
+<th class="py-space-sm px-space-md">الإجابة الصحيحة المعتمدة</th>
+<th class="py-space-sm px-space-md">الوقت المستغرق</th>
+<th class="py-space-sm px-space-md rounded-l-lg text-center">إجراء</th>
+</tr>
+</thead>
+<tbody class="divide-y-0">
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-space-sm px-space-md font-data-metric font-bold text-on-surface">سؤال 04</td>
+<td class="py-space-sm px-space-md text-on-surface">أمراض القلب</td>
+<td class="py-space-sm px-space-md text-on-surface-variant">NSTEMI Risk Stratification</td>
+<td class="py-space-sm px-space-md text-error font-medium">B (Immediate CABG)</td>
+<td class="py-space-sm px-space-md text-secondary font-semibold">D (Early Invasive Angiography)</td>
+<td class="py-space-sm px-space-md font-data-metric text-on-surface-variant">1:42 د</td>
+<td class="py-space-sm px-space-md text-center">
+<button class="p-1 text-primary hover:bg-surface-container-high rounded" title="مراجعة التفسير" type="button"><span class="material-symbols-outlined text-[20px]">visibility</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors bg-surface-container-low/20">
+<td class="py-space-sm px-space-md font-data-metric font-bold text-on-surface">سؤال 11</td>
+<td class="py-space-sm px-space-md text-on-surface">أمراض الكلى</td>
+<td class="py-space-sm px-space-md text-on-surface-variant">Prerenal vs Intrinsic AKI (FeNa)</td>
+<td class="py-space-sm px-space-md text-error font-medium">A (FeNa &gt; 2%)</td>
+<td class="py-space-sm px-space-md text-secondary font-semibold">C (FeNa &lt; 1%)</td>
+<td class="py-space-sm px-space-md font-data-metric text-on-surface-variant">1:15 د</td>
+<td class="py-space-sm px-space-md text-center">
+<button class="p-1 text-primary hover:bg-surface-container-high rounded" title="مراجعة التفسير" type="button"><span class="material-symbols-outlined text-[20px]">visibility</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-space-sm px-space-md font-data-metric font-bold text-on-surface">سؤال 14</td>
+<td class="py-space-sm px-space-md text-on-surface">أمراض الكلى</td>
+<td class="py-space-sm px-space-md text-on-surface-variant">High Anion Gap Acidosis (MUDPILES)</td>
+<td class="py-space-sm px-space-md text-error font-medium">C (Normal Saline Bolus)</td>
+<td class="py-space-sm px-space-md text-secondary font-semibold">E (Fomepizole + Hemodialysis)</td>
+<td class="py-space-sm px-space-md font-data-metric text-on-surface-variant">3:12 د</td>
+<td class="py-space-sm px-space-md text-center">
+<button class="p-1 text-primary hover:bg-surface-container-high rounded" title="مراجعة التفسير" type="button"><span class="material-symbols-outlined text-[20px]">visibility</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors bg-surface-container-low/20">
+<td class="py-space-sm px-space-md font-data-metric font-bold text-on-surface">سؤال 19</td>
+<td class="py-space-sm px-space-md text-on-surface">الجهاز الهضمي</td>
+<td class="py-space-sm px-space-md text-on-surface-variant">Acute Pancreatitis Severity Scoring</td>
+<td class="py-space-sm px-space-md text-error font-medium">B (Serum Amylase &gt; 1000)</td>
+<td class="py-space-sm px-space-md text-secondary font-semibold">A (BUN &gt; 20 and rising)</td>
+<td class="py-space-sm px-space-md font-data-metric text-on-surface-variant">0:58 د</td>
+<td class="py-space-sm px-space-md text-center">
+<button class="p-1 text-primary hover:bg-surface-container-high rounded" title="مراجعة التفسير" type="button"><span class="material-symbols-outlined text-[20px]">visibility</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-space-sm px-space-md font-data-metric font-bold text-on-surface">سؤال 23</td>
+<td class="py-space-sm px-space-md text-on-surface">الجهاز التنفسي</td>
+<td class="py-space-sm px-space-md text-on-surface-variant">Light's Criteria for Pleural Effusion</td>
+<td class="py-space-sm px-space-md text-error font-medium">D (Transudative by Glucose)</td>
+<td class="py-space-sm px-space-md text-secondary font-semibold">B (Exudative - Pleural/Serum Protein &gt; 0.5)</td>
+<td class="py-space-sm px-space-md font-data-metric text-on-surface-variant">1:20 د</td>
+<td class="py-space-sm px-space-md text-center">
+<button class="p-1 text-primary hover:bg-surface-container-high rounded" title="مراجعة التفسير" type="button"><span class="material-symbols-outlined text-[20px]">visibility</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors bg-surface-container-low/20">
+<td class="py-space-sm px-space-md font-data-metric font-bold text-on-surface">سؤال 32</td>
+<td class="py-space-sm px-space-md text-on-surface">أمراض القلب</td>
+<td class="py-space-sm px-space-md text-on-surface-variant">Aortic Stenosis Murmur Maneuvers</td>
+<td class="py-space-sm px-space-md text-error font-medium">A (Increases with Handgrip)</td>
+<td class="py-space-sm px-space-md text-secondary font-semibold">C (Decreases with Valsalva)</td>
+<td class="py-space-sm px-space-md font-data-metric text-on-surface-variant">1:04 د</td>
+<td class="py-space-sm px-space-md text-center">
+<button class="p-1 text-primary hover:bg-surface-container-high rounded" title="مراجعة التفسير" type="button"><span class="material-symbols-outlined text-[20px]">visibility</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-space-sm px-space-md font-data-metric font-bold text-on-surface">سؤال 37</td>
+<td class="py-space-sm px-space-md text-on-surface">طب الطوارئ</td>
+<td class="py-space-sm px-space-md text-on-surface-variant">Anaphylaxis Refractory to Epinephrine</td>
+<td class="py-space-sm px-space-md text-error font-medium">B (IV Diphenhydramine 50mg)</td>
+<td class="py-space-sm px-space-md text-secondary font-semibold">D (IV Glucagon for Beta-blocker pt)</td>
+<td class="py-space-sm px-space-md font-data-metric text-on-surface-variant">1:38 د</td>
+<td class="py-space-sm px-space-md text-center">
+<button class="p-1 text-primary hover:bg-surface-container-high rounded" title="مراجعة التفسير" type="button"><span class="material-symbols-outlined text-[20px]">visibility</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- بطاقة السؤالين المتروكين دون إجابة -->
+<div class="mt-space-md p-space-md bg-surface-container-low rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-outline text-[22px]">pending_actions</span>
+<div>
+<span class="font-headline-sm text-[14px] text-on-surface font-semibold">سؤالان تُركا بدون إجابة (Unanswered Items)</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant block">السؤال رقم 09 (أمراض الكبد) والسؤال رقم 35 (الأمراض التنفسية المزمنة)</span>
+</div>
+</div>
+<button class="px-space-md py-1.5 bg-surface-container-highest text-on-surface hover:bg-surface-container-high rounded-lg font-body-sm text-body-sm font-medium transition-colors shrink-0" type="button">
+        حل السؤالين الآن (+5% محتملة)
+      </button>
+</div>
+</div>
+<!-- تذييل الإجراءات الأكاديمية والطباعة -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-space-md py-space-sm">
+<div class="flex items-center gap-space-sm">
+<button class="px-space-md py-space-xs bg-surface-container text-on-surface hover:bg-surface-container-high rounded-xl font-body-sm text-body-sm font-medium flex items-center gap-space-xs transition-colors" onclick="window.print()" type="button">
+<span class="material-symbols-outlined text-[18px]">print</span>
+<span>طباعة تقرير التحصيل السريري (PDF)</span>
+</button>
+<button class="px-space-md py-space-xs bg-surface-container text-on-surface hover:bg-surface-container-high rounded-xl font-body-sm text-body-sm font-medium flex items-center gap-space-xs transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">share</span>
+<span>تصدير مع المشرف الأكاديمي</span>
+</button>
+</div>
+<div class="flex items-center gap-space-sm w-full sm:w-auto">
+<button class="w-full sm:w-auto px-space-lg py-space-sm bg-surface-container-high text-primary hover:bg-surface-container-highest rounded-xl font-headline-sm text-[14px] transition-colors" type="button">
+        العودة لقائمة الاختبارات
+      </button>
+<button class="w-full sm:w-auto px-space-xl py-space-sm bg-primary-container text-on-primary hover:bg-primary rounded-xl font-headline-sm text-[14px] transition-colors shadow-sm" type="button">
+        بدء بلوك جديد (Block 2)
+      </button>
+</div>
+</div>
+</div></main></div></body></html>

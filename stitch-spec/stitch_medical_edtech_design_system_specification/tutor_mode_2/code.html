@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "secondary-container": "#99efe5",
+          "on-tertiary-fixed-variant": "#661aa3",
+          "surface": "#faf8ff",
+          "inverse-surface": "#283044",
+          "tertiary-container": "#5f0d9c",
+          "surface-container-lowest": "#ffffff",
+          "surface-bright": "#faf8ff",
+          "surface-container-high": "#e2e7ff",
+          "inverse-on-surface": "#eef0ff",
+          "error": "#ba1a1a",
+          "on-surface": "#131b2e",
+          "on-primary": "#ffffff",
+          "on-primary-fixed-variant": "#264191",
+          "background": "#faf8ff",
+          "primary-container": "#1e3a8a",
+          "on-tertiary": "#ffffff",
+          "surface-dim": "#d2d9f4",
+          "surface-container": "#eaedff",
+          "on-background": "#131b2e",
+          "tertiary-fixed-dim": "#dfb7ff",
+          "on-tertiary-fixed": "#2d0050",
+          "tertiary": "#410070",
+          "secondary-fixed": "#9cf2e8",
+          "outline": "#757682",
+          "on-surface-variant": "#444651",
+          "on-secondary-fixed": "#00201d",
+          "tertiary-fixed": "#f1dbff",
+          "on-secondary": "#ffffff",
+          "on-secondary-fixed-variant": "#00504a",
+          "on-primary-fixed": "#00164e",
+          "primary": "#00236f",
+          "surface-container-highest": "#dae2fd",
+          "secondary-fixed-dim": "#80d5cb",
+          "on-error-container": "#93000a",
+          "surface-variant": "#dae2fd",
+          "error-container": "#ffdad6",
+          "primary-fixed": "#dce1ff",
+          "outline-variant": "#c5c5d3",
+          "on-tertiary-container": "#cc93ff",
+          "on-error": "#ffffff",
+          "on-primary-container": "#90a8ff",
+          "inverse-primary": "#b6c4ff",
+          "secondary": "#006a63",
+          "surface-tint": "#4059aa",
+          "primary-fixed-dim": "#b6c4ff",
+          "surface-container-low": "#f2f3ff",
+          "on-secondary-container": "#006f67"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+        "spacing": {
+          "space-lg": "1.5rem",
+          "space-sm": "0.5rem",
+          "margin": "2rem",
+          "gutter-mobile": "0.75rem",
+          "space-xs": "0.25rem",
+          "space-xl": "2rem",
+          "gutter": "1.5rem",
+          "margin-mobile": "1rem",
+          "space-md": "1rem"
+        },
+        "fontFamily": {
+          "headline-xl-mobile": [
+            "Noto Sans"
+          ],
+          "headline-sm": [
+            "Noto Sans"
+          ],
+          "headline-lg": [
+            "Noto Sans"
+          ],
+          "label-caps": [
+            "Inter"
+          ],
+          "headline-xl": [
+            "Noto Sans"
+          ],
+          "body-md": [
+            "Noto Sans"
+          ],
+          "body-sm": [
+            "Noto Sans"
+          ],
+          "data-metric": [
+            "Inter"
+          ],
+          "option-label": [
+            "Inter"
+          ],
+          "vignette-text": [
+            "Noto Sans"
+          ]
+        },
+        "fontSize": {
+          "headline-xl-mobile": [
+            "24px",
+            {
+              "lineHeight": "38px",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-sm": [
+            "18px",
+            {
+              "lineHeight": "30px",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-lg": [
+            "22px",
+            {
+              "lineHeight": "36px",
+              "fontWeight": "600"
+            }
+          ],
+          "label-caps": [
+            "11px",
+            {
+              "lineHeight": "16px",
+              "letterSpacing": "0.05em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-xl": [
+            "30px",
+            {
+              "lineHeight": "48px",
+              "fontWeight": "700"
+            }
+          ],
+          "body-md": [
+            "15px",
+            {
+              "lineHeight": "26px",
+              "fontWeight": "400"
+            }
+          ],
+          "body-sm": [
+            "13px",
+            {
+              "lineHeight": "22px",
+              "fontWeight": "400"
+            }
+          ],
+          "data-metric": [
+            "13px",
+            {
+              "lineHeight": "18px",
+              "letterSpacing": "0.02em",
+              "fontWeight": "500"
+            }
+          ],
+          "option-label": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "fontWeight": "700"
+            }
+          ],
+          "vignette-text": [
+            "17px",
+            {
+              "lineHeight": "32px",
+              "fontWeight": "400"
+            }
+          ]
+        }
+      },
+    },
+  }</script></head><body class="bg-background font-body-md text-on-surface"><aside class="fixed right-0 top-0 h-full w-72 bg-surface-container-lowest z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="h-16 px-space-md flex items-center justify-between gap-space-sm bg-surface-container-low/50"><div class="flex items-center gap-space-sm"><div class="w-9 h-9 rounded-xl bg-primary-container text-on-primary flex items-center justify-center"><span class="material-symbols-outlined text-[20px]">vital_signs</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary tracking-tight">منصة نبض الطبية</span><span class="font-label-caps text-label-caps text-on-surface-variant uppercase">MedPulse Academic</span></div></div></div><div class="px-space-md py-space-sm"><div class="px-space-xs py-space-xs"><span class="font-label-caps text-label-caps text-on-surface-variant uppercase">الوحدات الأكاديمية</span></div><nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary font-headline-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="main-dashboard" href="#"><span class="material-symbols-outlined text-[20px]">dashboard</span><span class="font-body-md text-body-md">الرئيسية</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl transition-all bg-primary-container text-on-primary font-headline-sm" data-path="question-bank" href="#"><span class="material-symbols-outlined text-[20px]">quiz</span><span class="font-body-md text-body-md">بنك الأسئلة</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="mock-exams" href="#"><span class="material-symbols-outlined text-[20px]">assignment</span><span class="font-body-md text-body-md">الاختبارات</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="performance-analytics" href="#"><span class="material-symbols-outlined text-[20px]">monitoring</span><span class="font-body-md text-body-md">الأداء والتحصيل</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="study-planner" href="#"><span class="material-symbols-outlined text-[20px]">calendar_month</span><span class="font-body-md text-body-md">خطة الدراسة</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="clinical-review" href="#"><span class="material-symbols-outlined text-[20px]">clinical_notes</span><span class="font-body-md text-body-md">المراجعة السريرية</span></a></nav></div><div class="px-space-md py-space-xs"><div class="px-space-xs py-space-xs"><span class="font-label-caps text-label-caps text-on-surface-variant uppercase">الأدوات والمراجع</span></div><nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary font-headline-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="bookmarks-vault" href="#"><span class="material-symbols-outlined text-[20px]">bookmark</span><span class="font-body-md text-body-md">المحفوظات</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="clinical-notes" href="#"><span class="material-symbols-outlined text-[20px]">edit_note</span><span class="font-body-md text-body-md">الملاحظات</span></a></nav></div></div><div class="flex flex-col gap-space-xs p-space-md bg-surface-container-low/40"><nav class="flex flex-col gap-1 mb-space-xs" data-active-classes="bg-primary-container text-on-primary font-headline-sm"><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="help-center" href="#"><span class="material-symbols-outlined text-[18px]">help_outline</span><span class="font-body-sm text-body-sm">المساعدة والدعم</span></a><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="system-settings" href="#"><span class="material-symbols-outlined text-[18px]">settings</span><span class="font-body-sm text-body-sm">الإعدادات</span></a></nav><div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col"><span class="font-headline-sm text-[13px] leading-tight text-on-surface font-semibold">علي أحمد</span><span class="font-label-caps text-[10px] text-on-surface-variant">طالب طب • مرحلة 5</span></div></div><button aria-label="تسجيل الخروج" class="p-space-xs text-on-surface-variant hover:text-primary transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">logout</span></button></div></div></aside><div class="pr-72"><header class="fixed top-0 right-72 left-0 h-16 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-xl"><div class="flex items-center gap-space-md flex-1 max-w-xl"><div class="relative w-full"><span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span><input class="w-full bg-surface-container-lowest text-on-surface font-body-sm text-body-sm pr-10 pl-space-md py-space-xs rounded-full outline-none ring-0 placeholder:text-on-surface-variant/70 shadow-[0_1px_8px_rgba(0,0,0,0.04)] focus:bg-surface-container-low transition-all" placeholder="ابحث في الأسئلة، المواضيع، والامتحانات..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="hidden md:flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-secondary-container/40 text-on-secondary-container font-data-metric text-[12px]"><span class="material-symbols-outlined text-[16px]">cloud_done</span><span>تم الحفظ المتزامن</span></div><button class="px-space-sm py-1 rounded-full bg-surface-container-high text-on-surface font-label-caps text-label-caps hover:bg-surface-container-highest transition-colors" type="button">EN</button><div class="relative flex items-center"><button aria-label="الإشعارات" class="p-space-xs rounded-full text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all relative" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-error"></span></button></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="relative pt-16 bg-background min-h-screen px-space-xl py-space-lg"><div class="flex flex-col w-full">
+<!-- Top Session Bar: Tutor Mode Control Strip -->
+<header class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm mb-space-md flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md flex-wrap">
+<div class="flex items-center gap-space-xs bg-secondary-container/30 text-secondary px-space-md py-1.5 rounded-full">
+<span class="material-symbols-outlined text-[18px]">school</span>
+<span class="font-headline-sm text-[13px] font-bold">وضع التدريب (Tutor Mode)</span>
+</div>
+<div class="h-5 w-[1px] bg-surface-container-highest hidden sm:block"></div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-data-metric text-[12px]">
+<span class="material-symbols-outlined text-[16px] text-secondary">verified</span>
+<span>تم الحفظ تلقائياً</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-data-metric text-[12px] bg-surface-container px-space-sm py-1 rounded-full">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>الوقت المنقضي: <strong class="text-on-surface font-semibold">18:45</strong></span>
+</div>
+</div>
+<!-- Quick Tool Triggers -->
+<div class="flex items-center gap-space-xs flex-wrap">
+<button class="flex items-center gap-1 px-space-sm py-1.5 rounded-lg bg-surface-container-low text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-body-sm text-[12px]" title="حفظ ومتابعة لاحقاً" type="button">
+<span class="material-symbols-outlined text-[18px]">pause_circle</span>
+<span class="hidden md:inline">إيقاف مؤقت وحفظ</span>
+</button>
+<button class="flex items-center gap-1 px-space-sm py-1.5 rounded-lg bg-surface-container-low text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-body-sm text-[12px]" title="وضع التركيز" type="button">
+<span class="material-symbols-outlined text-[18px]">fullscreen</span>
+<span class="hidden lg:inline">وضع التركيز</span>
+</button>
+<button class="flex items-center gap-1 px-space-sm py-1.5 rounded-lg bg-surface-container-low text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-body-sm text-[12px]" title="اختصارات الكيبورد" type="button">
+<span class="material-symbols-outlined text-[18px]">keyboard</span>
+</button>
+<button class="flex items-center gap-1 px-space-sm py-1.5 rounded-lg bg-error-container/40 text-error hover:bg-error-container hover:text-on-error-container transition-all font-body-sm text-[12px]" title="إنهاء الجلسة" type="button">
+<span class="material-symbols-outlined text-[18px]">logout</span>
+<span class="hidden sm:inline">إنهاء الجلسة</span>
+</button>
+</div>
+</header>
+<!-- Progress Bar Matrix Strip -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm mb-space-lg">
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-[14px] text-primary font-bold">السؤال 8 من 20</span>
+<span class="font-label-caps text-on-surface-variant text-[11px]">(40% مكتمل)</span>
+</div>
+<div class="flex items-center gap-space-md font-data-metric text-[12px] text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-secondary"></span> 5 صحيحة</span>
+<span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-error"></span> 3 غير صحيحة</span>
+<span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-surface-container-high"></span> 12 متبقية</span>
+</div>
+</div>
+<!-- 20-Segment Indicator -->
+<div class="grid grid-cols-20 gap-1 w-full h-2 rounded-full overflow-hidden bg-surface-container">
+<div class="bg-secondary rounded-full" title="Q1: صحيح"></div>
+<div class="bg-secondary rounded-full" title="Q2: صحيح"></div>
+<div class="bg-error rounded-full" title="Q3: خاطئ"></div>
+<div class="bg-secondary rounded-full" title="Q4: صحيح"></div>
+<div class="bg-secondary rounded-full" title="Q5: صحيح"></div>
+<div class="bg-error rounded-full" title="Q6: خاطئ"></div>
+<div class="bg-secondary rounded-full" title="Q7: صحيح"></div>
+<div class="bg-error ring-2 ring-primary rounded-full relative" title="Q8: الحالي (خاطئ)"></div>
+<div class="bg-surface-container-highest rounded-full" title="Q9: غير مجاب"></div>
+<div class="bg-surface-container-highest rounded-full" title="Q10: غير مجاب"></div>
+<div class="bg-surface-container-highest rounded-full" title="Q11: غير مجاب"></div>
+<div class="bg-surface-container-highest rounded-full" title="Q12: غير مجاب"></div>
+<div class="bg-surface-container-highest rounded-full" title="Q13: غير مجاب"></div>
+<div class="bg-surface-container-highest rounded-full" title="Q14: غير مجاب"></div>
+<div class="bg-surface-container-highest rounded-full" title="Q15: غير مجاب"></div>
+<div class="bg-surface-container-highest rounded-full" title="Q16: غير مجاب"></div>
+<div class="bg-surface-container-highest rounded-full" title="Q17: غير مجاب"></div>
+<div class="bg-surface-container-highest rounded-full" title="Q18: غير مجاب"></div>
+<div class="bg-surface-container-highest rounded-full" title="Q19: غير مجاب"></div>
+<div class="bg-surface-container-highest rounded-full" title="Q20: غير مجاب"></div>
+</div>
+</div>
+<!-- Main Asymmetrical Grid: Question (Left 68%) & Clinical Navigator (Right 32%) -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg items-start">
+<!-- Question & Rationale Column (xl:col-span-8) -->
+<div class="xl:col-span-8 flex flex-col gap-space-lg">
+<!-- Vignette Card -->
+<section class="bg-surface-container-lowest rounded-xl p-space-xl shadow-sm relative overflow-hidden">
+<!-- Accent Top Line -->
+<div class="absolute top-0 right-0 left-0 h-1.5 bg-primary-container"></div>
+<!-- Metadata Header -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm mb-space-lg pb-space-sm bg-surface-container-low/40 px-space-md py-space-xs rounded-xl">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-data-metric text-[12px] font-bold text-primary px-2 py-0.5 rounded bg-primary-fixed">Q-4821</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">حالة سريرية (Clinical Vignette)</span>
+<span class="text-outline-variant">•</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">أمراض القلب والأوعية الدموية ← اضطرابات النظم والنقل (Arrhythmias)</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="px-2.5 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-container font-label-caps text-[11px] font-bold">
+              مستوى متوسط • Intermediate
+            </span>
+<button class="text-tertiary hover:text-tertiary-container transition-colors p-1" title="تم الحفظ في المحفوظات" type="button">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">bookmark</span>
+</button>
+</div>
+</div>
+<!-- Clinical Scenario Narrative -->
+<div class="space-y-space-md font-vignette-text text-vignette-text text-on-surface leading-loose text-justify">
+<p>
+            رجلٌ يبلغ من العمر <strong class="font-semibold text-primary">64 عاماً</strong>، لديه تاريخ مرضي مشخص لارتفاع ضغط الدم الشرياني وداء السكري من النوع الثاني، يحضر إلى قسم الطوارئ وهو يشكو من خفقان حاد مفاجئ، دوخة خفيفة، وشعور بضيق في التنفس مستمر منذ 3 ساعات دون ألم صريح في الصدر.
+          </p>
+<!-- Vitals Callout Grid -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-sm p-space-md rounded-xl bg-surface-container-low">
+<div class="flex flex-col">
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase">ضغط الدم (BP)</span>
+<span class="font-data-metric text-[15px] font-bold text-on-surface">105/70 mmHg</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase">معدل النبض (HR)</span>
+<span class="font-data-metric text-[15px] font-bold text-error">148 bpm (سريع غير منتظم)</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase">معدل التنفس (RR)</span>
+<span class="font-data-metric text-[15px] font-bold text-on-surface">20 /min</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase">تشبع الأكسجين (SpO₂)</span>
+<span class="font-data-metric text-[15px] font-bold text-secondary">96% (هواء الغرفة)</span>
+</div>
+</div>
+<p>
+<strong class="font-semibold text-on-surface">الفحص السريري:</strong> المريض واعٍ ومتجاوب وموجّه تماماً بالزمان والمكان. أصوات القلب متغيرة الشدة (Variable S1 intensity) مع إيقاع غير منتظم بالكامل وبمعدل متسارع. امتلاء الوداجي طبيعي، وفحص الساقين لا يظهر أي وذمة محيطية. فحص الرئتين بالتسمع يُظهر أصواتاً تنفسية حويصلية متناظرة ونظيفة ثنائياً دون كراكر (No crackles).
+          </p>
+<p>
+            أُجري تخطيط كهربائية القلب (ECG) الفوري كما هو موضح أدناه، وأظهر تسارع قلب ضيق المركب (<span class="font-data-metric text-[14px]">Narrow-complex tachycardia</span>) مع غياب تام لموجات P المنفصلة، وتذبذب متموج لخط الأساس غير متناسق السعة والفواصل، واستجابة بطينية متسارعة غير منتظمة (<span class="font-data-metric text-[14px]">Irregularly irregular rhythm with fibrillatory waves - AF with RVR</span>).
+          </p>
+</div>
+<!-- Interactive Diagnostic ECG Strip Viewer -->
+<div class="mt-space-lg rounded-xl overflow-hidden shadow-sm bg-inverse-surface text-inverse-on-surface">
+<!-- ECG Viewer Toolbar -->
+<div class="flex items-center justify-between px-space-md py-space-xs bg-surface-container-highest/20 text-inverse-on-surface text-[12px]">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[18px] text-secondary-fixed">ecg_heart</span>
+<span class="font-label-caps font-semibold">تخطيط القلب السريري: Lead II Rhythm Strip (مسار النظم)</span>
+</div>
+<div class="flex items-center gap-space-xs font-data-metric">
+<span class="px-2 py-0.5 rounded bg-surface-container-highest/30 text-[11px]">25 mm/s • 10 mm/mV</span>
+<button class="p-1 rounded hover:bg-surface-container-highest/40 transition-colors" title="تكبير المسار" type="button">
+<span class="material-symbols-outlined text-[16px]">zoom_in</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container-highest/40 transition-colors" title="شاشة كاملة" type="button">
+<span class="material-symbols-outlined text-[16px]">open_in_full</span>
+</button>
+</div>
+</div>
+<!-- ECG Waveform Canvas (Visual SVG) -->
+<div class="relative w-full h-44 bg-[#0a1122] overflow-hidden p-space-sm flex items-center justify-center">
+<!-- Grid Background Overlay -->
+<svg class="absolute inset-0 w-full h-full opacity-25" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern height="8" id="smallGrid" patternunits="userSpaceOnUse" width="8">
+<path d="M 8 0 L 0 0 0 8" fill="none" stroke="#38bdf8" stroke-width="0.5"></path>
+</pattern>
+<pattern height="40" id="grid" patternunits="userSpaceOnUse" width="40">
+<rect fill="url(#smallGrid)" height="40" width="40"></rect>
+<path d="M 40 0 L 0 0 0 40" fill="none" stroke="#0284c7" stroke-width="1"></path>
+</pattern>
+</defs>
+<rect fill="url(#grid)" height="100%" width="100%"></rect>
+</svg>
+<!-- ECG Rhythm Trace: Realistic Atrial Fibrillation with RVR and irregular RR intervals -->
+<svg class="w-full h-full relative z-10" preserveaspectratio="none" viewbox="0 0 1000 160">
+<!-- Animated Sweep Glow -->
+<path d="
+                M 0,85 
+                Q 10,83 20,87 Q 30,83 40,86 Q 50,84 60,88
+                L 64,88 L 68,96 L 73,12 L 80,132 L 85,85 L 94,85
+                Q 105,74 116,85
+                Q 125,83 135,87 Q 145,84 155,86
+                L 158,86 L 162,94 L 167,10 L 174,135 L 179,85 L 188,85
+                Q 198,75 210,85
+                Q 225,87 Q 240,83 Q 255,88 Q 270,84 Q 285,87
+                L 290,87 L 294,95 L 299,14 L 306,130 L 311,85 L 320,85
+                Q 330,73 342,85
+                Q 355,87 Q 365,83 Q 375,88 Q 385,84
+                L 390,85 L 394,93 L 399,16 L 406,128 L 411,85 L 420,85
+                Q 432,74 445,85
+                Q 460,87 Q 480,83 Q 500,88 Q 520,84 Q 540,86
+                L 544,86 L 548,95 L 553,10 L 560,134 L 565,85 L 574,85
+                Q 585,73 598,85
+                Q 610,86 Q 620,83 Q 630,88
+                L 634,88 L 638,94 L 643,15 L 650,132 L 655,85 L 664,85
+                Q 676,75 688,85
+                Q 705,86 Q 720,83 Q 735,88 Q 750,84
+                L 755,85 L 759,95 L 764,12 L 771,133 L 776,85 L 785,85
+                Q 796,73 808,85
+                Q 820,86 Q 835,83 Q 850,87 Q 865,84 Q 880,88
+                L 885,88 L 889,94 L 894,11 L 901,135 L 906,85 L 915,85
+                Q 926,74 938,85
+                Q 955,86 Q 970,83 Q 985,87 L 1000,85
+              " fill="none" stroke="#22d3ee" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<!-- Callout Annotation on ECG -->
+<div class="absolute bottom-2 right-4 bg-inverse-surface/90 backdrop-blur-sm px-2.5 py-1 rounded text-[11px] text-cyan-200 flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+<span>عدم انتظام فواصل R-R مع غياب تام لموجة P وتذبذب خط الأساس (AF)</span>
+</div>
+</div>
+</div>
+<!-- Question Lead / Direct Stem -->
+<div class="mt-space-lg p-space-md rounded-xl bg-surface-container-high/60">
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">
+            ما هو التدبير السريري الدوائي الفوري الأنسب للسيطرة على معدل ضربات القلب (Rate Control) لدى هذا المريض مع الحفاظ على استقراره الديناميكي الدموي؟
+          </h2>
+</div>
+</section>
+<!-- Post-Submission Question Distractor Options (A to E) -->
+<section aria-label="خيارات الإجابة" class="flex flex-col gap-space-sm">
+<!-- Option A: Student's INCORRECT Choice -->
+<div class="group relative rounded-xl p-space-md bg-error-container/20 text-on-surface shadow-sm transition-all">
+<div class="flex items-start gap-space-md">
+<!-- Distractor Letter Token: Red X -->
+<div class="w-9 h-9 rounded-lg bg-error text-on-error flex items-center justify-center font-option-label text-option-label shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</div>
+<!-- Option Content -->
+<div class="flex-1 flex flex-col gap-1">
+<div class="flex items-center justify-between flex-wrap gap-space-xs">
+<span class="font-option-label text-[15px] font-bold text-error">خيار A: أدينوسين وريدياً (IV Adenosine 6 mg bolus)</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-error text-on-error font-label-caps text-[11px] font-bold">
+<span class="material-symbols-outlined text-[13px]">cancel</span>
+                  إجابتك (اختيار غير صحيح)
+                </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                جرعة بلعة سريعة من الأدينوسين عبر الوريد متبوعة بدفق ملحي سريع.
+              </p>
+<div class="mt-space-xs flex items-center gap-2 font-data-metric text-[12px] text-error">
+<span class="material-symbols-outlined text-[15px]">info</span>
+<span>تم اختياره بواسطة 18% من أطباء الاختبار • ليس علاجاً للرجفان الأذيني</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Option B: The TRUE CORRECT Answer -->
+<div class="group relative rounded-xl p-space-md bg-secondary-container/30 text-on-surface shadow-sm">
+<div class="flex items-start gap-space-md">
+<!-- Distractor Letter Token: Green Check -->
+<div class="w-9 h-9 rounded-lg bg-secondary text-on-secondary flex items-center justify-center font-option-label text-option-label shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[22px]">check</span>
+</div>
+<!-- Option Content -->
+<div class="flex-1 flex flex-col gap-1">
+<div class="flex items-center justify-between flex-wrap gap-space-xs">
+<span class="font-option-label text-[15px] font-bold text-secondary">خيار B: ميتوبرولول وريدياً (IV Metoprolol 5 mg over 2-5 minutes)</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-secondary text-on-secondary font-label-caps text-[11px] font-bold">
+<span class="material-symbols-outlined text-[13px]">verified</span>
+                  الإجابة الصحيحة السريرية
+                </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface">
+                حاصرات بيتا وريدياً (Beta-blocker) لتثبيط التوصيل عبر العقدة الأذينية البطينية (AV node) والسيطرة على المعدل البطيني.
+              </p>
+<div class="mt-space-xs flex items-center gap-2 font-data-metric text-[12px] text-secondary">
+<span class="material-symbols-outlined text-[15px]">trending_up</span>
+<span>أجاب عليه بشكل صحيح 68% من المتقدمين للاختبار (معدل تمييز عالي)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Option C: Incorrect Distractor -->
+<div class="rounded-xl p-space-md bg-surface-container-lowest text-on-surface shadow-sm opacity-70 hover:opacity-100 transition-opacity">
+<div class="flex items-start gap-space-md">
+<div class="w-9 h-9 rounded-lg bg-surface-container-high text-on-surface-variant flex items-center justify-center font-option-label text-option-label shrink-0">
+              C
+            </div>
+<div class="flex-1 flex flex-col gap-0.5">
+<div class="flex items-center justify-between">
+<span class="font-option-label text-[15px] text-on-surface">خيار C: أميودارون وريدياً (IV Amiodarone 150 mg over 10 minutes)</span>
+<span class="text-on-surface-variant font-label-caps text-[11px]">8% اختاروا هذا</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                مضاد لاضطراب النظم من الصنف الثالث (Class III Antiarrhythmic) لتقويم النظم الكيميائي.
+              </p>
+</div>
+</div>
+</div>
+<!-- Option D: Incorrect Distractor -->
+<div class="rounded-xl p-space-md bg-surface-container-lowest text-on-surface shadow-sm opacity-70 hover:opacity-100 transition-opacity">
+<div class="flex items-start gap-space-md">
+<div class="w-9 h-9 rounded-lg bg-surface-container-high text-on-surface-variant flex items-center justify-center font-option-label text-option-label shrink-0">
+              D
+            </div>
+<div class="flex-1 flex flex-col gap-0.5">
+<div class="flex items-center justify-between">
+<span class="font-option-label text-[15px] text-on-surface">خيار D: تقويم نظم القلب الكهربائي المتزامن الفوري (Synchronized DC Cardioversion)</span>
+<span class="text-on-surface-variant font-label-caps text-[11px]">4% اختاروا هذا</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                إعطاء صدمة كهربائية فورية متزامنة عبر الصدر مع تسكين خفيف.
+              </p>
+</div>
+</div>
+</div>
+<!-- Option E: Incorrect Distractor -->
+<div class="rounded-xl p-space-md bg-surface-container-lowest text-on-surface shadow-sm opacity-70 hover:opacity-100 transition-opacity">
+<div class="flex items-start gap-space-md">
+<div class="w-9 h-9 rounded-lg bg-surface-container-high text-on-surface-variant flex items-center justify-center font-option-label text-option-label shrink-0">
+              E
+            </div>
+<div class="flex-1 flex flex-col gap-0.5">
+<div class="flex items-center justify-between">
+<span class="font-option-label text-[15px] text-on-surface">خيار E: ديجوكسين فموياً (Oral Digoxin 0.25 mg daily)</span>
+<span class="text-on-surface-variant font-label-caps text-[11px]">2% اختاروا هذا</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                مُثبط مضخة الصوديوم والبوتاسيوم (Cardiac Glycoside) كجرعة فموية صيانة.
+              </p>
+</div>
+</div>
+</div>
+</section>
+<!-- Comprehensive Clinical Explanation Block (التفسير السريري الشامل) -->
+<section class="bg-surface-container-lowest rounded-xl p-space-xl shadow-sm space-y-space-lg">
+<!-- Status & Diagnosis Banner -->
+<div class="rounded-xl bg-error-container/30 p-space-md flex items-start gap-space-md">
+<span class="material-symbols-outlined text-error text-[28px] shrink-0 mt-0.5">error</span>
+<div class="flex flex-col gap-1">
+<span class="font-headline-sm text-[16px] text-error font-bold">إجابة غير صحيحة — الرجفان الأذيني مع استجابة بطينية سريعة (AF with RVR)</span>
+<p class="font-body-sm text-body-sm text-on-surface">
+              لدى المرضى المستقرين ديناميكياً (ضغط دم طبيعي، عدم وجود وذمة رئة حادة أو نقص تروية صريح)، الخطوة العلاجية الأولى الموصى بها هي <strong class="font-semibold text-primary">السيطرة على معدل النبض (Rate Control)</strong> عبر الوريد بحاصرات بيتا أو حاصرات قنوات الكالسيوم، وليس محاولة حصر النظم أو استخدام الأدينوسين.
+            </p>
+</div>
+</div>
+<!-- 1. Key Learning Objective -->
+<div class="p-space-md rounded-xl bg-surface-container-low">
+<div class="flex items-center gap-space-xs text-primary mb-1">
+<span class="material-symbols-outlined text-[20px]">lightbulb</span>
+<span class="font-label-caps uppercase tracking-wider text-[12px] font-bold">الهدف التعليمي المحوري (Key Learning Objective)</span>
+</div>
+<p class="font-headline-sm text-[15px] text-on-surface leading-relaxed font-semibold">
+            التمييز بين تدبير تسارع القلب فوق البطيني المنتظم (SVT) الذي يستجيب للأدينوسين، وبين الرجفان الأذيني غير المنتظم (AF) الذي يتطلب حاصرات العقدة AV (مثل ميتوبرولول أو ديلتيازيم) للسيطرة على المعدل، وتجنب Cardioversion دون التأكد من خطورة الانصمام الخثاري إلا في حالات عدم الاستقرار.
+          </p>
+</div>
+<!-- 2. Why the Correct Answer (Option B) is Correct -->
+<div class="space-y-space-xs">
+<div class="flex items-center gap-space-xs text-secondary font-headline-sm text-headline-sm font-bold">
+<span class="material-symbols-outlined text-[24px]">check_circle</span>
+<h3>لماذا خيار (B) هو الإجابة الصحيحة؟</h3>
+</div>
+<div class="font-body-md text-body-md text-on-surface space-y-space-sm pr- space-md leading-relaxed text-justify">
+<p>
+              يُظهر المريض رجفاناً أذينياً مع استجابة بطينية سريعة (<strong class="font-semibold text-primary">Atrial Fibrillation with Rapid Ventricular Response</strong>)، حيث تتجاوز ضربات القلب 140 نبضة/دقيقة مسببة انخفاض زمن الامتلاء الانبساطي وبالتالي نقص النتاج القلبي وظهور أعراض الخفقان والدوخة.
+            </p>
+<p>
+              العلامات الحيوية تُشير إلى أن المريض <strong class="font-semibold text-secondary">مستقر ديناميكياً (Hemodynamically Stable)</strong>: ضغط الدم 105/70 mmHg (طبيعي ومقبول)، الأكسجين 96%، والرئتان خاليتان من علامات وذمة الرئة الحادة.
+            </p>
+<p>
+              في هذه الحالة، الهدف الفوري هو إبطاء معدل النبض البطيني (&lt; 110 bpm) لتقليل العبء على العضلة القلبية. يُعتبر <strong class="font-semibold text-primary">الميتوبرولول الوريدي (IV Metoprolol)</strong> أو <strong class="font-semibold text-primary">الديلتيازيم (IV Diltiazem)</strong> الخط الأول المعياري؛ حيث يُطيلان فترة الحِران في العقدة الأذينية البطينية (<span class="font-data-metric text-[13px]">AV Nodal Refractory Period</span>) مما يُقلل عدد النبضات الفوضوية العابرة إلى البطينات بكفاءة وسرعة فائقة.
+            </p>
+</div>
+</div>
+<!-- 3. Why Option A (Your Answer) is Incorrect -->
+<div class="space-y-space-xs p-space-md rounded-xl bg-error-container/15">
+<div class="flex items-center gap-space-xs text-error font-headline-sm text-headline-sm font-bold">
+<span class="material-symbols-outlined text-[24px]">highlight_off</span>
+<h3>لماذا كان خيارك (A - الأدينوسين) خاطئاً وسريرياً غير ملائم؟</h3>
+</div>
+<div class="font-body-md text-body-md text-on-surface space-y-space-sm pr-space-md leading-relaxed text-justify">
+<p>
+              يعمل الأدينوسين (<span class="font-data-metric text-[13px]">Adenosine</span>) على إحداث حصر عابر كامل في العقدة الأذينية البطينية لعدة ثوانٍ فقط (Half-life &lt; 10 seconds).
+            </p>
+<p>
+              يُستخدم الأدينوسين حصراً في تسارع القلب المنتظم ضيق المركب (<strong class="font-semibold">Regular Paroxysmal Supraventricular Tachycardia</strong> مثل AVNRT و AVRT) لكسر دارة إعادة الدخول (<span class="font-data-metric text-[13px]">Re-entry Circuit</span>).
+            </p>
+<p class="text-error font-semibold">
+              في حالة الرجفان الأذيني (AF)، لا يوجد دارة إعادة دخول في العقدة AV، بل نشاط بؤري فوضوي في الأذينة (غالباً حول الأوردة الرئوية). إعطاء الأدينوسين لن يُنهي الرجفان الأذيني، بل قد يتسبب في تسرع انعكاسي حاد للنبض (Reflex tachycardia)، أو الأسوأ من ذلك: إذا كان المريض يمتلك سبيلاً إضافياً مستوراً (WPW syndrome)، فقد يؤدي حصر العقدة AV إلى تحويل الرجفان إلى رجفان بطيني مميت (Ventricular Fibrillation).
+            </p>
+</div>
+</div>
+<!-- 4. Breakdown of Remaining Distractors (C, D, E) -->
+<div class="space-y-space-sm">
+<h4 class="font-headline-sm text-[16px] text-on-surface font-bold">تحليل بقية الخيارات البديلة:</h4>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-sm">
+<!-- Option C Analysis -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-1 text-on-surface-variant font-bold mb-1">
+<span class="w-5 h-5 rounded-full bg-surface-container-high flex items-center justify-center text-[12px]">C</span>
+<span class="text-[13px]">أميودارون (Amiodarone)</span>
+</div>
+<p class="font-body-sm text-[12px] text-on-surface-variant">
+                  دواء للسيطرة على النظم (Rhythm Control). قد يؤدي للتحويل التلقائي للنظم الجيبي (Cardioversion) مما يشكل خطراً كبيراً بإطلاق صمة خثارية إن لم يُستبعد وجود خثرة أذينية عبر TEE أو لم يكن المريض خاضعاً لمميعات الدم.
+                </p>
+</div>
+<span class="text-error font-data-metric text-[11px] mt-2 font-semibold">غير مناسب كخط أول فوري</span>
+</div>
+<!-- Option D Analysis -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-1 text-on-surface-variant font-bold mb-1">
+<span class="w-5 h-5 rounded-full bg-surface-container-high flex items-center justify-center text-[12px]">D</span>
+<span class="text-[13px]">التقويم الكهربائي (DC)</span>
+</div>
+<p class="font-body-sm text-[12px] text-on-surface-variant">
+                  التقويم الكهربائي الفوري مخصص فقط لحالات عدم الاستقرار الديناميكي الشديد (صدمة دورانية، هبوط ضغط حاد، نقص تروية عضلة القلب المستمر، أو وذمة رئة صريحة). المريض الحالي مستقر.
+                </p>
+</div>
+<span class="text-error font-data-metric text-[11px] mt-2 font-semibold">مخصص لغير المستقرين فقط</span>
+</div>
+<!-- Option E Analysis -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-1 text-on-surface-variant font-bold mb-1">
+<span class="w-5 h-5 rounded-full bg-surface-container-high flex items-center justify-center text-[12px]">E</span>
+<span class="text-[13px]">ديجوكسين فموياً (Digoxin)</span>
+</div>
+<p class="font-body-sm text-[12px] text-on-surface-variant">
+                  بدء تأثير الديجوكسين بطيء جداً (يستغرق ساعات)، وهو ضعيف التأثير في وجود توتر ودي مرتفع (High Sympathetic Tone) كما هو الحال في الطوارئ، بالإضافة إلى أن الإعطاء فموي وليس وريدياً.
+                </p>
+</div>
+<span class="text-error font-data-metric text-[11px] mt-2 font-semibold">بطيء التأثير وغير فعال حاداً</span>
+</div>
+</div>
+</div>
+<!-- 5. Clinical Pearl Box -->
+<div class="p-space-md rounded-xl bg-primary-container text-on-primary flex items-start gap-space-md shadow-sm">
+<div class="w-10 h-10 rounded-xl bg-surface-container-lowest/15 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary-fixed text-[24px]">grade</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-headline-sm text-[15px] font-bold text-secondary-fixed">لؤلؤة سريرية ذهبية (Clinical Pearl)</span>
+<p class="font-body-sm text-[13px] leading-relaxed text-on-primary-container text-white">
+              في الرجفان الأذيني (AF)، القاعدة الذهبية للاختبارات والممارسة السريرية: <br/>
+<strong>مستقر ديناميكياً؟</strong> ← ابدأ دائماً بـ <span class="text-secondary-fixed font-semibold">Rate Control</span> (حاصرات بيتا أو قنوات الكالسيوم).<br/>
+<strong>غير مستقر ديناميكياً؟</strong> (Hypotension, AMS, Ischemic Chest Pain, Pulmonary Edema) ← توجه فوراً إلى <span class="text-secondary-fixed font-semibold">Synchronized Cardioversion</span> بغض النظر عن مدة الرجفان.
+            </p>
+</div>
+</div>
+<!-- 6. Verified Guidelines & Academic References -->
+<div class="pt-space-sm flex flex-wrap items-center justify-between gap-space-sm text-on-surface-variant font-data-metric text-[11px] bg-surface-container-low/50 px-space-md py-space-xs rounded-lg">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[15px] text-primary">menu_book</span>
+<span>المرجع: AHA/ACC/HRS Guidelines for the Management of Patients With Atrial Fibrillation • UpToDate 2025</span>
+</div>
+<span class="font-label-caps">SMLE / USMLE Step 2 CK Yield: High</span>
+</div>
+</section>
+<!-- Bottom Question Navigation Bar (Sticky CTA) -->
+<footer class="sticky bottom-4 z-30 bg-surface-container-lowest/95 backdrop-blur-md rounded-xl p-space-md shadow-xl flex items-center justify-between gap-space-md">
+<button class="flex items-center gap-space-xs px-space-md py-2.5 rounded-lg bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-all font-headline-sm text-[14px]" type="button">
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+<span>السؤال السابق (7)</span>
+</button>
+<div class="hidden sm:flex items-center gap-space-sm font-data-metric text-[12px] text-on-surface-variant">
+<span>اختصار سريع:</span>
+<kbd class="px-2 py-0.5 rounded bg-surface-container text-on-surface font-semibold text-[11px]">N</kbd>
+<span>للسؤال التالي</span>
+</div>
+<button class="flex items-center gap-space-xs px-space-xl py-2.5 rounded-lg bg-primary-container text-on-primary hover:bg-primary transition-all font-headline-sm text-[14px] font-bold shadow-md" type="button">
+<span>السؤال التالي (السؤال 9)</span>
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+</button>
+</footer>
+</div>
+<!-- Right Column: Exam Matrix & Diagnostic Reference Drawer (xl:col-span-4) -->
+<aside class="xl:col-span-4 flex flex-col gap-space-md">
+<!-- Session Navigator Box -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm">
+<div class="flex items-center justify-between pb-space-sm mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[20px] text-primary">apps</span>
+<h3 class="font-headline-sm text-[14px] font-bold text-on-surface">خريطة أسئلة الجلسة</h3>
+</div>
+<span class="font-label-caps text-on-surface-variant text-[11px]">20 سؤالاً</span>
+</div>
+<!-- 20-Question Button Grid -->
+<div class="grid grid-cols-5 gap-2 font-data-metric text-[13px]">
+<!-- Q1: Correct -->
+<button class="h-10 rounded-lg bg-secondary text-on-secondary flex flex-col items-center justify-center font-bold relative group" title="Q1 - صحيح" type="button">
+<span>1</span>
+<span class="material-symbols-outlined text-[10px] -mt-1">check</span>
+</button>
+<!-- Q2: Correct -->
+<button class="h-10 rounded-lg bg-secondary text-on-secondary flex flex-col items-center justify-center font-bold relative group" title="Q2 - صحيح" type="button">
+<span>2</span>
+<span class="material-symbols-outlined text-[10px] -mt-1">check</span>
+</button>
+<!-- Q3: Incorrect -->
+<button class="h-10 rounded-lg bg-error text-on-error flex flex-col items-center justify-center font-bold relative group" title="Q3 - غير صحيح" type="button">
+<span>3</span>
+<span class="material-symbols-outlined text-[10px] -mt-1">close</span>
+</button>
+<!-- Q4: Correct -->
+<button class="h-10 rounded-lg bg-secondary text-on-secondary flex flex-col items-center justify-center font-bold relative group" title="Q4 - صحيح" type="button">
+<span>4</span>
+<span class="material-symbols-outlined text-[10px] -mt-1">check</span>
+</button>
+<!-- Q5: Correct -->
+<button class="h-10 rounded-lg bg-secondary text-on-secondary flex flex-col items-center justify-center font-bold relative group" title="Q5 - صحيح" type="button">
+<span>5</span>
+<span class="material-symbols-outlined text-[10px] -mt-1">check</span>
+</button>
+<!-- Q6: Incorrect -->
+<button class="h-10 rounded-lg bg-error text-on-error flex flex-col items-center justify-center font-bold relative group" title="Q6 - غير صحيح" type="button">
+<span>6</span>
+<span class="material-symbols-outlined text-[10px] -mt-1">close</span>
+</button>
+<!-- Q7: Correct -->
+<button class="h-10 rounded-lg bg-secondary text-on-secondary flex flex-col items-center justify-center font-bold relative group" title="Q7 - صحيح" type="button">
+<span>7</span>
+<span class="material-symbols-outlined text-[10px] -mt-1">check</span>
+</button>
+<!-- Q8: Current (Incorrect) Active State -->
+<button class="h-10 rounded-lg bg-error text-on-error flex flex-col items-center justify-center font-bold ring-4 ring-primary shadow-sm" title="السؤال الحالي (8)" type="button">
+<span>8</span>
+<span class="material-symbols-outlined text-[10px] -mt-1">close</span>
+</button>
+<!-- Unanswered Questions 9 to 20 -->
+<button class="h-10 rounded-lg bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors flex items-center justify-center font-semibold" type="button">9</button>
+<button class="h-10 rounded-lg bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors flex items-center justify-center font-semibold" type="button">10</button>
+<button class="h-10 rounded-lg bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors flex items-center justify-center font-semibold" type="button">11</button>
+<button class="h-10 rounded-lg bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors flex items-center justify-center font-semibold" type="button">12</button>
+<button class="h-10 rounded-lg bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors flex items-center justify-center font-semibold" type="button">13</button>
+<button class="h-10 rounded-lg bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors flex items-center justify-center font-semibold" type="button">14</button>
+<button class="h-10 rounded-lg bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors flex items-center justify-center font-semibold" type="button">15</button>
+<button class="h-10 rounded-lg bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors flex items-center justify-center font-semibold" type="button">16</button>
+<button class="h-10 rounded-lg bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors flex items-center justify-center font-semibold" type="button">17</button>
+<button class="h-10 rounded-lg bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors flex items-center justify-center font-semibold" type="button">18</button>
+<button class="h-10 rounded-lg bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors flex items-center justify-center font-semibold" type="button">19</button>
+<button class="h-10 rounded-lg bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors flex items-center justify-center font-semibold" type="button">20</button>
+</div>
+<!-- Legend -->
+<div class="mt-space-md pt-space-sm flex items-center justify-between text-[11px] font-label-caps text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-secondary"></span> صحيح</span>
+<span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-error"></span> خاطئ</span>
+<span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-surface-container"></span> غير مجاب</span>
+</div>
+</div>
+<!-- Quick Action Utilities -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm space-y-space-xs">
+<button class="w-full flex items-center justify-between px-space-md py-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors text-right" type="button">
+<div class="flex items-center gap-space-sm text-on-surface font-body-sm text-[13px]">
+<span class="material-symbols-outlined text-[18px] text-tertiary">edit_note</span>
+<span>إضافة ملاحظة خاصة على السؤال</span>
+</div>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">chevron_left</span>
+</button>
+<button class="w-full flex items-center justify-between px-space-md py-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors text-right" type="button">
+<div class="flex items-center gap-space-sm text-on-surface font-body-sm text-[13px]">
+<span class="material-symbols-outlined text-[18px] text-primary">calculate</span>
+<span>حاسبة طبية سريرية (CHA₂DS₂-VASc)</span>
+</div>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">chevron_left</span>
+</button>
+<button class="w-full flex items-center justify-between px-space-md py-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors text-right" type="button">
+<div class="flex items-center gap-space-sm text-on-surface font-body-sm text-[13px]">
+<span class="material-symbols-outlined text-[18px] text-outline">flag</span>
+<span>الإبلاغ عن خطأ أو صياغة في السؤال</span>
+</div>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">chevron_left</span>
+</button>
+</div>
+<!-- High-Yield Clinical Reference Values Panel (Cardiology Quick-Sheet) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm">
+<div class="flex items-center justify-between pb-space-sm mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[20px] text-secondary">chips</span>
+<h4 class="font-headline-sm text-[14px] font-bold text-on-surface">القيم المرجعية المخبرية (Labs)</h4>
+</div>
+<span class="font-label-caps text-secondary text-[11px] font-bold">طوارئ القلب</span>
+</div>
+<div class="space-y-space-xs font-data-metric text-[12px]">
+<div class="flex items-center justify-between py-1.5 px-2 rounded bg-surface-container-low">
+<span class="text-on-surface-variant">تروبونين T عالي الحساسية (hs-cTnT)</span>
+<span class="font-semibold text-on-surface">&lt; 14 ng/L (سليم)</span>
+</div>
+<div class="flex items-center justify-between py-1.5 px-2 rounded bg-surface-container-low">
+<span class="text-on-surface-variant">بوتاسيوم المصل (Serum Potassium)</span>
+<span class="font-semibold text-on-surface">4.2 mmol/L (3.5 - 5.0)</span>
+</div>
+<div class="flex items-center justify-between py-1.5 px-2 rounded bg-surface-container-low">
+<span class="text-on-surface-variant">مغنيسيوم المصل (Serum Magnesium)</span>
+<span class="font-semibold text-on-surface">2.0 mg/dL (1.7 - 2.2)</span>
+</div>
+<div class="flex items-center justify-between py-1.5 px-2 rounded bg-surface-container-low">
+<span class="text-on-surface-variant">هرمون TSH الغدة الدرقية</span>
+<span class="font-semibold text-on-surface">1.8 mIU/L (0.4 - 4.0)</span>
+</div>
+<div class="flex items-center justify-between py-1.5 px-2 rounded bg-surface-container-low">
+<span class="text-on-surface-variant">الكرياتينين الكلوي (Creatinine)</span>
+<span class="font-semibold text-on-surface">1.0 mg/dL (0.7 - 1.2)</span>
+</div>
+</div>
+<div class="mt-space-md p-space-sm rounded-lg bg-surface-container-high/50 text-[11px] text-on-surface-variant flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-primary">info</span>
+<span>قيم الشوارد طبيعية مما ينفي اضطرابات كهرلية كمحرض للرجفان.</span>
+</div>
+</div>
+<!-- Clinical Diagnostic Algorithm Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm">
+<h4 class="font-headline-sm text-[13px] font-bold text-on-surface mb-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[17px] text-primary">account_tree</span>
+<span>مخطط اتخاذ القرار: AF with RVR</span>
+</h4>
+<div class="space-y-2 font-body-sm text-[12px] text-on-surface">
+<div class="p-2 rounded-lg bg-error-container/20 flex items-center justify-between">
+<span>غير مستقر (Shock / Pain / Edema)</span>
+<strong class="text-error font-bold font-data-metric">DC Cardioversion</strong>
+</div>
+<div class="p-2 rounded-lg bg-secondary-container/30 flex items-center justify-between">
+<span>مستقر + وظيفة بطين طبيعية (EF &gt; 40%)</span>
+<strong class="text-secondary font-bold font-data-metric">Metoprolol / Diltiazem</strong>
+</div>
+<div class="p-2 rounded-lg bg-surface-container flex items-center justify-between">
+<span>مستقر + فشل قلب حاد (HFrEF / Decompensated)</span>
+<strong class="text-primary font-bold font-data-metric">Amiodarone / Digoxin</strong>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</div></main></div></body></html>

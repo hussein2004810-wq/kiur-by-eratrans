@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"error":"#ba1a1a","secondary-fixed":"#9cf2e8","on-tertiary":"#ffffff","on-primary-fixed-variant":"#264191","tertiary":"#410070","on-secondary-fixed":"#00201d","primary-fixed-dim":"#b6c4ff","tertiary-container":"#5f0d9c","surface-container-lowest":"#ffffff","surface-dim":"#d2d9f4","primary-container":"#1e3a8a","inverse-primary":"#b6c4ff","error-container":"#ffdad6","outline":"#757682","secondary":"#006a63","surface-container":"#eaedff","on-tertiary-container":"#cc93ff","tertiary-fixed":"#f1dbff","surface-container-high":"#e2e7ff","surface-container-highest":"#dae2fd","on-surface":"#131b2e","tertiary-fixed-dim":"#dfb7ff","surface-variant":"#dae2fd","primary":"#00236f","inverse-surface":"#283044","on-tertiary-fixed":"#2d0050","surface":"#faf8ff","on-tertiary-fixed-variant":"#661aa3","secondary-fixed-dim":"#80d5cb","on-secondary":"#ffffff","background":"#faf8ff","secondary-container":"#99efe5","surface-bright":"#faf8ff","surface-tint":"#4059aa","surface-container-low":"#f2f3ff","on-secondary-fixed-variant":"#00504a","on-error-container":"#93000a","on-primary-container":"#90a8ff","on-surface-variant":"#444651","on-primary-fixed":"#00164e","on-primary":"#ffffff","inverse-on-surface":"#eef0ff","on-secondary-container":"#006f67","outline-variant":"#c5c5d3","primary-fixed":"#dce1ff","on-error":"#ffffff","on-background":"#131b2e"},borderRadius:{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},spacing:{"margin":"2rem","space-xl":"2rem","gutter-mobile":"0.75rem","space-lg":"1.5rem","gutter":"1.5rem","space-sm":"0.5rem","margin-mobile":"1rem","space-md":"1rem","space-xs":"0.25rem"},fontFamily:{"vignette-text":["Noto Sans"],"data-metric":["Inter"],"headline-lg":["Noto Sans"],"option-label":["Inter"],"body-sm":["Noto Sans"],"label-caps":["Inter"],"headline-xl":["Noto Sans"],"headline-sm":["Noto Sans"],"headline-xl-mobile":["Noto Sans"],"body-md":["Noto Sans"]},fontSize:{"vignette-text":["17px",{"lineHeight":"32px","fontWeight":"400"}],"data-metric":["13px",{"lineHeight":"18px","letterSpacing":"0.02em","fontWeight":"500"}],"headline-lg":["22px",{"lineHeight":"36px","fontWeight":"600"}],"option-label":["14px",{"lineHeight":"20px","fontWeight":"700"}],"body-sm":["13px",{"lineHeight":"22px","fontWeight":"400"}],"label-caps":["11px",{"lineHeight":"16px","letterSpacing":"0.05em","fontWeight":"600"}],"headline-xl":["30px",{"lineHeight":"48px","fontWeight":"700"}],"headline-sm":["18px",{"lineHeight":"30px","fontWeight":"600"}],"headline-xl-mobile":["24px",{"lineHeight":"38px","fontWeight":"700"}],"body-md":["15px",{"lineHeight":"26px","fontWeight":"400"}]}}}}</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased selection:bg-primary selection:text-on-primary"><aside class="fixed right-0 top-0 h-full w-72 bg-surface-container-lowest z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col flex-1 overflow-y-auto px-space-md py-space-lg"><div class="flex items-center gap-space-sm px-space-sm mb-space-lg"><div class="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center text-on-primary shrink-0"><span class="material-symbols-outlined text-[24px]">cardiology</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary tracking-tight font-bold">منصة نبض الطبية</span><span class="font-label-caps text-label-caps text-on-surface-variant font-semibold tracking-wider uppercase">MedPulse Academic</span></div></div><div class="px-space-sm py-space-xs mb-space-xs"><span class="font-label-caps text-label-caps text-on-surface-variant tracking-wider uppercase font-semibold">المسار التعليمي</span></div><nav class="flex flex-col gap-1 mb-space-md" data-active-classes="bg-primary-container text-on-primary font-bold shadow-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[20px]">dashboard</span><span class="font-body-md text-body-md">الرئيسية</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="question-bank" href="#"><span class="material-symbols-outlined text-[20px]">menu_book</span><span class="font-body-md text-body-md">بنك الأسئلة</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="exams" href="#"><span class="material-symbols-outlined text-[20px]">assignment</span><span class="font-body-md text-body-md">الاختبارات</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="al-ada-wal-tahsil" href="#"><span class="material-symbols-outlined text-[20px]">monitoring</span><span class="font-body-md text-body-md">الأداء والتحصيل</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl transition-all bg-primary-container text-on-primary font-bold shadow-sm" data-path="study-plan" href="#"><span class="material-symbols-outlined text-[20px]">calendar_month</span><span class="font-body-md text-body-md">خطة الدراسة</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="review" href="#"><span class="material-symbols-outlined text-[20px]">fact_check</span><span class="font-body-md text-body-md">المراجعة السريرية</span></a></nav><div class="px-space-sm py-space-xs mb-space-xs"><span class="font-label-caps text-label-caps text-on-surface-variant tracking-wider uppercase font-semibold">الأدوات الأكاديمية</span></div><nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary font-bold shadow-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="bookmarks" href="#"><span class="material-symbols-outlined text-[20px]">bookmark</span><span class="font-body-md text-body-md">المحفوظات</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="notes" href="#"><span class="material-symbols-outlined text-[20px]">edit_note</span><span class="font-body-md text-body-md">الملاحظات</span></a></nav></div><div class="p-space-md bg-surface-container-low flex flex-col gap-space-sm"><nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary font-bold shadow-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="help" href="#"><span class="material-symbols-outlined text-[20px]">help_center</span><span class="font-body-sm text-body-sm">المساعدة والدعم</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="settings" href="#"><span class="material-symbols-outlined text-[20px]">settings</span><span class="font-body-sm text-body-sm">الإعدادات</span></a></nav><div class="flex items-center gap-space-sm p-space-sm rounded-xl bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="relative"><div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="absolute bottom-0 left-0 w-2.5 h-2.5 bg-secondary rounded-full ring-2 ring-surface-container-lowest"></span></div><div class="flex flex-col flex-1 min-w-0"><span class="font-option-label text-option-label text-on-surface truncate">علي أحمد</span><span class="font-body-sm text-body-sm text-on-surface-variant truncate">طالب طب - مرحلة 5</span></div><button class="p-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[18px]">unfold_more</span></button></div></div></aside><div class="pr-72"><header class="fixed top-0 right-72 left-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-lg"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm"><span class="material-symbols-outlined text-[18px]">analytics</span><span class="text-on-surface font-semibold">لوحة المتابعة والتحصيل</span></div><div class="h-4 w-px bg-outline-variant"></div><div class="relative w-96"><span class="material-symbols-outlined absolute right-space-sm top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span><input class="w-full bg-surface-container-low text-on-surface placeholder:text-on-surface-variant font-body-sm text-body-sm rounded-xl pr-10 pl-space-md py-space-xs focus:outline-none focus:bg-surface-container transition-colors" placeholder="ابحث في الأسئلة، المواضيع، والامتحانات..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1 rounded-full"><span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span><span class="font-label-caps text-label-caps text-on-secondary-container font-semibold">تم الحفظ المتزامن</span></div><button class="px-space-sm py-1 rounded-lg bg-surface-container-low text-on-surface font-data-metric text-data-metric font-semibold hover:bg-surface-container transition-colors">EN</button><button class="relative p-space-xs rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span></button><div class="h-6 w-px bg-outline-variant"></div><div class="flex items-center gap-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="material-symbols-outlined text-on-surface-variant text-[18px] cursor-pointer">expand_more</span></div></div></header><main class="w-full pt-16 px-space-lg py-space-lg bg-surface min-h-screen"><div class="flex flex-col w-full gap-space-lg">
+<!-- Breadcrumbs & Dynamic Operational Header -->
+<div class="flex flex-col gap-space-sm">
+<!-- Breadcrumb Stream -->
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<a class="hover:text-primary transition-colors" href="#">الرئيسية</a>
+<span class="material-symbols-outlined text-[14px]">chevron_left</span>
+<span class="text-on-surface font-semibold">مركز المراجعة السريرية</span>
+<span class="material-symbols-outlined text-[14px]">chevron_left</span>
+<span class="font-data-metric text-data-metric text-primary px-space-xs py-0.5 rounded bg-primary-fixed">SMLE / IFOM Ready</span>
+</div>
+<!-- Header Canvas Banner -->
+<div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-space-md p-space-lg rounded-xl bg-surface-container-lowest shadow-sm">
+<div class="flex flex-col gap-space-xs max-w-3xl">
+<div class="flex items-center gap-space-sm flex-wrap">
+<h1 class="font-headline-xl text-headline-xl text-primary font-bold tracking-tight">
+            مركز المراجعة السريرية
+          </h1>
+<span class="font-label-caps text-label-caps text-secondary font-bold px-space-sm py-1 rounded bg-secondary-container">
+            Review Center • Diagnostic Engine
+          </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+          منصتك المركزية لتشخيص الأخطاء ومراجعة الأسئلة المحفوظة والمعلّمة وتدارك الفجوات المعرفية السريرية بأسلوب علمي منهجي.
+        </p>
+</div>
+<!-- Quick Action CTA Block -->
+<div class="flex items-center gap-space-sm shrink-0 w-full lg:w-auto">
+<button class="flex-1 lg:flex-none flex items-center justify-center gap-space-sm px-space-lg py-space-sm rounded-xl bg-primary text-on-primary font-headline-sm text-headline-sm hover:bg-primary-container transition-all shadow-sm group" id="quick-review-btn">
+<span class="material-symbols-outlined text-[20px] group-hover:rotate-45 transition-transform">bolt</span>
+<span>مراجعة سريعة (10 أخطاء حديثة)</span>
+<span class="flex items-center gap-1 font-label-caps text-label-caps bg-on-primary/20 text-on-primary px-space-xs py-0.5 rounded">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+            12 دقيقة تقريباً
+          </span>
+</button>
+</div>
+</div>
+</div>
+<!-- Top Diagnostic Metrics Matrix (4 Actionable Cards) -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-space-md">
+<!-- Metric 1: Mistakes -->
+<div class="flex flex-col justify-between p-space-md rounded-xl bg-surface-container-lowest shadow-sm">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">الأسئلة الخاطئة</span>
+<span class="font-headline-xl text-headline-xl font-bold text-on-surface mt-1">124</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-error-container text-on-error-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">cancel</span>
+</div>
+</div>
+<div class="mt-space-md flex flex-col gap-space-xs">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="text-on-surface-variant">تمت مراجعة <strong class="text-on-surface font-semibold">74 (60%)</strong></span>
+<span class="font-data-metric text-data-metric text-error font-semibold">+32 هذا الأسبوع</span>
+</div>
+<div class="w-full h-2 rounded bg-surface-container-high overflow-hidden">
+<div class="h-full bg-secondary rounded" style="width: 60%"></div>
+</div>
+<span class="text-on-surface-variant font-body-sm text-body-sm">متبقي 50 سؤالاً بحاجة لمراجعة دقيقة</span>
+</div>
+<button class="mt-space-md w-full py-space-xs px-space-sm rounded-lg bg-surface-container-low text-primary hover:bg-primary-fixed font-option-label text-option-label transition-colors flex items-center justify-center gap-1">
+<span>مراجعة الأخطاء (124)</span>
+<span class="material-symbols-outlined text-[16px]">arrow_left</span>
+</button>
+</div>
+<!-- Metric 2: Repeated Mistakes -->
+<div class="flex flex-col justify-between p-space-md rounded-xl bg-surface-container-lowest shadow-sm relative overflow-hidden">
+<div class="absolute top-0 right-0 w-1.5 h-full bg-error"></div>
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-error uppercase tracking-wider font-bold">أخطاء متكررة (Critical)</span>
+<span class="font-headline-xl text-headline-xl font-bold text-error mt-1">18</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-error-container text-error flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">warning</span>
+</div>
+</div>
+<div class="mt-space-md flex flex-col gap-space-xs">
+<div class="flex items-center gap-1 text-on-surface font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-error">priority_high</span>
+<span class="font-medium text-error">أولوية سريرية قصوى</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          حالات أخطأت بها مرتين أو أكثر عبر الاختبارات والمحاكاة التقييمية
+        </p>
+</div>
+<button class="mt-space-md w-full py-space-xs px-space-sm rounded-lg bg-error-container text-on-error-container hover:bg-error hover:text-on-error font-option-label text-option-label transition-colors flex items-center justify-center gap-1">
+<span>مراجعة المتكررة (18)</span>
+<span class="material-symbols-outlined text-[16px]">restart_alt</span>
+</button>
+</div>
+<!-- Metric 3: Bookmarks -->
+<div class="flex flex-col justify-between p-space-md rounded-xl bg-surface-container-lowest shadow-sm">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">المحفوظات السريرية</span>
+<span class="font-headline-xl text-headline-xl font-bold text-on-surface mt-1">38</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-tertiary-fixed text-tertiary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">bookmark</span>
+</div>
+</div>
+<div class="mt-space-md flex flex-col gap-space-xs">
+<span class="font-body-sm text-body-sm text-on-surface font-medium">تصنيف دوائي وتشخيصي متقدم</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          حالات معقدة حُفظت كمرجع تفاعلي لمراجعة المسارات العلاجية
+        </p>
+</div>
+<button class="mt-space-md w-full py-space-xs px-space-sm rounded-lg bg-surface-container-low text-tertiary hover:bg-tertiary-fixed font-option-label text-option-label transition-colors flex items-center justify-center gap-1">
+<span>عرض المحفوظات</span>
+<span class="material-symbols-outlined text-[16px]">arrow_left</span>
+</button>
+</div>
+<!-- Metric 4: Flagged -->
+<div class="flex flex-col justify-between p-space-md rounded-xl bg-surface-container-lowest shadow-sm">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">المعلّمة للمراجعة</span>
+<span class="font-headline-xl text-headline-xl font-bold text-on-surface mt-1">12</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-secondary-fixed text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">flag</span>
+</div>
+</div>
+<div class="mt-space-md flex flex-col gap-space-xs">
+<span class="font-body-sm text-body-sm text-on-surface font-medium">علامات Mock 4 والتدريب</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          أسئلة تتطلب فحصاً عميقاً للمفاهيم الأساسية والجدلية
+        </p>
+</div>
+<button class="mt-space-md w-full py-space-xs px-space-sm rounded-lg bg-surface-container-low text-secondary hover:bg-secondary-fixed font-option-label text-option-label transition-colors flex items-center justify-center gap-1">
+<span>فحص المعلّمة</span>
+<span class="material-symbols-outlined text-[16px]">arrow_left</span>
+</button>
+</div>
+</div>
+<!-- Section 1: Prominent Priority Action & Continue Review -->
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">pending_actions</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-bold">أولوية المراجعة واستئناف الجلسات</h2>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant font-semibold">استئناف المسار الفوري</span>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-space-md">
+<!-- Action Card A: In-progress Session -->
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="w-2.5 h-2.5 rounded-full bg-error animate-ping"></span>
+<span class="font-label-caps text-label-caps font-bold text-error uppercase">أولوية فائقة • جلسة نشطة</span>
+</div>
+<span class="font-data-metric text-data-metric text-on-surface-variant bg-surface-container-low px-space-xs py-0.5 rounded">
+            المنقضي: 14 دقيقة
+          </span>
+</div>
+<div class="flex flex-col gap-space-xs mb-space-md">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">
+            أخطاء أمراض القلب والكهربائية (Cardiology Arrhythmias)
+          </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+            مراجعة تشخيص اضطرابات النظم القلبي، وتخطيط القلب الكهربائي (ECG) مع التداخلات الدوائية المهدئة للمسار الأذيني.
+          </p>
+</div>
+<div class="flex flex-col gap-space-sm bg-surface-container-low p-space-md rounded-xl mb-space-md">
+<div class="flex items-center justify-between font-body-sm text-body-sm">
+<span class="text-on-surface font-semibold">مستوى الإنجاز الحالي</span>
+<span class="font-data-metric text-data-metric text-primary font-bold">6 من 10 أسئلة مراجعة (60%)</span>
+</div>
+<div class="w-full h-2.5 rounded bg-surface-container-high overflow-hidden">
+<div class="h-full bg-primary rounded" style="width: 60%"></div>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<button class="flex-1 py-space-sm px-space-md rounded-xl bg-primary text-on-primary font-headline-sm text-headline-sm hover:bg-primary-container transition-all flex items-center justify-center gap-space-xs shadow-sm">
+<span>متابعة المراجعة الآن</span>
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+</button>
+<button class="py-space-sm px-space-md rounded-xl bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container font-option-label text-option-label transition-colors">
+            إنهاء وحفظ
+          </button>
+</div>
+</div>
+<!-- Action Card B: Gap Reinforcement Recommendation -->
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[18px]">psychology</span>
+<span class="font-label-caps text-label-caps font-bold text-secondary uppercase">جلسة تعزيز موصى بها تلقائياً</span>
+</div>
+<span class="font-data-metric text-data-metric text-error bg-error-container px-space-xs py-0.5 rounded font-bold">
+            تراجع الأداء إلى 62%
+          </span>
+</div>
+<div class="flex flex-col gap-space-xs mb-space-md">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">
+            20 سؤالاً في علم الأدوية ومدرات البول (Pharmacology)
+          </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+            رصد المحرك الذكي ارتباكاً ملحوظاً في تحديد مواضع تأثير مدرات العروة والثيازيد والتداخلات الكلوية المعقدة في أسئلة البورد الأخيرة.
+          </p>
+</div>
+<div class="grid grid-cols-2 gap-space-sm bg-surface-container-low p-space-md rounded-xl mb-space-md">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant">التركيز المطلوب</span>
+<span class="font-body-md text-body-md font-semibold text-on-surface">آليات النقل الأنبوبي الدوائي</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant">نمط الجلسة المقترح</span>
+<span class="font-body-md text-body-md font-semibold text-primary">نمط المعلم مع تفسير فوري</span>
+</div>
+</div>
+<button class="w-full py-space-sm px-space-md rounded-xl bg-secondary text-on-secondary font-headline-sm text-headline-sm hover:bg-on-secondary-container transition-all flex items-center justify-center gap-space-xs shadow-sm">
+<span>بدء تدريب جديد (Tutor Mode)</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Section 2: Priority Weak Topics Matrix -->
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">troubleshoot</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-bold">المواضيع السريرية الأضعف الأكثر احتياجاً للمراجعة</h2>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant font-semibold">حسب خوارزمية التحليل التراكمي</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<!-- Weak Topic 1 -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-option-label text-option-label text-on-surface font-bold">أمراض القلب والكهربائية</span>
+<span class="font-data-metric text-data-metric text-error font-bold px-space-xs py-0.5 rounded bg-error-container">دقة 58%</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Cardiology &amp; Hemodynamics • 124 سؤالاً منجزاً</span>
+</div>
+<!-- SVG Mini Metric Gauge -->
+<div class="my-space-md flex items-center justify-between bg-surface-container-low p-space-sm rounded-xl">
+<div class="flex items-center gap-space-sm">
+<svg class="w-12 h-12 -rotate-90" viewbox="0 0 36 36">
+<path class="text-surface-container-high" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.5"></path>
+<path class="text-error" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="58, 100" stroke-linecap="round" stroke-width="3.5"></path>
+</svg>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">48</span>
+<span class="font-label-caps text-label-caps text-error font-semibold">خطأ مسجل بالملف</span>
+</div>
+</div>
+<div class="flex flex-col items-end text-body-sm font-body-sm text-on-surface-variant">
+<span>متوسط الوقت: <strong>68ث</strong></span>
+<span>نسبة التكرار: <strong>32%</strong></span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="flex-1 py-space-xs px-space-sm rounded-lg bg-primary text-on-primary font-body-sm text-body-sm font-medium hover:bg-primary-container transition-colors text-center">
+            مراجعة أخطاء القلب (48)
+          </button>
+<button class="py-space-xs px-space-sm rounded-lg bg-surface-container-low text-primary font-body-sm text-body-sm font-medium hover:bg-surface-container transition-colors">
+            تدريب 20 جديد
+          </button>
+</div>
+</div>
+<!-- Weak Topic 2 -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-option-label text-option-label text-on-surface font-bold">علم الأدوية السريري</span>
+<span class="font-data-metric text-data-metric text-error font-bold px-space-xs py-0.5 rounded bg-error-container">دقة 61%</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Pharmacology &amp; Toxins • 93 سؤالاً منجزاً</span>
+</div>
+<div class="my-space-md flex items-center justify-between bg-surface-container-low p-space-sm rounded-xl">
+<div class="flex items-center gap-space-sm">
+<svg class="w-12 h-12 -rotate-90" viewbox="0 0 36 36">
+<path class="text-surface-container-high" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.5"></path>
+<path class="text-error" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="61, 100" stroke-linecap="round" stroke-width="3.5"></path>
+</svg>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">36</span>
+<span class="font-label-caps text-label-caps text-error font-semibold">خطأ مسجل بالملف</span>
+</div>
+</div>
+<div class="flex flex-col items-end text-body-sm font-body-sm text-on-surface-variant">
+<span>متوسط الوقت: <strong>82ث</strong></span>
+<span>نسبة التكرار: <strong>25%</strong></span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="flex-1 py-space-xs px-space-sm rounded-lg bg-primary text-on-primary font-body-sm text-body-sm font-medium hover:bg-primary-container transition-colors text-center">
+            مراجعة الأخطاء
+          </button>
+<button class="py-space-xs px-space-sm rounded-lg bg-surface-container-low text-primary font-body-sm text-body-sm font-medium hover:bg-surface-container transition-colors">
+            بدء تدريب
+          </button>
+</div>
+</div>
+<!-- Weak Topic 3 -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-option-label text-option-label text-on-surface font-bold">أمراض الكلى واضطراب الشوارد</span>
+<span class="font-data-metric text-data-metric text-secondary font-bold px-space-xs py-0.5 rounded bg-secondary-container">دقة 64%</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Nephrology &amp; Electrolytes • 56 سؤالاً منجزاً</span>
+</div>
+<div class="my-space-md flex items-center justify-between bg-surface-container-low p-space-sm rounded-xl">
+<div class="flex items-center gap-space-sm">
+<svg class="w-12 h-12 -rotate-90" viewbox="0 0 36 36">
+<path class="text-surface-container-high" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="3.5"></path>
+<path class="text-secondary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="64, 100" stroke-linecap="round" stroke-width="3.5"></path>
+</svg>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">20</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant font-semibold">خطأ مسجل بالملف</span>
+</div>
+</div>
+<div class="flex flex-col items-end text-body-sm font-body-sm text-on-surface-variant">
+<span>متوسط الوقت: <strong>55ث</strong></span>
+<span>نسبة التكرار: <strong>14%</strong></span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="flex-1 py-space-xs px-space-sm rounded-lg bg-primary text-on-primary font-body-sm text-body-sm font-medium hover:bg-primary-container transition-colors text-center">
+            مراجعة الأخطاء
+          </button>
+<button class="py-space-xs px-space-sm rounded-lg bg-surface-container-low text-primary font-body-sm text-body-sm font-medium hover:bg-surface-container transition-colors">
+            بدء تدريب
+          </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 3: Interactive Revision Table & Filters -->
+<div class="flex flex-col gap-space-md p-space-lg rounded-xl bg-surface-container-lowest shadow-sm">
+<!-- Header & Category Tabs -->
+<div class="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-space-md pb-space-sm">
+<div class="flex flex-col">
+<h3 class="font-headline-lg text-headline-lg text-on-surface font-bold">فهرس الأسئلة الخاطئة وقائمة المراجعة الذكية</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">تصفح الأسئلة السريرية حسب طبيعة الخطأ وإمكانية التحديد لإطلاق جلسة تقييم موجهة.</p>
+</div>
+<!-- Navigation Tabs -->
+<div class="flex items-center gap-1 bg-surface-container-low p-1 rounded-xl flex-wrap">
+<button class="px-space-md py-space-xs rounded-lg bg-primary text-on-primary font-option-label text-option-label font-bold shadow-sm transition-all">
+          نظرة عامة والكل (124)
+        </button>
+<button class="px-space-md py-space-xs rounded-lg text-on-surface-variant hover:text-on-surface font-option-label text-option-label font-bold transition-all flex items-center gap-1">
+<span>أخطاء متكررة</span>
+<span class="px-1.5 py-0.2 bg-error-container text-error rounded text-[11px]">18</span>
+</button>
+<button class="px-space-md py-space-xs rounded-lg text-on-surface-variant hover:text-on-surface font-option-label text-option-label font-bold transition-all flex items-center gap-1">
+<span>المحفوظات</span>
+<span class="px-1.5 py-0.2 bg-tertiary-fixed text-tertiary rounded text-[11px]">38</span>
+</button>
+<button class="px-space-md py-space-xs rounded-lg text-on-surface-variant hover:text-on-surface font-option-label text-option-label font-bold transition-all flex items-center gap-1">
+<span>المعلّمة أثناء الامتحان</span>
+<span class="px-1.5 py-0.2 bg-secondary-fixed text-secondary rounded text-[11px]">12</span>
+</button>
+<button class="px-space-md py-space-xs rounded-lg text-on-surface-variant hover:text-on-surface font-option-label text-option-label font-bold transition-all flex items-center gap-1">
+<span>الملاحظات المدوّنة</span>
+<span class="px-1.5 py-0.2 bg-surface-container-high text-on-surface rounded text-[11px]">16</span>
+</button>
+</div>
+</div>
+<!-- Filter & Search Toolbar -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-space-sm items-center bg-surface-container-low p-space-sm rounded-xl">
+<!-- Search Input -->
+<div class="relative md:col-span-4">
+<span class="material-symbols-outlined absolute right-space-sm top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+<input class="w-full bg-surface-container-lowest text-on-surface placeholder:text-on-surface-variant font-body-sm text-body-sm rounded-lg pr-9 pl-space-sm py-space-xs focus:outline-none focus:ring-1 focus:ring-primary shadow-xs" placeholder="ابحث برقم السؤال، التشخيص، أو الموضوع الفرعي..." type="text"/>
+</div>
+<!-- Subject Filter -->
+<div class="relative md:col-span-3">
+<select class="w-full bg-surface-container-lowest text-on-surface font-body-sm text-body-sm rounded-lg px-space-sm py-space-xs focus:outline-none focus:ring-1 focus:ring-primary shadow-xs appearance-none cursor-pointer">
+<option>جميع المواد (All Subjects)</option>
+<option>أمراض القلب (Cardiology)</option>
+<option>علم الأدوية (Pharmacology)</option>
+<option>أمراض الكلى (Nephrology)</option>
+<option>طب الأطفال (Pediatrics)</option>
+<option>الجراحة العامة (General Surgery)</option>
+</select>
+<span class="material-symbols-outlined absolute left-space-sm top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px] pointer-events-none">arrow_drop_down</span>
+</div>
+<!-- Review Status Filter -->
+<div class="relative md:col-span-3">
+<select class="w-full bg-surface-container-lowest text-on-surface font-body-sm text-body-sm rounded-lg px-space-sm py-space-xs focus:outline-none focus:ring-1 focus:ring-primary shadow-xs appearance-none cursor-pointer">
+<option>حالة المراجعة: الكل (مراجعة / غير مراجعة)</option>
+<option>لم تُراجع بعد (Unreviewed)</option>
+<option>تمت المراجعة سابقاً (Reviewed)</option>
+</select>
+<span class="material-symbols-outlined absolute left-space-sm top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px] pointer-events-none">arrow_drop_down</span>
+</div>
+<!-- Date Filter -->
+<div class="relative md:col-span-2">
+<select class="w-full bg-surface-container-lowest text-on-surface font-body-sm text-body-sm rounded-lg px-space-sm py-space-xs focus:outline-none focus:ring-1 focus:ring-primary shadow-xs appearance-none cursor-pointer">
+<option>آخر 30 يوماً</option>
+<option>آخر 7 أيام</option>
+<option>هذا الفصل الدراسي</option>
+<option>جميع التواريخ</option>
+</select>
+<span class="material-symbols-outlined absolute left-space-sm top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px] pointer-events-none">calendar_today</span>
+</div>
+</div>
+<!-- Bulk Selection Bar Indicator -->
+<div class="flex items-center justify-between px-space-md py-space-xs rounded-lg bg-surface-container text-on-surface font-body-sm text-body-sm">
+<div class="flex items-center gap-space-sm">
+<input class="w-4 h-4 rounded text-primary focus:ring-primary" id="select-all" type="checkbox"/>
+<label class="cursor-pointer font-medium" for="select-all">حدد أسئلة لبدء جلسة مراجعة مخصصة</label>
+<span class="text-on-surface-variant font-label-caps text-label-caps" id="selected-counter">(0 محدد)</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<button class="px-space-sm py-1 rounded bg-surface-container-lowest text-on-surface-variant hover:text-on-surface text-body-sm font-body-sm transition-colors">
+          تصدير قائمة المراجعة
+        </button>
+<button class="px-space-md py-1 rounded bg-primary text-on-primary font-option-label text-option-label font-bold hover:bg-primary-container transition-colors disabled:opacity-50" disabled="" id="start-bulk-session">
+          بدء جلسة بالمحدد
+        </button>
+</div>
+</div>
+<!-- Questions Table / Structured Clinical Vignette List -->
+<div class="flex flex-col gap-space-xs">
+<!-- Question Row 1 (Critical Repeat) -->
+<div class="p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-all flex flex-col xl:flex-row items-start xl:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md min-w-0 flex-1">
+<input class="question-checkbox mt-1 w-4 h-4 rounded text-primary" type="checkbox"/>
+<div class="flex flex-col gap-1 min-w-0">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-data-metric text-data-metric font-bold text-primary px-space-xs py-0.5 rounded bg-surface-container-lowest">
+                Q-4821
+              </span>
+<span class="font-option-label text-option-label text-on-surface font-bold">
+                أمراض القلب — الرجفان الأذيني المترافق مع مسار إضافي (WPW + AF)
+              </span>
+<span class="flex items-center gap-1 font-label-caps text-label-caps px-space-xs py-0.5 rounded bg-error-container text-error font-bold">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+                محاولتان خاطئتان - متكرر
+              </span>
+<span class="flex items-center gap-1 font-label-caps text-label-caps px-space-xs py-0.5 rounded bg-surface-container-lowest text-tertiary">
+<span class="material-symbols-outlined text-[14px]">note_alt</span>
+                ملاحظة (1)
+              </span>
+</div>
+<div class="flex items-center gap-space-md text-on-surface-variant font-body-sm text-body-sm flex-wrap">
+<span>المصدر: <strong class="text-on-surface">بلوك امتحاني Mock 4</strong></span>
+<span>•</span>
+<span>التاريخ: منذ ساعتين</span>
+<span>•</span>
+<span class="text-error font-medium">حالة المراجعة: لم تُراجع بعد</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-xs shrink-0 self-end xl:self-center">
+<button class="px-space-md py-space-xs rounded-lg bg-primary text-on-primary font-option-label text-option-label hover:bg-primary-container transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>مراجعة وتفسير</span>
+</button>
+<button class="px-space-sm py-space-xs rounded-lg bg-surface-container-lowest text-on-surface-variant hover:text-on-surface font-option-label text-option-label transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">restart_alt</span>
+<span>أعد التدريب</span>
+</button>
+</div>
+</div>
+<!-- Question Row 2 (Single Mistake, Reviewed) -->
+<div class="p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-all flex flex-col xl:flex-row items-start xl:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md min-w-0 flex-1">
+<input class="question-checkbox mt-1 w-4 h-4 rounded text-primary" type="checkbox"/>
+<div class="flex flex-col gap-1 min-w-0">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-data-metric text-data-metric font-bold text-primary px-space-xs py-0.5 rounded bg-surface-container-lowest">
+                Q-5119
+              </span>
+<span class="font-option-label text-option-label text-on-surface font-bold">
+                الطب الباطني — فرط الكالسيوم الورمي واعتلال الكلى الحاد
+              </span>
+<span class="font-label-caps text-label-caps px-space-xs py-0.5 rounded bg-surface-container-highest text-on-surface-variant">
+                أول محاولة خاطئة
+              </span>
+<span class="flex items-center gap-1 font-label-caps text-label-caps px-space-xs py-0.5 rounded bg-secondary-fixed text-secondary font-bold">
+<span class="material-symbols-outlined text-[14px]">done_all</span>
+                تمت المراجعة
+              </span>
+</div>
+<div class="flex items-center gap-space-md text-on-surface-variant font-body-sm text-body-sm flex-wrap">
+<span>المصدر: <strong class="text-on-surface">بنك الأسئلة (QBank)</strong></span>
+<span>•</span>
+<span>التاريخ: أمس 04:15 م</span>
+<span>•</span>
+<span class="text-secondary font-medium">أُتقن التفسير السريري</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-xs shrink-0 self-end xl:self-center">
+<button class="px-space-md py-space-xs rounded-lg bg-surface-container-lowest text-primary font-option-label text-option-label hover:bg-primary-fixed transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>مراجعة وتفسير</span>
+</button>
+<button class="px-space-sm py-space-xs rounded-lg bg-surface-container-lowest text-on-surface-variant hover:text-on-surface font-option-label text-option-label transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">restart_alt</span>
+<span>أعد التدريب</span>
+</button>
+</div>
+</div>
+<!-- Question Row 3 (Multi-attempt Repeat with Note) -->
+<div class="p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-all flex flex-col xl:flex-row items-start xl:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md min-w-0 flex-1">
+<input class="question-checkbox mt-1 w-4 h-4 rounded text-primary" type="checkbox"/>
+<div class="flex flex-col gap-1 min-w-0">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-data-metric text-data-metric font-bold text-primary px-space-xs py-0.5 rounded bg-surface-container-lowest">
+                Q-3904
+              </span>
+<span class="font-option-label text-option-label text-on-surface font-bold">
+                علم الأدوية — التداخل الدوائي بين السبيرونولاكتون ومثبطات ACEi
+              </span>
+<span class="flex items-center gap-1 font-label-caps text-label-caps px-space-xs py-0.5 rounded bg-error-container text-error font-bold">
+<span class="material-symbols-outlined text-[14px]">priority_high</span>
+                3 محاولات: 2 خاطئة
+              </span>
+<span class="flex items-center gap-1 font-label-caps text-label-caps px-space-xs py-0.5 rounded bg-tertiary-fixed text-tertiary font-semibold">
+<span class="material-symbols-outlined text-[14px]">edit_note</span>
+                انتبه لخطر فرط البوتاسيوم
+              </span>
+</div>
+<div class="flex items-center gap-space-md text-on-surface-variant font-body-sm text-body-sm flex-wrap">
+<span>المصدر: <strong class="text-on-surface">جلسة تدريبية حرة</strong></span>
+<span>•</span>
+<span>التاريخ: قبل يومين</span>
+<span>•</span>
+<span class="text-error font-medium">حالة المراجعة: لم تُراجع بعد</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-xs shrink-0 self-end xl:self-center">
+<button class="px-space-md py-space-xs rounded-lg bg-primary text-on-primary font-option-label text-option-label hover:bg-primary-container transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>مراجعة وتفسير</span>
+</button>
+<button class="px-space-sm py-space-xs rounded-lg bg-surface-container-lowest text-on-surface-variant hover:text-on-surface font-option-label text-option-label transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">restart_alt</span>
+<span>أعد التدريب</span>
+</button>
+</div>
+</div>
+<!-- Question Row 4 (Pediatrics RDS) -->
+<div class="p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-all flex flex-col xl:flex-row items-start xl:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md min-w-0 flex-1">
+<input class="question-checkbox mt-1 w-4 h-4 rounded text-primary" type="checkbox"/>
+<div class="flex flex-col gap-1 min-w-0">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-data-metric text-data-metric font-bold text-primary px-space-xs py-0.5 rounded bg-surface-container-lowest">
+                Q-2810
+              </span>
+<span class="font-option-label text-option-label text-on-surface font-bold">
+                طب الأطفال — متلازمة الضائقة التنفسية عند الخدج (RDS &amp; Surfactant)
+              </span>
+<span class="font-label-caps text-label-caps px-space-xs py-0.5 rounded bg-surface-container-highest text-on-surface-variant">
+                إجابة خاطئة
+              </span>
+</div>
+<div class="flex items-center gap-space-md text-on-surface-variant font-body-sm text-body-sm flex-wrap">
+<span>المصدر: <strong class="text-on-surface">بلوك الأطفال السريري</strong></span>
+<span>•</span>
+<span>التاريخ: 12 أكتوبر</span>
+<span>•</span>
+<span class="text-error font-medium">حالة المراجعة: لم تُراجع بعد</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-xs shrink-0 self-end xl:self-center">
+<button class="px-space-md py-space-xs rounded-lg bg-primary text-on-primary font-option-label text-option-label hover:bg-primary-container transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>مراجعة وتفسير</span>
+</button>
+<button class="px-space-sm py-space-xs rounded-lg bg-surface-container-lowest text-on-surface-variant hover:text-on-surface font-option-label text-option-label transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">restart_alt</span>
+<span>أعد التدريب</span>
+</button>
+</div>
+</div>
+<!-- Question Row 5 (General Surgery) -->
+<div class="p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-all flex flex-col xl:flex-row items-start xl:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md min-w-0 flex-1">
+<input class="question-checkbox mt-1 w-4 h-4 rounded text-primary" type="checkbox"/>
+<div class="flex flex-col gap-1 min-w-0">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-data-metric text-data-metric font-bold text-primary px-space-xs py-0.5 rounded bg-surface-container-lowest">
+                Q-1402
+              </span>
+<span class="font-option-label text-option-label text-on-surface font-bold">
+                الجراحة العامة — تدبير التهاب الزائدة الحاد عند الحامل بالثلث الثاني
+              </span>
+<span class="flex items-center gap-1 font-label-caps text-label-caps px-space-xs py-0.5 rounded bg-secondary-fixed text-secondary font-bold">
+<span class="material-symbols-outlined text-[14px]">check</span>
+                تمت المراجعة
+              </span>
+</div>
+<div class="flex items-center gap-space-md text-on-surface-variant font-body-sm text-body-sm flex-wrap">
+<span>المصدر: <strong class="text-on-surface">امتحان البورد التجريبي</strong></span>
+<span>•</span>
+<span>التاريخ: 10 أكتوبر</span>
+<span>•</span>
+<span class="text-on-surface-variant">القرار الجراحي والتصوير بالموجات فوق الصوتية</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-xs shrink-0 self-end xl:self-center">
+<button class="px-space-md py-space-xs rounded-lg bg-surface-container-lowest text-primary font-option-label text-option-label hover:bg-primary-fixed transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>مراجعة وتفسير</span>
+</button>
+<button class="px-space-sm py-space-xs rounded-lg bg-surface-container-lowest text-on-surface-variant hover:text-on-surface font-option-label text-option-label transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">restart_alt</span>
+<span>أعد التدريب</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Table Pagination Footer -->
+<div class="flex items-center justify-between pt-space-sm">
+<span class="font-body-sm text-body-sm text-on-surface-variant">عرض 5 من أصل 124 سؤالاً مسجلاً</span>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded bg-surface-container-low text-on-surface-variant hover:text-on-surface transition-colors" disabled="">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+<button class="w-8 h-8 rounded bg-primary text-on-primary font-data-metric text-data-metric font-bold flex items-center justify-center">1</button>
+<button class="w-8 h-8 rounded bg-surface-container-low text-on-surface font-data-metric text-data-metric font-medium hover:bg-surface-container flex items-center justify-center">2</button>
+<button class="w-8 h-8 rounded bg-surface-container-low text-on-surface font-data-metric text-data-metric font-medium hover:bg-surface-container flex items-center justify-center">3</button>
+<span class="px-2 text-on-surface-variant font-data-metric">...</span>
+<button class="w-8 h-8 rounded bg-surface-container-low text-on-surface font-data-metric text-data-metric font-medium hover:bg-surface-container flex items-center justify-center">25</button>
+<button class="p-1 rounded bg-surface-container-low text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Section 4: Side/Bottom Academic Utility Modules -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-md mb-space-lg">
+<!-- Recent Clinical Pearls & Notes -->
+<div class="lg:col-span-7 p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary text-[22px]">auto_stories</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">الملاحظات السريرية الأخيرة (Clinical Pearls)</h3>
+</div>
+<a class="text-tertiary font-option-label text-option-label hover:underline" href="#">كل الملاحظات (16)</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<!-- Pearl 1 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between">
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-data-metric text-data-metric text-primary font-bold">مرتبط بـ Q-4821</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">اليوم 09:30 ص</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface font-medium mt-1">
+              "في الرجفان الأذيني مع متلازمة WPW: يُمنع إعطاء حاصرات العقدة AV (ديجوكسين، فيراباميل، بيتا بلوكر) لأنها توجه السيالة للمسار الشاذ مسببة VF!"
+            </p>
+</div>
+<div class="mt-space-sm flex items-center justify-between pt-space-xs">
+<span class="font-label-caps text-label-caps text-secondary font-bold">أمراض القلب • Pharmacology</span>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+</div>
+</div>
+<!-- Pearl 2 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between">
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-data-metric text-data-metric text-primary font-bold">مرتبط بـ Q-3904</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">قبل يومين</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface font-medium mt-1">
+              "مدرات البول الموفرة للبوتاسيوم مثل Spironolactone مع مثبطات ACEi تضاعف احتمال Hyperkalemia الحاد. يلزم مراقبة الصوديوم والبوتاسيوم بعد 7 أيام."
+            </p>
+</div>
+<div class="mt-space-sm flex items-center justify-between pt-space-xs">
+<span class="font-label-caps text-label-caps text-secondary font-bold">الأدوية • Electrolytes</span>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Review Sessions Archive -->
+<div class="lg:col-span-5 p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[22px]">history_toggle_off</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">جلسات المراجعة السابقة</h3>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant">سجل الأسبوع الحالي</span>
+</div>
+<div class="flex flex-col gap-space-sm">
+<!-- Session Archive Item 1 -->
+<div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container-low">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-secondary-container text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+</div>
+<div class="flex flex-col">
+<span class="font-option-label text-option-label text-on-surface">أخطاء القلب - مكتمل</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">10 / 10 حالات • دقة استدراك 90%</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-data-metric text-data-metric text-on-surface font-semibold">قبل 3 أيام</span>
+<button class="text-primary font-body-sm text-body-sm hover:underline">عرض التقرير</button>
+</div>
+</div>
+<!-- Session Archive Item 2 -->
+<div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container-low">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-secondary-container text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+</div>
+<div class="flex flex-col">
+<span class="font-option-label text-option-label text-on-surface">مراجعة مدرات البول السريرية</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">8 / 8 حالات • دقة استدراك 85%</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-data-metric text-data-metric text-on-surface font-semibold">قبل 5 أيام</span>
+<button class="text-primary font-body-sm text-body-sm hover:underline">عرض التقرير</button>
+</div>
+</div>
+</div>
+<button class="mt-space-md w-full py-space-xs px-space-sm rounded-lg bg-surface-container-high text-on-surface hover:bg-surface-container font-body-sm text-body-sm font-medium transition-colors text-center">
+        فتح الأرشيف الكامل للجلسات (14 جلسة سابقة)
+      </button>
+</div>
+</div>
+</div>
+<!-- Interactive Client-side Script for Bulk Selection & Action Trigger -->
+<script>
+  (function() {
+    const selectAllCheckbox = document.getElementById('select-all');
+    const questionCheckboxes = document.querySelectorAll('.question-checkbox');
+    const selectedCounter = document.getElementById('selected-counter');
+    const startBulkButton = document.getElementById('start-bulk-session');
+    const quickReviewButton = document.getElementById('quick-review-btn');
+
+    function updateCounter() {
+      const checkedBoxes = document.querySelectorAll('.question-checkbox:checked');
+      const count = checkedBoxes.length;
+      selectedCounter.textContent = `(${count} محدد)`;
+      
+      if (count > 0) {
+        startBulkButton.removeAttribute('disabled');
+        startBulkButton.classList.remove('opacity-50');
+      } else {
+        startBulkButton.setAttribute('disabled', 'true');
+        startBulkButton.classList.add('opacity-50');
+      }
+    }
+
+    if (selectAllCheckbox) {
+      selectAllCheckbox.addEventListener('change', function(e) {
+        questionCheckboxes.forEach(cb => {
+          cb.checked = e.target.checked;
+        });
+        updateCounter();
+      });
+    }
+
+    questionCheckboxes.forEach(cb => {
+      cb.addEventListener('change', function() {
+        if (!this.checked && selectAllCheckbox) {
+          selectAllCheckbox.checked = false;
+        }
+        updateCounter();
+      });
+    });
+
+    if (quickReviewButton) {
+      quickReviewButton.addEventListener('click', function() {
+        this.classList.add('scale-95');
+        setTimeout(() => this.classList.remove('scale-95'), 150);
+      });
+    }
+  })();
+</script></main></div></body></html>

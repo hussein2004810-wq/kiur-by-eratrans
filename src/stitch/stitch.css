@@ -1,44 +1,113 @@
-﻿/**
+/**
  * KIUR × Google Stitch Design System Adapter CSS
  * Ready to receive and host UI components and design tokens exported from Google Stitch.
  */
 
 :root {
-  /* Google Stitch Core Design Tokens */
-  --stitch-primary: #0d9488;
-  --stitch-primary-hover: #0f766e;
-  --stitch-secondary: #0284c7;
-  --stitch-accent: #2dd4bf;
-  --stitch-bg: #080d1a;
-  --stitch-bg-surface: #0e172a;
-  --stitch-bg-elevated: #131e34;
-  --stitch-text-primary: #f8fafc;
-  --stitch-text-secondary: #94a3b8;
-  --stitch-text-muted: #64748b;
-  --stitch-border: rgba(148, 163, 184, 0.18);
-  --stitch-border-focus: #14b8a6;
-  --stitch-radius-sm: 8px;
-  --stitch-radius-md: 14px;
-  --stitch-radius-lg: 20px;
+  /* Google Stitch Core Tokens (Light Theme Baseline) */
+  --stitch-surface: #faf8ff;
+  --stitch-surface-dim: #d2d9f4;
+  --stitch-surface-bright: #faf8ff;
+  --stitch-surface-container-lowest: #ffffff;
+  --stitch-surface-container-low: #f2f3ff;
+  --stitch-surface-container: #eaedff;
+  --stitch-surface-container-high: #e2e7ff;
+  --stitch-surface-container-highest: #dae2fd;
+  --stitch-on-surface: #131b2e;
+  --stitch-on-surface-variant: #444651;
+  --stitch-inverse-surface: #283044;
+  --stitch-inverse-on-surface: #eef0ff;
+  --stitch-outline: #757682;
+  --stitch-outline-variant: #c5c5d3;
+  --stitch-surface-tint: #4059aa;
+
+  --stitch-primary: #00236f;
+  --stitch-primary-container: #1e3a8a;
+  --stitch-on-primary: #ffffff;
+  --stitch-on-primary-container: #90a8ff;
+  --stitch-inverse-primary: #b6c4ff;
+
+  --stitch-secondary: #006a63;
+  --stitch-secondary-container: #99efe5;
+  --stitch-on-secondary: #ffffff;
+  --stitch-on-secondary-container: #006f67;
+
+  --stitch-tertiary: #410070;
+  --stitch-tertiary-container: #5f0d9c;
+  --stitch-on-tertiary: #ffffff;
+  --stitch-on-tertiary-container: #cc93ff;
+
+  --stitch-error: #ba1a1a;
+  --stitch-error-container: #ffdad6;
+  --stitch-on-error: #ffffff;
+  --stitch-on-error-container: #93000a;
+
+  --stitch-primary-fixed: #dce1ff;
+  --stitch-primary-fixed-dim: #b6c4ff;
+  --stitch-secondary-fixed: #9cf2e8;
+  --stitch-secondary-fixed-dim: #80d5cb;
+
+  --stitch-bg: #faf8ff;
+  --stitch-bg-surface: #ffffff;
+  --stitch-bg-elevated: #f2f3ff;
+  --stitch-text-primary: #131b2e;
+  --stitch-text-secondary: #444651;
+  --stitch-text-muted: #757682;
+  --stitch-border: #e2e8f0;
+  --stitch-border-focus: #1e3a8a;
+
+  --stitch-radius-sm: 4px;
+  --stitch-radius-md: 8px;
+  --stitch-radius-lg: 12px;
+  --stitch-radius-xl: 16px;
   --stitch-radius-full: 9999px;
-  --stitch-shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.25);
-  --stitch-shadow-md: 0 12px 30px rgba(0, 0, 0, 0.35);
-  --stitch-shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.5);
-  --stitch-font-family: inherit;
+
+  --stitch-shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.05);
+  --stitch-shadow-md: 0 4px 12px rgba(15, 23, 42, 0.07);
+  --stitch-shadow-lg: 0 12px 30px rgba(15, 23, 42, 0.1);
+  --stitch-font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-html[data-kiur-theme="light"] {
-  --stitch-bg: #f8fafc;
-  --stitch-bg-surface: #ffffff;
-  --stitch-bg-elevated: #f1f5f9;
-  --stitch-text-primary: #0f172a;
-  --stitch-text-secondary: #475569;
-  --stitch-text-muted: #64748b;
-  --stitch-border: #cbd5e1;
-  --stitch-border-focus: #0d9488;
-  --stitch-shadow-sm: 0 4px 12px rgba(15, 23, 42, 0.05);
-  --stitch-shadow-md: 0 12px 28px rgba(15, 23, 42, 0.08);
-  --stitch-shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.12);
+/* Dark Mode Tokens (Calibrated for Low-strain Night Study) */
+html[data-kiur-theme="dark"] {
+  --stitch-surface: #0b1222;
+  --stitch-surface-dim: #070c17;
+  --stitch-surface-bright: #101a30;
+  --stitch-surface-container-lowest: #080e1b;
+  --stitch-surface-container-low: #0f182e;
+  --stitch-surface-container: #14203b;
+  --stitch-surface-container-high: #1a294c;
+  --stitch-surface-container-highest: #23355f;
+  --stitch-on-surface: #eef2ff;
+  --stitch-on-surface-variant: #94a3b8;
+  --stitch-outline: #64748b;
+  --stitch-outline-variant: #334155;
+
+  --stitch-primary: #1e3a8a;
+  --stitch-primary-container: #2563eb;
+  --stitch-on-primary: #ffffff;
+  --stitch-on-primary-container: #dbeafe;
+
+  --stitch-secondary: #0d9488;
+  --stitch-secondary-container: #134e4a;
+  --stitch-on-secondary: #ffffff;
+  --stitch-on-secondary-container: #99f6e4;
+
+  --stitch-tertiary: #7c3aed;
+  --stitch-tertiary-container: #4c1d95;
+
+  --stitch-bg: #080d1a;
+  --stitch-bg-surface: #0f182e;
+  --stitch-bg-elevated: #14203b;
+  --stitch-text-primary: #f8fafc;
+  --stitch-text-secondary: #cbd5e1;
+  --stitch-text-muted: #94a3b8;
+  --stitch-border: rgba(148, 163, 184, 0.16);
+  --stitch-border-focus: #3b82f6;
+
+  --stitch-shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.35);
+  --stitch-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.45);
+  --stitch-shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
 }
 
 /* Master Stitch Layout Shell */
@@ -244,13 +313,194 @@ html[data-kiur-theme="light"] {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
+  padding: 4px 10px;
   border-radius: var(--stitch-radius-full);
-  background: linear-gradient(120deg, rgba(13, 148, 136, 0.15), rgba(2, 132, 199, 0.15));
-  border: 1px solid rgba(45, 212, 191, 0.3);
-  color: var(--stitch-accent);
+  background: var(--stitch-surface-container-low);
+  border: 1px solid var(--stitch-border);
+  color: var(--stitch-primary);
   font-size: 11px;
+  font-weight: 700;
+}
+
+html[data-kiur-theme="dark"] .stitchEngineBadge {
+  color: var(--stitch-on-primary-container);
+}
+
+/* Target Examination Pill */
+.stitchTargetExamPill {
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border-radius: var(--stitch-radius-md);
+  background: var(--stitch-surface-container-low);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid var(--stitch-border);
+}
+
+.stitchTargetExamPill span {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--stitch-text-muted);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.stitchTargetExamPill strong {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--stitch-primary-container);
+}
+
+/* Sidebar Footer / Exam Timer Box */
+.stitchSidebarTimer {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: var(--stitch-radius-md);
+  background: var(--stitch-surface-container-low);
+  border: 1px solid var(--stitch-border);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stitchSidebarTimerHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+}
+
+.stitchSidebarTimerHeader span {
+  color: var(--stitch-text-muted);
+  font-weight: 600;
+}
+
+.stitchSidebarTimerHeader strong {
+  color: var(--stitch-secondary);
+  font-weight: 700;
+}
+
+.stitchSidebarTimerBar {
+  width: 100%;
+  height: 6px;
+  border-radius: var(--stitch-radius-full);
+  background: var(--stitch-surface-container-highest);
+  overflow: hidden;
+}
+
+.stitchSidebarTimerBarFill {
+  height: 100%;
+  border-radius: var(--stitch-radius-full);
+  background: var(--stitch-primary-container);
+  width: 65%;
+}
+
+.stitchSidebarTimerTime {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+}
+
+.stitchSidebarTimerTime span {
+  color: var(--stitch-text-muted);
+}
+
+.stitchSidebarTimerTime b {
+  font-size: 12px;
   font-weight: 800;
+  color: var(--stitch-text-primary);
+}
+
+/* 4-Card High-Yield Metrics Grid (from Stitch Tablet / Desktop Specs) */
+.stitchMetricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.stitchMetricCard {
+  background: var(--stitch-bg-surface);
+  border: 1px solid var(--stitch-border);
+  border-radius: var(--stitch-radius-lg);
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--stitch-shadow-sm);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.stitchMetricCard:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--stitch-shadow-md);
+}
+
+.stitchMetricInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.stitchMetricLabel {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--stitch-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stitchMetricValues {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.stitchMetricValues b {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--stitch-text-primary);
+  line-height: 1.1;
+}
+
+.stitchMetricValues span {
+  font-size: 12px;
+  color: var(--stitch-text-muted);
+}
+
+.stitchMetricPill {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: var(--stitch-radius-sm);
+  background: var(--stitch-secondary-container);
+  color: var(--stitch-on-secondary-container);
+}
+
+.stitchMetricFootnote {
+  font-size: 12px;
+  color: var(--stitch-secondary);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.stitchMetricIconSquare {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--stitch-radius-md);
+  background: var(--stitch-surface-container);
+  color: var(--stitch-primary-container);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+html[data-kiur-theme="dark"] .stitchMetricIconSquare {
+  color: var(--stitch-on-primary-container);
 }
 
 @media(max-width: 900px) {
@@ -264,5 +514,8 @@ html[data-kiur-theme="light"] {
     flex-direction: column;
     align-items: flex-start;
     padding: 24px;
+  }
+  .stitchMetricsGrid {
+    grid-template-columns: 1fr;
   }
 }

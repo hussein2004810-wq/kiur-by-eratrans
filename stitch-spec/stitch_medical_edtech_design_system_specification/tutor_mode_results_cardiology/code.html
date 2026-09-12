@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "secondary-container": "#99efe5",
+          "on-tertiary-fixed-variant": "#661aa3",
+          "surface": "#faf8ff",
+          "inverse-surface": "#283044",
+          "tertiary-container": "#5f0d9c",
+          "surface-container-lowest": "#ffffff",
+          "surface-bright": "#faf8ff",
+          "surface-container-high": "#e2e7ff",
+          "inverse-on-surface": "#eef0ff",
+          "error": "#ba1a1a",
+          "on-surface": "#131b2e",
+          "on-primary": "#ffffff",
+          "on-primary-fixed-variant": "#264191",
+          "background": "#faf8ff",
+          "primary-container": "#1e3a8a",
+          "on-tertiary": "#ffffff",
+          "surface-dim": "#d2d9f4",
+          "surface-container": "#eaedff",
+          "on-background": "#131b2e",
+          "tertiary-fixed-dim": "#dfb7ff",
+          "on-tertiary-fixed": "#2d0050",
+          "tertiary": "#410070",
+          "secondary-fixed": "#9cf2e8",
+          "outline": "#757682",
+          "on-surface-variant": "#444651",
+          "on-secondary-fixed": "#00201d",
+          "tertiary-fixed": "#f1dbff",
+          "on-secondary": "#ffffff",
+          "on-secondary-fixed-variant": "#00504a",
+          "on-primary-fixed": "#00164e",
+          "primary": "#00236f",
+          "surface-container-highest": "#dae2fd",
+          "secondary-fixed-dim": "#80d5cb",
+          "on-error-container": "#93000a",
+          "surface-variant": "#dae2fd",
+          "error-container": "#ffdad6",
+          "primary-fixed": "#dce1ff",
+          "outline-variant": "#c5c5d3",
+          "on-tertiary-container": "#cc93ff",
+          "on-error": "#ffffff",
+          "on-primary-container": "#90a8ff",
+          "inverse-primary": "#b6c4ff",
+          "secondary": "#006a63",
+          "surface-tint": "#4059aa",
+          "primary-fixed-dim": "#b6c4ff",
+          "surface-container-low": "#f2f3ff",
+          "on-secondary-container": "#006f67"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+        "spacing": {
+          "space-lg": "1.5rem",
+          "space-sm": "0.5rem",
+          "margin": "2rem",
+          "gutter-mobile": "0.75rem",
+          "space-xs": "0.25rem",
+          "space-xl": "2rem",
+          "gutter": "1.5rem",
+          "margin-mobile": "1rem",
+          "space-md": "1rem"
+        },
+        "fontFamily": {
+          "headline-xl-mobile": [
+            "Noto Sans"
+          ],
+          "headline-sm": [
+            "Noto Sans"
+          ],
+          "headline-lg": [
+            "Noto Sans"
+          ],
+          "label-caps": [
+            "Inter"
+          ],
+          "headline-xl": [
+            "Noto Sans"
+          ],
+          "body-md": [
+            "Noto Sans"
+          ],
+          "body-sm": [
+            "Noto Sans"
+          ],
+          "data-metric": [
+            "Inter"
+          ],
+          "option-label": [
+            "Inter"
+          ],
+          "vignette-text": [
+            "Noto Sans"
+          ]
+        },
+        "fontSize": {
+          "headline-xl-mobile": [
+            "24px",
+            {
+              "lineHeight": "38px",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-sm": [
+            "18px",
+            {
+              "lineHeight": "30px",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-lg": [
+            "22px",
+            {
+              "lineHeight": "36px",
+              "fontWeight": "600"
+            }
+          ],
+          "label-caps": [
+            "11px",
+            {
+              "lineHeight": "16px",
+              "letterSpacing": "0.05em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-xl": [
+            "30px",
+            {
+              "lineHeight": "48px",
+              "fontWeight": "700"
+            }
+          ],
+          "body-md": [
+            "15px",
+            {
+              "lineHeight": "26px",
+              "fontWeight": "400"
+            }
+          ],
+          "body-sm": [
+            "13px",
+            {
+              "lineHeight": "22px",
+              "fontWeight": "400"
+            }
+          ],
+          "data-metric": [
+            "13px",
+            {
+              "lineHeight": "18px",
+              "letterSpacing": "0.02em",
+              "fontWeight": "500"
+            }
+          ],
+          "option-label": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "fontWeight": "700"
+            }
+          ],
+          "vignette-text": [
+            "17px",
+            {
+              "lineHeight": "32px",
+              "fontWeight": "400"
+            }
+          ]
+        }
+      },
+    },
+  }</script></head><body class="bg-background font-body-md text-on-surface"><aside class="fixed right-0 top-0 h-full w-72 bg-surface-container-lowest z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="h-16 px-space-md flex items-center justify-between gap-space-sm bg-surface-container-low/50"><div class="flex items-center gap-space-sm"><div class="w-9 h-9 rounded-xl bg-primary-container text-on-primary flex items-center justify-center"><span class="material-symbols-outlined text-[20px]">vital_signs</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary tracking-tight">منصة نبض الطبية</span><span class="font-label-caps text-label-caps text-on-surface-variant uppercase">MedPulse Academic</span></div></div></div><div class="px-space-md py-space-sm"><div class="px-space-xs py-space-xs"><span class="font-label-caps text-label-caps text-on-surface-variant uppercase">الوحدات الأكاديمية</span></div><nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary font-headline-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="main-dashboard" href="#"><span class="material-symbols-outlined text-[20px]">dashboard</span><span class="font-body-md text-body-md">الرئيسية</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl transition-all bg-primary-container text-on-primary font-headline-sm" data-path="question-bank" href="#"><span class="material-symbols-outlined text-[20px]">quiz</span><span class="font-body-md text-body-md">بنك الأسئلة</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="mock-exams" href="#"><span class="material-symbols-outlined text-[20px]">assignment</span><span class="font-body-md text-body-md">الاختبارات</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="performance-analytics" href="#"><span class="material-symbols-outlined text-[20px]">monitoring</span><span class="font-body-md text-body-md">الأداء والتحصيل</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="study-planner" href="#"><span class="material-symbols-outlined text-[20px]">calendar_month</span><span class="font-body-md text-body-md">خطة الدراسة</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="clinical-review" href="#"><span class="material-symbols-outlined text-[20px]">clinical_notes</span><span class="font-body-md text-body-md">المراجعة السريرية</span></a></nav></div><div class="px-space-md py-space-xs"><div class="px-space-xs py-space-xs"><span class="font-label-caps text-label-caps text-on-surface-variant uppercase">الأدوات والمراجع</span></div><nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary font-headline-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="bookmarks-vault" href="#"><span class="material-symbols-outlined text-[20px]">bookmark</span><span class="font-body-md text-body-md">المحفوظات</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="clinical-notes" href="#"><span class="material-symbols-outlined text-[20px]">edit_note</span><span class="font-body-md text-body-md">الملاحظات</span></a></nav></div></div><div class="flex flex-col gap-space-xs p-space-md bg-surface-container-low/40"><nav class="flex flex-col gap-1 mb-space-xs" data-active-classes="bg-primary-container text-on-primary font-headline-sm"><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="help-center" href="#"><span class="material-symbols-outlined text-[18px]">help_outline</span><span class="font-body-sm text-body-sm">المساعدة والدعم</span></a><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="system-settings" href="#"><span class="material-symbols-outlined text-[18px]">settings</span><span class="font-body-sm text-body-sm">الإعدادات</span></a></nav><div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col"><span class="font-headline-sm text-[13px] leading-tight text-on-surface font-semibold">علي أحمد</span><span class="font-label-caps text-[10px] text-on-surface-variant">طالب طب • مرحلة 5</span></div></div><button aria-label="تسجيل الخروج" class="p-space-xs text-on-surface-variant hover:text-primary transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">logout</span></button></div></div></aside><div class="pr-72"><header class="fixed top-0 right-72 left-0 h-16 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-xl"><div class="flex items-center gap-space-md flex-1 max-w-xl"><div class="relative w-full"><span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span><input class="w-full bg-surface-container-lowest text-on-surface font-body-sm text-body-sm pr-10 pl-space-md py-space-xs rounded-full outline-none ring-0 placeholder:text-on-surface-variant/70 shadow-[0_1px_8px_rgba(0,0,0,0.04)] focus:bg-surface-container-low transition-all" placeholder="ابحث في الأسئلة، المواضيع، والامتحانات..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="hidden md:flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-secondary-container/40 text-on-secondary-container font-data-metric text-[12px]"><span class="material-symbols-outlined text-[16px]">cloud_done</span><span>تم الحفظ المتزامن</span></div><button class="px-space-sm py-1 rounded-full bg-surface-container-high text-on-surface font-label-caps text-label-caps hover:bg-surface-container-highest transition-colors" type="button">EN</button><div class="relative flex items-center"><button aria-label="الإشعارات" class="p-space-xs rounded-full text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all relative" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-error"></span></button></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="relative pt-16 bg-background min-h-screen px-space-xl py-space-lg"><div class="flex flex-col w-full gap-space-lg pb-space-xl">
+<!-- سياق المسار والترويسة السريرية -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-caps text-label-caps">
+<span class="hover:text-primary transition-colors cursor-pointer">بنك الأسئلة</span>
+<span class="material-symbols-outlined text-[14px]">chevron_left</span>
+<span class="hover:text-primary transition-colors cursor-pointer">أمراض القلب (Cardiology)</span>
+<span class="material-symbols-outlined text-[14px]">chevron_left</span>
+<span class="text-primary font-semibold">نتائج جلسة التدريب</span>
+</div>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md mt-1">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-sm">
+<h1 class="font-headline-xl text-headline-xl text-primary font-bold tracking-tight">جلسة مراجعة اضطرابات النظم والكهربائية</h1>
+<span class="inline-flex items-center gap-1 px-space-sm py-0.5 rounded-full bg-secondary-container/50 text-on-secondary-container font-label-caps text-label-caps font-semibold">
+<span class="material-symbols-outlined text-[14px]">school</span>
+            وضع التدريب (Tutor Mode)
+          </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+          جلسة تعليمية غير موقوتة مدعومة بالشروحات الفورية • 12 أكتوبر 2026 • معرف الجلسة: <span class="font-data-metric text-primary">#CRD-ARR-8842</span>
+</p>
+</div>
+<div class="flex items-center gap-space-sm">
+<button class="inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-xl bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors font-body-sm text-body-sm font-medium" type="button">
+<span class="material-symbols-outlined text-[18px]">print</span>
+<span>طباعة تقرير التحصيل</span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-xl bg-primary text-on-primary hover:bg-primary-container transition-colors font-body-sm text-body-sm font-semibold" type="button">
+<span class="material-symbols-outlined text-[18px]">replay</span>
+<span>بدء جلسة جديدة</span>
+</button>
+</div>
+</div>
+<!-- بطاقة التنويه الأكاديمي -->
+<div class="flex items-center gap-space-sm px-space-md py-space-xs rounded-xl bg-surface-container-low text-on-surface-variant font-body-sm text-body-sm mt-1">
+<span class="material-symbols-outlined text-primary text-[20px]">info</span>
+<span>أكملت جلسة التدريب بنجاح. تهدف هذه النتائج لمساعدتك على تحديد الثغرات المعرفية وتثبيت النقاط السريرية الحرجة قبل الانتقال إلى الامتحانات الشاملة.</span>
+</div>
+</div>
+<!-- شبكة الملخص والإحصائيات الرئيسية -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- بطاقة النتيجة التراكمية وشريط الدقة الأكاديمي -->
+<div class="lg:col-span-8 flex flex-col justify-between p-space-lg rounded-xl bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">analytics</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">مستوى الاستيعاب في هذه الجلسة</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">CLINICAL MASTERY INDEX</span>
+</div>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-xl text-[38px] font-bold text-primary leading-none">75.0%</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant font-semibold">دقة التشخيص</span>
+</div>
+</div>
+<!-- شريط التوزيع الثلاثي -->
+<div class="flex flex-col gap-space-xs mt-2">
+<div class="h-3 w-full rounded-full bg-surface-container-high overflow-hidden flex">
+<div class="bg-secondary h-full" style="width: 75%;" title="صحيح (15)"></div>
+<div class="bg-error h-full" style="width: 20%;" title="خاطئ (4)"></div>
+<div class="bg-surface-dim h-full" style="width: 5%;" title="بدون إجابة (1)"></div>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-data-metric text-[12px] pt-1">
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span>15 إجابة صحيحة (75%)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-error"></span>
+<span>4 إجابات خاطئة (20%)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-surface-dim"></span>
+<span>1 سؤال متبقٍ دون إجابة (5%)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- مؤشرات سريعة -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-space-md pt-space-lg mt-space-md border-t border-surface-container-high/60">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">إجمالي الحالات</span>
+<span class="font-headline-sm text-headline-sm text-on-surface mt-0.5">20 حالة</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">أمراض نظم القلب</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">وقت الاستذكار المستغرق</span>
+<span class="font-headline-sm text-headline-sm text-on-surface mt-0.5">26:40 دقيقة</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">معدل 1:20 د/سؤال</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">حالات مؤشرة للمراجعة</span>
+<span class="font-headline-sm text-headline-sm text-tertiary-container mt-0.5">3 حالات</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Bookmarked</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">ملاحظات سريرية مدونة</span>
+<span class="font-headline-sm text-headline-sm text-primary mt-0.5">2 لآلئ</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Clinical Pearls</span>
+</div>
+</div>
+</div>
+<!-- بطاقة الخطوة القادمة والإجراء المباشر -->
+<div class="lg:col-span-4 flex flex-col justify-between p-space-lg rounded-xl bg-primary text-on-primary shadow-[0_1px_8px_rgba(0,0,0,0.06)] relative overflow-hidden">
+<div class="absolute -left-6 -bottom-6 w-32 h-32 rounded-full bg-primary-fixed-dim/10 pointer-events-none"></div>
+<div class="flex flex-col gap-space-sm relative z-10">
+<div class="flex items-center justify-between">
+<span class="inline-flex items-center gap-1 px-space-sm py-0.5 rounded-full bg-white/15 text-on-primary font-label-caps text-label-caps">
+<span class="material-symbols-outlined text-[13px]">lightbulb</span>
+            توصية التعلم التكيفي
+          </span>
+<span class="font-data-metric text-[12px] text-primary-fixed-dim">الأولوية الأولى</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-primary font-bold mt-1">ترسيخ المفاهيم التي ورد فيها خطأ</h3>
+<p class="font-body-sm text-body-sm text-white/85 leading-relaxed">
+          راجع الـ 4 حالات التي أخطأت فيها (خاصة إدارة الرجفان الأذيني Atrial Fibrillation وعلاجات متلازمات استطالة QT) لقراءة التحليل التفسيري وحفظ اللؤلؤة الطبية.
+        </p>
+</div>
+<div class="flex flex-col gap-space-xs mt-space-md relative z-10">
+<button class="w-full flex items-center justify-center gap-space-xs py-space-sm px-space-md rounded-xl bg-white text-primary hover:bg-surface-container-low transition-all font-body-md text-body-md font-bold shadow-sm" type="button">
+<span class="material-symbols-outlined text-[20px]">assignment_turned_in</span>
+<span>مراجعة الـ 4 أخطاء فوراً (Review Mistakes)</span>
+</button>
+<div class="grid grid-cols-2 gap-space-xs mt-1">
+<button class="flex items-center justify-center gap-1 py-space-xs px-space-sm rounded-lg bg-white/10 hover:bg-white/20 text-on-primary transition-colors font-body-sm text-[12px]" type="button">
+<span class="material-symbols-outlined text-[16px]">bookmark</span>
+<span>المحفوظات (3)</span>
+</button>
+<button class="flex items-center justify-center gap-1 py-space-xs px-space-sm rounded-lg bg-white/10 hover:bg-white/20 text-on-primary transition-colors font-body-sm text-[12px]" type="button">
+<span class="material-symbols-outlined text-[16px]">edit_note</span>
+<span>الملاحظات (2)</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- أثر الجلسة على الخطة اليومية الهادئة -->
+<div class="flex items-center justify-between px-space-lg py-space-sm rounded-xl bg-surface-container-low text-on-surface">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed">
+<span class="material-symbols-outlined text-[18px]">done_all</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">تأثير الجلسة على خطة المراجعة اليومية</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">أضفت 20 سؤالاً إلى رصيدك اليومي • أكملت اليوم 62 من أصل 60 سؤالاً مقرراً (تم تحقيق الهدف اليومي بنسبة 103%)</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs font-data-metric text-data-metric text-secondary font-semibold">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>هدف اليوم مكتمل</span>
+</div>
+</div>
+<!-- شبكة التفكيك السريري وقائمة الأخطاء الحرجة -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- تحليل المفاهيم السريرية الدقيقة (Subtopics) -->
+<div class="lg:col-span-7 flex flex-col p-space-lg rounded-xl bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">bar_chart</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">التحليل الأكاديمي للمحاور الفرعية (Subtopics)</h2>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant">5 محاور سريرية</span>
+</div>
+<div class="flex flex-col divide-y divide-surface-container-high/60">
+<!-- محور 1 -->
+<div class="py-space-sm flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="font-body-md text-body-md font-semibold text-on-surface">تسارع القلب فوق البطيني (SVT)</span>
+<span class="font-label-caps text-[11px] px-2 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-container">استيعاب تام</span>
+</div>
+<div class="flex items-center gap-space-sm font-data-metric text-data-metric">
+<span class="text-on-surface-variant font-normal">4 من 4 حالات</span>
+<span class="text-secondary font-bold">100%</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 100%;"></div>
+</div>
+<span class="font-body-sm text-[12px] text-on-surface-variant">استيعاب ممتاز لخوارزمية التشخيص الحركي ومناورة Valsalva وعقار Adenosine.</span>
+</div>
+<!-- محور 2 -->
+<div class="py-space-sm flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="font-body-md text-body-md font-semibold text-on-surface">إحصار القلب وبطء النظم (Bradyarrhythmias &amp; AV Blocks)</span>
+<span class="font-label-caps text-[11px] px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface">مستقر</span>
+</div>
+<div class="flex items-center gap-space-sm font-data-metric text-data-metric">
+<span class="text-on-surface-variant font-normal">4 من 5 حالات</span>
+<span class="text-primary font-bold">80%</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 80%;"></div>
+</div>
+<span class="font-body-sm text-[12px] text-on-surface-variant">فهم سليم لتخطيط كهربية القلب (ECG) للدرجتين الأولى والثانية (Mobitz I &amp; II).</span>
+</div>
+<!-- محور 3 -->
+<div class="py-space-sm flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="font-body-md text-body-md font-semibold text-on-surface">اللانظميات البطينية (Ventricular Arrhythmias &amp; VT/VF)</span>
+<span class="font-label-caps text-[11px] px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface">جيد</span>
+</div>
+<div class="flex items-center gap-space-sm font-data-metric text-data-metric">
+<span class="text-on-surface-variant font-normal">3 من 4 حالات</span>
+<span class="text-primary font-bold">75%</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 75%;"></div>
+</div>
+<span class="font-body-sm text-[12px] text-on-surface-variant">التمييز بين النبضات المستقرة وغير المستقرة وتوقيت الصدمة المتزامنة (Cardioversion).</span>
+</div>
+<!-- محور 4 - ضعيف -->
+<div class="py-space-sm flex flex-col gap-1.5 bg-error-container/20 -mx-space-lg px-space-lg rounded-lg">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="font-body-md text-body-md font-semibold text-on-surface">الرجفان الأذيني ومضادات التخثر (AF &amp; Anticoagulation)</span>
+<span class="font-label-caps text-[11px] px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-semibold">ثغرة حرجة (Needs Focus)</span>
+</div>
+<div class="flex items-center gap-space-sm font-data-metric text-data-metric">
+<span class="text-on-surface-variant font-normal">2 من 4 حالات</span>
+<span class="text-error font-bold">50%</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-error h-full rounded-full" style="width: 50%;"></div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="font-body-sm text-[12px] text-on-surface-variant">خلط متكرر في معايير حساب مؤشر CHA2DS2-VASc واختيار محصرات بيتا مقابل الديجوكسين.</span>
+<button class="font-label-caps text-label-caps text-primary hover:underline font-semibold inline-flex items-center gap-0.5" type="button">
+<span>تدرّب على 10 حالات AF</span>
+<span class="material-symbols-outlined text-[14px]">arrow_left</span>
+</button>
+</div>
+</div>
+<!-- محور 5 -->
+<div class="py-space-sm flex flex-col gap-1.5 pt-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="font-body-md text-body-md font-semibold text-on-surface">متلازمة استطالة QT واعتلال القنوات (Long QT Syndromes)</span>
+<span class="font-label-caps text-[11px] px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface">متوسط</span>
+</div>
+<div class="flex items-center gap-space-sm font-data-metric text-data-metric">
+<span class="text-on-surface-variant font-normal">2 من 3 حالات</span>
+<span class="text-on-surface font-bold">66.7%</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-primary-fixed-variant h-full rounded-full" style="width: 66.7%;"></div>
+</div>
+<span class="font-body-sm text-[12px] text-on-surface-variant">انتبه للأدوية المحفزة لاستطالة فواصل QT (مثل Macrolides وAntipsychotics).</span>
+</div>
+</div>
+</div>
+<!-- قائمة فحص الحالات الخاطئة للمراجعة المباشرة -->
+<div class="lg:col-span-5 flex flex-col p-space-lg rounded-xl bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-error text-[22px]">error</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">الحالات الخاطئة الأربع (Mistakes Log)</h2>
+</div>
+<span class="font-label-caps text-label-caps text-error font-semibold">4 حالات سريرية</span>
+</div>
+<div class="flex flex-col gap-space-sm">
+<!-- بطاقة خطأ 1 -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="font-data-metric font-semibold text-[12px] text-primary">سؤال Q-4821</span>
+<span class="text-on-surface-variant text-[11px]">•</span>
+<span class="font-body-sm text-[12px] text-on-surface font-medium">الرجفان الأذيني السريع (RVR)</span>
+</div>
+<span class="px-1.5 py-0.5 rounded bg-error-container text-on-error-container font-label-caps text-[10px] font-semibold">تثبيط دوائي خاطئ</span>
+</div>
+<div class="flex items-center justify-between text-[12px] font-body-sm">
+<div class="flex items-center gap-space-xs">
+<span class="text-error font-medium line-through">إجابتك: (أ) Adenosine</span>
+<span class="text-on-surface-variant">|</span>
+<span class="text-secondary font-semibold">الصحيح: (ب) IV Metoprolol</span>
+</div>
+<button class="text-primary hover:text-primary-container font-label-caps text-[11px] font-bold inline-flex items-center gap-0.5" type="button">
+<span>عرض التفسير</span>
+<span class="material-symbols-outlined text-[13px]">arrow_left</span>
+</button>
+</div>
+</div>
+<!-- بطاقة خطأ 2 -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="font-data-metric font-semibold text-[12px] text-primary">سؤال Q-4903</span>
+<span class="text-on-surface-variant text-[11px]">•</span>
+<span class="font-body-sm text-[12px] text-on-surface font-medium">متلازمة Torsades de Pointes</span>
+</div>
+<span class="px-1.5 py-0.5 rounded bg-error-container text-on-error-container font-label-caps text-[10px] font-semibold">تدخل إسعافي</span>
+</div>
+<div class="flex items-center justify-between text-[12px] font-body-sm">
+<div class="flex items-center gap-space-xs">
+<span class="text-error font-medium line-through">إجابتك: (ب) Amiodarone</span>
+<span class="text-on-surface-variant">|</span>
+<span class="text-secondary font-semibold">الصحيح: (د) IV Magnesium</span>
+</div>
+<button class="text-primary hover:text-primary-container font-label-caps text-[11px] font-bold inline-flex items-center gap-0.5" type="button">
+<span>عرض التفسير</span>
+<span class="material-symbols-outlined text-[13px]">arrow_left</span>
+</button>
+</div>
+</div>
+<!-- بطاقة خطأ 3 -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="font-data-metric font-semibold text-[12px] text-primary">سؤال Q-4856</span>
+<span class="text-on-surface-variant text-[11px]">•</span>
+<span class="font-body-sm text-[12px] text-on-surface font-medium">إحصار أذيني بطيني Mobitz Type II</span>
+</div>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface font-label-caps text-[10px] font-semibold">تخطيط ECG</span>
+</div>
+<div class="flex items-center justify-between text-[12px] font-body-sm">
+<div class="flex items-center gap-space-xs">
+<span class="text-error font-medium line-through">إجابتك: (ج) مراجعة بعد 6 شهور</span>
+<span class="text-on-surface-variant">|</span>
+<span class="text-secondary font-semibold">الصحيح: (أ) زراعة ناظمة خطى Pacemaker</span>
+</div>
+<button class="text-primary hover:text-primary-container font-label-caps text-[11px] font-bold inline-flex items-center gap-0.5" type="button">
+<span>عرض التفسير</span>
+<span class="material-symbols-outlined text-[13px]">arrow_left</span>
+</button>
+</div>
+</div>
+<!-- بطاقة خطأ 4 -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-all flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="font-data-metric font-semibold text-[12px] text-primary">سؤال Q-4917</span>
+<span class="text-on-surface-variant text-[11px]">•</span>
+<span class="font-body-sm text-[12px] text-on-surface font-medium">مؤشر التخثر بعد تقويم النظم (AF Cardioversion)</span>
+</div>
+<span class="px-1.5 py-0.5 rounded bg-error-container text-on-error-container font-label-caps text-[10px] font-semibold">مدة العلاج الوقائي</span>
+</div>
+<div class="flex items-center justify-between text-[12px] font-body-sm">
+<div class="flex items-center gap-space-xs">
+<span class="text-error font-medium line-through">إجابتك: (أ) أسبوعان</span>
+<span class="text-on-surface-variant">|</span>
+<span class="text-secondary font-semibold">الصحيح: (ج) 4 أسابيع على الأقل</span>
+</div>
+<button class="text-primary hover:text-primary-container font-label-caps text-[11px] font-bold inline-flex items-center gap-0.5" type="button">
+<span>عرض التفسير</span>
+<span class="material-symbols-outlined text-[13px]">arrow_left</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- شبكة استعراض كافة أسئلة الجلسة (20 سؤالاً بالترقيم الكامل) -->
+<div class="flex flex-col p-space-lg rounded-xl bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-sm mb-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">grid_view</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">مصفوفة مراجعة كافة أسئلة الجلسة (1 – 20)</h3>
+</div>
+<div class="flex items-center gap-space-md text-[12px] font-body-sm text-on-surface-variant">
+<span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>صحيح (15)</span>
+<span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-error"></span>خاطئ (4)</span>
+<span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-surface-dim"></span>متروك (1)</span>
+<span class="inline-flex items-center gap-1"><span class="material-symbols-outlined text-tertiary-container text-[14px]">bookmark</span>محفوظ (3)</span>
+</div>
+</div>
+<!-- شبكة أزرار الأسئلة -->
+<div class="grid grid-cols-5 sm:grid-cols-10 md:grid-cols-20 gap-2">
+<!-- 1 -->
+<button class="relative h-11 rounded-lg bg-secondary-container/40 text-on-secondary-container font-data-metric text-data-metric font-semibold flex flex-col items-center justify-center hover:opacity-85 transition-opacity" title="سؤال 1: صحيح" type="button">
+<span>01</span>
+</button>
+<!-- 2 -->
+<button class="relative h-11 rounded-lg bg-secondary-container/40 text-on-secondary-container font-data-metric text-data-metric font-semibold flex flex-col items-center justify-center hover:opacity-85 transition-opacity" title="سؤال 2: صحيح" type="button">
+<span>02</span>
+</button>
+<!-- 3 (Bookmark) -->
+<button class="relative h-11 rounded-lg bg-secondary-container/40 text-on-secondary-container font-data-metric text-data-metric font-semibold flex flex-col items-center justify-center hover:opacity-85 transition-opacity" title="سؤال 3: صحيح ومحفوظ" type="button">
+<span>03</span>
+<span class="absolute top-1 left-1 w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+</button>
+<!-- 4 -->
+<button class="relative h-11 rounded-lg bg-secondary-container/40 text-on-secondary-container font-data-metric text-data-metric font-semibold flex flex-col items-center justify-center hover:opacity-85 transition-opacity" title="سؤال 4: صحيح" type="button">
+<span>04</span>
+</button>
+<!-- 5 (Error) -->
+<button class="relative h-11 rounded-lg bg-error-container text-on-error-container font-data-metric text-data-metric font-bold flex flex-col items-center justify-center hover:opacity-85 transition-opacity" title="سؤال 5: خطأ (Q-4821)" type="button">
+<span>05</span>
+<span class="absolute bottom-1 w-1 h-1 rounded-full bg-error"></span>
+</button>
+<!-- 6 -->
+<button class="relative h-11 rounded-lg bg-secondary-container/40 text-on-secondary-container font-data-metric text-data-metric font-semibold flex flex-col items-center justify-center hover:opacity-85 transition-opacity" title="سؤال 6: صحيح" type="button">
+<span>06</span>
+</button>
+<!-- 7 -->
+<button class="relative h-11 rounded-lg bg-secondary-container/40 text-on-secondary-container font-data-metric text-data-metric font-semibold flex flex-col items-center justify-center hover:opacity-85 transition-opacity" title="سؤال 7: صحيح" type="button">
+<span>07</span>
+</button>
+<!-- 8 (Error + Note) -->
+<button class="relative h-11 rounded-lg bg-error-container text-on-error-container font-data-metric text-data-metric font-bold flex flex-col items-center justify-center hover:opacity-85 transition-opacity" title="سؤال 8: خطأ وملاحظة مدونة" type="button">
+<span>08</span>
+<span class="absolute top-1 left-1 w-1.5 h-1.5 rounded-full bg-primary"></span>
+</button>
+<!-- 9 -->
+<button class="relative h-11 rounded-lg bg-secondary-container/40 text-on-secondary-container font-data-metric text-data-metric font-semibold flex flex-col items-center justify-center hover:opacity-85 transition-opacity" title="سؤال 9: صحيح" type="button">
+<span>09</span>
+</button>
+<!-- 10 -->
+<button class="relative h-11 rounded-lg bg-secondary-container/40 text-on-secondary-container font-data-metric text-data-metric font-semibold flex flex-col items-center justify-center hover:opacity-85 transition-opacity" title="سؤال 10: صحيح" type="button">
+<span>10</span>
+</button>
+<!-- 11 -->
+<button class="relative h-11 rounded-lg bg-secondary-container/40 text-on-secondary-container font-data-metric text-data-metric font-semibold flex flex-col items-center justify-center hover:opacity-85 transition-opacity" title="سؤال 11: صحيح" type="button">
+<span>11</span>
+</button>
+<!-- 12 (Bookmark) -->
+<button class="relative h-11 rounded-lg bg-secondary-container/40 text-on-secondary-container font-data-metric text-data-metric font-semibold flex flex-col items-center justify-center hover:opacity-85 transition-opacity" title="سؤال 12: صحيح ومحفوظ" type="button">
+<span>12</span>
+<span class="absolute top-1 left-1 w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+</button>
+<!-- 13 (Error) -->
+<button class="relative h-11 rounded-lg bg-error-container text-on-error-container font-data-metric text-data-metric font-bold flex flex-col items-center justify-center hover:opacity-85 transition-opacity" title="سؤال 13: خطأ" type="button">
+<span>13</span>
+<span class="absolute bottom-1 w-1 h-1 rounded-full bg-error"></span>
+</button>
+<!-- 14 -->
+<button class="relative h-11 rounded-lg bg-secondary-container/40 text-on-secondary-container font-data-metric text-data-metric font-semibold flex flex-col items-center justify-center hover:opacity-85 transition-opacity" title="سؤال 14: صحيح" type="button">
+<span>14</span>
+</button>
+<!-- 15 -->
+<button class="relative h-11 rounded-lg bg-secondary-container/40 text-on-secondary-container font-data-metric text-data-metric font-semibold flex flex-col items-center justify-center hover:opacity-85 transition-opacity" title="سؤال 15: صحيح" type="button">
+<span>15</span>
+</button>
+<!-- 16 -->
+<button class="relative h-11 rounded-lg bg-secondary-container/40 text-on-secondary-container font-data-metric text-data-metric font-semibold flex flex-col items-center justify-center hover:opacity-85 transition-opacity" title="سؤال 16: صحيح" type="button">
+<span>16</span>
+</button>
+<!-- 17 (Error + Bookmark) -->
+<button class="relative h-11 rounded-lg bg-error-container text-on-error-container font-data-metric text-data-metric font-bold flex flex-col items-center justify-center hover:opacity-85 transition-opacity" title="سؤال 17: خطأ ومحفوظ" type="button">
+<span>17</span>
+<span class="absolute top-1 left-1 w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+</button>
+<!-- 18 -->
+<button class="relative h-11 rounded-lg bg-secondary-container/40 text-on-secondary-container font-data-metric text-data-metric font-semibold flex flex-col items-center justify-center hover:opacity-85 transition-opacity" title="سؤال 18: صحيح" type="button">
+<span>18</span>
+</button>
+<!-- 19 (Omitted / Unanswered) -->
+<button class="relative h-11 rounded-lg bg-surface-container-high text-on-surface-variant font-data-metric text-data-metric font-semibold flex flex-col items-center justify-center hover:opacity-85 transition-opacity" title="سؤال 19: بدون إجابة" type="button">
+<span>19</span>
+</button>
+<!-- 20 -->
+<button class="relative h-11 rounded-lg bg-secondary-container/40 text-on-secondary-container font-data-metric text-data-metric font-semibold flex flex-col items-center justify-center hover:opacity-85 transition-opacity" title="سؤال 20: صحيح" type="button">
+<span>20</span>
+</button>
+</div>
+</div>
+</div></main></div></body></html>

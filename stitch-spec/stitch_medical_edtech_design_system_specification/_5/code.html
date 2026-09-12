@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "secondary-container": "#99efe5",
+          "on-tertiary-fixed-variant": "#661aa3",
+          "surface": "#faf8ff",
+          "inverse-surface": "#283044",
+          "tertiary-container": "#5f0d9c",
+          "surface-container-lowest": "#ffffff",
+          "surface-bright": "#faf8ff",
+          "surface-container-high": "#e2e7ff",
+          "inverse-on-surface": "#eef0ff",
+          "error": "#ba1a1a",
+          "on-surface": "#131b2e",
+          "on-primary": "#ffffff",
+          "on-primary-fixed-variant": "#264191",
+          "background": "#faf8ff",
+          "primary-container": "#1e3a8a",
+          "on-tertiary": "#ffffff",
+          "surface-dim": "#d2d9f4",
+          "surface-container": "#eaedff",
+          "on-background": "#131b2e",
+          "tertiary-fixed-dim": "#dfb7ff",
+          "on-tertiary-fixed": "#2d0050",
+          "tertiary": "#410070",
+          "secondary-fixed": "#9cf2e8",
+          "outline": "#757682",
+          "on-surface-variant": "#444651",
+          "on-secondary-fixed": "#00201d",
+          "tertiary-fixed": "#f1dbff",
+          "on-secondary": "#ffffff",
+          "on-secondary-fixed-variant": "#00504a",
+          "on-primary-fixed": "#00164e",
+          "primary": "#00236f",
+          "surface-container-highest": "#dae2fd",
+          "secondary-fixed-dim": "#80d5cb",
+          "on-error-container": "#93000a",
+          "surface-variant": "#dae2fd",
+          "error-container": "#ffdad6",
+          "primary-fixed": "#dce1ff",
+          "outline-variant": "#c5c5d3",
+          "on-tertiary-container": "#cc93ff",
+          "on-error": "#ffffff",
+          "on-primary-container": "#90a8ff",
+          "inverse-primary": "#b6c4ff",
+          "secondary": "#006a63",
+          "surface-tint": "#4059aa",
+          "primary-fixed-dim": "#b6c4ff",
+          "surface-container-low": "#f2f3ff",
+          "on-secondary-container": "#006f67"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+        "spacing": {
+          "space-lg": "1.5rem",
+          "space-sm": "0.5rem",
+          "margin": "2rem",
+          "gutter-mobile": "0.75rem",
+          "space-xs": "0.25rem",
+          "space-xl": "2rem",
+          "gutter": "1.5rem",
+          "margin-mobile": "1rem",
+          "space-md": "1rem"
+        },
+        "fontFamily": {
+          "headline-xl-mobile": [
+            "Noto Sans"
+          ],
+          "headline-sm": [
+            "Noto Sans"
+          ],
+          "headline-lg": [
+            "Noto Sans"
+          ],
+          "label-caps": [
+            "Inter"
+          ],
+          "headline-xl": [
+            "Noto Sans"
+          ],
+          "body-md": [
+            "Noto Sans"
+          ],
+          "body-sm": [
+            "Noto Sans"
+          ],
+          "data-metric": [
+            "Inter"
+          ],
+          "option-label": [
+            "Inter"
+          ],
+          "vignette-text": [
+            "Noto Sans"
+          ]
+        },
+        "fontSize": {
+          "headline-xl-mobile": [
+            "24px",
+            {
+              "lineHeight": "38px",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-sm": [
+            "18px",
+            {
+              "lineHeight": "30px",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-lg": [
+            "22px",
+            {
+              "lineHeight": "36px",
+              "fontWeight": "600"
+            }
+          ],
+          "label-caps": [
+            "11px",
+            {
+              "lineHeight": "16px",
+              "letterSpacing": "0.05em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-xl": [
+            "30px",
+            {
+              "lineHeight": "48px",
+              "fontWeight": "700"
+            }
+          ],
+          "body-md": [
+            "15px",
+            {
+              "lineHeight": "26px",
+              "fontWeight": "400"
+            }
+          ],
+          "body-sm": [
+            "13px",
+            {
+              "lineHeight": "22px",
+              "fontWeight": "400"
+            }
+          ],
+          "data-metric": [
+            "13px",
+            {
+              "lineHeight": "18px",
+              "letterSpacing": "0.02em",
+              "fontWeight": "500"
+            }
+          ],
+          "option-label": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "fontWeight": "700"
+            }
+          ],
+          "vignette-text": [
+            "17px",
+            {
+              "lineHeight": "32px",
+              "fontWeight": "400"
+            }
+          ]
+        }
+      },
+    },
+  }</script></head><body class="bg-background font-body-md text-on-surface"><aside class="fixed right-0 top-0 h-full w-72 bg-surface-container-lowest z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="h-16 px-space-md flex items-center justify-between gap-space-sm bg-surface-container-low/50"><div class="flex items-center gap-space-sm"><div class="w-9 h-9 rounded-xl bg-primary-container text-on-primary flex items-center justify-center"><span class="material-symbols-outlined text-[20px]">vital_signs</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary tracking-tight">منصة نبض الطبية</span><span class="font-label-caps text-label-caps text-on-surface-variant uppercase">MedPulse Academic</span></div></div></div><div class="px-space-md py-space-sm"><div class="px-space-xs py-space-xs"><span class="font-label-caps text-label-caps text-on-surface-variant uppercase">الوحدات الأكاديمية</span></div><nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary font-headline-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="main-dashboard" href="#"><span class="material-symbols-outlined text-[20px]">dashboard</span><span class="font-body-md text-body-md">الرئيسية</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl transition-all bg-primary-container text-on-primary font-headline-sm" data-path="question-bank" href="#"><span class="material-symbols-outlined text-[20px]">quiz</span><span class="font-body-md text-body-md">بنك الأسئلة</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="mock-exams" href="#"><span class="material-symbols-outlined text-[20px]">assignment</span><span class="font-body-md text-body-md">الاختبارات</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="performance-analytics" href="#"><span class="material-symbols-outlined text-[20px]">monitoring</span><span class="font-body-md text-body-md">الأداء والتحصيل</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="study-planner" href="#"><span class="material-symbols-outlined text-[20px]">calendar_month</span><span class="font-body-md text-body-md">خطة الدراسة</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="clinical-review" href="#"><span class="material-symbols-outlined text-[20px]">clinical_notes</span><span class="font-body-md text-body-md">المراجعة السريرية</span></a></nav></div><div class="px-space-md py-space-xs"><div class="px-space-xs py-space-xs"><span class="font-label-caps text-label-caps text-on-surface-variant uppercase">الأدوات والمراجع</span></div><nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary font-headline-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="bookmarks-vault" href="#"><span class="material-symbols-outlined text-[20px]">bookmark</span><span class="font-body-md text-body-md">المحفوظات</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="clinical-notes" href="#"><span class="material-symbols-outlined text-[20px]">edit_note</span><span class="font-body-md text-body-md">الملاحظات</span></a></nav></div></div><div class="flex flex-col gap-space-xs p-space-md bg-surface-container-low/40"><nav class="flex flex-col gap-1 mb-space-xs" data-active-classes="bg-primary-container text-on-primary font-headline-sm"><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="help-center" href="#"><span class="material-symbols-outlined text-[18px]">help_outline</span><span class="font-body-sm text-body-sm">المساعدة والدعم</span></a><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="system-settings" href="#"><span class="material-symbols-outlined text-[18px]">settings</span><span class="font-body-sm text-body-sm">الإعدادات</span></a></nav><div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col"><span class="font-headline-sm text-[13px] leading-tight text-on-surface font-semibold">علي أحمد</span><span class="font-label-caps text-[10px] text-on-surface-variant">طالب طب • مرحلة 5</span></div></div><button aria-label="تسجيل الخروج" class="p-space-xs text-on-surface-variant hover:text-primary transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">logout</span></button></div></div></aside><div class="pr-72"><header class="fixed top-0 right-72 left-0 h-16 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-xl"><div class="flex items-center gap-space-md flex-1 max-w-xl"><div class="relative w-full"><span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span><input class="w-full bg-surface-container-lowest text-on-surface font-body-sm text-body-sm pr-10 pl-space-md py-space-xs rounded-full outline-none ring-0 placeholder:text-on-surface-variant/70 shadow-[0_1px_8px_rgba(0,0,0,0.04)] focus:bg-surface-container-low transition-all" placeholder="ابحث في الأسئلة، المواضيع، والامتحانات..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="hidden md:flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-secondary-container/40 text-on-secondary-container font-data-metric text-[12px]"><span class="material-symbols-outlined text-[16px]">cloud_done</span><span>تم الحفظ المتزامن</span></div><button class="px-space-sm py-1 rounded-full bg-surface-container-high text-on-surface font-label-caps text-label-caps hover:bg-surface-container-highest transition-colors" type="button">EN</button><div class="relative flex items-center"><button aria-label="الإشعارات" class="p-space-xs rounded-full text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all relative" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-error"></span></button></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="relative pt-16 bg-background min-h-screen px-space-xl py-space-lg"><div class="flex flex-col w-full pb-32 space-y-space-lg">
+<!-- Top Academic Context Header -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex flex-col space-y-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="px-space-xs py-0.5 rounded-DEFAULT bg-secondary-container text-on-secondary-container font-label-caps text-label-caps uppercase tracking-wider">SMLE / IFOM High-Yield QBank</span>
+<span class="text-outline-variant">•</span>
+<span class="font-data-metric text-data-metric text-on-surface-variant">تحديث المنهاج الأكاديمي 2025</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-primary font-bold tracking-tight">بنك الأسئلة الطبي الشامل</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+        اختر المواد والمواضيع السريرية لبناء جلسة تدريبية فورية مخصصة، محاكية للاختبارات المهنية مع إيضاحات سريرية تفصيلية.
+      </p>
+</div>
+<div class="flex items-center gap-space-sm self-start md:self-auto">
+<button class="flex items-center gap-space-xs px-space-md py-space-sm rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-headline-sm text-headline-sm transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[20px] text-primary">tune</span>
+<span>إنشاء جلسة مخصصة</span>
+</button>
+<button class="flex items-center justify-center w-11 h-11 rounded-xl bg-surface-container-lowest text-on-surface-variant hover:text-primary shadow-sm transition-colors" title="سجل الجلسات السابقة" type="button">
+<span class="material-symbols-outlined text-[22px]">history</span>
+</button>
+</div>
+</div>
+<!-- Progress & Overall Diagnostic Bar -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-space-md bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
+<!-- Metric 1 -->
+<div class="flex flex-col p-space-sm bg-surface-container-low/60 rounded-lg space-y-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">إجمالي الرصيد السريري</span>
+<span class="material-symbols-outlined text-primary text-[18px]">inventory_2</span>
+</div>
+<div class="flex items-baseline gap-space-xs">
+<span class="font-headline-xl text-headline-xl text-on-surface font-bold">4,500</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">سؤال مفهرس</span>
+</div>
+<span class="font-data-metric text-data-metric text-secondary">جاهزة لجميع التخصصات</span>
+</div>
+<!-- Metric 2 -->
+<div class="flex flex-col p-space-sm bg-surface-container-low/60 rounded-lg space-y-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">نسبة الإنجاز الفعلية</span>
+<span class="font-data-metric text-data-metric text-primary-container font-semibold">41%</span>
+</div>
+<div class="flex items-baseline gap-space-xs">
+<span class="font-headline-xl text-headline-xl text-on-surface font-bold">1,842</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">تم حلها</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary-container h-1.5 rounded-full" style="width: 41%"></div>
+</div>
+</div>
+<!-- Metric 3 -->
+<div class="flex flex-col p-space-sm bg-surface-container-low/60 rounded-lg space-y-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">معدل الدقة الأكاديمية</span>
+<span class="material-symbols-outlined text-secondary text-[18px]">verified</span>
+</div>
+<div class="flex items-baseline gap-space-xs">
+<span class="font-headline-xl text-headline-xl text-secondary font-bold">68%</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">دقة تشخيصية</span>
+</div>
+<span class="font-data-metric text-data-metric text-on-surface-variant">ضمن الشريحة المتقدمة (أعلى 15%)</span>
+</div>
+<!-- Metric 4 -->
+<div class="flex flex-col p-space-sm bg-surface-container-low/60 rounded-lg space-y-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">المراجعة والتركيز</span>
+<span class="material-symbols-outlined text-error text-[18px]">error</span>
+</div>
+<div class="flex items-baseline gap-space-xs">
+<span class="font-headline-xl text-headline-xl text-error font-bold">124</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">تحتاج تثبيت</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-data-metric text-data-metric">
+<span class="material-symbols-outlined text-[14px] text-tertiary">bookmark</span>
+<span>38 حالة سريرية محفوظة</span>
+</div>
+</div>
+</div>
+<!-- Search & Active Filters Bar -->
+<div class="flex flex-col gap-space-md bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
+<!-- Filter Chips Row -->
+<div class="flex items-center justify-between flex-wrap gap-space-sm">
+<div class="flex items-center gap-space-xs flex-wrap" id="filterChips">
+<button class="filter-chip px-space-md py-space-xs rounded-full font-label-caps text-label-caps bg-primary text-on-primary shadow-sm transition-all flex items-center gap-1" data-filter="all" type="button">
+<span>الكل المتاح</span>
+<span class="bg-surface-container-lowest/20 px-1.5 py-0.5 rounded-full font-data-metric text-[10px]">4,500</span>
+</button>
+<button class="filter-chip px-space-md py-space-xs rounded-full font-label-caps text-label-caps bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest transition-all flex items-center gap-1" data-filter="unanswered" type="button">
+<span>لم تُحل بعد</span>
+<span class="bg-surface-container-highest px-1.5 py-0.5 rounded-full font-data-metric text-[10px]">2,658</span>
+</button>
+<button class="filter-chip px-space-md py-space-xs rounded-full font-label-caps text-label-caps bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest transition-all flex items-center gap-1" data-filter="incorrect" type="button">
+<span>أخطائي السابقة</span>
+<span class="bg-error-container text-on-error-container px-1.5 py-0.5 rounded-full font-data-metric text-[10px]">124</span>
+</button>
+<button class="filter-chip px-space-md py-space-xs rounded-full font-label-caps text-label-caps bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest transition-all flex items-center gap-1" data-filter="bookmarked" type="button">
+<span>المحفوظات السريرية</span>
+<span class="bg-surface-container-highest px-1.5 py-0.5 rounded-full font-data-metric text-[10px]">38</span>
+</button>
+<button class="filter-chip px-space-md py-space-xs rounded-full font-label-caps text-label-caps bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest transition-all flex items-center gap-1" data-filter="weak-points" type="button">
+<span class="material-symbols-outlined text-[14px] text-tertiary">priority_high</span>
+<span>نقاط الضعف السريرية</span>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed px-1.5 py-0.5 rounded-full font-data-metric text-[10px]">350</span>
+</button>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-caps text-label-caps">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>عرض: المواد الأساسية والسريرية (8)</span>
+</div>
+</div>
+<!-- Targeted Keyword Input + Latency Autocomplete Tags -->
+<div class="flex flex-col gap-space-xs">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute right-space-md top-1/2 -translate-y-1/2 text-on-surface-variant text-[22px]">manage_search</span>
+<input class="w-full bg-surface-container-low text-on-surface font-body-md text-body-md pr-12 pl-space-md py-space-sm rounded-xl outline-none placeholder:text-on-surface-variant/60 focus:bg-surface-container-lowest focus:shadow-sm transition-all" placeholder="ابحث عن مادة، جهاز عضوي، متلازمة سريرية، فئة دوائية، أو كود تشخيصي..." type="text"/>
+<button class="absolute left-3 top-1/2 -translate-y-1/2 font-label-caps text-label-caps px-space-xs py-1 rounded bg-surface-container text-on-surface-variant hover:text-on-surface" type="button">
+          مسح
+        </button>
+</div>
+<!-- High Yield Autocomplete Tags -->
+<div class="flex items-center gap-space-xs flex-wrap pt-1 text-on-surface-variant font-data-metric text-data-metric">
+<span class="font-label-caps text-label-caps text-outline uppercase ml-1">شائع الآن:</span>
+<button class="px-space-xs py-0.5 rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant text-[12px] transition-colors" type="button">Acute Coronary Syndrome</button>
+<button class="px-space-xs py-0.5 rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant text-[12px] transition-colors" type="button">Cardiac Arrhythmias</button>
+<button class="px-space-xs py-0.5 rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant text-[12px] transition-colors" type="button">Renal Tubular Acidosis</button>
+<button class="px-space-xs py-0.5 rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant text-[12px] transition-colors" type="button">Cephalosporins Spectrum</button>
+<button class="px-space-xs py-0.5 rounded bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant text-[12px] transition-colors" type="button">Shock Classifications</button>
+</div>
+</div>
+</div>
+<!-- Subject Academic Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-space-md">
+<!-- Subject Card 1: Internal Medicine -->
+<div class="subject-card group relative flex flex-col justify-between bg-surface-container-lowest p-space-md rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer select-none">
+<div class="flex flex-col space-y-space-sm">
+<div class="flex items-start justify-between">
+<div class="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">cardiology</span>
+</div>
+<div class="subject-checkbox w-6 h-6 rounded-md bg-surface-container-highest flex items-center justify-center text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[18px] opacity-0 check-icon">check</span>
+</div>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-semibold group-hover:text-primary transition-colors">الطب الباطني</h2>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Internal Medicine</span>
+</div>
+<!-- Metric badges -->
+<div class="flex items-center justify-between pt-1">
+<span class="font-data-metric text-data-metric text-on-surface font-semibold">1,120 سؤال</span>
+<span class="font-data-metric text-data-metric text-secondary font-bold">دقة 74%</span>
+</div>
+<!-- Progress bar -->
+<div class="space-y-1">
+<div class="flex justify-between font-label-caps text-[10px] text-on-surface-variant">
+<span>مكتمل 43%</span>
+<span>482 / 1,120</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary h-1.5 rounded-full" style="width: 43%"></div>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps text-primary">12 جهاز عضوي</span>
+<div class="flex items-center text-body-sm font-body-sm group-hover:translate-x-[-4px] transition-transform text-primary font-medium">
+<span>استعراض الأجهزة</span>
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+</div>
+</div>
+</div>
+<!-- Subject Card 2: General Surgery -->
+<div class="subject-card group relative flex flex-col justify-between bg-surface-container-lowest p-space-md rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer select-none">
+<div class="flex flex-col space-y-space-sm">
+<div class="flex items-start justify-between">
+<div class="w-10 h-10 rounded-lg bg-secondary/10 text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">fluid_med</span>
+</div>
+<div class="subject-checkbox w-6 h-6 rounded-md bg-surface-container-highest flex items-center justify-center text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[18px] opacity-0 check-icon">check</span>
+</div>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-semibold group-hover:text-secondary transition-colors">الجراحة العامة</h2>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">General Surgery</span>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="font-data-metric text-data-metric text-on-surface font-semibold">850 سؤال</span>
+<span class="font-data-metric text-data-metric text-secondary font-bold">دقة 68%</span>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between font-label-caps text-[10px] text-on-surface-variant">
+<span>مكتمل 48%</span>
+<span>408 / 850</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden">
+<div class="bg-secondary h-1.5 rounded-full" style="width: 48%"></div>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps text-secondary">8 تخصصات فرعية</span>
+<div class="flex items-center text-body-sm font-body-sm group-hover:translate-x-[-4px] transition-transform text-secondary font-medium">
+<span>استعراض الأجهزة</span>
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+</div>
+</div>
+</div>
+<!-- Subject Card 3: Pediatrics -->
+<div class="subject-card group relative flex flex-col justify-between bg-surface-container-lowest p-space-md rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer select-none">
+<div class="flex flex-col space-y-space-sm">
+<div class="flex items-start justify-between">
+<div class="w-10 h-10 rounded-lg bg-tertiary/10 text-tertiary flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">child_care</span>
+</div>
+<div class="subject-checkbox w-6 h-6 rounded-md bg-surface-container-highest flex items-center justify-center text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[18px] opacity-0 check-icon">check</span>
+</div>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-semibold group-hover:text-tertiary transition-colors">طب الأطفال</h2>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Pediatrics</span>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="font-data-metric text-data-metric text-on-surface font-semibold">450 سؤال</span>
+<span class="font-data-metric text-data-metric text-secondary font-bold">دقة 81%</span>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between font-label-caps text-[10px] text-on-surface-variant">
+<span>مكتمل 78%</span>
+<span>351 / 450</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden">
+<div class="bg-tertiary h-1.5 rounded-full" style="width: 78%"></div>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps text-tertiary">حديثو الولادة والتطور</span>
+<div class="flex items-center text-body-sm font-body-sm group-hover:translate-x-[-4px] transition-transform text-tertiary font-medium">
+<span>استعراض الأجهزة</span>
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+</div>
+</div>
+</div>
+<!-- Subject Card 4: Obstetrics & Gynecology -->
+<div class="subject-card group relative flex flex-col justify-between bg-surface-container-lowest p-space-md rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer select-none">
+<div class="flex flex-col space-y-space-sm">
+<div class="flex items-start justify-between">
+<div class="w-10 h-10 rounded-lg bg-primary-container/10 text-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">pregnant_woman</span>
+</div>
+<div class="subject-checkbox w-6 h-6 rounded-md bg-surface-container-highest flex items-center justify-center text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[18px] opacity-0 check-icon">check</span>
+</div>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-semibold group-hover:text-primary-container transition-colors">النسائية والتوليد</h2>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Obstetrics &amp; Gynecology</span>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="font-data-metric text-data-metric text-on-surface font-semibold">400 سؤال</span>
+<span class="font-data-metric text-data-metric text-secondary font-bold">دقة 71%</span>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between font-label-caps text-[10px] text-on-surface-variant">
+<span>مكتمل 45%</span>
+<span>180 / 400</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary-container h-1.5 rounded-full" style="width: 45%"></div>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps text-primary-container">توليد وسرطان الإناث</span>
+<div class="flex items-center text-body-sm font-body-sm group-hover:translate-x-[-4px] transition-transform text-primary-container font-medium">
+<span>استعراض الأجهزة</span>
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+</div>
+</div>
+</div>
+<!-- Subject Card 5: Clinical Pharmacology (With Review Tag) -->
+<div class="subject-card group relative flex flex-col justify-between bg-surface-container-lowest p-space-md rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer select-none">
+<div class="flex flex-col space-y-space-sm">
+<div class="flex items-start justify-between">
+<div class="w-10 h-10 rounded-lg bg-error-container text-on-error-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">medication</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="px-space-xs py-0.5 rounded bg-error-container text-on-error-container font-label-caps text-[10px] font-semibold">يحتاج مراجعة</span>
+<div class="subject-checkbox w-6 h-6 rounded-md bg-surface-container-highest flex items-center justify-center text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[18px] opacity-0 check-icon">check</span>
+</div>
+</div>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-semibold group-hover:text-error transition-colors">علم الأدوية السريري</h2>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Clinical Pharmacology</span>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="font-data-metric text-data-metric text-on-surface font-semibold">600 سؤال</span>
+<span class="font-data-metric text-data-metric text-error font-bold">دقة 64%</span>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between font-label-caps text-[10px] text-on-surface-variant">
+<span>مكتمل 40%</span>
+<span>240 / 600</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden">
+<div class="bg-error h-1.5 rounded-full" style="width: 40%"></div>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps text-error">حركية وديناميكية الدواء</span>
+<div class="flex items-center text-body-sm font-body-sm group-hover:translate-x-[-4px] transition-transform text-error font-medium">
+<span>استعراض الأجهزة</span>
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+</div>
+</div>
+</div>
+<!-- Subject Card 6: Pathology -->
+<div class="subject-card group relative flex flex-col justify-between bg-surface-container-lowest p-space-md rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer select-none">
+<div class="flex flex-col space-y-space-sm">
+<div class="flex items-start justify-between">
+<div class="w-10 h-10 rounded-lg bg-surface-tint/10 text-surface-tint flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">biotech</span>
+</div>
+<div class="subject-checkbox w-6 h-6 rounded-md bg-surface-container-highest flex items-center justify-center text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[18px] opacity-0 check-icon">check</span>
+</div>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-semibold group-hover:text-surface-tint transition-colors">علم الأمراض السريري</h2>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Pathology</span>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="font-data-metric text-data-metric text-on-surface font-semibold">520 سؤال</span>
+<span class="font-data-metric text-data-metric text-secondary font-bold">دقة 69%</span>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between font-label-caps text-[10px] text-on-surface-variant">
+<span>مكتمل 25%</span>
+<span>130 / 520</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden">
+<div class="bg-surface-tint h-1.5 rounded-full" style="width: 25%"></div>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps text-surface-tint">تشريح مرضي ومناعي</span>
+<div class="flex items-center text-body-sm font-body-sm group-hover:translate-x-[-4px] transition-transform text-surface-tint font-medium">
+<span>استعراض الأجهزة</span>
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+</div>
+</div>
+</div>
+<!-- Subject Card 7: Clinical Anatomy & Embryology -->
+<div class="subject-card group relative flex flex-col justify-between bg-surface-container-lowest p-space-md rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer select-none">
+<div class="flex flex-col space-y-space-sm">
+<div class="flex items-start justify-between">
+<div class="w-10 h-10 rounded-lg bg-secondary-fixed-dim/30 text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">accessibility_new</span>
+</div>
+<div class="subject-checkbox w-6 h-6 rounded-md bg-surface-container-highest flex items-center justify-center text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[18px] opacity-0 check-icon">check</span>
+</div>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-semibold group-hover:text-secondary transition-colors">التشريح السريري وعلم الأجنة</h2>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Clinical Anatomy</span>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="font-data-metric text-data-metric text-on-surface font-semibold">340 سؤال</span>
+<span class="font-data-metric text-data-metric text-secondary font-bold">دقة 72%</span>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between font-label-caps text-[10px] text-on-surface-variant">
+<span>مكتمل 30%</span>
+<span>102 / 340</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden">
+<div class="bg-secondary h-1.5 rounded-full" style="width: 30%"></div>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps text-secondary">تشريح جراحي ومقاطع شعاعية</span>
+<div class="flex items-center text-body-sm font-body-sm group-hover:translate-x-[-4px] transition-transform text-secondary font-medium">
+<span>استعراض الأجهزة</span>
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+</div>
+</div>
+</div>
+<!-- Subject Card 8: Microbiology & Immunology -->
+<div class="subject-card group relative flex flex-col justify-between bg-surface-container-lowest p-space-md rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer select-none">
+<div class="flex flex-col space-y-space-sm">
+<div class="flex items-start justify-between">
+<div class="w-10 h-10 rounded-lg bg-tertiary-container/15 text-tertiary flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">coronavirus</span>
+</div>
+<div class="subject-checkbox w-6 h-6 rounded-md bg-surface-container-highest flex items-center justify-center text-on-primary transition-colors">
+<span class="material-symbols-outlined text-[18px] opacity-0 check-icon">check</span>
+</div>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-semibold group-hover:text-tertiary transition-colors">الأحياء المجهرية والمناعة</h2>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Microbiology &amp; Immunology</span>
+</div>
+<div class="flex items-center justify-between pt-1">
+<span class="font-data-metric text-data-metric text-on-surface font-semibold">220 سؤال</span>
+<span class="font-data-metric text-data-metric text-secondary font-bold">دقة 70%</span>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between font-label-caps text-[10px] text-on-surface-variant">
+<span>مكتمل 15%</span>
+<span>33 / 220</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden">
+<div class="bg-tertiary h-1.5 rounded-full" style="width: 15%"></div>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-xs flex items-center justify-between text-on-surface-variant">
+<span class="font-label-caps text-label-caps text-tertiary">بكتيريا، فيروسات ومناعة سريرية</span>
+<div class="flex items-center text-body-sm font-body-sm group-hover:translate-x-[-4px] transition-transform text-tertiary font-medium">
+<span>استعراض الأجهزة</span>
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Educational Exam Modes Quick Setup Panel -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-space-md bg-surface-container-low/50 p-space-md rounded-xl">
+<div class="flex items-start gap-space-sm p-space-sm bg-surface-container-lowest rounded-lg shadow-sm">
+<div class="p-2 rounded-md bg-primary-container/10 text-primary-container">
+<span class="material-symbols-outlined text-[20px]">school</span>
+</div>
+<div class="flex flex-col space-y-0.5">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-[15px] font-semibold text-on-surface">وضع المعلم (Tutor Mode)</span>
+<span class="px-1.5 py-0.5 rounded bg-secondary-container text-on-secondary-container font-data-metric text-[10px]">موصى به</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-normal">
+          إظهار التحليل السريري والإجابة الدقيقة فور اختيار الإجابة، مع الوصول الفوري للأجهزة والمراجع الطبية.
+        </p>
+</div>
+</div>
+<div class="flex items-start gap-space-sm p-space-sm bg-surface-container-lowest rounded-lg shadow-sm">
+<div class="p-2 rounded-md bg-secondary/10 text-secondary">
+<span class="material-symbols-outlined text-[20px]">timer</span>
+</div>
+<div class="flex flex-col space-y-0.5">
+<span class="font-headline-sm text-[15px] font-semibold text-on-surface">وضع الاختبار الزمني (Timed)</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-normal">
+          تخصيص 90 ثانية لكل سؤال لمحاكاة الضغط الزمني لامتحان البورد السعودي SMLE أو USMLE Step 2 CK.
+        </p>
+</div>
+</div>
+<div class="flex items-start gap-space-sm p-space-sm bg-surface-container-lowest rounded-lg shadow-sm">
+<div class="p-2 rounded-md bg-tertiary/10 text-tertiary">
+<span class="material-symbols-outlined text-[20px]">psychology</span>
+</div>
+<div class="flex flex-col space-y-0.5">
+<span class="font-headline-sm text-[15px] font-semibold text-on-surface">الخوارزمية الذكية (Adaptive)</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-normal">
+          توزيع الأسئلة تلقائياً بالتركيز على النقاط السريرية الأكثر تعرضاً للأخطاء في تاريخك الأكاديمي.
+        </p>
+</div>
+</div>
+</div>
+<!-- Docked Bottom Floating Action Bar -->
+<div class="fixed bottom-4 right-80 left-8 bg-surface-container-lowest/95 backdrop-blur-xl p-space-md rounded-xl shadow-xl z-30 flex flex-col md:flex-row items-center justify-between gap-space-md">
+<!-- Right Scope Selection Indicator -->
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-primary-container text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">checklist</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold" id="scopeIndicator">تم اختيار بنك الأسئلة العام</span>
+<span class="px-1.5 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-data-metric text-[11px]" id="selectedCountBadge">4,500 سؤال متوفر</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">الوضع الحالي: نمط التدريب الأكاديمي المباشر</span>
+</div>
+</div>
+<!-- Center Quick Question Count Chips -->
+<div class="flex items-center gap-space-xs bg-surface-container-low p-1 rounded-xl" id="questionCountGroup">
+<button class="count-chip px-space-md py-space-xs rounded-lg font-data-metric text-data-metric text-on-surface-variant hover:text-on-surface transition-all" data-count="10" type="button">
+        10 أسئلة
+      </button>
+<button class="count-chip px-space-md py-space-xs rounded-lg font-data-metric text-data-metric bg-surface-container-lowest text-primary font-bold shadow-sm transition-all" data-count="20" type="button">
+        20 سؤالاً
+      </button>
+<button class="count-chip px-space-md py-space-xs rounded-lg font-data-metric text-data-metric text-on-surface-variant hover:text-on-surface transition-all" data-count="40" type="button">
+        40 سؤالاً
+      </button>
+<button class="count-chip px-space-md py-space-xs rounded-lg font-data-metric text-data-metric text-on-surface-variant hover:text-on-surface transition-all" data-count="max" type="button">
+        الحد الأقصى
+      </button>
+</div>
+<!-- Left Primary Actions -->
+<div class="flex items-center gap-space-sm w-full md:w-auto">
+<button class="px-space-md py-space-sm rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-headline-sm text-headline-sm transition-colors" type="button">
+        تخصيص الجلسة
+      </button>
+<button class="flex-1 md:flex-initial flex items-center justify-center gap-space-xs px-space-xl py-space-sm rounded-xl bg-primary-container hover:bg-primary text-on-primary font-headline-sm text-headline-sm transition-all shadow-md active:scale-[0.99]" id="startSessionBtn" type="button">
+<span>ابدأ تدريب 20 سؤالاً</span>
+<span class="material-symbols-outlined text-[20px] rotate-180">arrow_forward</span>
+</button>
+</div>
+</div>
+<script>
+    (function() {
+      // Interactive Subject Card Selection
+      const cards = document.querySelectorAll('.subject-card');
+      const scopeText = document.getElementById('scopeIndicator');
+      const countBadge = document.getElementById('selectedCountBadge');
+      let selectedCount = 0;
+
+      cards.forEach(card => {
+        card.addEventListener('click', (e) => {
+          // If clicked on "browse topics" link, avoid card toggle
+          if (e.target.closest('div.group-hover\\:translate-x-\\[-4px\\]')) {
+            return;
+          }
+
+          card.classList.toggle('selected-subject');
+          const checkIcon = card.querySelector('.check-icon');
+          const checkbox = card.querySelector('.subject-checkbox');
+
+          if (card.classList.contains('selected-subject')) {
+            card.classList.add('bg-primary-fixed/20');
+            checkbox.classList.remove('bg-surface-container-highest');
+            checkbox.classList.add('bg-primary');
+            checkIcon.classList.remove('opacity-0');
+            selectedCount++;
+          } else {
+            card.classList.remove('bg-primary-fixed/20');
+            checkbox.classList.add('bg-surface-container-highest');
+            checkbox.classList.remove('bg-primary');
+            checkIcon.classList.add('opacity-0');
+            selectedCount--;
+          }
+
+          if (selectedCount > 0) {
+            scopeText.textContent = `تم تحديد ${selectedCount} مواد مخصصة`;
+            countBadge.textContent = `نطاق مخصص`;
+          } else {
+            scopeText.textContent = 'تم اختيار بنك الأسئلة العام';
+            countBadge.textContent = '4,500 سؤال متوفر';
+          }
+        });
+      });
+
+      // Question Count Selector
+      const countChips = document.querySelectorAll('.count-chip');
+      const startBtn = document.getElementById('startSessionBtn');
+
+      countChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          countChips.forEach(c => {
+            c.classList.remove('bg-surface-container-lowest', 'text-primary', 'font-bold', 'shadow-sm');
+            c.classList.add('text-on-surface-variant');
+          });
+
+          chip.classList.add('bg-surface-container-lowest', 'text-primary', 'font-bold', 'shadow-sm');
+          chip.classList.remove('text-on-surface-variant');
+
+          const val = chip.getAttribute('data-count');
+          const textSpan = startBtn.querySelector('span:first-child');
+          if (val === 'max') {
+            textSpan.textContent = 'ابدأ تدريب بكامل السعة';
+          } else {
+            textSpan.textContent = `ابدأ تدريب ${val} سؤالاً`;
+          }
+        });
+      });
+
+      // Quick Filter Switcher
+      const filterChips = document.querySelectorAll('.filter-chip');
+      filterChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          filterChips.forEach(c => {
+            c.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+            c.classList.add('bg-surface-container-high', 'text-on-surface-variant');
+          });
+
+          chip.classList.remove('bg-surface-container-high', 'text-on-surface-variant');
+          chip.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+        });
+      });
+    })();
+  </script>
+</div></main></div></body></html>

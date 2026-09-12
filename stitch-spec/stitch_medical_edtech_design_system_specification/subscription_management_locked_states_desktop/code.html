@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"error":"#ba1a1a","secondary-fixed":"#9cf2e8","on-tertiary":"#ffffff","on-primary-fixed-variant":"#264191","tertiary":"#410070","on-secondary-fixed":"#00201d","primary-fixed-dim":"#b6c4ff","tertiary-container":"#5f0d9c","surface-container-lowest":"#ffffff","surface-dim":"#d2d9f4","primary-container":"#1e3a8a","inverse-primary":"#b6c4ff","error-container":"#ffdad6","outline":"#757682","secondary":"#006a63","surface-container":"#eaedff","on-tertiary-container":"#cc93ff","tertiary-fixed":"#f1dbff","surface-container-high":"#e2e7ff","surface-container-highest":"#dae2fd","on-surface":"#131b2e","tertiary-fixed-dim":"#dfb7ff","surface-variant":"#dae2fd","primary":"#00236f","inverse-surface":"#283044","on-tertiary-fixed":"#2d0050","surface":"#faf8ff","on-tertiary-fixed-variant":"#661aa3","secondary-fixed-dim":"#80d5cb","on-secondary":"#ffffff","background":"#faf8ff","secondary-container":"#99efe5","surface-bright":"#faf8ff","surface-tint":"#4059aa","surface-container-low":"#f2f3ff","on-secondary-fixed-variant":"#00504a","on-error-container":"#93000a","on-primary-container":"#90a8ff","on-surface-variant":"#444651","on-primary-fixed":"#00164e","on-primary":"#ffffff","inverse-on-surface":"#eef0ff","on-secondary-container":"#006f67","outline-variant":"#c5c5d3","primary-fixed":"#dce1ff","on-error":"#ffffff","on-background":"#131b2e"},borderRadius:{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},spacing:{"margin":"2rem","space-xl":"2rem","gutter-mobile":"0.75rem","space-lg":"1.5rem","gutter":"1.5rem","space-sm":"0.5rem","margin-mobile":"1rem","space-md":"1rem","space-xs":"0.25rem"},fontFamily:{"vignette-text":["Noto Sans"],"data-metric":["Inter"],"headline-lg":["Noto Sans"],"option-label":["Inter"],"body-sm":["Noto Sans"],"label-caps":["Inter"],"headline-xl":["Noto Sans"],"headline-sm":["Noto Sans"],"headline-xl-mobile":["Noto Sans"],"body-md":["Noto Sans"]},fontSize:{"vignette-text":["17px",{"lineHeight":"32px","fontWeight":"400"}],"data-metric":["13px",{"lineHeight":"18px","letterSpacing":"0.02em","fontWeight":"500"}],"headline-lg":["22px",{"lineHeight":"36px","fontWeight":"600"}],"option-label":["14px",{"lineHeight":"20px","fontWeight":"700"}],"body-sm":["13px",{"lineHeight":"22px","fontWeight":"400"}],"label-caps":["11px",{"lineHeight":"16px","letterSpacing":"0.05em","fontWeight":"600"}],"headline-xl":["30px",{"lineHeight":"48px","fontWeight":"700"}],"headline-sm":["18px",{"lineHeight":"30px","fontWeight":"600"}],"headline-xl-mobile":["24px",{"lineHeight":"38px","fontWeight":"700"}],"body-md":["15px",{"lineHeight":"26px","fontWeight":"400"}]}}}}</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased selection:bg-primary selection:text-on-primary"><aside class="fixed right-0 top-0 h-full w-72 bg-surface-container-lowest z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col flex-1 overflow-y-auto px-space-md py-space-lg"><div class="flex items-center gap-space-sm px-space-sm mb-space-lg"><div class="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center text-on-primary shrink-0"><span class="material-symbols-outlined text-[24px]">cardiology</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary tracking-tight font-bold">منصة نبض الطبية</span><span class="font-label-caps text-label-caps text-on-surface-variant font-semibold tracking-wider uppercase">MedPulse Academic</span></div></div><div class="px-space-sm py-space-xs mb-space-xs"><span class="font-label-caps text-label-caps text-on-surface-variant tracking-wider uppercase font-semibold">المسار التعليمي</span></div><nav class="flex flex-col gap-1 mb-space-md" data-active-classes="bg-primary-container text-on-primary font-bold shadow-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[20px]">dashboard</span><span class="font-body-md text-body-md">الرئيسية</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="question-bank" href="#"><span class="material-symbols-outlined text-[20px]">menu_book</span><span class="font-body-md text-body-md">بنك الأسئلة</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="exams" href="#"><span class="material-symbols-outlined text-[20px]">assignment</span><span class="font-body-md text-body-md">الاختبارات</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="al-ada-wal-tahsil" href="#"><span class="material-symbols-outlined text-[20px]">monitoring</span><span class="font-body-md text-body-md">الأداء والتحصيل</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl transition-all bg-primary-container text-on-primary font-bold shadow-sm" data-path="study-plan" href="#"><span class="material-symbols-outlined text-[20px]">calendar_month</span><span class="font-body-md text-body-md">خطة الدراسة</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="review" href="#"><span class="material-symbols-outlined text-[20px]">fact_check</span><span class="font-body-md text-body-md">المراجعة السريرية</span></a></nav><div class="px-space-sm py-space-xs mb-space-xs"><span class="font-label-caps text-label-caps text-on-surface-variant tracking-wider uppercase font-semibold">الأدوات الأكاديمية</span></div><nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary font-bold shadow-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="bookmarks" href="#"><span class="material-symbols-outlined text-[20px]">bookmark</span><span class="font-body-md text-body-md">المحفوظات</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="notes" href="#"><span class="material-symbols-outlined text-[20px]">edit_note</span><span class="font-body-md text-body-md">الملاحظات</span></a></nav></div><div class="p-space-md bg-surface-container-low flex flex-col gap-space-sm"><nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary font-bold shadow-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="help" href="#"><span class="material-symbols-outlined text-[20px]">help_center</span><span class="font-body-sm text-body-sm">المساعدة والدعم</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="settings" href="#"><span class="material-symbols-outlined text-[20px]">settings</span><span class="font-body-sm text-body-sm">الإعدادات</span></a></nav><div class="flex items-center gap-space-sm p-space-sm rounded-xl bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="relative"><div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="absolute bottom-0 left-0 w-2.5 h-2.5 bg-secondary rounded-full ring-2 ring-surface-container-lowest"></span></div><div class="flex flex-col flex-1 min-w-0"><span class="font-option-label text-option-label text-on-surface truncate">علي أحمد</span><span class="font-body-sm text-body-sm text-on-surface-variant truncate">طالب طب - مرحلة 5</span></div><button class="p-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[18px]">unfold_more</span></button></div></div></aside><div class="pr-72"><header class="fixed top-0 right-72 left-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-lg"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm"><span class="material-symbols-outlined text-[18px]">analytics</span><span class="text-on-surface font-semibold">لوحة المتابعة والتحصيل</span></div><div class="h-4 w-px bg-outline-variant"></div><div class="relative w-96"><span class="material-symbols-outlined absolute right-space-sm top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span><input class="w-full bg-surface-container-low text-on-surface placeholder:text-on-surface-variant font-body-sm text-body-sm rounded-xl pr-10 pl-space-md py-space-xs focus:outline-none focus:bg-surface-container transition-colors" placeholder="ابحث في الأسئلة، المواضيع، والامتحانات..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1 rounded-full"><span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span><span class="font-label-caps text-label-caps text-on-secondary-container font-semibold">تم الحفظ المتزامن</span></div><button class="px-space-sm py-1 rounded-lg bg-surface-container-low text-on-surface font-data-metric text-data-metric font-semibold hover:bg-surface-container transition-colors">EN</button><button class="relative p-space-xs rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span></button><div class="h-6 w-px bg-outline-variant"></div><div class="flex items-center gap-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="material-symbols-outlined text-on-surface-variant text-[18px] cursor-pointer">expand_more</span></div></div></header><main class="w-full pt-16 px-space-lg py-space-lg bg-surface min-h-screen"><div class="flex flex-col w-full gap-space-xl">
+<!-- Top Academic Breadcrumb & View Header -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">
+<span>إعدادات الحساب الأكاديمي</span>
+<span class="material-symbols-outlined text-[14px]">arrow_back</span>
+<span class="text-primary font-semibold">إدارة الاشتراك والوصول المؤسسي</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-on-surface font-bold tracking-tight">
+        الاشتراكات والاعتمادات الأكاديمية
+      </h1>
+<p class="font-body-md text-body-md text-on-surface-variant">
+        إدارة خطتك الحالية، تفعيل المنح الجامعية، وشفافية الفوترة الرقمية وفق المعايير السريرية.
+      </p>
+</div>
+<!-- Active Tier Quick Pill -->
+<div class="flex items-center gap-space-sm bg-surface-container-low px-space-md py-space-sm rounded-xl">
+<div class="w-8 h-8 rounded-lg bg-primary-container text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">workspace_premium</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">المستوى الحالي</span>
+<span class="font-option-label text-option-label text-primary font-bold">Premium السريري الشامل</span>
+</div>
+</div>
+</div>
+<!-- Primary Section: Active Plan & Billing Architecture (Bento Grid) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- Active Premium Subscription Card (Span 8) -->
+<div class="lg:col-span-8 flex flex-col justify-between bg-surface-container-lowest rounded-xl p-space-xl shadow-sm relative overflow-hidden">
+<div class="flex flex-col gap-space-lg">
+<!-- Card Header -->
+<div class="flex flex-wrap items-start justify-between gap-space-md">
+<div class="flex items-start gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[28px]">verified</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-sm">
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-bold">
+                  خطة Premium الأكاديمية (الفوترة الشهرية)
+                </h2>
+</div>
+<span class="font-data-metric text-data-metric text-on-surface-variant">
+                معرف الاشتراك: #MP-MED-8842-IQ
+              </span>
+</div>
+</div>
+<!-- Clinical Status Badge (Dynamic State Hook) -->
+<div class="flex items-center gap-space-xs bg-secondary-container text-on-secondary-container px-space-md py-1.5 rounded-full font-label-caps text-label-caps font-bold" id="subStatusBadge">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span id="subStatusText">نشط • تجديد تلقائي مفعل</span>
+</div>
+</div>
+<!-- Plan Diagnostics Summary -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-space-md p-space-md bg-surface-container-low rounded-xl">
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-label-caps text-on-surface-variant font-semibold">تاريخ الفوترة القادم</span>
+<span class="font-option-label text-option-label text-on-surface font-bold">20 أكتوبر 2026</span>
+<span class="font-label-caps text-label-caps text-secondary font-medium">(متبقي 26 يوماً)</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-label-caps text-on-surface-variant font-semibold">المبلغ الشهري المتفق</span>
+<span class="font-option-label text-option-label text-on-surface font-bold">18,000 د.ع <span class="font-body-sm text-body-sm text-on-surface-variant font-normal">/ شهر</span></span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">شامل الضرائب المباشرة</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-label-caps text-on-surface-variant font-semibold">حالة الوصول لبنك الأسئلة</span>
+<span class="font-option-label text-option-label text-on-surface font-bold">غير مقيد (Full Access)</span>
+<span class="font-label-caps text-label-caps text-primary font-medium">100% من الوحدات السريرية</span>
+</div>
+</div>
+<!-- Attached Payment Instrument -->
+<div class="flex flex-wrap items-center justify-between gap-space-md p-space-md bg-surface rounded-xl">
+<div class="flex items-center gap-space-md">
+<div class="w-11 h-7 bg-surface-container-highest rounded flex items-center justify-center font-data-metric text-data-metric font-bold text-on-surface-variant">
+              CARD
+            </div>
+<div class="flex flex-col">
+<span class="font-option-label text-option-label text-on-surface font-bold">بطاقة مسبقة الدفع تنتهي بـ •••• 4242</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">الصلاحية: 09/2028 | المعالجة المباشرة الآمنة</span>
+</div>
+</div>
+<button class="flex items-center gap-1.5 px-space-md py-space-xs text-primary font-option-label text-option-label font-bold rounded-lg hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">credit_card</span>
+<span>تحديث وسيلة الدفع</span>
+</button>
+</div>
+</div>
+<!-- Action Footer: Transparent & Respectful -->
+<div class="flex flex-wrap items-center justify-between gap-space-md pt-space-lg mt-space-md">
+<div class="flex items-center gap-space-sm">
+<button class="flex items-center gap-space-xs bg-primary text-on-primary px-space-lg py-space-sm rounded-lg font-option-label text-option-label font-bold hover:bg-primary-container transition-all shadow-sm">
+<span class="material-symbols-outlined text-[18px]">upgrade</span>
+<span>الترقية للفوترة السنوية (وفر 20%)</span>
+</button>
+<button class="hidden items-center gap-space-xs bg-secondary text-on-secondary px-space-lg py-space-sm rounded-lg font-option-label text-option-label font-bold hover:opacity-90 transition-all shadow-sm" id="toggleRestoreBtn">
+<span class="material-symbols-outlined text-[18px]">restart_alt</span>
+<span>إعادة تفعيل التجديد التلقائي</span>
+</button>
+</div>
+<!-- Distinct, Respectful Cancellation Button (No Dark Patterns) -->
+<button class="flex items-center gap-1.5 text-on-surface-variant hover:text-error px-space-md py-space-xs rounded-lg font-body-md text-body-md transition-colors underline-offset-4 hover:underline" id="openCancelDialogBtn">
+<span class="material-symbols-outlined text-[18px]">event_busy</span>
+<span>إلغاء التجديد التلقائي</span>
+</button>
+</div>
+</div>
+<!-- Active University Partnership Card (Span 4) -->
+<div class="lg:col-span-4 flex flex-col justify-between bg-surface-container-lowest rounded-xl p-space-xl shadow-sm relative overflow-hidden">
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-secondary font-bold uppercase tracking-wider bg-secondary-container/40 px-2 py-1 rounded">
+            شراكة معتمدة
+          </span>
+<span class="material-symbols-outlined text-secondary text-[24px]">school</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">
+            جامعة الملك سعود — كلية الطب
+          </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            حسابك الأكاديمي مسجل ضمن اتفاقية الترخيص السريري التابعة للعمادة التعليمية.
+          </p>
+</div>
+<div class="flex flex-col gap-space-xs p-space-md bg-surface-container-low rounded-xl">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">صلاحية الاعتماد:</span>
+<span class="font-data-metric text-data-metric text-on-surface font-bold">نوفمبر 2027</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">المقاعد المخصصة:</span>
+<span class="font-data-metric text-data-metric text-secondary font-bold">ترخيص طبي كامل</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">معرف الطالب المؤسسي:</span>
+<span class="font-data-metric text-data-metric text-on-surface">MED-KSU-442109</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-space-xs mt-space-md pt-space-md">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary">verified_user</span>
+<span>يتم التحقق تلقائياً عبر نطاق البريد الجامعي</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Cancellation Modal / Inline Card (Respectful Clinical Retention Flow) -->
+<div class="hidden flex flex-col bg-surface-container-lowest rounded-xl p-space-xl shadow-md transition-all" id="cancellationDrawer">
+<div class="flex flex-col gap-space-lg max-w-3xl">
+<div class="flex items-start gap-space-md">
+<div class="w-10 h-10 rounded-xl bg-error-container text-on-error-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px]">info</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="font-headline-lg text-headline-lg text-on-surface font-bold">
+            تأكيد إيقاف التجديد التلقائي لاشتراكك
+          </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+            سيبقى وصولك إلى كافة ميزات Premium مفعلاً حتى نهاية دورتك الحالية بتاريخ 
+            <span class="font-bold text-on-surface">20 أكتوبر 2026</span>. 
+            لن يتم خصم أي مبالغ مالية إضافية من بطاقتك.
+          </p>
+</div>
+</div>
+<!-- Data Safety Clinical Guarantee -->
+<div class="flex items-start gap-space-md p-space-md bg-surface-container rounded-xl">
+<span class="material-symbols-outlined text-primary text-[22px] shrink-0">clinical_notes</span>
+<div class="flex flex-col">
+<span class="font-option-label text-option-label text-primary font-bold">طمأنة البيانات السريرية والتحصيل</span>
+<p class="font-body-sm text-body-sm text-on-surface">
+            كافة ملاحظاتك المدونة، علاماتك المرجعية (Bookmarks)، ونتائج امتحاناتك السابقة ستبقى محفوظة بالكامل في سجل حسابك الأكاديمي ولن تحذف أبداً.
+          </p>
+</div>
+</div>
+<!-- Optional Non-Mandatory Survey -->
+<div class="flex flex-col gap-space-sm">
+<span class="font-option-label text-option-label text-on-surface font-semibold">
+          استبيان تحسين تجربة المنصة (اختياري بالكامل):
+        </span>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-space-sm">
+<label class="flex items-center gap-space-xs p-space-sm bg-surface-container-low rounded-lg cursor-pointer hover:bg-surface-container transition-colors">
+<input class="accent-primary" name="cancelReason" type="radio" value="cost"/>
+<span class="font-body-sm text-body-sm text-on-surface">ملاءمة التكلفة الشهرية</span>
+</label>
+<label class="flex items-center gap-space-xs p-space-sm bg-surface-container-low rounded-lg cursor-pointer hover:bg-surface-container transition-colors">
+<input class="accent-primary" name="cancelReason" type="radio" value="exam_finished"/>
+<span class="font-body-sm text-body-sm text-on-surface">أنهيت اختباري النهائي</span>
+</label>
+<label class="flex items-center gap-space-xs p-space-sm bg-surface-container-low rounded-lg cursor-pointer hover:bg-surface-container transition-colors">
+<input class="accent-primary" name="cancelReason" type="radio" value="other"/>
+<span class="font-body-sm text-body-sm text-on-surface">سبب دراسي أو زمني آخر</span>
+</label>
+</div>
+</div>
+<!-- Dialog Controls -->
+<div class="flex flex-wrap items-center gap-space-md pt-space-sm">
+<button class="px-space-lg py-space-sm bg-error text-on-error rounded-lg font-option-label text-option-label font-bold hover:opacity-90 transition-opacity" id="confirmCancelActionBtn">
+          تأكيد إيقاف التجديد التلقائي
+        </button>
+<button class="px-space-lg py-space-sm bg-surface-container text-on-surface rounded-lg font-option-label text-option-label font-bold hover:bg-surface-container-high transition-colors" id="dismissCancelDrawerBtn">
+          التراجع والاحتفاظ باشتراكي
+        </button>
+</div>
+</div>
+</div>
+<!-- Invoices and Redemption Section: Side by Side -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- Invoices History Table (Span 7) -->
+<div class="lg:col-span-7 flex flex-col bg-surface-container-lowest rounded-xl p-space-xl shadow-sm">
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">receipt_long</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">سجل الفواتير والإيصالات الأكاديمية</h3>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">3 عمليات معتمدة</span>
+</div>
+<!-- Concise Billing Table -->
+<div class="w-full overflow-x-auto">
+<table class="w-full text-right">
+<thead>
+<tr class="text-on-surface-variant font-label-caps text-label-caps uppercase bg-surface-container-low rounded-lg">
+<th class="py-2.5 px-3 rounded-r-lg">التاريخ</th>
+<th class="py-2.5 px-3">الوصف</th>
+<th class="py-2.5 px-3">القيمة</th>
+<th class="py-2.5 px-3">الحالة</th>
+<th class="py-2.5 px-3 rounded-l-lg text-left">الإيصال</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm text-on-surface">
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-3 font-data-metric text-data-metric">20 سبتمبر 2026</td>
+<td class="py-3 px-3 font-medium">اشتراك Premium الشهري</td>
+<td class="py-3 px-3 font-data-metric text-data-metric font-semibold">18,000 د.ع</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1 font-label-caps text-label-caps text-secondary font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                  مكتمل
+                </span>
+</td>
+<td class="py-3 px-3 text-left">
+<button class="inline-flex items-center gap-1 text-primary hover:underline font-data-metric text-data-metric font-semibold">
+<span>PDF</span>
+<span class="material-symbols-outlined text-[16px]">download</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-3 font-data-metric text-data-metric">20 أغسطس 2026</td>
+<td class="py-3 px-3 font-medium">اشتراك Premium الشهري</td>
+<td class="py-3 px-3 font-data-metric text-data-metric font-semibold">18,000 د.ع</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1 font-label-caps text-label-caps text-secondary font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                  مكتمل
+                </span>
+</td>
+<td class="py-3 px-3 text-left">
+<button class="inline-flex items-center gap-1 text-primary hover:underline font-data-metric text-data-metric font-semibold">
+<span>PDF</span>
+<span class="material-symbols-outlined text-[16px]">download</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-3 font-data-metric text-data-metric">20 يوليو 2026</td>
+<td class="py-3 px-3 font-medium">اشتراك Premium الشهري</td>
+<td class="py-3 px-3 font-data-metric text-data-metric font-semibold">18,000 د.ع</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1 font-label-caps text-label-caps text-secondary font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                  مكتمل
+                </span>
+</td>
+<td class="py-3 px-3 text-left">
+<button class="inline-flex items-center gap-1 text-primary hover:underline font-data-metric text-data-metric font-semibold">
+<span>PDF</span>
+<span class="material-symbols-outlined text-[16px]">download</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Institutional Access Redemption (Span 5) -->
+<div class="lg:col-span-5 flex flex-col justify-between bg-surface-container-lowest rounded-xl p-space-xl shadow-sm">
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">domain_verification</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">الوصول عبر كليتك أو جامعتك الطبية</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+          إذا حصلت على قسيمة اشتراك من عمادة كليتك أو برنامج تدريب الأطباء المقيمين، أدخل رمز الاعتماد الموحد لتطبيق المنحة فوراً.
+        </p>
+<!-- Redemption Input Group -->
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase font-semibold" for="institutionalCodeInput">
+            رمز الاعتماد المؤسسي (Institutional Voucher / Access Code)
+          </label>
+<div class="flex gap-space-xs">
+<input class="flex-1 bg-surface-container-low text-on-surface placeholder:text-on-surface-variant font-data-metric text-data-metric rounded-xl px-space-md py-space-sm focus:outline-none focus:bg-surface-container transition-colors uppercase tracking-wider" id="institutionalCodeInput" placeholder="مثال: KSU-MED-2026-X99" type="text"/>
+<button class="bg-primary text-on-primary font-option-label text-option-label font-bold px-space-lg py-space-sm rounded-xl hover:bg-primary-container transition-colors whitespace-nowrap" id="redeemVoucherBtn">
+              تفعيل الرمز والربط
+            </button>
+</div>
+<span class="hidden font-body-sm text-body-sm text-secondary font-medium mt-1" id="redeemFeedback">
+            ✓ تم التحقق بنجاح وتمديد الترخيص الأكاديمي.
+          </span>
+</div>
+</div>
+<div class="p-space-sm bg-surface rounded-lg mt-space-md flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">support_agent</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+          هل تواجه مشكلة في تفعيل كود الجامعة؟ تواصل مع 
+          <a class="text-primary font-semibold hover:underline" href="#">مكتب الدعم الأكاديمي المباشر</a>.
+        </span>
+</div>
+</div>
+</div>
+<!-- Contextual Locked Content States (Respectful, Transparent, Zero-Interruption) -->
+<div class="flex flex-col gap-space-lg pt-space-md">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs font-label-caps text-label-caps text-secondary font-bold uppercase">
+<span class="material-symbols-outlined text-[16px]">lock_open</span>
+<span>حالات المحتوى المقفل الأنيقة والمسؤولة (Locked States)</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-bold">
+        نماذج الوصول المشروط للوحدات المتقدمة
+      </h2>
+<p class="font-body-md text-body-md text-on-surface-variant">
+        تصميم هادئ ومحترم يشرح بدقة القيمة الأكاديمية للمحتوى المخصص دون اللجوء للمؤقتات التنازلية أو تكتيكات الضغط النفسي.
+      </p>
+</div>
+<!-- Institutional Constitutional Pledge -->
+<div class="flex items-center gap-space-md p-space-md bg-surface-container-high rounded-xl text-on-surface">
+<span class="material-symbols-outlined text-primary text-[24px] shrink-0">gavel</span>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm w-full">
+<div class="flex flex-col">
+<span class="font-option-label text-option-label font-bold text-primary">الميثاق الدستوري لطلبـة منصة نبض (Zero Mid-Session Paywalls)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+            نلتزم قطعياً بعدم مقاطعة الطالب بإعلانات أو حجب وصول أثناء انخراطه في حل بنك الأسئلة أو قراءة التفسيرات السريرية. الوصول المقفل يظهر فقط كبوابة مستقلة قبل بدء البلوك.
+          </span>
+</div>
+<span class="font-label-caps text-label-caps text-secondary font-bold bg-surface-container-lowest px-space-sm py-1 rounded whitespace-nowrap">
+          بروتوكول معتمد
+        </span>
+</div>
+</div>
+<!-- Locked Content Applied Demos (2 Cards Grid) -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-space-lg">
+<!-- Locked Showcase Card 1: Full Mock Exam Block -->
+<div class="flex flex-col justify-between bg-surface-container-lowest rounded-xl p-space-xl shadow-sm relative overflow-hidden">
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<span class="flex items-center gap-1 font-label-caps text-label-caps text-on-surface-variant uppercase font-semibold bg-surface-container-low px-2 py-1 rounded">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+              محتوى اختبارات النخبة
+            </span>
+<span class="font-data-metric text-data-metric text-on-surface-variant">Block 05 / SMLE-Style</span>
+</div>
+<!-- Title & Overview -->
+<div class="flex flex-col gap-1">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">
+              الاختبار التجريبي الشامل 05 (Mock Block 05) — باقة Premium
+            </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              محاكاة واقعية متطابقة لظروف اختبار التراخيص الطبية النهائي، تم تدقيق صياغتها عبر لجنة سريرية متخصصة.
+            </p>
+</div>
+<!-- Value Breakdown Badges -->
+<div class="grid grid-cols-3 gap-space-xs p-space-sm bg-surface-container-low rounded-xl text-center">
+<div class="flex flex-col">
+<span class="font-option-label text-option-label text-primary font-bold">100 سؤال</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">حالات سريرية ممتدة</span>
+</div>
+<div class="flex flex-col">
+<span class="font-option-label text-option-label text-primary font-bold">120 دقيقة</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">محاكاة زمنية قياسية</span>
+</div>
+<div class="flex flex-col">
+<span class="font-option-label text-option-label text-secondary font-bold">تفسير كامل</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">مدعوم بالأدلة والمراجع</span>
+</div>
+</div>
+<!-- Academic Image Preview Asset -->
+<div class="w-full h-32 rounded-xl overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Close up photograph of medical students in white coats discussing clinical exam cases around a modern diagnostic tablet inside a quiet medical library, soft natural sunlight, calm and focused academic atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDXXWN_YFNmbPhP6XfLD1BE40hALdyOAuFxW2_0W0tsbsXqE5RaFc4ob2qeTa08z9USOAutIES9l2KUitZgI3GLieuCNtmsKlIJEusLL04O26E5Yfhd1Clt57W_8nEmUL3GePhn7yhcAl8XCK-ClKzAjPF7MtSQVCGWIQ46619icm1zN7kmD8GHEmHg0BZUwwuauwYfJtNaMUfAn4krOtfW6dcbYMuSiXfS_mNQ4QbdkvPN6NioEmvlw"/>
+<div class="absolute inset-0 bg-primary/20 backdrop-blur-[2px] flex items-center justify-center">
+<div class="bg-surface-container-lowest/90 px-space-md py-1.5 rounded-full flex items-center gap-space-xs text-primary font-option-label text-option-label font-bold shadow-sm">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>فحص سريري عالي الصعوبة</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Locked Action Footprint -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm pt-space-lg mt-space-md">
+<button class="flex items-center gap-space-xs bg-primary text-on-primary px-space-lg py-space-sm rounded-lg font-option-label text-option-label font-bold hover:bg-primary-container transition-all">
+<span class="material-symbols-outlined text-[18px]">key</span>
+<span>الترقية لـ Premium وفتح الاختبار</span>
+</button>
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-primary font-body-sm text-body-sm font-semibold transition-colors">
+<span>استعراض الاختبارات المجانية المتاحة</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Locked Showcase Card 2: Advanced Forensic Time Analytics -->
+<div class="flex flex-col justify-between bg-surface-container-lowest rounded-xl p-space-xl shadow-sm relative overflow-hidden">
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<span class="flex items-center gap-1 font-label-caps text-label-caps text-on-surface-variant uppercase font-semibold bg-surface-container-low px-2 py-1 rounded">
+<span class="material-symbols-outlined text-[14px]">query_stats</span>
+              تحليلات سريرية متقدمة
+            </span>
+<span class="font-data-metric text-data-metric text-on-surface-variant">Forensic Diagnostic Engine</span>
+</div>
+<!-- Title & Overview -->
+<div class="flex flex-col gap-1">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">
+              مصفوفة التحليل الجنائي للوقت ومكامن الضعف (Forensic Time Analytics)
+            </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              تحليل عميق لسلوكك التشخيصي: يكشف زمن التردد في استبعاد المشتتات الخاطئة والمواضيع السريرية المستنزفة لوقتك.
+            </p>
+</div>
+<!-- Rich Visual Graphic: Mock Data Matrix -->
+<div class="p-space-md bg-surface-container-low rounded-xl flex flex-col gap-space-sm">
+<div class="flex items-center justify-between font-label-caps text-label-caps text-on-surface-variant">
+<span>توزيع استهلاك الثواني لكل خيار تشخيصي (Distractor Latency)</span>
+<span class="text-primary font-bold">معاينة تمثيلية</span>
+</div>
+<!-- Inline SVG Sparkline / Bar Graph Visualization -->
+<svg class="w-full h-20 text-primary" fill="none" viewbox="0 0 300 70" xmlns="http://www.w3.org/2000/svg">
+<!-- Grid Lines -->
+<line stroke="currentColor" stroke-dasharray="2 2" stroke-opacity="0.15" x1="0" x2="300" y1="60" y2="60"></line>
+<line stroke="currentColor" stroke-dasharray="2 2" stroke-opacity="0.15" x1="0" x2="300" y1="30" y2="30"></line>
+<!-- Latency Area Curve -->
+<path d="M 0,55 Q 40,20 80,45 T 160,15 T 240,40 T 300,10 L 300,60 L 0,60 Z" fill="currentColor" fill-opacity="0.08"></path>
+<path d="M 0,55 Q 40,20 80,45 T 160,15 T 240,40 T 300,10" stroke="currentColor" stroke-linecap="round" stroke-width="2.5"></path>
+<!-- Data Points with High Contrast -->
+<circle cx="80" cy="45" fill="currentColor" r="3.5"></circle>
+<circle cx="160" cy="15" fill="currentColor" r="3.5"></circle>
+<circle cx="240" cy="40" fill="currentColor" r="3.5"></circle>
+</svg>
+<div class="flex items-center justify-between font-label-caps text-label-caps text-on-surface-variant font-medium">
+<span>أمراض الباطنية: 42 ث/سؤال</span>
+<span>الجراحة العامة: 78 ث/سؤال (منطقة بطء)</span>
+<span>طب الأطفال: 36 ث/سؤال</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs font-body-sm text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px] text-secondary">psychology</span>
+<span>تتضمن مؤشر الدقة العكسية (Confidence vs. Accuracy Matrix)</span>
+</div>
+</div>
+<!-- Locked Action Footprint -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm pt-space-lg mt-space-md">
+<button class="flex items-center gap-space-xs bg-primary text-on-primary px-space-lg py-space-sm rounded-lg font-option-label text-option-label font-bold hover:bg-primary-container transition-all">
+<span class="material-symbols-outlined text-[18px]">insights</span>
+<span>تفعيل مصفوفة التحليل المتقدم</span>
+</button>
+<span class="font-label-caps text-label-caps text-on-surface-variant">متاحة لجميع مشتركي خطة Premium</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Client-side Interactive Behavior -->
+<script>
+    (function initSubscriptionInteractions() {
+      const openCancelDialogBtn = document.getElementById('openCancelDialogBtn');
+      const dismissCancelDrawerBtn = document.getElementById('dismissCancelDrawerBtn');
+      const confirmCancelActionBtn = document.getElementById('confirmCancelActionBtn');
+      const cancellationDrawer = document.getElementById('cancellationDrawer');
+      const subStatusBadge = document.getElementById('subStatusBadge');
+      const subStatusText = document.getElementById('subStatusText');
+      const toggleRestoreBtn = document.getElementById('toggleRestoreBtn');
+      const redeemVoucherBtn = document.getElementById('redeemVoucherBtn');
+      const institutionalCodeInput = document.getElementById('institutionalCodeInput');
+      const redeemFeedback = document.getElementById('redeemFeedback');
+
+      // Open Cancellation Flow
+      if (openCancelDialogBtn && cancellationDrawer) {
+        openCancelDialogBtn.addEventListener('click', () => {
+          cancellationDrawer.classList.remove('hidden');
+          cancellationDrawer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+      }
+
+      // Dismiss Cancellation
+      if (dismissCancelDrawerBtn && cancellationDrawer) {
+        dismissCancelDrawerBtn.addEventListener('click', () => {
+          cancellationDrawer.classList.add('hidden');
+        });
+      }
+
+      // Confirm Cancellation (Respectful, immediate transparent visual feedback)
+      if (confirmCancelActionBtn && cancellationDrawer) {
+        confirmCancelActionBtn.addEventListener('click', () => {
+          cancellationDrawer.classList.add('hidden');
+          
+          // Switch subscription status badge
+          if (subStatusBadge && subStatusText) {
+            subStatusBadge.className = 'flex items-center gap-space-xs bg-surface-container-high text-on-surface px-space-md py-1.5 rounded-full font-label-caps text-label-caps font-bold';
+            subStatusText.textContent = 'تم إيقاف التجديد — متاح حتى 20 أكتوبر';
+          }
+
+          // Hide cancellation trigger and display Reactivate action
+          if (openCancelDialogBtn) openCancelDialogBtn.classList.add('hidden');
+          if (toggleRestoreBtn) toggleRestoreBtn.classList.remove('hidden');
+        });
+      }
+
+      // Restore / Reactivate Auto-Renewal
+      if (toggleRestoreBtn) {
+        toggleRestoreBtn.addEventListener('click', () => {
+          toggleRestoreBtn.classList.add('hidden');
+          if (openCancelDialogBtn) openCancelDialogBtn.classList.remove('hidden');
+
+          if (subStatusBadge && subStatusText) {
+            subStatusBadge.className = 'flex items-center gap-space-xs bg-secondary-container text-on-secondary-container px-space-md py-1.5 rounded-full font-label-caps text-label-caps font-bold';
+            subStatusText.textContent = 'نشط • تجديد تلقائي مفعل';
+          }
+        });
+      }
+
+      // Institutional Voucher Redemption Simulation
+      if (redeemVoucherBtn && institutionalCodeInput && redeemFeedback) {
+        redeemVoucherBtn.addEventListener('click', () => {
+          const val = institutionalCodeInput.value.trim();
+          if (val.length > 3) {
+            redeemFeedback.classList.remove('hidden');
+            institutionalCodeInput.classList.add('bg-secondary-container/20');
+            redeemVoucherBtn.disabled = true;
+            redeemVoucherBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            redeemVoucherBtn.textContent = 'تم الاعتماد';
+          } else {
+            institutionalCodeInput.focus();
+          }
+        });
+      }
+    })();
+  </script>
+</div></main></div></body></html>

@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "secondary-container": "#99efe5",
+          "on-tertiary-fixed-variant": "#661aa3",
+          "surface": "#faf8ff",
+          "inverse-surface": "#283044",
+          "tertiary-container": "#5f0d9c",
+          "surface-container-lowest": "#ffffff",
+          "surface-bright": "#faf8ff",
+          "surface-container-high": "#e2e7ff",
+          "inverse-on-surface": "#eef0ff",
+          "error": "#ba1a1a",
+          "on-surface": "#131b2e",
+          "on-primary": "#ffffff",
+          "on-primary-fixed-variant": "#264191",
+          "background": "#faf8ff",
+          "primary-container": "#1e3a8a",
+          "on-tertiary": "#ffffff",
+          "surface-dim": "#d2d9f4",
+          "surface-container": "#eaedff",
+          "on-background": "#131b2e",
+          "tertiary-fixed-dim": "#dfb7ff",
+          "on-tertiary-fixed": "#2d0050",
+          "tertiary": "#410070",
+          "secondary-fixed": "#9cf2e8",
+          "outline": "#757682",
+          "on-surface-variant": "#444651",
+          "on-secondary-fixed": "#00201d",
+          "tertiary-fixed": "#f1dbff",
+          "on-secondary": "#ffffff",
+          "on-secondary-fixed-variant": "#00504a",
+          "on-primary-fixed": "#00164e",
+          "primary": "#00236f",
+          "surface-container-highest": "#dae2fd",
+          "secondary-fixed-dim": "#80d5cb",
+          "on-error-container": "#93000a",
+          "surface-variant": "#dae2fd",
+          "error-container": "#ffdad6",
+          "primary-fixed": "#dce1ff",
+          "outline-variant": "#c5c5d3",
+          "on-tertiary-container": "#cc93ff",
+          "on-error": "#ffffff",
+          "on-primary-container": "#90a8ff",
+          "inverse-primary": "#b6c4ff",
+          "secondary": "#006a63",
+          "surface-tint": "#4059aa",
+          "primary-fixed-dim": "#b6c4ff",
+          "surface-container-low": "#f2f3ff",
+          "on-secondary-container": "#006f67"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+        "spacing": {
+          "space-lg": "1.5rem",
+          "space-sm": "0.5rem",
+          "margin": "2rem",
+          "gutter-mobile": "0.75rem",
+          "space-xs": "0.25rem",
+          "space-xl": "2rem",
+          "gutter": "1.5rem",
+          "margin-mobile": "1rem",
+          "space-md": "1rem"
+        },
+        "fontFamily": {
+          "headline-xl-mobile": [
+            "Noto Sans"
+          ],
+          "headline-sm": [
+            "Noto Sans"
+          ],
+          "headline-lg": [
+            "Noto Sans"
+          ],
+          "label-caps": [
+            "Inter"
+          ],
+          "headline-xl": [
+            "Noto Sans"
+          ],
+          "body-md": [
+            "Noto Sans"
+          ],
+          "body-sm": [
+            "Noto Sans"
+          ],
+          "data-metric": [
+            "Inter"
+          ],
+          "option-label": [
+            "Inter"
+          ],
+          "vignette-text": [
+            "Noto Sans"
+          ]
+        },
+        "fontSize": {
+          "headline-xl-mobile": [
+            "24px",
+            {
+              "lineHeight": "38px",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-sm": [
+            "18px",
+            {
+              "lineHeight": "30px",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-lg": [
+            "22px",
+            {
+              "lineHeight": "36px",
+              "fontWeight": "600"
+            }
+          ],
+          "label-caps": [
+            "11px",
+            {
+              "lineHeight": "16px",
+              "letterSpacing": "0.05em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-xl": [
+            "30px",
+            {
+              "lineHeight": "48px",
+              "fontWeight": "700"
+            }
+          ],
+          "body-md": [
+            "15px",
+            {
+              "lineHeight": "26px",
+              "fontWeight": "400"
+            }
+          ],
+          "body-sm": [
+            "13px",
+            {
+              "lineHeight": "22px",
+              "fontWeight": "400"
+            }
+          ],
+          "data-metric": [
+            "13px",
+            {
+              "lineHeight": "18px",
+              "letterSpacing": "0.02em",
+              "fontWeight": "500"
+            }
+          ],
+          "option-label": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "fontWeight": "700"
+            }
+          ],
+          "vignette-text": [
+            "17px",
+            {
+              "lineHeight": "32px",
+              "fontWeight": "400"
+            }
+          ]
+        }
+      },
+    },
+  }</script></head><body class="bg-background font-body-md text-on-surface"><aside class="fixed right-0 top-0 h-full w-72 bg-surface-container-lowest z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="h-16 px-space-md flex items-center justify-between gap-space-sm bg-surface-container-low/50"><div class="flex items-center gap-space-sm"><div class="w-9 h-9 rounded-xl bg-primary-container text-on-primary flex items-center justify-center"><span class="material-symbols-outlined text-[20px]">vital_signs</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary tracking-tight">منصة نبض الطبية</span><span class="font-label-caps text-label-caps text-on-surface-variant uppercase">MedPulse Academic</span></div></div></div><div class="px-space-md py-space-sm"><div class="px-space-xs py-space-xs"><span class="font-label-caps text-label-caps text-on-surface-variant uppercase">الوحدات الأكاديمية</span></div><nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary font-headline-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="main-dashboard" href="#"><span class="material-symbols-outlined text-[20px]">dashboard</span><span class="font-body-md text-body-md">الرئيسية</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl transition-all bg-primary-container text-on-primary font-headline-sm" data-path="question-bank" href="#"><span class="material-symbols-outlined text-[20px]">quiz</span><span class="font-body-md text-body-md">بنك الأسئلة</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="mock-exams" href="#"><span class="material-symbols-outlined text-[20px]">assignment</span><span class="font-body-md text-body-md">الاختبارات</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="performance-analytics" href="#"><span class="material-symbols-outlined text-[20px]">monitoring</span><span class="font-body-md text-body-md">الأداء والتحصيل</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="study-planner" href="#"><span class="material-symbols-outlined text-[20px]">calendar_month</span><span class="font-body-md text-body-md">خطة الدراسة</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="clinical-review" href="#"><span class="material-symbols-outlined text-[20px]">clinical_notes</span><span class="font-body-md text-body-md">المراجعة السريرية</span></a></nav></div><div class="px-space-md py-space-xs"><div class="px-space-xs py-space-xs"><span class="font-label-caps text-label-caps text-on-surface-variant uppercase">الأدوات والمراجع</span></div><nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary font-headline-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="bookmarks-vault" href="#"><span class="material-symbols-outlined text-[20px]">bookmark</span><span class="font-body-md text-body-md">المحفوظات</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="clinical-notes" href="#"><span class="material-symbols-outlined text-[20px]">edit_note</span><span class="font-body-md text-body-md">الملاحظات</span></a></nav></div></div><div class="flex flex-col gap-space-xs p-space-md bg-surface-container-low/40"><nav class="flex flex-col gap-1 mb-space-xs" data-active-classes="bg-primary-container text-on-primary font-headline-sm"><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="help-center" href="#"><span class="material-symbols-outlined text-[18px]">help_outline</span><span class="font-body-sm text-body-sm">المساعدة والدعم</span></a><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="system-settings" href="#"><span class="material-symbols-outlined text-[18px]">settings</span><span class="font-body-sm text-body-sm">الإعدادات</span></a></nav><div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col"><span class="font-headline-sm text-[13px] leading-tight text-on-surface font-semibold">علي أحمد</span><span class="font-label-caps text-[10px] text-on-surface-variant">طالب طب • مرحلة 5</span></div></div><button aria-label="تسجيل الخروج" class="p-space-xs text-on-surface-variant hover:text-primary transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">logout</span></button></div></div></aside><div class="pr-72"><header class="fixed top-0 right-72 left-0 h-16 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-xl"><div class="flex items-center gap-space-md flex-1 max-w-xl"><div class="relative w-full"><span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span><input class="w-full bg-surface-container-lowest text-on-surface font-body-sm text-body-sm pr-10 pl-space-md py-space-xs rounded-full outline-none ring-0 placeholder:text-on-surface-variant/70 shadow-[0_1px_8px_rgba(0,0,0,0.04)] focus:bg-surface-container-low transition-all" placeholder="ابحث في الأسئلة، المواضيع، والامتحانات..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="hidden md:flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-secondary-container/40 text-on-secondary-container font-data-metric text-[12px]"><span class="material-symbols-outlined text-[16px]">cloud_done</span><span>تم الحفظ المتزامن</span></div><button class="px-space-sm py-1 rounded-full bg-surface-container-high text-on-surface font-label-caps text-label-caps hover:bg-surface-container-highest transition-colors" type="button">EN</button><div class="relative flex items-center"><button aria-label="الإشعارات" class="p-space-xs rounded-full text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all relative" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-error"></span></button></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="relative pt-16 bg-background min-h-screen px-space-xl py-space-lg"><div class="flex flex-col w-full">
+<!-- Exam Persistent Top Session Bar -->
+<header class="bg-surface-container-lowest shadow-sm rounded-xl p-space-md mb-space-lg">
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-space-md">
+<!-- Session Identification & Mode Badge -->
+<div class="flex items-center gap-space-md">
+<div class="w-11 h-11 rounded-xl bg-primary-container text-on-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[24px]">assignment_turned_in</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface">محاكاة الاختبار الشامل (SMLE Mock Block 1)</span>
+<span class="px-space-xs py-0.5 rounded bg-primary-container/10 text-primary font-label-caps text-label-caps">وضع الاختبار المحاكي الرسمي</span>
+</div>
+<div class="flex items-center gap-space-md mt-0.5 text-on-surface-variant font-body-sm text-body-sm">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span>
+<span>السؤال <strong class="font-bold text-on-surface">24</strong> من أصل <strong class="font-bold text-on-surface">40</strong></span>
+</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="flex items-center gap-1.5 text-secondary">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="font-data-metric text-data-metric">تم الحفظ التلقائي المباشر</span>
+</span>
+</div>
+</div>
+</div>
+<!-- Live Clinical Timer & Exam Quick Tools -->
+<div class="flex flex-wrap items-center gap-space-sm justify-between lg:justify-end">
+<!-- Precision Countdown Module -->
+<div class="flex items-center gap-space-xs px-space-md py-space-xs rounded-xl bg-surface-container-high text-on-surface shadow-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">timer</span>
+<div class="flex flex-col text-right">
+<span class="font-label-caps text-[10px] text-on-surface-variant leading-none">الوقت المتبقي للجلسة</span>
+<span class="font-data-metric text-[17px] font-bold text-primary tracking-wider" dir="ltr">34 : 18</span>
+</div>
+</div>
+<!-- Reference Tools Buttons -->
+<div class="flex items-center gap-space-xs">
+<button class="flex items-center gap-1 px-space-sm py-2 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface font-body-sm text-body-sm shadow-sm transition-colors" id="btn-labs-modal" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary">chips</span>
+<span>القيم المخبرية</span>
+</button>
+<button class="flex items-center gap-1 px-space-sm py-2 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface font-body-sm text-body-sm shadow-sm transition-colors" id="btn-calc-modal" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary">calculate</span>
+<span>الحاسبة الطبية</span>
+</button>
+<!-- Flag Toggle Trigger (Active in context) -->
+<button class="flex items-center gap-1 px-space-sm py-2 rounded-xl bg-tertiary-fixed text-on-tertiary-fixed font-body-sm text-body-sm shadow-sm transition-colors" id="btn-flag-toggle" type="button">
+<span class="material-symbols-outlined text-[18px] text-tertiary" style="font-variation-settings: 'FILL' 1;">flag</span>
+<span class="font-semibold text-tertiary">مُعَلّم للمراجعة</span>
+</button>
+<!-- Critical Finish Exam Trigger -->
+<button class="flex items-center gap-1 px-space-sm py-2 rounded-xl bg-error-container/60 hover:bg-error-container text-on-error-container font-body-sm text-body-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">logout</span>
+<span>إنهاء البلوك</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Exam Progress Track -->
+<div class="w-full bg-surface-container-high h-1.5 rounded-full mt-space-md overflow-hidden flex">
+<div class="bg-primary h-full transition-all duration-300" style="width: 60%;"></div>
+</div>
+</header>
+<!-- Main Split Architecture: 68% Question Workspace / 32% Navigation Matrix -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- Question Workspace (RTL First Flow) -->
+<section class="lg:col-span-8 flex flex-col gap-space-lg">
+<!-- Vignette & Data Card -->
+<article class="bg-surface-container-lowest rounded-xl shadow-sm p-space-xl flex flex-col gap-space-lg">
+<!-- Question Meta & System Badges -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm pb-space-sm bg-surface-container-low/40 px-space-md py-space-xs rounded-xl">
+<div class="flex items-center gap-space-xs">
+<span class="px-space-xs py-0.5 rounded bg-primary-container text-on-primary font-data-metric text-[12px] font-bold">Q-5119</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant font-semibold">حالة سريرية مركبة • سياق استشفائي</span>
+</div>
+<div class="flex items-center gap-1.5 text-on-surface-variant font-body-sm text-[12px]">
+<span class="material-symbols-outlined text-[16px] text-primary">local_hospital</span>
+<span>الطب الباطني</span>
+<span>←</span>
+<span>أمراض الكلى والغدد الصماء</span>
+</div>
+</div>
+<!-- Clinical Vignette Body -->
+<div class="flex flex-col gap-space-sm text-on-surface font-vignette-text text-vignette-text leading-loose">
+<p>
+            سيدة تبلغ من العمر 58 عاماً، تراجع العيادة الباطنية بعد تحويلها من عيادة الرعاية الأولية بسبب شعور متزايد بالوهن العام، التعب المزمن، غثيان متكرر، ونوبات من التشوش الذهني الخفيف على مدار الأسبوعين الماضيين.
+          </p>
+<div class="bg-surface-container-low/60 rounded-xl p-space-md my-space-xs text-on-surface">
+<span class="font-headline-sm text-[15px] font-bold text-primary block mb-1">السوابق المرضية والدوائية:</span>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              تعاني من سرطان الثدي المنتشر مع نقائل عظمية (<span class="font-data-metric font-semibold text-on-surface" dir="ltr">Metastatic breast cancer</span>) شُخص قبل 8 أشهر، وتتلقى علاجاً هرمونياً مضاداً للأستروجين. المريضة لا تدخن، وتنفي تناول أي مستحضرات عشبية أو أدوية مدرة للبول.
+            </p>
+</div>
+<p>
+<strong class="text-on-surface font-semibold">الفحص السريري:</strong> المريضة تبدو هزيلة وجافة الأغشية المخاطية مع تراجع مرونة الجلد (<span class="font-data-metric text-on-surface" dir="ltr">Signs of moderate dehydration</span>). ضغط الدم <span class="font-data-metric" dir="ltr">118/74 mmHg</span>، معدل النبض <span class="font-data-metric" dir="ltr">84 bpm</span> منتظم، معدل التنفس <span class="font-data-metric" dir="ltr">16/min</span>، ودرجة الحرارة <span class="font-data-metric" dir="ltr">37.1 °C</span>. لا يوجد انتفاخ في الوريد الوداجي، وفحص البطن سليم ورخو دون مضض أو تضخم بالأحشاء. الفحص العصبي يُظهر بطء الاستجابة المنعكسة بالأطراف وتشتت الانتباه مع غياب تام لأي عجز عصبي بؤري.
+          </p>
+<p class="text-on-surface-variant font-body-md text-body-md">
+            تم سحب عينات الدم الوريدي الشاملة فوراً في العيادة، وكانت نتائج الفحوصات المخبرية كالآتي:
+          </p>
+</div>
+<!-- High-Fidelity Clinical Laboratory Table -->
+<div class="overflow-x-auto rounded-xl bg-surface-container-low/30 p-space-xs shadow-inner">
+<div class="flex items-center justify-between px-space-md py-space-xs mb-1">
+<div class="flex items-center gap-space-xs text-primary">
+<span class="material-symbols-outlined text-[18px]">table_chart</span>
+<span class="font-headline-sm text-[14px] font-bold">لوحة الفحوصات الكيميائية الحيوية والأملاح (Serum Chemistry Panel)</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant">المرجع المعتمد: SMLE Normal Reference Limits</span>
+</div>
+<table class="w-full text-right border-collapse font-body-sm text-body-sm">
+<thead>
+<tr class="bg-surface-container-high text-on-surface font-semibold text-[13px]">
+<th class="py-2.5 px-space-md rounded-r-lg">الفحص المخبري</th>
+<th class="py-2.5 px-space-md">نتيجة المريض</th>
+<th class="py-2.5 px-space-md">المجال المرجعي الطبيعي</th>
+<th class="py-2.5 px-space-md rounded-l-lg">الوحدة</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container">
+<!-- Item 1: High Calcium (Subtly highlighted) -->
+<tr class="bg-error-container/30 hover:bg-error-container/40 transition-colors">
+<td class="py-2.5 px-space-md font-semibold text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-error">arrow_upward</span>
+<span>الكالسيوم الكلي في المصل (Serum Total Calcium)</span>
+</td>
+<td class="py-2.5 px-space-md font-data-metric text-[14px] font-bold text-error">13.8</td>
+<td class="py-2.5 px-space-md font-data-metric text-on-surface-variant" dir="ltr">8.5 – 10.5</td>
+<td class="py-2.5 px-space-md font-data-metric text-on-surface-variant">mg/dL</td>
+</tr>
+<!-- Item 2: Ionized Calcium -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
+<td class="py-2.5 px-space-md font-medium text-on-surface">الكالسيوم المتأين (Ionized Calcium)</td>
+<td class="py-2.5 px-space-md font-data-metric text-[14px] font-bold text-error">1.82</td>
+<td class="py-2.5 px-space-md font-data-metric text-on-surface-variant" dir="ltr">1.15 – 1.33</td>
+<td class="py-2.5 px-space-md font-data-metric text-on-surface-variant">mmol/L</td>
+</tr>
+<!-- Item 3: Serum Albumin -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
+<td class="py-2.5 px-space-md font-medium text-on-surface">الألبومين في المصل (Serum Albumin)</td>
+<td class="py-2.5 px-space-md font-data-metric text-on-surface font-semibold">3.2</td>
+<td class="py-2.5 px-space-md font-data-metric text-on-surface-variant" dir="ltr">3.5 – 5.0</td>
+<td class="py-2.5 px-space-md font-data-metric text-on-surface-variant">g/dL</td>
+</tr>
+<!-- Item 4: Creatinine -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
+<td class="py-2.5 px-space-md font-medium text-on-surface">الكرياتينين (Serum Creatinine)</td>
+<td class="py-2.5 px-space-md font-data-metric text-on-surface font-semibold">1.6</td>
+<td class="py-2.5 px-space-md font-data-metric text-on-surface-variant" dir="ltr">0.6 – 1.1</td>
+<td class="py-2.5 px-space-md font-data-metric text-on-surface-variant">mg/dL</td>
+</tr>
+<!-- Item 5: BUN -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
+<td class="py-2.5 px-space-md font-medium text-on-surface">نيتروجين يوريا الدم (BUN)</td>
+<td class="py-2.5 px-space-md font-data-metric text-on-surface font-semibold">38</td>
+<td class="py-2.5 px-space-md font-data-metric text-on-surface-variant" dir="ltr">7 – 20</td>
+<td class="py-2.5 px-space-md font-data-metric text-on-surface-variant">mg/dL</td>
+</tr>
+<!-- Item 6: Sodium -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
+<td class="py-2.5 px-space-md font-medium text-on-surface">الصوديوم (Serum Sodium)</td>
+<td class="py-2.5 px-space-md font-data-metric text-on-surface">141</td>
+<td class="py-2.5 px-space-md font-data-metric text-on-surface-variant" dir="ltr">135 – 145</td>
+<td class="py-2.5 px-space-md font-data-metric text-on-surface-variant">mmol/L</td>
+</tr>
+<!-- Item 7: Potassium -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
+<td class="py-2.5 px-space-md font-medium text-on-surface">البوتاسيوم (Serum Potassium)</td>
+<td class="py-2.5 px-space-md font-data-metric text-on-surface">4.1</td>
+<td class="py-2.5 px-space-md font-data-metric text-on-surface-variant" dir="ltr">3.5 – 5.0</td>
+<td class="py-2.5 px-space-md font-data-metric text-on-surface-variant">mmol/L</td>
+</tr>
+<!-- Item 8: Phosphate -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
+<td class="py-2.5 px-space-md font-medium text-on-surface">الفوسفات غير العضوي (Serum Phosphate)</td>
+<td class="py-2.5 px-space-md font-data-metric text-on-surface">2.1</td>
+<td class="py-2.5 px-space-md font-data-metric text-on-surface-variant" dir="ltr">2.5 – 4.5</td>
+<td class="py-2.5 px-space-md font-data-metric text-on-surface-variant">mg/dL</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Clinical Question Stem -->
+<div class="bg-surface-container-low p-space-md rounded-xl">
+<p class="font-headline-sm text-headline-sm text-on-surface font-bold">
+            بعد البدء الفوري بالإماهة الوريدية القوية بمحلول ملحي طبيعي (IV Normal Saline Rehydration)، ما هو التدبير الدوائي النوعي الموصى به تالياً لخفض مستويات الكالسيوم وتثبيط ارتشاف العظم العظمي على المدى المتوسط والطويل في هذه المريضة؟
+          </p>
+</div>
+<!-- Strictly Neutral Exam Multiple Choice Options (A-E) -->
+<div class="flex flex-col gap-space-sm pt-space-xs" id="exam-options-container">
+<!-- Option A (Unselected) -->
+<label class="group relative flex items-center justify-between p-space-md rounded-xl bg-surface-container-lowest hover:bg-surface-container-low cursor-pointer shadow-sm transition-all duration-150">
+<div class="flex items-center gap-space-md">
+<span class="w-8 h-8 rounded-lg bg-surface-container-high text-on-surface font-option-label text-option-label flex items-center justify-center font-bold">
+                أ
+              </span>
+<span class="font-body-md text-body-md text-on-surface leading-normal">
+                فيوروسيمايد وريدياً بجرعات عالية (<span class="font-data-metric" dir="ltr">High-dose IV Furosemide</span>)
+              </span>
+</div>
+<input class="w-4 h-4 text-primary focus:ring-0 focus:ring-offset-0 cursor-pointer" name="exam_q24" type="radio" value="A"/>
+</label>
+<!-- Option B (SELECTED - Pure Neutral State in Mock Exam Mode) -->
+<label class="group relative flex items-center justify-between p-space-md rounded-xl bg-primary-container/10 shadow-sm cursor-pointer transition-all duration-150">
+<div class="flex items-center gap-space-md">
+<span class="w-8 h-8 rounded-lg bg-primary text-on-primary font-option-label text-option-label flex items-center justify-center font-bold shadow-sm">
+                ب
+              </span>
+<span class="font-body-md text-body-md text-on-surface font-medium leading-normal">
+                حمض الزوليدرونيك وريدياً (<span class="font-data-metric font-semibold" dir="ltr">IV Zoledronic acid / Bisphosphonate</span>)
+              </span>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-space-xs py-0.5 rounded bg-primary-container text-on-primary font-label-caps text-[10px]">محدد حالياً</span>
+<input checked="" class="w-4 h-4 text-primary focus:ring-0 focus:ring-offset-0 cursor-pointer" name="exam_q24" type="radio" value="B"/>
+</div>
+</label>
+<!-- Option C (Unselected) -->
+<label class="group relative flex items-center justify-between p-space-md rounded-xl bg-surface-container-lowest hover:bg-surface-container-low cursor-pointer shadow-sm transition-all duration-150">
+<div class="flex items-center gap-space-md">
+<span class="w-8 h-8 rounded-lg bg-surface-container-high text-on-surface font-option-label text-option-label flex items-center justify-center font-bold">
+                ج
+              </span>
+<span class="font-body-md text-body-md text-on-surface leading-normal">
+                كالسيتونين سمك السلمون تحت الجلد (<span class="font-data-metric" dir="ltr">Subcutaneous Salmon Calcitonin</span>)
+              </span>
+</div>
+<input class="w-4 h-4 text-primary focus:ring-0 focus:ring-offset-0 cursor-pointer" name="exam_q24" type="radio" value="C"/>
+</label>
+<!-- Option D (Unselected) -->
+<label class="group relative flex items-center justify-between p-space-md rounded-xl bg-surface-container-lowest hover:bg-surface-container-low cursor-pointer shadow-sm transition-all duration-150">
+<div class="flex items-center gap-space-md">
+<span class="w-8 h-8 rounded-lg bg-surface-container-high text-on-surface font-option-label text-option-label flex items-center justify-center font-bold">
+                د
+              </span>
+<span class="font-body-md text-body-md text-on-surface leading-normal">
+                هيدروكورتيزون وريدياً (<span class="font-data-metric" dir="ltr">IV Hydrocortisone pulse therapy</span>)
+              </span>
+</div>
+<input class="w-4 h-4 text-primary focus:ring-0 focus:ring-offset-0 cursor-pointer" name="exam_q24" type="radio" value="D"/>
+</label>
+<!-- Option E (Unselected) -->
+<label class="group relative flex items-center justify-between p-space-md rounded-xl bg-surface-container-lowest hover:bg-surface-container-low cursor-pointer shadow-sm transition-all duration-150">
+<div class="flex items-center gap-space-md">
+<span class="w-8 h-8 rounded-lg bg-surface-container-high text-on-surface font-option-label text-option-label flex items-center justify-center font-bold">
+                هـ
+              </span>
+<span class="font-body-md text-body-md text-on-surface leading-normal">
+                فوسفات البوتاسيوم الفموي (<span class="font-data-metric" dir="ltr">Oral Potassium Phosphate supplementation</span>)
+              </span>
+</div>
+<input class="w-4 h-4 text-primary focus:ring-0 focus:ring-offset-0 cursor-pointer" name="exam_q24" type="radio" value="E"/>
+</label>
+</div>
+<!-- Strict Exam Notice Disclaimer -->
+<div class="flex items-center gap-space-sm p-space-sm bg-surface-container-low/70 rounded-xl text-on-surface-variant font-body-sm text-[12px]">
+<span class="material-symbols-outlined text-[18px] text-outline">lock</span>
+<span>وضع الاختبار القياسي نشط: لا تظهر مؤشرات صحة الإجابة أو الشروحات السريرية إلا بعد إكمال الاختبار وتسليمه نهائياً.</span>
+</div>
+</article>
+<!-- Bottom Question Action Bar (Bi-Directional RTL Exam Navigation) -->
+<footer class="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex items-center justify-between gap-space-md">
+<!-- Next Question Button (Leftward in RTL) -->
+<button class="flex items-center gap-space-xs px-space-lg py-2.5 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-headline-sm text-[15px] shadow-sm transition-all" type="button">
+<span>السؤال التالي (25)</span>
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+</button>
+<!-- Quick Flag / Bookmark Center Action -->
+<button class="flex items-center gap-1.5 px-space-md py-2 rounded-xl bg-surface-container-high text-on-surface font-body-sm text-body-sm hover:bg-surface-container-highest transition-colors" type="button">
+<span class="material-symbols-outlined text-tertiary text-[18px]" style="font-variation-settings: 'FILL' 1;">bookmark</span>
+<span>إلغاء وضع علامة مراجعة</span>
+</button>
+<!-- Previous Question Button (Rightward in RTL) -->
+<button class="flex items-center gap-space-xs px-space-md py-2.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-headline-sm text-[15px] transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+<span>السؤال السابق (23)</span>
+</button>
+</footer>
+</section>
+<!-- Side Panel: Question Matrix Navigator (لوحة مصفوفة الأسئلة - 40 سؤالاً) -->
+<aside class="lg:col-span-4 flex flex-col gap-space-md sticky top-20">
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex flex-col gap-space-md">
+<!-- Matrix Header & Stats -->
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">grid_view</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">مصفوفة الامتحان</h3>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant font-semibold">بلوك 1 (40 سؤالاً)</span>
+</div>
+<!-- Metric Snapshot Tiles -->
+<div class="grid grid-cols-3 gap-space-xs text-center">
+<div class="p-space-xs rounded-lg bg-surface-container-low flex flex-col items-center">
+<span class="font-data-metric text-[18px] font-bold text-secondary">23</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">تمت الإجابة</span>
+</div>
+<div class="p-space-xs rounded-lg bg-surface-container-low flex flex-col items-center">
+<span class="font-data-metric text-[18px] font-bold text-on-surface">15</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">بدون إجابة</span>
+</div>
+<div class="p-space-xs rounded-lg bg-surface-container-low flex flex-col items-center">
+<span class="font-data-metric text-[18px] font-bold text-tertiary">2</span>
+<span class="font-label-caps text-[10px] text-on-surface-variant">معلّمة للمراجعة</span>
+</div>
+</div>
+<!-- Quick Filter Tabs -->
+<div class="flex items-center gap-1 p-1 bg-surface-container-low rounded-lg font-label-caps text-[11px]">
+<button class="flex-1 py-1.5 rounded-md bg-surface-container-lowest shadow-sm text-on-surface font-bold text-center" type="button">
+            الكل (40)
+          </button>
+<button class="flex-1 py-1.5 rounded-md text-on-surface-variant hover:text-on-surface text-center transition-colors" type="button">
+            المتبقية (15)
+          </button>
+<button class="flex-1 py-1.5 rounded-md text-on-surface-variant hover:text-on-surface text-center transition-colors" type="button">
+            المعلّمة (2)
+          </button>
+</div>
+<!-- Question Matrix Grid (40 Questions) -->
+<div class="grid grid-cols-5 gap-2 pt-space-xs" dir="rtl">
+<!-- Answered Questions (1 to 13) -->
+<button class="h-10 rounded-lg bg-primary-container text-on-primary font-data-metric text-[13px] font-semibold flex items-center justify-center shadow-xs hover:opacity-90" type="button">1</button>
+<button class="h-10 rounded-lg bg-primary-container text-on-primary font-data-metric text-[13px] font-semibold flex items-center justify-center shadow-xs hover:opacity-90" type="button">2</button>
+<button class="h-10 rounded-lg bg-primary-container text-on-primary font-data-metric text-[13px] font-semibold flex items-center justify-center shadow-xs hover:opacity-90" type="button">3</button>
+<button class="h-10 rounded-lg bg-primary-container text-on-primary font-data-metric text-[13px] font-semibold flex items-center justify-center shadow-xs hover:opacity-90" type="button">4</button>
+<button class="h-10 rounded-lg bg-primary-container text-on-primary font-data-metric text-[13px] font-semibold flex items-center justify-center shadow-xs hover:opacity-90" type="button">5</button>
+<button class="h-10 rounded-lg bg-primary-container text-on-primary font-data-metric text-[13px] font-semibold flex items-center justify-center shadow-xs hover:opacity-90" type="button">6</button>
+<button class="h-10 rounded-lg bg-primary-container text-on-primary font-data-metric text-[13px] font-semibold flex items-center justify-center shadow-xs hover:opacity-90" type="button">7</button>
+<button class="h-10 rounded-lg bg-primary-container text-on-primary font-data-metric text-[13px] font-semibold flex items-center justify-center shadow-xs hover:opacity-90" type="button">8</button>
+<button class="h-10 rounded-lg bg-primary-container text-on-primary font-data-metric text-[13px] font-semibold flex items-center justify-center shadow-xs hover:opacity-90" type="button">9</button>
+<button class="h-10 rounded-lg bg-primary-container text-on-primary font-data-metric text-[13px] font-semibold flex items-center justify-center shadow-xs hover:opacity-90" type="button">10</button>
+<button class="h-10 rounded-lg bg-primary-container text-on-primary font-data-metric text-[13px] font-semibold flex items-center justify-center shadow-xs hover:opacity-90" type="button">11</button>
+<button class="h-10 rounded-lg bg-primary-container text-on-primary font-data-metric text-[13px] font-semibold flex items-center justify-center shadow-xs hover:opacity-90" type="button">12</button>
+<button class="h-10 rounded-lg bg-primary-container text-on-primary font-data-metric text-[13px] font-semibold flex items-center justify-center shadow-xs hover:opacity-90" type="button">13</button>
+<!-- Question 14: Answered AND Flagged for Review -->
+<button class="relative h-10 rounded-lg bg-primary-container text-on-primary font-data-metric text-[13px] font-semibold flex items-center justify-center shadow-xs hover:opacity-90" type="button">
+<span>14</span>
+<span class="absolute top-1 left-1 w-2.5 h-2.5 rounded-full bg-tertiary-fixed-dim ring-2 ring-tertiary"></span>
+</button>
+<!-- Answered Questions (15 to 23) -->
+<button class="h-10 rounded-lg bg-primary-container text-on-primary font-data-metric text-[13px] font-semibold flex items-center justify-center shadow-xs hover:opacity-90" type="button">15</button>
+<button class="h-10 rounded-lg bg-primary-container text-on-primary font-data-metric text-[13px] font-semibold flex items-center justify-center shadow-xs hover:opacity-90" type="button">16</button>
+<button class="h-10 rounded-lg bg-primary-container text-on-primary font-data-metric text-[13px] font-semibold flex items-center justify-center shadow-xs hover:opacity-90" type="button">17</button>
+<button class="h-10 rounded-lg bg-primary-container text-on-primary font-data-metric text-[13px] font-semibold flex items-center justify-center shadow-xs hover:opacity-90" type="button">18</button>
+<button class="h-10 rounded-lg bg-primary-container text-on-primary font-data-metric text-[13px] font-semibold flex items-center justify-center shadow-xs hover:opacity-90" type="button">19</button>
+<button class="h-10 rounded-lg bg-primary-container text-on-primary font-data-metric text-[13px] font-semibold flex items-center justify-center shadow-xs hover:opacity-90" type="button">20</button>
+<button class="h-10 rounded-lg bg-primary-container text-on-primary font-data-metric text-[13px] font-semibold flex items-center justify-center shadow-xs hover:opacity-90" type="button">21</button>
+<button class="h-10 rounded-lg bg-primary-container text-on-primary font-data-metric text-[13px] font-semibold flex items-center justify-center shadow-xs hover:opacity-90" type="button">22</button>
+<button class="h-10 rounded-lg bg-primary-container text-on-primary font-data-metric text-[13px] font-semibold flex items-center justify-center shadow-xs hover:opacity-90" type="button">23</button>
+<!-- Question 24: CURRENT QUESTION + FLAGGED -->
+<button class="relative h-10 rounded-lg bg-surface-container-lowest text-primary font-data-metric text-[14px] font-bold flex items-center justify-center shadow-md ring-2 ring-primary" type="button">
+<span>24</span>
+<span class="material-symbols-outlined text-[12px] text-tertiary absolute top-0.5 left-0.5" style="font-variation-settings: 'FILL' 1;">flag</span>
+</button>
+<!-- Unanswered Questions (25 to 40) -->
+<button class="h-10 rounded-lg bg-surface-container-low text-on-surface-variant font-data-metric text-[13px] flex items-center justify-center hover:bg-surface-container-high transition-colors" type="button">25</button>
+<button class="h-10 rounded-lg bg-surface-container-low text-on-surface-variant font-data-metric text-[13px] flex items-center justify-center hover:bg-surface-container-high transition-colors" type="button">26</button>
+<button class="h-10 rounded-lg bg-surface-container-low text-on-surface-variant font-data-metric text-[13px] flex items-center justify-center hover:bg-surface-container-high transition-colors" type="button">27</button>
+<button class="h-10 rounded-lg bg-surface-container-low text-on-surface-variant font-data-metric text-[13px] flex items-center justify-center hover:bg-surface-container-high transition-colors" type="button">28</button>
+<button class="h-10 rounded-lg bg-surface-container-low text-on-surface-variant font-data-metric text-[13px] flex items-center justify-center hover:bg-surface-container-high transition-colors" type="button">29</button>
+<button class="h-10 rounded-lg bg-surface-container-low text-on-surface-variant font-data-metric text-[13px] flex items-center justify-center hover:bg-surface-container-high transition-colors" type="button">30</button>
+<button class="h-10 rounded-lg bg-surface-container-low text-on-surface-variant font-data-metric text-[13px] flex items-center justify-center hover:bg-surface-container-high transition-colors" type="button">31</button>
+<button class="h-10 rounded-lg bg-surface-container-low text-on-surface-variant font-data-metric text-[13px] flex items-center justify-center hover:bg-surface-container-high transition-colors" type="button">32</button>
+<button class="h-10 rounded-lg bg-surface-container-low text-on-surface-variant font-data-metric text-[13px] flex items-center justify-center hover:bg-surface-container-high transition-colors" type="button">33</button>
+<button class="h-10 rounded-lg bg-surface-container-low text-on-surface-variant font-data-metric text-[13px] flex items-center justify-center hover:bg-surface-container-high transition-colors" type="button">34</button>
+<button class="h-10 rounded-lg bg-surface-container-low text-on-surface-variant font-data-metric text-[13px] flex items-center justify-center hover:bg-surface-container-high transition-colors" type="button">35</button>
+<button class="h-10 rounded-lg bg-surface-container-low text-on-surface-variant font-data-metric text-[13px] flex items-center justify-center hover:bg-surface-container-high transition-colors" type="button">36</button>
+<button class="h-10 rounded-lg bg-surface-container-low text-on-surface-variant font-data-metric text-[13px] flex items-center justify-center hover:bg-surface-container-high transition-colors" type="button">37</button>
+<button class="h-10 rounded-lg bg-surface-container-low text-on-surface-variant font-data-metric text-[13px] flex items-center justify-center hover:bg-surface-container-high transition-colors" type="button">38</button>
+<button class="h-10 rounded-lg bg-surface-container-low text-on-surface-variant font-data-metric text-[13px] flex items-center justify-center hover:bg-surface-container-high transition-colors" type="button">39</button>
+<button class="h-10 rounded-lg bg-surface-container-low text-on-surface-variant font-data-metric text-[13px] flex items-center justify-center hover:bg-surface-container-high transition-colors" type="button">40</button>
+</div>
+<!-- Matrix Legend Keys -->
+<div class="flex flex-wrap items-center justify-between gap-y-2 pt-space-xs text-[11px] font-label-caps text-on-surface-variant bg-surface-container-low/40 p-space-xs rounded-lg">
+<div class="flex items-center gap-1">
+<span class="w-3 h-3 rounded bg-primary-container"></span>
+<span>مجاب (23)</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="w-3 h-3 rounded bg-surface-container-low"></span>
+<span>شاغر (15)</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary"></span>
+<span>معلّم (2)</span>
+</div>
+</div>
+<!-- Fast Jump CTA Button -->
+<button class="w-full flex items-center justify-center gap-space-xs py-2.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-primary font-headline-sm text-[13px] font-semibold transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">skip_next</span>
+<span>الانتقال لأول سؤال غير مُجاب (25)</span>
+</button>
+</div>
+<!-- Quick Exam Reference Summary Tooltip Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[22px]">medical_services</span>
+<div class="flex flex-col text-on-surface">
+<span class="font-headline-sm text-[13px] font-bold">تذكير التدبير الحاد لفرط الكالسيوم الورمي</span>
+<p class="font-body-sm text-[12px] text-on-surface-variant mt-0.5">
+            الهدف الأولي في حالات فرط الكالسيوم العرضي الشديد هو استعادة الحجم الوعائي (Saline hydration) يليه تثبيط نشاط الخلايا الكاسرة للعظم (Bisphosphonates).
+          </p>
+</div>
+</div>
+</aside>
+</div>
+</div>
+<script>
+  // Clean, lightweight micro-interactions for active exam session state
+  (function() {
+    // Flag toggle state micro-interaction
+    const flagBtn = document.getElementById('btn-flag-toggle');
+    if (flagBtn) {
+      flagBtn.addEventListener('click', function() {
+        const isFlagged = this.classList.contains('bg-tertiary-fixed');
+        if (isFlagged) {
+          this.classList.remove('bg-tertiary-fixed', 'text-on-tertiary-fixed');
+          this.classList.add('bg-surface-container-low', 'text-on-surface-variant');
+          this.innerHTML = `<span class="material-symbols-outlined text-[18px]">flag</span><span>تمييز للمراجعة</span>`;
+        } else {
+          this.classList.remove('bg-surface-container-low', 'text-on-surface-variant');
+          this.classList.add('bg-tertiary-fixed', 'text-on-tertiary-fixed');
+          this.innerHTML = `<span class="material-symbols-outlined text-[18px] text-tertiary" style="font-variation-settings: 'FILL' 1;">flag</span><span class="font-semibold text-tertiary">مُعَلّم للمراجعة</span>`;
+        }
+      });
+    }
+
+    // Dynamic selection styling for exam options (Neutral state only, never reveal answers)
+    const optionsContainer = document.getElementById('exam-options-container');
+    if (optionsContainer) {
+      const labels = optionsContainer.querySelectorAll('label');
+      labels.forEach(label => {
+        label.addEventListener('click', function() {
+          labels.forEach(l => {
+            l.classList.remove('bg-primary-container/10');
+            l.classList.add('bg-surface-container-lowest');
+            const token = l.querySelector('span:first-child');
+            if (token) {
+              token.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+              token.classList.add('bg-surface-container-high', 'text-on-surface');
+            }
+            const selectedBadge = l.querySelector('span.font-label-caps');
+            if (selectedBadge) selectedBadge.remove();
+          });
+
+          this.classList.remove('bg-surface-container-lowest');
+          this.classList.add('bg-primary-container/10');
+          const activeToken = this.querySelector('span:first-child');
+          if (activeToken) {
+            activeToken.classList.remove('bg-surface-container-high', 'text-on-surface');
+            activeToken.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+          }
+        });
+      });
+    }
+  })();
+</script></main></div></body></html>

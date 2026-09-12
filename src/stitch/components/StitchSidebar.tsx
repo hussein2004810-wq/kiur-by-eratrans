@@ -1,5 +1,5 @@
-﻿import React from 'react';
-import { HeartPulse, ClipboardList, BookOpen, Brain, History, Trophy, UserRound, LogOut, Settings2 } from 'lucide-react';
+import React from 'react';
+import { HeartPulse, ClipboardList, BookOpen, Brain, History, Trophy, UserRound, LogOut, Settings2, FileText, Activity } from 'lucide-react';
 import { useStitch } from '../StitchContext';
 
 export function StitchSidebar() {
@@ -9,24 +9,36 @@ export function StitchSidebar() {
 
   return (
     <aside className="stitchSidebar">
+      {/* Brand Header */}
       <div className="stitchBrand">
         <div className="stitchBrandIcon">
-          <HeartPulse size={24} />
+          <HeartPulse size={22} />
         </div>
         <div className="stitchBrandTitle">
-          <h2>KIUR</h2>
+          <h2>KIUR Academic</h2>
           <small>BY ERATRANS • STITCH UI</small>
         </div>
       </div>
 
+      {/* Target Examination Context Pill */}
+      <div className="stitchTargetExamPill">
+        <span>الاختبار المستهدف</span>
+        <strong>{user.phaseName || 'SMLE 2025'}</strong>
+      </div>
+
+      {/* Navigation */}
       <nav className="stitchNav">
+        <p className="stitchNavLabel">بيئة التعلم والتدريب</p>
+
         <button
           type="button"
           className={`stitchNavItem ${view === 'home' ? 'active' : ''}`}
           onClick={() => setView('home')}
         >
-          <BookOpen size={18} />
-          <span>الرئيسية</span>
+          <div className="stitchNavItemInner">
+            <BookOpen size={18} />
+            <span>لوحة المتابعة</span>
+          </div>
         </button>
 
         <button
@@ -34,9 +46,11 @@ export function StitchSidebar() {
           className={`stitchNavItem ${view === 'tests' ? 'active' : ''}`}
           onClick={() => setView('tests')}
         >
-          <ClipboardList size={18} />
-          <span>الاختبارات</span>
-          {tests.length > 0 && <span style={{ marginInlineStart: 'auto', opacity: 0.7 }}>{tests.length}</span>}
+          <div className="stitchNavItemInner">
+            <ClipboardList size={18} />
+            <span>بيئة الاختبارات (QBank)</span>
+          </div>
+          {tests.length > 0 && <span className="stitchNavBadge">{tests.length}</span>}
         </button>
 
         <button
@@ -44,8 +58,10 @@ export function StitchSidebar() {
           className="stitchNavItem"
           onClick={() => openSmartReview('flashcards')}
         >
-          <Brain size={18} />
-          <span>المراجعة الذكية</span>
+          <div className="stitchNavItemInner">
+            <Brain size={18} />
+            <span>المراجعة الذكية (SM-2)</span>
+          </div>
         </button>
 
         <button
@@ -53,17 +69,23 @@ export function StitchSidebar() {
           className={`stitchNavItem ${view === 'glimpses' ? 'active' : ''}`}
           onClick={() => setView('glimpses')}
         >
-          <HeartPulse size={18} />
-          <span>اللمحات السريرية</span>
+          <div className="stitchNavItemInner">
+            <HeartPulse size={18} />
+            <span>اللمحات السريرية 3D</span>
+          </div>
         </button>
+
+        <p className="stitchNavLabel" style={{ marginTop: '8px' }}>التحليل والسجل</p>
 
         <button
           type="button"
           className={`stitchNavItem ${view === 'history' ? 'active' : ''}`}
           onClick={() => setView('history')}
         >
-          <History size={18} />
-          <span>سجل النتائج</span>
+          <div className="stitchNavItemInner">
+            <History size={18} />
+            <span>سجل النتائج والشهادات</span>
+          </div>
         </button>
 
         {user.role === 'student' && (
@@ -72,8 +94,10 @@ export function StitchSidebar() {
             className={`stitchNavItem ${view === 'points' ? 'active' : ''}`}
             onClick={() => setView('points')}
           >
-            <Trophy size={18} />
-            <span>نقاطي وإنجازاتي</span>
+            <div className="stitchNavItemInner">
+              <Trophy size={18} />
+              <span>نقاطي والتحصيل</span>
+            </div>
           </button>
         )}
 
@@ -82,37 +106,66 @@ export function StitchSidebar() {
           className={`stitchNavItem ${view === 'profile' ? 'active' : ''}`}
           onClick={() => setView('profile')}
         >
-          <UserRound size={18} />
-          <span>حسابي</span>
+          <div className="stitchNavItemInner">
+            <UserRound size={18} />
+            <span>الهوية الأكاديمية</span>
+          </div>
         </button>
 
         {isStaff && (
-          <button
-            type="button"
-            className={`stitchNavItem ${view === 'admin' ? 'active' : ''}`}
-            onClick={() => setView('admin')}
-            style={{ marginTop: 'auto' }}
-          >
-            <Settings2 size={18} />
-            <span>لوحة الإشراف</span>
-          </button>
+          <>
+            <p className="stitchNavLabel" style={{ marginTop: '8px' }}>العمليات السريرية</p>
+            <button
+              type="button"
+              className={`stitchNavItem ${view === 'admin' ? 'active' : ''}`}
+              onClick={() => setView('admin')}
+            >
+              <div className="stitchNavItemInner">
+                <Settings2 size={18} />
+                <span>مركز الإشراف والكادر</span>
+              </div>
+            </button>
+          </>
         )}
       </nav>
 
-      <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--stitch-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div>
-          <b style={{ fontSize: '13px', display: 'block' }}>{user.name}</b>
-          <small style={{ color: 'var(--stitch-text-muted)', fontSize: '11px' }}>
-            {user.role === 'student' ? 'طالب' : user.role === 'teacher' ? 'تدريسي' : 'مشرف'}
-          </small>
+      {/* Exam Timer Widget */}
+      <div className="stitchSidebarTimer">
+        <div className="stitchSidebarTimerHeader">
+          <span>مؤقت الجلسة النشطة</span>
+          <strong>جلسة تدريبية</strong>
+        </div>
+        <div className="stitchSidebarTimerBar">
+          <div className="stitchSidebarTimerBarFill" />
+        </div>
+        <div className="stitchSidebarTimerTime">
+          <span>الوقت المتبقي</span>
+          <b>01:14:22</b>
+        </div>
+      </div>
+
+      {/* Mini Profile Footer */}
+      <div className="stitchMiniProfile">
+        <button
+          type="button"
+          className="stitchMiniAvatar"
+          onClick={() => setView('profile')}
+          title="فتح حسابي"
+        >
+          {user.name.slice(0, 2)}
+        </button>
+        <div className="stitchMiniInfo">
+          <b>{user.name}</b>
+          <small>{user.role === 'student' ? (user.phaseName || 'طالب سريري') : 'كادر أكاديمي'}</small>
         </div>
         <button
           type="button"
-          onClick={() => void logout()}
-          style={{ background: 'transparent', border: 0, color: 'var(--stitch-text-muted)', cursor: 'pointer', padding: '6px' }}
+          className="stitchLogoutBtn"
+          onClick={() => logout()}
+          title="تسجيل الخروج"
           aria-label="تسجيل الخروج"
         >
-          <LogOut size={18} />
+          <LogOut size={16} />
         </button>
       </div>
     </aside>

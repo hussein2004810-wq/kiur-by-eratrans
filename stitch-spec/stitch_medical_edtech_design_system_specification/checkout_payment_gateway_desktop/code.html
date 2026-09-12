@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"error":"#ba1a1a","secondary-fixed":"#9cf2e8","on-tertiary":"#ffffff","on-primary-fixed-variant":"#264191","tertiary":"#410070","on-secondary-fixed":"#00201d","primary-fixed-dim":"#b6c4ff","tertiary-container":"#5f0d9c","surface-container-lowest":"#ffffff","surface-dim":"#d2d9f4","primary-container":"#1e3a8a","inverse-primary":"#b6c4ff","error-container":"#ffdad6","outline":"#757682","secondary":"#006a63","surface-container":"#eaedff","on-tertiary-container":"#cc93ff","tertiary-fixed":"#f1dbff","surface-container-high":"#e2e7ff","surface-container-highest":"#dae2fd","on-surface":"#131b2e","tertiary-fixed-dim":"#dfb7ff","surface-variant":"#dae2fd","primary":"#00236f","inverse-surface":"#283044","on-tertiary-fixed":"#2d0050","surface":"#faf8ff","on-tertiary-fixed-variant":"#661aa3","secondary-fixed-dim":"#80d5cb","on-secondary":"#ffffff","background":"#faf8ff","secondary-container":"#99efe5","surface-bright":"#faf8ff","surface-tint":"#4059aa","surface-container-low":"#f2f3ff","on-secondary-fixed-variant":"#00504a","on-error-container":"#93000a","on-primary-container":"#90a8ff","on-surface-variant":"#444651","on-primary-fixed":"#00164e","on-primary":"#ffffff","inverse-on-surface":"#eef0ff","on-secondary-container":"#006f67","outline-variant":"#c5c5d3","primary-fixed":"#dce1ff","on-error":"#ffffff","on-background":"#131b2e"},borderRadius:{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},spacing:{"margin":"2rem","space-xl":"2rem","gutter-mobile":"0.75rem","space-lg":"1.5rem","gutter":"1.5rem","space-sm":"0.5rem","margin-mobile":"1rem","space-md":"1rem","space-xs":"0.25rem"},fontFamily:{"vignette-text":["Noto Sans"],"data-metric":["Inter"],"headline-lg":["Noto Sans"],"option-label":["Inter"],"body-sm":["Noto Sans"],"label-caps":["Inter"],"headline-xl":["Noto Sans"],"headline-sm":["Noto Sans"],"headline-xl-mobile":["Noto Sans"],"body-md":["Noto Sans"]},fontSize:{"vignette-text":["17px",{"lineHeight":"32px","fontWeight":"400"}],"data-metric":["13px",{"lineHeight":"18px","letterSpacing":"0.02em","fontWeight":"500"}],"headline-lg":["22px",{"lineHeight":"36px","fontWeight":"600"}],"option-label":["14px",{"lineHeight":"20px","fontWeight":"700"}],"body-sm":["13px",{"lineHeight":"22px","fontWeight":"400"}],"label-caps":["11px",{"lineHeight":"16px","letterSpacing":"0.05em","fontWeight":"600"}],"headline-xl":["30px",{"lineHeight":"48px","fontWeight":"700"}],"headline-sm":["18px",{"lineHeight":"30px","fontWeight":"600"}],"headline-xl-mobile":["24px",{"lineHeight":"38px","fontWeight":"700"}],"body-md":["15px",{"lineHeight":"26px","fontWeight":"400"}]}}}}</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased selection:bg-primary selection:text-on-primary"><aside class="fixed right-0 top-0 h-full w-72 bg-surface-container-lowest z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col flex-1 overflow-y-auto px-space-md py-space-lg"><div class="flex items-center gap-space-sm px-space-sm mb-space-lg"><div class="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center text-on-primary shrink-0"><span class="material-symbols-outlined text-[24px]">cardiology</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary tracking-tight font-bold">منصة نبض الطبية</span><span class="font-label-caps text-label-caps text-on-surface-variant font-semibold tracking-wider uppercase">MedPulse Academic</span></div></div><div class="px-space-sm py-space-xs mb-space-xs"><span class="font-label-caps text-label-caps text-on-surface-variant tracking-wider uppercase font-semibold">المسار التعليمي</span></div><nav class="flex flex-col gap-1 mb-space-md" data-active-classes="bg-primary-container text-on-primary font-bold shadow-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[20px]">dashboard</span><span class="font-body-md text-body-md">الرئيسية</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="question-bank" href="#"><span class="material-symbols-outlined text-[20px]">menu_book</span><span class="font-body-md text-body-md">بنك الأسئلة</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="exams" href="#"><span class="material-symbols-outlined text-[20px]">assignment</span><span class="font-body-md text-body-md">الاختبارات</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="al-ada-wal-tahsil" href="#"><span class="material-symbols-outlined text-[20px]">monitoring</span><span class="font-body-md text-body-md">الأداء والتحصيل</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl transition-all bg-primary-container text-on-primary font-bold shadow-sm" data-path="study-plan" href="#"><span class="material-symbols-outlined text-[20px]">calendar_month</span><span class="font-body-md text-body-md">خطة الدراسة</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="review" href="#"><span class="material-symbols-outlined text-[20px]">fact_check</span><span class="font-body-md text-body-md">المراجعة السريرية</span></a></nav><div class="px-space-sm py-space-xs mb-space-xs"><span class="font-label-caps text-label-caps text-on-surface-variant tracking-wider uppercase font-semibold">الأدوات الأكاديمية</span></div><nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary font-bold shadow-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="bookmarks" href="#"><span class="material-symbols-outlined text-[20px]">bookmark</span><span class="font-body-md text-body-md">المحفوظات</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="notes" href="#"><span class="material-symbols-outlined text-[20px]">edit_note</span><span class="font-body-md text-body-md">الملاحظات</span></a></nav></div><div class="p-space-md bg-surface-container-low flex flex-col gap-space-sm"><nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary font-bold shadow-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="help" href="#"><span class="material-symbols-outlined text-[20px]">help_center</span><span class="font-body-sm text-body-sm">المساعدة والدعم</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="settings" href="#"><span class="material-symbols-outlined text-[20px]">settings</span><span class="font-body-sm text-body-sm">الإعدادات</span></a></nav><div class="flex items-center gap-space-sm p-space-sm rounded-xl bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="relative"><div class="w-9 h-9 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="absolute bottom-0 left-0 w-2.5 h-2.5 bg-secondary rounded-full ring-2 ring-surface-container-lowest"></span></div><div class="flex flex-col flex-1 min-w-0"><span class="font-option-label text-option-label text-on-surface truncate">علي أحمد</span><span class="font-body-sm text-body-sm text-on-surface-variant truncate">طالب طب - مرحلة 5</span></div><button class="p-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[18px]">unfold_more</span></button></div></div></aside><div class="pr-72"><header class="fixed top-0 right-72 left-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-lg"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm"><span class="material-symbols-outlined text-[18px]">analytics</span><span class="text-on-surface font-semibold">لوحة المتابعة والتحصيل</span></div><div class="h-4 w-px bg-outline-variant"></div><div class="relative w-96"><span class="material-symbols-outlined absolute right-space-sm top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span><input class="w-full bg-surface-container-low text-on-surface placeholder:text-on-surface-variant font-body-sm text-body-sm rounded-xl pr-10 pl-space-md py-space-xs focus:outline-none focus:bg-surface-container transition-colors" placeholder="ابحث في الأسئلة، المواضيع، والامتحانات..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1 rounded-full"><span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span><span class="font-label-caps text-label-caps text-on-secondary-container font-semibold">تم الحفظ المتزامن</span></div><button class="px-space-sm py-1 rounded-lg bg-surface-container-low text-on-surface font-data-metric text-data-metric font-semibold hover:bg-surface-container transition-colors">EN</button><button class="relative p-space-xs rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span></button><div class="h-6 w-px bg-outline-variant"></div><div class="flex items-center gap-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="material-symbols-outlined text-on-surface-variant text-[18px] cursor-pointer">expand_more</span></div></div></header><main class="w-full pt-16 px-space-lg py-space-lg bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- Interactive Toast Notification (Hidden by default, triggered via actions) -->
+<div class="fixed bottom-6 left-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-space-sm bg-inverse-surface text-inverse-on-surface px-space-md py-space-sm rounded-xl shadow-xl" id="payment-toast">
+<span class="material-symbols-outlined text-[20px] text-secondary-fixed">verified_user</span>
+<span class="font-body-sm text-body-sm font-medium" id="toast-message">تم تطبيق الكود الترويجي الأكاديمي بنجاح</span>
+</div>
+<!-- Screen Header / Navigation Breadcrumb Bar -->
+<div class="flex flex-wrap items-center justify-between gap-space-md pb-space-lg">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-caps text-label-caps tracking-wider uppercase">
+<a class="hover:text-primary transition-colors" href="#">الخطط الأكاديمية</a>
+<span class="material-symbols-outlined text-[14px]">chevron_left</span>
+<span class="text-primary font-bold">بوابة الدفع الآمن والتفعيل السريري</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<h1 class="font-headline-lg text-headline-lg text-on-surface font-bold">إتمام ترقية الاشتراك السريري المتقدم</h1>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container-high text-primary font-label-caps text-label-caps font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+          اتصال مشفر 256-bit
+        </span>
+</div>
+</div>
+<!-- Security Trust Micro-Pills -->
+<div class="flex items-center gap-space-sm">
+<div class="flex items-center gap-space-xs bg-surface-container-lowest px-space-sm py-1.5 rounded-xl shadow-sm">
+<span class="material-symbols-outlined text-secondary text-[18px]">verified</span>
+<span class="font-data-metric text-data-metric text-on-surface font-semibold">PCI-DSS Level 1</span>
+</div>
+<div class="flex items-center gap-space-xs bg-surface-container-lowest px-space-sm py-1.5 rounded-xl shadow-sm">
+<span class="material-symbols-outlined text-primary text-[18px]">security</span>
+<span class="font-data-metric text-data-metric text-on-surface font-semibold">حماية مصرفية معتمدة</span>
+</div>
+</div>
+</div>
+<!-- Two-Column Checkout Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- RIGHT COLUMN: Order Summary & Transparent Financial Breakdown (5 Cols on LG) -->
+<section class="lg:col-span-5 flex flex-col gap-space-md order-2 lg:order-1">
+<!-- Plan Card with Billing Switcher -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md relative overflow-hidden">
+<div class="absolute -top-12 -left-12 w-32 h-32 bg-primary/5 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-xl bg-primary-container text-on-primary flex items-center justify-center shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[26px]">vital_signs</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase font-semibold">الخطة التخصصية الكاملة</span>
+<h2 class="font-headline-sm text-headline-sm text-primary font-bold">اشتراك Premium السريري</h2>
+<span class="font-body-sm text-body-sm text-on-surface-variant">الوصول غير المحدود لبنوك الأسئلة والامتحانات</span>
+</div>
+</div>
+<span class="px-2 py-1 rounded-lg bg-surface-container-high text-primary font-label-caps text-label-caps font-bold">نشط</span>
+</div>
+<!-- Billing Toggle Pill -->
+<div class="bg-surface-container-low p-1.5 rounded-xl flex items-center justify-between gap-1">
+<button class="flex-1 py-1.5 px-3 rounded-lg text-center font-option-label text-option-label transition-all bg-surface-container-lowest text-primary shadow-sm font-bold" id="btn-monthly" onclick="switchBilling('monthly')">
+            فوترة شهرية
+          </button>
+<button class="flex-1 py-1.5 px-3 rounded-lg text-center font-option-label text-option-label text-on-surface-variant hover:text-on-surface transition-all flex items-center justify-center gap-1" id="btn-annual" onclick="switchBilling('annual')">
+<span>فوترة سنوية</span>
+<span class="bg-secondary-container text-on-secondary-container font-label-caps text-[10px] px-1.5 py-0.5 rounded-full font-bold">وفر 20%</span>
+</button>
+</div>
+<!-- Academic Features Checklist -->
+<div class="space-y-2 pt-space-xs">
+<div class="flex items-center gap-space-xs text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[18px]">check_circle</span>
+<span class="font-body-sm text-body-sm">أكثر من 4,200 سؤال سريري مع التفسير الفيزيولوجي المرضي المفصل</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[18px]">check_circle</span>
+<span class="font-body-sm text-body-sm">نماذج محاكاة امتحانات البورد والتصنيف الوطني (SMLE / IFOM)</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[18px]">check_circle</span>
+<span class="font-body-sm text-body-sm">حاسبة السوائل السريرية وجداول القيم المخبرية المدمجة في واجهة الامتحان</span>
+</div>
+</div>
+<!-- Promo Code Input Group -->
+<div class="pt-space-xs">
+<label class="block font-label-caps text-label-caps text-on-surface-variant font-semibold mb-1" for="promo-input">كود المنحة أو الخصم الأكاديمي (اختياري)</label>
+<div class="flex items-center gap-space-xs">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">sell</span>
+<input class="w-full bg-surface-container-low text-on-surface placeholder:text-on-surface-variant font-body-sm text-body-sm rounded-xl pr-9 pl-space-sm py-2 focus:outline-none focus:bg-surface-container uppercase tracking-wider" id="promo-input" placeholder="مثال: MED-ALMAMUN-2025" type="text"/>
+</div>
+<button class="px-space-md py-2 rounded-xl bg-surface-container-high text-primary font-option-label text-option-label font-bold hover:bg-surface-container transition-colors" onclick="applyPromo()">
+              تطبيق
+            </button>
+</div>
+<div class="hidden mt-2 items-center justify-between bg-secondary-container/40 px-space-sm py-1 rounded-lg" id="promo-applied-badge">
+<div class="flex items-center gap-1 text-on-secondary-container font-label-caps text-label-caps font-semibold">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+<span>تم تفعيل خصم طلاب المجلس العراقي للاختصاصات الطبية (15%)</span>
+</div>
+<button class="text-error hover:opacity-80 transition-opacity" onclick="removePromo()">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+</div>
+</div>
+<!-- Itemized Financial Breakdown -->
+<div class="space-y-space-sm pt-space-sm">
+<div class="flex items-center justify-between text-on-surface-variant font-body-sm text-body-sm">
+<span id="billing-cycle-label">قيمة الاشتراك الشهري (30 يوماً كاملة)</span>
+<span class="font-data-metric text-data-metric text-on-surface font-semibold" dir="ltr" id="base-price">18,000 IQD</span>
+</div>
+<div class="hidden items-center justify-between text-secondary font-body-sm text-body-sm" id="discount-row">
+<span class="flex items-center gap-1">
+<span>خصم المنحة الطبية الجامعية</span>
+<span class="font-label-caps text-[10px] bg-secondary-container px-1 rounded">-15%</span>
+</span>
+<span class="font-data-metric text-data-metric font-semibold" dir="ltr" id="discount-amount">-2,700 IQD</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-body-sm text-body-sm">
+<span class="flex items-center gap-1">
+<span>ضريبة الخدمات الرقمية (VAT)</span>
+<span class="text-on-surface-variant font-label-caps text-label-caps">(متضمنة بالكامل)</span>
+</span>
+<span class="font-data-metric text-data-metric text-on-surface font-semibold" dir="ltr">0 IQD</span>
+</div>
+<!-- Total Highlight Box -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex items-center justify-between mt-space-sm">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase font-semibold">المبلغ الإجمالي المستحق دفعه اليوم</span>
+<span class="font-body-sm text-body-sm text-secondary font-semibold">تفعيل فوري لكافة الميزات</span>
+</div>
+<div class="text-left" dir="ltr">
+<span class="font-headline-lg text-headline-lg text-primary font-bold" id="total-price">18,000</span>
+<span class="font-option-label text-option-label text-primary font-semibold mr-1">د.ع</span>
+</div>
+</div>
+</div>
+<!-- Next Renewal Information & Policy Guarantee -->
+<div class="flex flex-col gap-space-xs pt-space-xs">
+<div class="flex items-start gap-space-xs bg-surface-container/60 p-space-sm rounded-xl text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-[18px] shrink-0 mt-0.5">event_repeat</span>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface font-bold">موعد الفوترة التالي والتجديد الآمن</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                التجديد التلقائي القادم: <strong class="text-on-surface" id="next-billing-date">20 أكتوبر 2026</strong> بمبلغ <span id="renewal-price">18,000 د.ع</span>. يمكنك إيقاف أو تعطيل التجديد في أي وقت بنقرة زر واحدة من إعدادات حسابك.
+              </p>
+</div>
+</div>
+<!-- Retention and Data Safety Guarantee -->
+<div class="flex items-start gap-space-xs p-space-sm rounded-xl bg-secondary-container/20 text-on-secondary-fixed">
+<span class="material-symbols-outlined text-secondary text-[18px] shrink-0 mt-0.5">verified_user</span>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps font-bold text-on-secondary-container">ميثاق الشفافية الأكاديمي</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                في حال إلغاء التجديد، يستمر وصولك لـ Premium حتى نهاية الفترة المدفوعة دون انقطاع. <strong class="text-on-surface">ولا تُحذف أي من ملاحظاتك السريرية، محفوظات الأسئلة، أو إحصائيات أدائك أبداً.</strong>
+</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Trust Academic Badges Mosaic -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-center justify-between text-on-surface-variant">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[22px]">verified</span>
+<span class="font-body-sm text-body-sm font-medium">ضمان استرجاع لمدة 7 أيام</span>
+</div>
+<div class="h-4 w-px bg-outline-variant"></div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">lock</span>
+<span class="font-body-sm text-body-sm font-medium">لا نقوم بتخزين أرقام بطاقتك السرية</span>
+</div>
+</div>
+</section>
+<!-- LEFT COLUMN: Payment Methods & Card Input (7 Cols on LG) -->
+<section class="lg:col-span-7 flex flex-col gap-space-md order-1 lg:order-2">
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-lg">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">طريقة الدفع المشفرة</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">اختر وسيلة الدفع المعتمدة لدى البنوك والمصارف الوطنية</p>
+</div>
+<div class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-secondary text-[20px]">lock_clock</span>
+<span class="font-label-caps text-label-caps font-semibold">نظام حماية الدفع المالي</span>
+</div>
+</div>
+<!-- Payment Method Tabs -->
+<div class="grid grid-cols-3 gap-space-xs bg-surface-container-low p-1.5 rounded-xl">
+<button class="flex flex-col md:flex-row items-center justify-center gap-space-xs py-space-sm px-2 rounded-lg bg-surface-container-lowest text-primary shadow-sm font-option-label text-option-label font-bold transition-all" id="tab-card" onclick="selectPaymentTab('card')">
+<span class="material-symbols-outlined text-[20px]">credit_card</span>
+<span class="text-center">البطاقات المصرفية</span>
+</button>
+<button class="flex flex-col md:flex-row items-center justify-center gap-space-xs py-space-sm px-2 rounded-lg text-on-surface-variant hover:text-on-surface font-option-label text-option-label transition-all" id="tab-wallets" onclick="selectPaymentTab('wallets')">
+<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+<span class="text-center">المحافظ و Apple Pay</span>
+</button>
+<button class="flex flex-col md:flex-row items-center justify-center gap-space-xs py-space-sm px-2 rounded-lg text-on-surface-variant hover:text-on-surface font-option-label text-option-label transition-all" id="tab-university" onclick="selectPaymentTab('university')">
+<span class="material-symbols-outlined text-[20px]">account_balance</span>
+<span class="text-center">البوابة الجامعية</span>
+</button>
+</div>
+<!-- Accepted Brands Visual Strip -->
+<div class="flex items-center justify-between bg-surface-container-low/50 px-space-md py-2.5 rounded-xl">
+<span class="font-label-caps text-label-caps text-on-surface-variant font-semibold">الشبكات المقبولة:</span>
+<div class="flex items-center gap-space-sm font-data-metric text-[12px] font-bold text-on-surface">
+<span class="px-2 py-0.5 rounded bg-surface-container-lowest shadow-xs tracking-wider text-primary">VISA</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-lowest shadow-xs tracking-wider text-error">Mastercard</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-lowest shadow-xs tracking-wider text-secondary">mada</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-lowest shadow-xs tracking-wider text-on-surface-variant">Qi Card</span>
+</div>
+</div>
+<!-- FORM CONTAINER: Tab 1 (Credit Card Form) -->
+<div class="space-y-space-md" id="view-card-form">
+<!-- Cardholder Name -->
+<div class="flex flex-col gap-1.5">
+<label class="font-option-label text-option-label text-on-surface font-semibold flex items-center justify-between" for="card-holder">
+<span>اسم حامل البطاقة</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant font-normal">مطابقاً لما هو مدون على البطاقة</span>
+</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low text-on-surface font-data-metric text-data-metric rounded-xl pr-space-md pl-10 py-3 focus:outline-none focus:bg-surface-container uppercase transition-all tracking-wider" dir="ltr" id="card-holder" placeholder="ALI AHMED MOHAMMED" type="text" value="ALI AHMED MOHAMMED"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">person</span>
+</div>
+</div>
+<!-- Card Number with Live Brand Visual Badge -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<label class="font-option-label text-option-label text-on-surface font-semibold" for="card-number">رقم البطاقة المصرفية</label>
+<div class="flex items-center gap-1 text-secondary font-data-metric text-[11px] font-semibold">
+<span class="material-symbols-outlined text-[14px]">shield</span>
+<span>تشفير مباشر غير قابل للاعتراض</span>
+</div>
+</div>
+<div class="relative">
+<input class="w-full bg-surface-container-low text-on-surface font-data-metric text-[15px] font-semibold rounded-xl pr-space-md pl-24 py-3 focus:outline-none focus:bg-surface-container tracking-widest transition-all" dir="ltr" id="card-number" maxlength="19" placeholder="4000 1234 5678 9010" type="text" value="4532 •••• •••• 8819"/>
+<div class="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 pointer-events-none">
+<span class="px-1.5 py-0.5 rounded bg-primary text-on-primary font-data-metric text-[10px] font-bold uppercase tracking-wider">VISA</span>
+<span class="material-symbols-outlined text-secondary text-[18px]">check_circle</span>
+</div>
+</div>
+</div>
+<!-- Expiry Date and CVV Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
+<!-- Expiration -->
+<div class="flex flex-col gap-1.5">
+<label class="font-option-label text-option-label text-on-surface font-semibold" for="card-expiry">تاريخ الانتهاء (MM / YY)</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low text-on-surface font-data-metric text-data-metric font-semibold rounded-xl pr-space-md pl-10 py-3 focus:outline-none focus:bg-surface-container text-center tracking-widest transition-all" dir="ltr" id="card-expiry" maxlength="5" placeholder="MM / YY" type="text" value="08 / 28"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">calendar_today</span>
+</div>
+</div>
+<!-- CVV with explainer tooltip -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<label class="font-option-label text-option-label text-on-surface font-semibold" for="card-cvv">رمز التحقق الخلفي (CVV)</label>
+<button class="flex items-center gap-0.5 text-on-surface-variant hover:text-primary font-label-caps text-label-caps" onclick="alert('رمز الأمان المكون من 3 أو 4 أرقام المطبوع على ظهر بطاقتك المصرفية بجانب شريط التوقيع')" type="button">
+<span class="material-symbols-outlined text-[14px]">info</span>
+<span>ما هو؟</span>
+</button>
+</div>
+<div class="relative">
+<input class="w-full bg-surface-container-low text-on-surface font-data-metric text-data-metric font-bold rounded-xl pr-space-md pl-10 py-3 focus:outline-none focus:bg-surface-container text-center tracking-widest transition-all" dir="ltr" id="card-cvv" maxlength="4" placeholder="•••" type="password" value="924"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">lock</span>
+</div>
+</div>
+</div>
+<!-- Save card for frictionless exam renewals checkbox -->
+<label class="flex items-start gap-space-sm p-space-sm rounded-xl hover:bg-surface-container-low transition-colors cursor-pointer">
+<input checked="" class="mt-1 w-4 h-4 rounded text-primary focus:ring-primary accent-primary" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-option-label text-option-label text-on-surface font-semibold">حفظ بيانات البطاقة بأمان لتجديد الدورات التقييمية تلقائياً</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">يتم حفظ رمز رمزي مشفر Token فقط دون تخزين أرقامك في خوادمنا امتثالاً لمعايير PCI</span>
+</div>
+</label>
+</div>
+<!-- FORM CONTAINER: Tab 2 (Wallets & Apple Pay - Alternative) -->
+<div class="hidden space-y-space-md py-space-sm" id="view-wallets">
+<div class="p-space-lg rounded-xl bg-surface-container-low flex flex-col items-center justify-center text-center gap-space-sm">
+<div class="w-14 h-14 rounded-full bg-inverse-surface text-inverse-on-surface flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-[28px]">phone_iphone</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">الدفع السريع المعتمد بنقرة واحدة</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-md">
+              استخدم Apple Pay أو المحافظ الرقمية الوطنية المرتبطة بجهازك لتأكيد العملية فورياً دون كتابة تفاصيل البطاقة.
+            </p>
+<div class="flex flex-col sm:flex-row gap-space-sm w-full max-w-sm mt-space-xs">
+<button class="flex-1 py-3 px-space-md rounded-xl bg-inverse-surface text-inverse-on-surface font-option-label text-option-label font-bold flex items-center justify-center gap-2 hover:opacity-95 shadow-sm transition-all" onclick="simulateSuccessState()">
+<span class="font-data-metric text-[16px]">Pay</span>
+<span>الدفع المباشر</span>
+</button>
+<button class="flex-1 py-3 px-space-md rounded-xl bg-surface-container-highest text-on-surface font-option-label text-option-label font-bold flex items-center justify-center gap-2 hover:bg-surface-container-high transition-all" onclick="simulateSuccessState()">
+<span class="material-symbols-outlined text-[18px]">wallet</span>
+<span>ZainCash / آسيا</span>
+</button>
+</div>
+</div>
+</div>
+<!-- FORM CONTAINER: Tab 3 (University Portal Gateway) -->
+<div class="hidden space-y-space-md py-space-sm" id="view-university">
+<div class="p-space-lg rounded-xl bg-surface-container-low flex flex-col gap-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-primary text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">domain</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">الربط بالمنحة الجامعية المباشرة</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">للطلبة الملتحقين بالجامعات الشريكة في المنصة السريرية</span>
+</div>
+</div>
+<div class="space-y-space-sm">
+<label class="block font-option-label text-option-label text-on-surface font-semibold">اختر كليتك أو مركز التدريب الطبي</label>
+<select class="w-full bg-surface-container-lowest text-on-surface font-body-sm text-body-sm rounded-xl px-space-md py-3 focus:outline-none">
+<option>كلية الطب - جامعة بغداد (مدينة الطب)</option>
+<option>المجلس العراقي للاختصاصات الطبية (ICMS)</option>
+<option>كلية الطب - جامعة النهرين</option>
+<option>كلية طب المستنصرية</option>
+<option>كلية الطب - جامعة الموصل</option>
+</select>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-option-label text-option-label text-on-surface font-semibold">الرقم التعريفي للطالب (Student ID)</label>
+<input class="w-full bg-surface-container-lowest text-on-surface font-data-metric text-data-metric rounded-xl px-space-md py-2.5 focus:outline-none uppercase tracking-wider" placeholder="MED-2024-88419" type="text"/>
+</div>
+<button class="w-full py-3 rounded-xl bg-primary text-on-primary font-option-label text-option-label font-bold hover:opacity-95 transition-all" onclick="simulateSuccessState()">
+              التحقق من الاعتماد الجامعي والدفع المدعوم
+            </button>
+</div>
+</div>
+<!-- Actions Cluster: Primary Submit + Cancel Return -->
+<div class="flex flex-col gap-space-sm pt-space-xs">
+<button class="w-full h-14 rounded-xl bg-primary text-on-primary hover:bg-primary/95 active:scale-[0.99] font-headline-sm text-headline-sm font-bold flex items-center justify-center gap-space-sm shadow-md transition-all" id="btn-submit-payment" onclick="processPayment()">
+<span class="material-symbols-outlined text-[24px]">verified</span>
+<span id="submit-btn-text">تأكيد ودفع 18,000 د.ع والبدء الفوري</span>
+<span class="material-symbols-outlined text-[20px] -scale-x-100">arrow_forward</span>
+</button>
+<div class="flex items-center justify-between px-space-xs">
+<a class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary font-body-sm text-body-sm transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+<span>إلغاء والعودة إلى جدول خطط الأسعار</span>
+</a>
+<span class="font-data-metric text-data-metric text-on-surface-variant flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+              بوابة الدفع الرسمية جاهزة
+            </span>
+</div>
+</div>
+<!-- Compliance & Legal Text -->
+<div class="pt-space-xs">
+<p class="font-body-sm text-[12px] leading-relaxed text-on-surface-variant text-center">
+            بالنقر على «تأكيد ودفع»، فإنك توافق صراحة على <a class="text-primary underline" href="#">شروط الخدمة الأكاديمية</a> و<a class="text-primary underline" href="#">سياسة الخصوصية وأمان الامتحانات</a>. معاملتك محمية ببروتوكولات التشفير المصرفي المعتمدة، ويتم إرسال إشعار فوري والإيصال الضريبي المعتمد إلى بريدك الأكاديمي.
+          </p>
+</div>
+</div>
+</section>
+</div>
+<!-- PAYMENT STATUS & RESULTS SECTION (Live Reference Overlays / Scenario Showcases) -->
+<section class="mt-space-xl pt-space-xl flex flex-col gap-space-lg">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-xl bg-surface-container-high text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">preview</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">لوحة حالات الدفع والنتائج (Payment State Previews)</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">معاينة تفاعلية حية لردود فعل البوابة المالية عند نجاح العملية أو تعذرها</p>
+</div>
+</div>
+<!-- Live Simulator Switcher Controls -->
+<div class="flex items-center gap-space-xs bg-surface-container-low p-1 rounded-xl">
+<button class="px-space-md py-1.5 rounded-lg text-secondary font-option-label text-option-label font-bold hover:bg-surface-container-lowest transition-all flex items-center gap-1" onclick="toggleScenario('success')">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span>معاينة حالة النجاح</span>
+</button>
+<button class="px-space-md py-1.5 rounded-lg text-error font-option-label text-option-label font-bold hover:bg-surface-container-lowest transition-all flex items-center gap-1" onclick="toggleScenario('error')">
+<span class="material-symbols-outlined text-[16px]">error</span>
+<span>معاينة حالة التعذر</span>
+</button>
+</div>
+</div>
+<!-- Scenarios Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-space-lg">
+<!-- STATE A: Payment Success Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-md relative overflow-hidden flex flex-col justify-between gap-space-md transition-all" id="scenario-success-card">
+<!-- Status Indicator Pill -->
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-xl bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[28px]">task_alt</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-secondary font-bold uppercase tracking-wider">العملية مقبولة ومكتملة</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-bold">تم تأكيد الدفع وتفعيل Premium بنجاح!</h4>
+</div>
+</div>
+<span class="font-data-metric text-data-metric bg-surface-container-low px-space-sm py-1 rounded-lg text-on-surface-variant" dir="ltr">
+            #TX-98421
+          </span>
+</div>
+<!-- Medical Unlock Highlight -->
+<div class="bg-surface-container-low rounded-xl p-space-md space-y-2">
+<div class="flex items-center gap-space-xs text-secondary font-option-label text-option-label font-semibold">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>الفوائد الأكاديمية المفعلة فوراً في حسابك:</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface">
+            تم فتح كافة أسئلة بنك الأسئلة السريري (QBank) والاختبارات التجريبية الشاملة تلقائياً. يمكنك الآن بدء اختباراتك دون أي قيود.
+          </p>
+<div class="flex flex-wrap items-center gap-space-xs pt-1">
+<span class="font-data-metric text-[12px] bg-surface-container-lowest px-2 py-0.5 rounded text-on-surface font-medium">الوصول: 2025/10/20</span>
+<span class="font-data-metric text-[12px] bg-surface-container-lowest px-2 py-0.5 rounded text-on-surface font-medium">المبلغ: 18,000 د.ع</span>
+<span class="font-data-metric text-[12px] bg-surface-container-lowest px-2 py-0.5 rounded text-secondary font-medium">الحالة: نشط ومفعل</span>
+</div>
+</div>
+<!-- Success Direct Actions -->
+<div class="flex flex-col sm:flex-row items-center gap-space-sm pt-space-xs">
+<button class="w-full sm:flex-1 py-3 rounded-xl bg-primary text-on-primary font-option-label text-option-label font-bold hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 shadow-sm" onclick="alert('جارٍ نقلك إلى بيئة الامتحان الشامل رقم 04...')">
+<span class="material-symbols-outlined text-[20px]">assignment</span>
+<span>بدء الاختبار التجريبي 04 الآن</span>
+</button>
+<button class="w-full sm:w-auto py-3 px-space-md rounded-xl bg-surface-container-low text-on-surface hover:bg-surface-container font-option-label text-option-label font-medium transition-colors flex items-center justify-center gap-1.5" onclick="downloadReceipt()">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+<span>تحميل الإيصال الضريبي (PDF)</span>
+</button>
+</div>
+</div>
+<!-- STATE B: Payment Declined & Error Handling Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-md relative overflow-hidden flex flex-col justify-between gap-space-md transition-all" id="scenario-error-card">
+<!-- Status Indicator Pill -->
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-xl bg-error-container text-on-error-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[28px]">error</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-error font-bold uppercase tracking-wider">إشعار أمان مصرفي</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-bold">تعذر إتمام عملية الدفع</h4>
+</div>
+</div>
+<span class="font-data-metric text-data-metric bg-error-container/40 text-on-error-container px-space-sm py-1 rounded-lg" dir="ltr">
+            Err: 51_DECLINED
+          </span>
+</div>
+<!-- Dignified Calm Clarification -->
+<div class="bg-surface-container-low rounded-xl p-space-md space-y-2">
+<div class="flex items-center gap-space-xs text-error font-option-label text-option-label font-semibold">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+<span>تم رفض العملية من قبل البنك المصدر (Insufficient Funds or Limit)</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+<strong>اطمئن، لم يتم خصم أي مبالغ مالية من حسابك،</strong> وخطة حسابك الحالية ما زالت آمنة بالكامل. لقد قمنا بحفظ خيارات الخطة والكود الترويجي لتتمكن من المتابعة بسلاسة.
+          </p>
+<div class="font-body-sm text-[12px] text-on-surface-variant bg-surface-container-lowest p-2 rounded-lg">
+            الأسباب المحتملة الشائعة: تجاوز الحد اليومي للشراء عبر الإنترنت، أو الحاجة لتفعيل خاصية 3D-Secure من تطبيق مصرفك.
+          </div>
+</div>
+<!-- Immediate Recovery Actions -->
+<div class="flex flex-col sm:flex-row items-center gap-space-sm pt-space-xs">
+<button class="w-full sm:flex-1 py-3 rounded-xl bg-primary text-on-primary font-option-label text-option-label font-bold hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 shadow-sm" onclick="retryPayment()">
+<span class="material-symbols-outlined text-[20px]">refresh</span>
+<span>إعادة المحاولة مجدداً</span>
+</button>
+<button class="w-full sm:flex-1 py-3 px-space-md rounded-xl bg-surface-container-low text-on-surface hover:bg-surface-container font-option-label text-option-label font-semibold transition-colors flex items-center justify-center gap-1.5" onclick="selectPaymentTab('wallets')">
+<span class="material-symbols-outlined text-[18px]">swap_horiz</span>
+<span>اختيار وسيلة دفع بديلة</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+</div>
+<script>
+  // Billing cycle state management
+  let currentCycle = 'monthly';
+  let isDiscountApplied = false;
+
+  const pricing = {
+    monthly: {
+      base: 18000,
+      discount: 2700,
+      label: 'قيمة الاشتراك الشهري (30 يوماً كاملة)',
+      nextDate: '20 أكتوبر 2026',
+      unit: 'شهرياً'
+    },
+    annual: {
+      base: 172800, // 20% savings on 12 months (normally 216,000)
+      discount: 25920,
+      label: 'قيمة الاشتراك السنوي الشامل (365 يوماً - وفر 20%)',
+      nextDate: '20 سبتمبر 2027',
+      unit: 'سنوياً'
+    }
+  };
+
+  function formatIQD(num) {
+    return num.toLocaleString('en-US');
+  }
+
+  function updatePrices() {
+    const data = pricing[currentCycle];
+    document.getElementById('billing-cycle-label').innerText = data.label;
+    document.getElementById('base-price').innerText = formatIQD(data.base) + ' IQD';
+    document.getElementById('next-billing-date').innerText = data.nextDate;
+
+    let finalTotal = data.base;
+    if (isDiscountApplied) {
+      finalTotal = data.base - data.discount;
+      document.getElementById('discount-row').classList.remove('hidden');
+      document.getElementById('discount-row').classList.add('flex');
+      document.getElementById('discount-amount').innerText = '-' + formatIQD(data.discount) + ' IQD';
+    } else {
+      document.getElementById('discount-row').classList.add('hidden');
+      document.getElementById('discount-row').classList.remove('flex');
+    }
+
+    document.getElementById('total-price').innerText = formatIQD(finalTotal);
+    document.getElementById('renewal-price').innerText = formatIQD(finalTotal) + ' د.ع';
+    document.getElementById('submit-btn-text').innerText = 'تأكيد ودفع ' + formatIQD(finalTotal) + ' د.ع والبدء الفوري';
+  }
+
+  function switchBilling(cycle) {
+    currentCycle = cycle;
+    const btnMonthly = document.getElementById('btn-monthly');
+    const btnAnnual = document.getElementById('btn-annual');
+
+    if (cycle === 'annual') {
+      btnAnnual.className = "flex-1 py-1.5 px-3 rounded-lg text-center font-option-label text-option-label transition-all bg-surface-container-lowest text-primary shadow-sm font-bold flex items-center justify-center gap-1";
+      btnMonthly.className = "flex-1 py-1.5 px-3 rounded-lg text-center font-option-label text-option-label text-on-surface-variant hover:text-on-surface transition-all font-medium";
+      showToast("تم تحويل الفوترة إلى الخطة السنوية (تم تطبيق توفير 20%)");
+    } else {
+      btnMonthly.className = "flex-1 py-1.5 px-3 rounded-lg text-center font-option-label text-option-label transition-all bg-surface-container-lowest text-primary shadow-sm font-bold";
+      btnAnnual.className = "flex-1 py-1.5 px-3 rounded-lg text-center font-option-label text-option-label text-on-surface-variant hover:text-on-surface transition-all flex items-center justify-center gap-1 font-medium";
+      showToast("تم العودة إلى الفوترة الشهرية المرنة");
+    }
+    updatePrices();
+  }
+
+  function applyPromo() {
+    const input = document.getElementById('promo-input');
+    if (input.value.trim() !== '') {
+      isDiscountApplied = true;
+      document.getElementById('promo-applied-badge').classList.remove('hidden');
+      document.getElementById('promo-applied-badge').classList.add('flex');
+      updatePrices();
+      showToast("تم تطبيق الخصم الأكاديمي المعتمد بنجاح (-15%)");
+    } else {
+      showToast("يرجى إدخال رمز الخصم أولاً");
+    }
+  }
+
+  function removePromo() {
+    isDiscountApplied = false;
+    document.getElementById('promo-input').value = '';
+    document.getElementById('promo-applied-badge').classList.add('hidden');
+    document.getElementById('promo-applied-badge').classList.remove('flex');
+    updatePrices();
+    showToast("تمت إزالة كود الخصم");
+  }
+
+  function selectPaymentTab(tab) {
+    const views = {
+      card: document.getElementById('view-card-form'),
+      wallets: document.getElementById('view-wallets'),
+      university: document.getElementById('view-university')
+    };
+
+    const tabs = {
+      card: document.getElementById('tab-card'),
+      wallets: document.getElementById('tab-wallets'),
+      university: document.getElementById('tab-university')
+    };
+
+    // Hide all views
+    Object.keys(views).forEach(key => {
+      views[key].classList.add('hidden');
+      tabs[key].className = "flex flex-col md:flex-row items-center justify-center gap-space-xs py-space-sm px-2 rounded-lg text-on-surface-variant hover:text-on-surface font-option-label text-option-label transition-all";
+    });
+
+    // Activate selected
+    views[tab].classList.remove('hidden');
+    tabs[tab].className = "flex flex-col md:flex-row items-center justify-center gap-space-xs py-space-sm px-2 rounded-lg bg-surface-container-lowest text-primary shadow-sm font-option-label text-option-label font-bold transition-all";
+  }
+
+  function processPayment() {
+    const btn = document.getElementById('btn-submit-payment');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<span class="material-symbols-outlined text-[20px] animate-spin">progress_activity</span><span>جارٍ تشفير البيانات والاتصال بالبنك المصدر...</span>';
+    btn.disabled = true;
+
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+      // Scroll smoothly to the live scenarios preview
+      const successCard = document.getElementById('scenario-success-card');
+      successCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      successCard.classList.add('ring-4', 'ring-secondary');
+      setTimeout(() => successCard.classList.remove('ring-4', 'ring-secondary'), 2500);
+      showToast("تمت معالجة العملية بنجاح من خلال البوابة المصرفية المشفرة!");
+    }, 1200);
+  }
+
+  function retryPayment() {
+    const errorCard = document.getElementById('scenario-error-card');
+    errorCard.classList.add('opacity-50');
+    setTimeout(() => {
+      errorCard.classList.remove('opacity-50');
+      showToast("جارٍ إعادة محاولة الاتصال بالشبكة المصرفية...");
+    }, 600);
+  }
+
+  function simulateSuccessState() {
+    const successCard = document.getElementById('scenario-success-card');
+    successCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    showToast("تم اعتماد طريقة الدفع وتفعيل الحساب بنجاح");
+  }
+
+  function toggleScenario(type) {
+    const target = type === 'success' ? document.getElementById('scenario-success-card') : document.getElementById('scenario-error-card');
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    target.classList.add('scale-[1.02]');
+    setTimeout(() => target.classList.remove('scale-[1.02]'), 600);
+  }
+
+  function downloadReceipt() {
+    showToast("جارٍ توليد وتحميل الإيصال المالي الرسمي #TX-98421 بصيغة PDF...");
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById('payment-toast');
+    const msgEl = document.getElementById('toast-message');
+    msgEl.innerText = msg;
+    toast.classList.remove('translate-y-20', 'opacity-0');
+    toast.classList.add('translate-y-0', 'opacity-100');
+    setTimeout(() => {
+      toast.classList.remove('translate-y-0', 'opacity-100');
+      toast.classList.add('translate-y-20', 'opacity-0');
+    }, 3500);
+  }
+
+  // Auto initialize prices
+  updatePrices();
+</script></main></div></body></html>

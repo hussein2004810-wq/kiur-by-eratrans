@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "secondary-container": "#99efe5",
+          "on-tertiary-fixed-variant": "#661aa3",
+          "surface": "#faf8ff",
+          "inverse-surface": "#283044",
+          "tertiary-container": "#5f0d9c",
+          "surface-container-lowest": "#ffffff",
+          "surface-bright": "#faf8ff",
+          "surface-container-high": "#e2e7ff",
+          "inverse-on-surface": "#eef0ff",
+          "error": "#ba1a1a",
+          "on-surface": "#131b2e",
+          "on-primary": "#ffffff",
+          "on-primary-fixed-variant": "#264191",
+          "background": "#faf8ff",
+          "primary-container": "#1e3a8a",
+          "on-tertiary": "#ffffff",
+          "surface-dim": "#d2d9f4",
+          "surface-container": "#eaedff",
+          "on-background": "#131b2e",
+          "tertiary-fixed-dim": "#dfb7ff",
+          "on-tertiary-fixed": "#2d0050",
+          "tertiary": "#410070",
+          "secondary-fixed": "#9cf2e8",
+          "outline": "#757682",
+          "on-surface-variant": "#444651",
+          "on-secondary-fixed": "#00201d",
+          "tertiary-fixed": "#f1dbff",
+          "on-secondary": "#ffffff",
+          "on-secondary-fixed-variant": "#00504a",
+          "on-primary-fixed": "#00164e",
+          "primary": "#00236f",
+          "surface-container-highest": "#dae2fd",
+          "secondary-fixed-dim": "#80d5cb",
+          "on-error-container": "#93000a",
+          "surface-variant": "#dae2fd",
+          "error-container": "#ffdad6",
+          "primary-fixed": "#dce1ff",
+          "outline-variant": "#c5c5d3",
+          "on-tertiary-container": "#cc93ff",
+          "on-error": "#ffffff",
+          "on-primary-container": "#90a8ff",
+          "inverse-primary": "#b6c4ff",
+          "secondary": "#006a63",
+          "surface-tint": "#4059aa",
+          "primary-fixed-dim": "#b6c4ff",
+          "surface-container-low": "#f2f3ff",
+          "on-secondary-container": "#006f67"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+        "spacing": {
+          "space-lg": "1.5rem",
+          "space-sm": "0.5rem",
+          "margin": "2rem",
+          "gutter-mobile": "0.75rem",
+          "space-xs": "0.25rem",
+          "space-xl": "2rem",
+          "gutter": "1.5rem",
+          "margin-mobile": "1rem",
+          "space-md": "1rem"
+        },
+        "fontFamily": {
+          "headline-xl-mobile": [
+            "Noto Sans"
+          ],
+          "headline-sm": [
+            "Noto Sans"
+          ],
+          "headline-lg": [
+            "Noto Sans"
+          ],
+          "label-caps": [
+            "Inter"
+          ],
+          "headline-xl": [
+            "Noto Sans"
+          ],
+          "body-md": [
+            "Noto Sans"
+          ],
+          "body-sm": [
+            "Noto Sans"
+          ],
+          "data-metric": [
+            "Inter"
+          ],
+          "option-label": [
+            "Inter"
+          ],
+          "vignette-text": [
+            "Noto Sans"
+          ]
+        },
+        "fontSize": {
+          "headline-xl-mobile": [
+            "24px",
+            {
+              "lineHeight": "38px",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-sm": [
+            "18px",
+            {
+              "lineHeight": "30px",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-lg": [
+            "22px",
+            {
+              "lineHeight": "36px",
+              "fontWeight": "600"
+            }
+          ],
+          "label-caps": [
+            "11px",
+            {
+              "lineHeight": "16px",
+              "letterSpacing": "0.05em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-xl": [
+            "30px",
+            {
+              "lineHeight": "48px",
+              "fontWeight": "700"
+            }
+          ],
+          "body-md": [
+            "15px",
+            {
+              "lineHeight": "26px",
+              "fontWeight": "400"
+            }
+          ],
+          "body-sm": [
+            "13px",
+            {
+              "lineHeight": "22px",
+              "fontWeight": "400"
+            }
+          ],
+          "data-metric": [
+            "13px",
+            {
+              "lineHeight": "18px",
+              "letterSpacing": "0.02em",
+              "fontWeight": "500"
+            }
+          ],
+          "option-label": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "fontWeight": "700"
+            }
+          ],
+          "vignette-text": [
+            "17px",
+            {
+              "lineHeight": "32px",
+              "fontWeight": "400"
+            }
+          ]
+        }
+      },
+    },
+  }</script></head><body class="bg-background font-body-md text-on-surface"><aside class="fixed right-0 top-0 h-full w-72 bg-surface-container-lowest z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="h-16 px-space-md flex items-center justify-between gap-space-sm bg-surface-container-low/50"><div class="flex items-center gap-space-sm"><div class="w-9 h-9 rounded-xl bg-primary-container text-on-primary flex items-center justify-center"><span class="material-symbols-outlined text-[20px]">vital_signs</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary tracking-tight">منصة نبض الطبية</span><span class="font-label-caps text-label-caps text-on-surface-variant uppercase">MedPulse Academic</span></div></div></div><div class="px-space-md py-space-sm"><div class="px-space-xs py-space-xs"><span class="font-label-caps text-label-caps text-on-surface-variant uppercase">الوحدات الأكاديمية</span></div><nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary font-headline-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="main-dashboard" href="#"><span class="material-symbols-outlined text-[20px]">dashboard</span><span class="font-body-md text-body-md">الرئيسية</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl transition-all bg-primary-container text-on-primary font-headline-sm" data-path="question-bank" href="#"><span class="material-symbols-outlined text-[20px]">quiz</span><span class="font-body-md text-body-md">بنك الأسئلة</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="mock-exams" href="#"><span class="material-symbols-outlined text-[20px]">assignment</span><span class="font-body-md text-body-md">الاختبارات</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="performance-analytics" href="#"><span class="material-symbols-outlined text-[20px]">monitoring</span><span class="font-body-md text-body-md">الأداء والتحصيل</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="study-planner" href="#"><span class="material-symbols-outlined text-[20px]">calendar_month</span><span class="font-body-md text-body-md">خطة الدراسة</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="clinical-review" href="#"><span class="material-symbols-outlined text-[20px]">clinical_notes</span><span class="font-body-md text-body-md">المراجعة السريرية</span></a></nav></div><div class="px-space-md py-space-xs"><div class="px-space-xs py-space-xs"><span class="font-label-caps text-label-caps text-on-surface-variant uppercase">الأدوات والمراجع</span></div><nav class="flex flex-col gap-1" data-active-classes="bg-primary-container text-on-primary font-headline-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="bookmarks-vault" href="#"><span class="material-symbols-outlined text-[20px]">bookmark</span><span class="font-body-md text-body-md">المحفوظات</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="clinical-notes" href="#"><span class="material-symbols-outlined text-[20px]">edit_note</span><span class="font-body-md text-body-md">الملاحظات</span></a></nav></div></div><div class="flex flex-col gap-space-xs p-space-md bg-surface-container-low/40"><nav class="flex flex-col gap-1 mb-space-xs" data-active-classes="bg-primary-container text-on-primary font-headline-sm"><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="help-center" href="#"><span class="material-symbols-outlined text-[18px]">help_outline</span><span class="font-body-sm text-body-sm">المساعدة والدعم</span></a><a class="flex items-center gap-space-sm px-space-md py-space-xs rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="system-settings" href="#"><span class="material-symbols-outlined text-[18px]">settings</span><span class="font-body-sm text-body-sm">الإعدادات</span></a></nav><div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col"><span class="font-headline-sm text-[13px] leading-tight text-on-surface font-semibold">علي أحمد</span><span class="font-label-caps text-[10px] text-on-surface-variant">طالب طب • مرحلة 5</span></div></div><button aria-label="تسجيل الخروج" class="p-space-xs text-on-surface-variant hover:text-primary transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">logout</span></button></div></div></aside><div class="pr-72"><header class="fixed top-0 right-72 left-0 h-16 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-xl"><div class="flex items-center gap-space-md flex-1 max-w-xl"><div class="relative w-full"><span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span><input class="w-full bg-surface-container-lowest text-on-surface font-body-sm text-body-sm pr-10 pl-space-md py-space-xs rounded-full outline-none ring-0 placeholder:text-on-surface-variant/70 shadow-[0_1px_8px_rgba(0,0,0,0.04)] focus:bg-surface-container-low transition-all" placeholder="ابحث في الأسئلة، المواضيع، والامتحانات..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="hidden md:flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-secondary-container/40 text-on-secondary-container font-data-metric text-[12px]"><span class="material-symbols-outlined text-[16px]">cloud_done</span><span>تم الحفظ المتزامن</span></div><button class="px-space-sm py-1 rounded-full bg-surface-container-high text-on-surface font-label-caps text-label-caps hover:bg-surface-container-highest transition-colors" type="button">EN</button><div class="relative flex items-center"><button aria-label="الإشعارات" class="p-space-xs rounded-full text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all relative" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-error"></span></button></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="relative pt-16 bg-background min-h-screen px-space-xl py-space-lg"><div class="flex flex-col w-full relative">
+<!-- Network Resilience Banner (Persistent Offline State) -->
+<div class="w-full bg-inverse-surface text-inverse-on-surface px-space-md py-space-sm rounded-xl mb-space-md shadow-md flex items-center justify-between gap-space-md relative overflow-hidden">
+<div class="flex items-center gap-space-md flex-1">
+<div class="w-9 h-9 rounded-lg bg-surface-variant/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary-container animate-pulse text-[20px]">wifi_off</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-[15px] font-bold text-surface">انقطع الاتصال بالإنترنت</span>
+<span class="w-2 h-2 rounded-full bg-secondary-container"></span>
+<span class="font-label-caps text-label-caps text-secondary-container">التخزين الآمن مفعل</span>
+</div>
+<p class="font-body-sm text-body-sm text-surface-container-high leading-snug">
+          يتم حفظ إجاباتك محلياً بشكل آمن ولن تفقد أي تقدم. ستتم المزامنة تلقائياً فور عودة الاتصال.
+        </p>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<div class="hidden sm:flex items-center gap-1 text-[12px] font-data-metric text-surface-dim bg-surface-container/10 px-space-sm py-1 rounded-lg">
+<span class="material-symbols-outlined text-[15px]">enhanced_encryption</span>
+<span>SHA-256 محلي مُؤَمَّن</span>
+</div>
+<button class="px-space-md py-space-xs rounded-xl bg-surface-container-lowest text-inverse-surface font-body-sm text-body-sm font-semibold hover:bg-surface-container-high transition-colors flex items-center gap-1 shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">sync</span>
+<span>إعادة التحقق من الاتصال</span>
+</button>
+</div>
+</div>
+<!-- Background Exam Player (Subdued & Dimmed State Question 40 of 40) -->
+<div class="w-full opacity-40 pointer-events-none select-none filter blur-[1.5px] transition-all grid grid-cols-12 gap-space-lg">
+<!-- Right Panel: Clinical Vignette & Distractors (65% Col 8) -->
+<div class="col-span-8 flex flex-col gap-space-md">
+<!-- Vignette Question Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-xl shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="px-space-sm py-0.5 rounded-full bg-primary-container text-on-primary font-data-metric text-[12px]">السؤال 40 من 40</span>
+<span class="px-space-sm py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-caps text-label-caps">طب الطوارئ والعناية المركزة</span>
+<span class="font-data-metric text-[12px] text-on-surface-variant">معرف السؤال: #SMLE-2024-8921</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">timer</span>
+<span class="font-data-metric text-[13px]">01:42 دقيقة متبقية</span>
+</div>
+</div>
+<p class="font-vignette-text text-vignette-text text-on-surface leading-loose">
+          رجل يبلغ من العمر 58 عاماً تم نقله إلى قسم الطوارئ وهو يعاني من ألم حاد ومفاجئ خلف القص يمتد إلى الظهر بين لوحي الكتف بدأ منذ ساعة ونصف. ضغط الدم 194/110 ملم زئبق في الذراع اليمنى و 158/88 ملم زئبق في الذراع اليسرى. النبض 104 في الدقيقة ومنتظم. أظهر تخطيط القلب الكهربائي تضخماً في البطين الأيسر بدون تغيرات إقفارية حادة. أي من الفحوصات التشخيصية التالية هو الأكثر ملاءمة لتأكيد التشخيص السريري الأولي؟
+        </p>
+<!-- Distractor Options -->
+<div class="flex flex-col gap-space-sm mt-space-sm">
+<div class="flex items-center gap-space-md p-space-md rounded-xl bg-surface-container-low text-on-surface">
+<div class="w-8 h-8 rounded-lg bg-surface-container text-on-surface flex items-center justify-center font-option-label text-option-label">أ</div>
+<span class="font-body-md text-body-md">تصوير الصدر بالأشعة السينية المحمولة (Portable Chest X-Ray)</span>
+</div>
+<div class="flex items-center gap-space-md p-space-md rounded-xl bg-primary/10 text-primary">
+<div class="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center font-option-label text-option-label">ب</div>
+<span class="font-body-md text-body-md font-semibold">تصوير الأوعية الطبقي المحوسب للصدر (CT Angiography of the Chest)</span>
+</div>
+<div class="flex items-center gap-space-md p-space-md rounded-xl bg-surface-container-low text-on-surface">
+<div class="w-8 h-8 rounded-lg bg-surface-container text-on-surface flex items-center justify-center font-option-label text-option-label">ج</div>
+<span class="font-body-md text-body-md">قسطرة الشرايين التاجية الطارئة (Coronary Angiography)</span>
+</div>
+<div class="flex items-center gap-space-md p-space-md rounded-xl bg-surface-container-low text-on-surface">
+<div class="w-8 h-8 rounded-lg bg-surface-container text-on-surface flex items-center justify-center font-option-label text-option-label">د</div>
+<span class="font-body-md text-body-md">تخطيط صدى القلب عبر الصدر (Transthoracic Echocardiography)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Left Panel: Exam Matrix & Lab Quick Values (Col 4) -->
+<div class="col-span-4 flex flex-col gap-space-md">
+<!-- Exam Navigator Matrix Preview -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center justify-between pb-space-xs">
+<span class="font-headline-sm text-headline-sm text-primary">مخطط تقدم الاختبار</span>
+<span class="font-data-metric text-[12px] text-on-surface-variant">40 سؤالاً</span>
+</div>
+<div class="grid grid-cols-8 gap-1.5 pt-space-xs">
+<!-- 40 matrix mini slots representing answered, flagged, and missing -->
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">1</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">2</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">3</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">4</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">5</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">6</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">7</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">8</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">9</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">10</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">11</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">12</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">13</div>
+<div class="h-7 rounded bg-tertiary text-on-tertiary flex items-center justify-center font-data-metric text-[11px] font-semibold">14</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">15</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">16</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">17</div>
+<div class="h-7 rounded bg-error text-on-error flex items-center justify-center font-data-metric text-[11px] font-semibold">18</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">19</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">20</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">21</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">22</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">23</div>
+<div class="h-7 rounded bg-tertiary text-on-tertiary flex items-center justify-center font-data-metric text-[11px] font-semibold">24</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">25</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">26</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">27</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">28</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">29</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">30</div>
+<div class="h-7 rounded bg-error text-on-error flex items-center justify-center font-data-metric text-[11px] font-semibold">31</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">32</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">33</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">34</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">35</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">36</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">37</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">38</div>
+<div class="h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-data-metric text-[11px] font-semibold">39</div>
+<div class="h-7 rounded bg-primary text-on-primary flex items-center justify-center font-data-metric text-[11px] font-semibold">40</div>
+</div>
+</div>
+<!-- Academic Reference Snapshot -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant">القيم المرجعية للمختبر</span>
+<div class="flex justify-between py-1 font-data-metric text-[12px] text-on-surface">
+<span>Troponin I (High-Sens)</span>
+<span class="font-semibold">&lt; 0.04 ng/mL</span>
+</div>
+<div class="flex justify-between py-1 font-data-metric text-[12px] text-on-surface">
+<span>D-dimer (FEU)</span>
+<span class="font-semibold">&lt; 0.50 mcg/mL</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Accessible High-Contrast Modal Backdrop & Centered Dialog -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-space-md bg-inverse-surface/60 backdrop-blur-[3px] transition-opacity" id="submissionModal">
+<!-- Modal Card Container (Strict 540px width, clean rounded 14px, flat architectural tier) -->
+<div class="w-full max-w-[540px] bg-surface-container-lowest rounded-[14px] shadow-2xl p-space-xl flex flex-col gap-space-lg relative overflow-hidden animate-in fade-in duration-200">
+<!-- Top Clinical Status Stripe -->
+<div class="absolute top-0 right-0 left-0 h-1.5 bg-gradient-to-l from-primary via-tertiary to-secondary"></div>
+<!-- Header Section -->
+<div class="flex items-start gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-primary-container text-on-primary flex items-center justify-center shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[26px]">task</span>
+</div>
+<div class="flex flex-col">
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-bold leading-tight">
+            هل أنت متأكد من إنهاء وتسليم الاختبار؟
+          </h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+            محاكاة الاختبار الشامل (SMLE Mock Block 1) — إجمالي 40 سؤالاً
+          </p>
+</div>
+</div>
+<!-- Visual Audit & Summary Statistics Grid -->
+<div class="grid grid-cols-3 gap-space-sm">
+<!-- Card 1: Answered -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col gap-space-xs relative overflow-hidden">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-[11px] text-on-surface-variant font-semibold">المجابة</span>
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+</div>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-data-metric text-[22px] font-bold text-on-surface">36</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">/ 40</span>
+</div>
+<div class="flex items-center gap-1 font-data-metric text-[11px] text-secondary font-semibold">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+<span>90% إنجاز</span>
+</div>
+</div>
+<!-- Card 2: Unanswered Warning -->
+<div class="p-space-md rounded-xl bg-error-container/40 flex flex-col gap-space-xs relative overflow-hidden">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-[11px] text-error font-semibold">بدون إجابة</span>
+<span class="w-2 h-2 rounded-full bg-error"></span>
+</div>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-data-metric text-[22px] font-bold text-error">2</span>
+<span class="font-body-sm text-[12px] text-error">أسئلة</span>
+</div>
+<span class="font-data-metric text-[11px] text-on-surface-variant font-medium">رقم 18 ورقم 31</span>
+</div>
+<!-- Card 3: Flagged for Review -->
+<div class="p-space-md rounded-xl bg-tertiary-fixed/30 flex flex-col gap-space-xs relative overflow-hidden">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-[11px] text-tertiary font-semibold">معلّمة للمراجعة</span>
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+</div>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-data-metric text-[22px] font-bold text-tertiary">2</span>
+<span class="font-body-sm text-[12px] text-tertiary">أسئلة</span>
+</div>
+<span class="font-data-metric text-[11px] text-on-surface-variant font-medium">رقم 14 ورقم 24</span>
+</div>
+</div>
+<!-- Warning Notice (Academic Guidance Callout) -->
+<div class="p-space-md rounded-xl bg-surface-container text-on-surface flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[22px] shrink-0 mt-0.5">info</span>
+<div class="flex flex-col gap-0.5">
+<span class="font-headline-sm text-[14px] font-semibold text-primary">تنبيه تقييمي</span>
+<p class="font-body-sm text-[13px] text-on-surface-variant leading-relaxed">
+            لا يزال لديك سؤالان لم تتم الإجابة عليهما، وسؤالان قمت بتعليمهما لمراجعتهما لاحقاً. بمجرد التسليم، ستنتهي الجلسة وتظهر نتيجتك التفصيلية والتقارير التفسيرية الكاملة.
+          </p>
+</div>
+</div>
+<!-- Action Hierarchy Buttons -->
+<div class="flex flex-col gap-space-sm pt-space-xs">
+<!-- Action 1: Safe Primary to Resolve Incompletes -->
+<button class="w-full py-space-sm px-space-md rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-primary font-headline-sm text-[14px] font-semibold transition-all flex items-center justify-between group shadow-sm" type="button">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[20px] text-primary">edit_note</span>
+<span>مراجعة الأسئلة غير المجابة والمعلّمة (4 أسئلة)</span>
+</div>
+<!-- RTL Direction Arrow points left -->
+<span class="material-symbols-outlined text-[18px] transform group-hover:-translate-x-1 transition-transform">arrow_back</span>
+</button>
+<div class="grid grid-cols-2 gap-space-sm mt-1">
+<!-- Action 2: Dismiss/Continue Exam -->
+<button class="py-space-sm px-space-md rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface-variant font-body-md text-[14px] font-medium transition-colors flex items-center justify-center gap-1" type="button">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+<span>متابعة الاختبار (إلغاء)</span>
+</button>
+<!-- Action 3: Dominant Final Submission Confirmation -->
+<button class="py-space-sm px-space-md rounded-xl bg-primary hover:bg-primary-container text-on-primary font-headline-sm text-[14px] font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-space-xs" type="button">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>تأكيد التسليم وإنهاء الاختبار</span>
+</button>
+</div>
+</div>
+<!-- Reassurance Local Offline Guarantee Footer -->
+<div class="pt-space-xs flex items-center justify-center gap-space-xs text-on-surface-variant font-data-metric text-[11px]">
+<span class="material-symbols-outlined text-secondary text-[16px]">lock_clock</span>
+<span>جميع إجاباتك البالغ عددها 36 محفوظة محلياً ومشفرة وجاهزة للإرسال.</span>
+</div>
+</div>
+</div>
+</div></main></div></body></html>
