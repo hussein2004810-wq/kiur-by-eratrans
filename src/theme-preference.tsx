@@ -4,9 +4,6 @@ import {useEffect,useState} from 'react';
 export type KiurTheme='light'|'dark';
 const STORAGE_KEY='kiur-theme';
 const CHANGE_EVENT='kiur-theme-change';
-let lightStylesLoaded=false;
-let lightStylesRequest:Promise<unknown>|null=null;
-function ensureLightStyles(){if(lightStylesLoaded)return Promise.resolve();if(!lightStylesRequest)lightStylesRequest=import('./light-theme.css').then(()=>{lightStylesLoaded=true});return lightStylesRequest}
 
 function storedTheme():KiurTheme|null{
   try{const value=localStorage.getItem(STORAGE_KEY);return value==='light'||value==='dark'?value:null}catch{return null}
@@ -20,7 +17,6 @@ export function currentTheme():KiurTheme{
 }
 
 export function applyTheme(theme:KiurTheme,{persist=false}:{persist?:boolean}={}){
-  if(theme==='light'&&!lightStylesLoaded){void ensureLightStyles().then(()=>applyTheme(theme,{persist}));return}
   const animate=persist&&!matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(animate){document.documentElement.classList.add('kiur-theme-transition');window.setTimeout(()=>document.documentElement.classList.remove('kiur-theme-transition'),220)}
   document.documentElement.dataset.kiurTheme=theme;
@@ -29,8 +25,6 @@ export function applyTheme(theme:KiurTheme,{persist=false}:{persist?:boolean}={}
   if(persist){try{localStorage.setItem(STORAGE_KEY,theme)}catch{}}
   window.dispatchEvent(new CustomEvent<KiurTheme>(CHANGE_EVENT,{detail:theme}));
 }
-
-if(currentTheme()==='light')void ensureLightStyles();
 
 export function useKiurTheme(){
   const [theme,setTheme]=useState<KiurTheme>(()=>currentTheme());

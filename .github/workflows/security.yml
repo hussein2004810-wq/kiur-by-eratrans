@@ -35,11 +35,11 @@ jobs:
       - name: Production Bundle Build & Performance Budget
         run: pnpm build
 
-      - name: Automated Node.js Test Suite (28 Suites)
+      - name: Automated Node.js Test Suite (29 Suites)
         run: pnpm test:node
 
-      - name: Production Security Audit
-        run: pnpm audit --prod --audit-level=high || true
+      - name: Production Security Audit (Blocks on High/Critical)
+        run: pnpm audit --prod --audit-level=high
 
   strix-security-scan:
     name: Strix AI Pentest & Security Audit
@@ -68,9 +68,19 @@ jobs:
           node scripts/test-smart-review.mjs
           node scripts/test-gamification-ui.mjs
           node scripts/test-student-profile-ui.mjs
+          node scripts/test-owner-auth-hardening.mjs
 
-      - name: Install Strix CLI
-        run: curl -sSL https://strix.ai/install | bash
+      - name: Install Pinned Strix CLI (v1.3.0)
+        run: |
+          VERSION="1.3.0"
+          curl -sSL "https://github.com/usestrix/strix/releases/download/v${VERSION}/strix-${VERSION}-linux-x86_64.tar.gz" -o strix.tar.gz || (curl -sSL https://strix.ai/install | VERSION=1.3.0 bash)
+          if [ -f strix.tar.gz ]; then
+            tar -xzf strix.tar.gz
+            mkdir -p "$HOME/.strix/bin"
+            chmod +x strix
+            mv strix "$HOME/.strix/bin/"
+            echo "$HOME/.strix/bin" >> $GITHUB_PATH
+          fi
 
       - name: Run Strix Vulnerability Pentest
         if: env.STRIX_LLM != '' && env.LLM_API_KEY != ''

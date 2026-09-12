@@ -20,8 +20,8 @@ export function StitchSidebar() {
             <HeartPulse size={22} />
           </div>
           <div className="stitchBrandTitle">
-            <h2>KIUR Academic</h2>
-            <small>BY ERATRANS • STITCH UI</small>
+            <h2>KIUR by ERATRANS</h2>
+            <small>المنصة الطبية الأكاديمية</small>
           </div>
           {setSidebarOpen && (
             <button

@@ -142,11 +142,11 @@ export default function StitchPublicLanding({
             <span className="stitchStatusDivider">|</span>
             <span className="stitchStatusBadge">
               <ShieldCheck size={14} className="text-secondary" />
-              مطابق لمعايير الامتحانات السريرية المحوسبة SCFHS و IFOM والبورد العراقي
+              تدريب سريري تفاعلي شامل مبني وفق أحدث المراجع الطبية المعتمدة
             </span>
           </div>
           <div className="stitchStatusLeft">
-            <span className="stitchUptime">زمن الاستجابة للأنظمة: 99.98%</span>
+            <span className="stitchUptime">بيئة امتحانات مستقرة ومؤمنة على مدار الساعة</span>
             <a href="#catalog-section" className="stitchPortalLink">
               بوابات كليات الطب والجامعات ←
             </a>
@@ -163,8 +163,8 @@ export default function StitchPublicLanding({
                 <HeartPulse size={24} />
               </div>
               <div className="stitchBrandTexts">
-                <span className="stitchBrandName">منصة نبض الطبية</span>
-                <span className="stitchBrandSub">MEDPULSE ACADEMIC • KIUR</span>
+                <span className="stitchBrandName">KIUR by ERATRANS</span>
+                <span className="stitchBrandSub">المنصة الطبية الأكاديمية التفاعلية</span>
               </div>
             </a>
 
@@ -382,7 +382,7 @@ export default function StitchPublicLanding({
               </div>
               <h3>اختبارات تجريبية موقوتة</h3>
               <p>محاكاة تامة ودقيقة لشاشات الامتحانات الوطنية الرسمية، بنفس المؤقت وسرعة الاستجابة والجداول المرجعية للمختبرات.</p>
-              <span className="stitchPillarNote">نفس برمجية Prometric و Pearson</span>
+              <span className="stitchPillarNote">واجهة محاكاة سريرية تفاعلية متقدمة</span>
             </div>
 
             <div className="stitchPillarCard">
@@ -708,8 +708,8 @@ export default function StitchPublicLanding({
                   <HeartPulse size={22} />
                 </div>
                 <div>
-                  <b className="stitchBrandName">منصة نبض الطبية</b>
-                  <small className="stitchBrandSub">MEDPULSE ACADEMIC • KIUR</small>
+                  <b className="stitchBrandName">KIUR by ERATRANS</b>
+                  <small className="stitchBrandSub">المنصة الطبية الأكاديمية التفاعلية</small>
                 </div>
               </div>
               <p className="stitchFooterDesc">
@@ -729,14 +729,14 @@ export default function StitchPublicLanding({
               <h5>التراخيص والامتحانات</h5>
               <a href="#catalog-section">البورد العراقي</a>
               <a href="#catalog-section">الامتحانات التقويمية والسريرية المعتمدة</a>
-              <a href="#catalog-section">امتحانات IFOM السريرية</a>
+              <a href="#catalog-section">نماذج تدريبية للعلوم السريرية</a>
               <a href="#catalog-section">التقييم الشامل لخريجي الطب</a>
             </div>
 
             <div className="stitchFooterCol">
               <h5>المساعدة والدعم</h5>
               <a href="#faqs">الأسئلة الشائعة</a>
-              <a href="mailto:support@kiur-iraq.com">تواصل مع الدعم الأكاديمي</a>
+              <a href="https://t.me/ERATRANS" target="_blank" rel="noopener noreferrer">قناة ERATRANS الرسمية والدعم</a>
               <button type="button" onClick={onStartAuth} className="text-right hover:underline">
                 بوابة الكادر التدريسي
               </button>
@@ -744,7 +744,7 @@ export default function StitchPublicLanding({
           </div>
 
           <div className="stitchFooterBottom">
-            <p>© 2026 منصة نبض الطبية (KIUR by ERATRANS). جميع الحقوق محفوظة لطلبة وأطباء المجموعة الطبية.</p>
+            <p>© 2026 KIUR by ERATRANS. جميع الحقوق محفوظة لقناة ERATRANS وطلبة وأطباء المجموعة الطبية.</p>
             <div className="stitchFooterDisclaimer">
               إخلاء مسؤولية: المنصة للأغراض التعليمية والتحضير للامتحانات الأكاديمية ولا تقدم استشارات طبية للمرضى.
             </div>

@@ -520,10 +520,10 @@ export function StitchAdminSuite() {
         }}>
           <div>
             <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 700, color: 'var(--stitch-text-primary)' }}>
-              محرك موازين ومخططات الاختبار الوطني (SCFHS Blueprint Engine)
+              محرك موازين ومخططات الاختبارات السريرية (Clinical Blueprint Engine)
             </h3>
             <p style={{ margin: '4px 0 0', color: 'var(--stitch-text-secondary)', fontSize: '13px' }}>
-              اضبط الأوزان النسبية للأسئلة في امتحانات المحاكاة لضمان تطابق تام مع معايير الهيئة.
+              اضبط الأوزان النسبية للأسئلة في امتحانات المحاكاة وفق المعايير الأكاديمية المستهدفة.
             </p>
           </div>
 

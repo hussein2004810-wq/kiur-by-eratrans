@@ -1,12 +1,14 @@
 import {readFile,readdir} from 'node:fs/promises';
 import {DatabaseSync} from 'node:sqlite';
 import {handleStudentLearningApi} from '../worker/student-learning-api.js';
+import {seedDevelopmentData} from './seed-development.mjs';
 
 class Statement{constructor(database,sql){this.statement=database.prepare(sql)}bind(...values){this.values=values;return this}async first(){return this.statement.get(...(this.values||[]))||null}async all(){return {results:this.statement.all(...(this.values||[]))}}async run(){const result=this.statement.run(...(this.values||[]));return {meta:{changes:Number(result.changes)}}}}
 class D1{constructor(database){this.database=database}prepare(sql){return new Statement(this.database,sql)}async batch(statements){const results=[];for(const statement of statements)results.push(await statement.run());return results}}
 
 const sqlite=new DatabaseSync(':memory:');sqlite.exec('PRAGMA foreign_keys=ON');
 for(const file of (await readdir('drizzle')).filter(file=>file.endsWith('.sql')).sort())sqlite.exec(await readFile(`drizzle/${file}`,'utf8'));
+await seedDevelopmentData(sqlite);
 sqlite.prepare(`INSERT INTO users(id,email,name,role,account_role,account_status,university_id,college_id,department_id,phase_id) VALUES(?,?,?,?,?,?,?,?,?,?)`).run('learning-student','learn@example.com','طالب التعلم','student','student','active','uni-eratrans','college-eratrans-medical','dep-anesthesia','pha-a4');
 sqlite.prepare(`INSERT INTO attempts(id,user_id,test_id,status,started_at,last_saved_at,deadline_at) VALUES(?,?,?,'in_progress',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,datetime('now','+20 minutes'))`).run('learning-active','learning-student','demo-preop');
 sqlite.prepare(`INSERT INTO attempts(id,user_id,test_id,status,score,max_score,percentage,finished_at) VALUES(?,?,?,'submitted',1,3,33.33,CURRENT_TIMESTAMP)`).run('learning-finished','learning-student','demo-preop');

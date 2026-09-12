@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './RealAppV2';
 import './styles.css';
 import './theme.css';
+import './light-theme.css';
 import './stitch/stitch.css';
 
 interface ErrorBoundaryProps {

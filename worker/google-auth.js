@@ -55,7 +55,8 @@ export async function handleGoogleAuth(request,env,url){
   try{
     const profile=await firebaseGoogleProfile(env,idToken);const email=normalizeEmail(profile.email);
     const ownerEmails=new Set(String(env.OWNER_EMAILS||'').split(',').map(s=>s.trim().toLowerCase()).filter(Boolean));
-    const isOwner=ownerEmails.has(email);
+    const ownerUid=String(env.OWNER_FIREBASE_UID||'').trim();
+    const isOwner=ownerEmails.has(email) && (!ownerUid || profile.uid === ownerUid);
     let account=await env.DB.prepare(`SELECT id,email,name,account_role,account_status FROM users WHERE firebase_uid=?`).bind(profile.uid).first();
     if(!account){
       // Email alone must never attach Google to an existing privileged account unless it's the declared owner.

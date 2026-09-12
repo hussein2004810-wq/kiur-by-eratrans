@@ -40,11 +40,7 @@ const schemaStatements = [
   `CREATE INDEX IF NOT EXISTS idx_attempts_test_status ON attempts(test_id,status)`,
   `CREATE INDEX IF NOT EXISTS idx_audit_at ON audit_logs(at DESC)`,
   `CREATE TABLE IF NOT EXISTS api_rate_limits (bucket_key TEXT NOT NULL,window_start INTEGER NOT NULL,count INTEGER NOT NULL DEFAULT 1 CHECK(count>=1),PRIMARY KEY(bucket_key,window_start))`,
-  `CREATE INDEX IF NOT EXISTS idx_api_rate_limits_window ON api_rate_limits(window_start)`,
-  `INSERT OR IGNORE INTO tests(id,title,subject,lecture,duration_minutes,pass_percentage,status,created_by) VALUES('demo-preop','تقييم المريض قبل العملية','التخدير العام','المحاضرة الثالثة',25,60,'published','system')`,
-  `INSERT OR IGNORE INTO questions(id,test_id,text,options_json,correct_option,explanation,position) VALUES('demo-q1','demo-preop','أي تصنيف من تصنيفات ASA يصف مريضًا لديه مرض جهازي شديد يحد من نشاطه؟','["ASA I","ASA II","ASA III","ASA IV"]',2,'يصنف هذا المريض ASA III بسبب وجود مرض جهازي شديد يحد من النشاط.',1)`,
-  `INSERT OR IGNORE INTO questions(id,test_id,text,options_json,correct_option,explanation,position) VALUES('demo-q2','demo-preop','ما الإجراء الأكثر أهمية ضمن التقييم الأولي لمجرى الهواء؟','["قياس ضغط الدم فقط","تقييم فتحة الفم وحركة الرقبة","قياس سكر الدم","تحديد فصيلة الدم"]',1,'تقييم فتحة الفم وحركة الرقبة يساعد على توقع صعوبة التنبيب.',2)`,
-  `INSERT OR IGNORE INTO questions(id,test_id,text,options_json,correct_option,explanation,position) VALUES('demo-q3','demo-preop','أي مما يأتي يجب توثيقه قبل بدء التخدير؟','["الموافقة المستنيرة وخطة التخدير","اسم الممرض فقط","موعد الخروج المتوقع فقط","نوع الغرفة"]',0,'يجب توثيق الموافقة المستنيرة وخطة التخدير قبل الإجراء.',3)`,
+  `CREATE INDEX IF NOT EXISTS idx_api_rate_limits_window ON api_rate_limits(window_start)`
 ];
 const visibleAcademicPath=`NOT EXISTS(SELECT 1 FROM academic_deleted_items z WHERE (z.resource_type='university' AND z.resource_id=c.university_id) OR (z.resource_type='college' AND z.resource_id=d.college_id) OR (z.resource_type='department' AND z.resource_id=t.department_id) OR (z.resource_type='phase' AND z.resource_id=t.phase_id) OR (z.resource_type='section' AND z.resource_id=t.section_id) OR (z.resource_type='subject' AND z.resource_id=t.subject_id) OR (z.resource_type='lecture' AND z.resource_id=t.lecture_id))`;
 

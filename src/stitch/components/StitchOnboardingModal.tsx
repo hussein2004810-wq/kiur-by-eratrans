@@ -40,7 +40,7 @@ export function StitchOnboardingModal({
   if (!open) return null;
 
   const handleFinishOnboarding = () => {
-    notify('تم ضبط مسارك الأكاديمي واختبارك المستهدف بنجاح! مرحباً بك في MedPulse.');
+    notify('تم ضبط مسارك الأكاديمي واختبارك المستهدف بنجاح! مرحباً بك في KIUR by ERATRANS.');
     onClose();
     setView('home');
   };
@@ -355,7 +355,7 @@ export function StitchOnboardingModal({
                   تسجيل الدخول الأكاديمي
                 </strong>
                 <span style={{ display: 'block', fontSize: '12px', color: 'var(--stitch-text-muted)' }}>
-                  MedPulse Academic • الدخول المعتمد
+                  KIUR by ERATRANS • الدخول الأكاديمي المعتمد
                 </span>
               </div>
             </div>
