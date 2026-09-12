@@ -1,0 +1,64 @@
+name: Security Scan (Strix)
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  strix-security-scan:
+    name: Strix AI Pentest & Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # required for diff-scoped vulnerability analysis
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run Core Security Verification Suite
+        run: |
+          node scripts/test-security.mjs
+          node scripts/test-scoped-access.mjs
+          node scripts/test-student-bans.mjs
+          node scripts/test-auth-extensions.mjs
+          node scripts/test-governance-features.mjs
+
+      - name: Install Strix CLI
+        run: curl -sSL https://strix.ai/install | bash
+
+      - name: Run Strix Vulnerability Pentest
+        if: env.STRIX_LLM != '' && env.LLM_API_KEY != ''
+        env:
+          STRIX_LLM: ${{ secrets.STRIX_LLM }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+        run: |
+          BASE_BRANCH="${{ github.base_ref }}"
+          DIFF_BASE="origin/${BASE_BRANCH:-main}"
+          strix -n -t ./ --scan-mode quick --scope-mode diff --diff-base "$DIFF_BASE" --max-budget 10
+
+      - name: Verify Scan Completed
+        if: env.STRIX_LLM != '' && env.LLM_API_KEY != ''
+        env:
+          STRIX_LLM: ${{ secrets.STRIX_LLM }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+        run: |
+          run_json=$(ls -t strix_runs/*/run.json 2>/dev/null | head -1)
+          if [ -f "$run_json" ]; then
+            status=$(jq -r .status "$run_json")
+            if [ "$status" != "completed" ]; then
+              echo "Strix run status is '$status' — scan did not complete. Raise --max-budget." >&2
+              exit 1
+            fi
+          fi
+
+      - name: Upload Security Findings (SARIF)
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        continue-on-error: true
+        with:
+          sarif_file: strix_runs
