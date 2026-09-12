@@ -1,0 +1,170 @@
+[
+  {
+    "id": "accessibility",
+    "title": "Accessibility"
+  },
+  {
+    "id": "account",
+    "title": "Accounts & access"
+  },
+  {
+    "id": "animals",
+    "title": "Animals"
+  },
+  {
+    "id": "arrows",
+    "title": "Arrows"
+  },
+  {
+    "id": "buildings",
+    "title": "Buildings"
+  },
+  {
+    "id": "charts",
+    "title": "Charts"
+  },
+  {
+    "id": "communication",
+    "title": "Communication"
+  },
+  {
+    "id": "connectivity",
+    "title": "Connectivity"
+  },
+  {
+    "id": "cursors",
+    "title": "Cursors"
+  },
+  {
+    "id": "design",
+    "title": "Design"
+  },
+  {
+    "id": "development",
+    "title": "Coding & development"
+  },
+  {
+    "id": "devices",
+    "title": "Devices"
+  },
+  {
+    "id": "emoji",
+    "title": "Emoji"
+  },
+  {
+    "id": "files",
+    "title": "File icons"
+  },
+  {
+    "id": "finance",
+    "title": "Finance"
+  },
+  {
+    "id": "food-beverage",
+    "title": "Food & beverage"
+  },
+  {
+    "id": "gaming",
+    "title": "Gaming"
+  },
+  {
+    "id": "home",
+    "title": "Home"
+  },
+  {
+    "id": "layout",
+    "title": "Layout"
+  },
+  {
+    "id": "mail",
+    "title": "Mail"
+  },
+  {
+    "id": "math",
+    "title": "Mathematics"
+  },
+  {
+    "id": "medical",
+    "title": "Medical"
+  },
+  {
+    "id": "multimedia",
+    "title": "Multimedia"
+  },
+  {
+    "id": "nature",
+    "title": "Nature"
+  },
+  {
+    "id": "navigation",
+    "title": "Navigation & Places"
+  },
+  {
+    "id": "notifications",
+    "title": "Notification"
+  },
+  {
+    "id": "people",
+    "title": "People"
+  },
+  {
+    "id": "photography",
+    "title": "Photography"
+  },
+  {
+    "id": "science",
+    "title": "Science"
+  },
+  {
+    "id": "seasons",
+    "title": "Seasons"
+  },
+  {
+    "id": "security",
+    "title": "Security"
+  },
+  {
+    "id": "shapes",
+    "title": "Shapes"
+  },
+  {
+    "id": "shopping",
+    "title": "Shopping"
+  },
+  {
+    "id": "social",
+    "title": "Social"
+  },
+  {
+    "id": "sports",
+    "title": "Sports"
+  },
+  {
+    "id": "sustainability",
+    "title": "Sustainability"
+  },
+  {
+    "id": "text",
+    "title": "Text formatting"
+  },
+  {
+    "id": "time",
+    "title": "Time & calendar"
+  },
+  {
+    "id": "tools",
+    "title": "Tools"
+  },
+  {
+    "id": "transportation",
+    "title": "Transportation"
+  },
+  {
+    "id": "travel",
+    "title": "Travel"
+  },
+  {
+    "id": "weather",
+    "title": "Weather"
+  }
+]

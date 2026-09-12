@@ -283,6 +283,16 @@ html[data-kiur-theme="light"] .bentoCard{background:#ffffff!important;border-col
 html[data-kiur-theme="light"] .bentoCard:hover{border-color:#0d9488!important;box-shadow:0 18px 45px rgba(15,23,42,0.1),0 0 20px rgba(13,148,136,0.1)!important}
 html[data-kiur-theme="light"] .bentoHero{background:linear-gradient(135deg,#ffffff,#f0fdfa)!important;border-color:#cbd5e1!important;box-shadow:0 14px 40px rgba(15,23,42,0.08)!important}
 html[data-kiur-theme="light"] .bentoStatCard{background:#ffffff!important;border-color:#cbd5e1!important}
+html[data-kiur-theme="light"] .bentoBadge{background:rgba(13,148,136,0.12)!important;color:#0f766e!important}
+html[data-kiur-theme="light"] .dateChip{background:#f1f5f9!important;border-color:#cbd5e1!important;color:#475569!important}
+html[data-kiur-theme="light"] .bentoQuickActions button{background:#f8fafc!important;color:#0f172a!important}
+html[data-kiur-theme="light"] .bentoQuickActions button:hover{background:#ccfbf1!important}
+html[data-kiur-theme="light"] .bentoQuickActions button svg{color:#0f766e!important}
+html[data-kiur-theme="light"] .bentoQuickActions kbd{background:#f1f5f9!important;border-color:#cbd5e1!important;color:#475569!important}
+html[data-kiur-theme="light"] .statIcon{background:rgba(13,148,136,0.1)!important;color:#0f766e!important}
+html[data-kiur-theme="light"] .statIcon.amber{background:rgba(245,158,11,0.1)!important;color:#d97706!important}
+html[data-kiur-theme="light"] .statIcon.blue{background:rgba(2,132,199,0.1)!important;color:#0284c7!important}
+html[data-kiur-theme="light"] .statIcon.coral{background:rgba(239,68,68,0.1)!important;color:#dc2626!important}
 
 /* Command Palette Light Mode */
 html[data-kiur-theme="light"] .commandPaletteBackdrop{background:rgba(15,23,42,0.5)!important}
@@ -301,6 +311,25 @@ html[data-kiur-theme="light"] .commandFooter kbd{background:#ffffff!important;bo
 html[data-kiur-theme="light"] .clinicalCasePane{background:#f8fafc!important;border-color:#cbd5e1!important}
 html[data-kiur-theme="light"] .optionHotkey{background:#f1f5f9!important;color:#334155!important;border:1px solid #cbd5e1!important}
 
+/* Study Shelf Light Mode */
+html[data-kiur-theme="light"] .shelfRecent{background:rgba(13,148,136,0.06)!important}
+html[data-kiur-theme="light"] .shelfSubject:hover,html[data-kiur-theme="light"] .shelfTest:hover{box-shadow:0 14px 35px rgba(15,23,42,0.1)!important}
+html[data-kiur-theme="light"] .shelfTest .shelfExamNotice{background:rgba(245,158,11,0.08)!important;color:#92400e!important}
+html[data-kiur-theme="light"] .shelfSubjectNote{color:#d97706!important}
+html[data-kiur-theme="light"] .shelfResume{background:linear-gradient(120deg,#f0fdfa,#ecfeff)!important;border-color:#99f6e4!important;box-shadow:0 14px 34px rgba(15,23,42,0.08)!important}
+html[data-kiur-theme="light"] .shelfResume small{color:#0f766e!important}
+html[data-kiur-theme="light"] .shelfResume b{color:#0f172a!important}
+html[data-kiur-theme="light"] .shelfResume p{color:#475569!important}
+html[data-kiur-theme="light"] .weakTopics button{background:#f8fafc!important}
+html[data-kiur-theme="light"] .weakTopics button span{color:#0284c7!important}
+html[data-kiur-theme="light"] .weakTopics header small,html[data-kiur-theme="light"] .reviewPlan header small{color:#0284c7!important}
+html[data-kiur-theme="light"] .reviewPlan button{background:#f8fafc!important}
+html[data-kiur-theme="light"] .reviewPlan button em{color:#0284c7!important}
+html[data-kiur-theme="light"] .reviewPlan header>span{background:#f1f5f9!important;color:#475569!important}
+html[data-kiur-theme="light"] .shelfFilters>button.active,html[data-kiur-theme="light"] .favoriteButton.active{color:#d97706!important;border-color:#d97706!important;background:rgba(245,158,11,0.08)!important}
+html[data-kiur-theme="light"] .readinessDialog{background:#fff!important;border-color:#cbd5e1!important;box-shadow:0 28px 90px rgba(15,23,42,0.2)!important}
+html[data-kiur-theme="light"] .readinessDialog header>button{background:#f8fafc!important;border-color:#cbd5e1!important}
+html[data-kiur-theme="light"] .readinessDialog footer button{background:#f8fafc!important;border-color:#cbd5e1!important;color:#0f172a!important}
 
 @media(max-width:720px){
   html[data-kiur-theme="light"] .app .topbar{background:rgba(248,250,252,0.96)}
