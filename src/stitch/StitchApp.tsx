@@ -22,6 +22,8 @@ import { HeartPulse } from 'lucide-react';
 export function StitchApp({
   studyContent,
   examRunnerElement,
+  editorElement,
+  toastElement,
   smartReviewElement,
   commandPaletteElement,
   historyElement,
@@ -31,6 +33,8 @@ export function StitchApp({
 }: {
   studyContent: React.ReactNode;
   examRunnerElement?: React.ReactNode;
+  editorElement?: React.ReactNode;
+  toastElement?: React.ReactNode;
   smartReviewElement?: React.ReactNode;
   commandPaletteElement?: React.ReactNode;
   historyElement?: React.ReactNode;
@@ -39,11 +43,6 @@ export function StitchApp({
   adminElement?: React.ReactNode;
 }) {
   const { view, setView } = useStitch();
-
-  // If currently taking an exam, render the ExamRunner directly
-  if (examRunnerElement) {
-    return <>{examRunnerElement}</>;
-  }
 
   return (
     <div className="stitchApp">
@@ -172,9 +171,12 @@ export function StitchApp({
         )}
       </main>
 
-      {/* Global Modals */}
+      {/* Global Modals & Overlays */}
+      {examRunnerElement}
+      {editorElement}
       {smartReviewElement}
       {commandPaletteElement}
+      {toastElement}
     </div>
   );
 }

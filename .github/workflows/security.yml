@@ -1,6 +1,8 @@
 name: Security Scan (Strix)
 
 on:
+  push:
+    branches: [main]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -27,6 +29,11 @@ jobs:
           node scripts/test-student-bans.mjs
           node scripts/test-auth-extensions.mjs
           node scripts/test-governance-features.mjs
+          node scripts/test-theme-ui.mjs
+          node scripts/test-stitch-modules.mjs
+          node scripts/test-smart-review.mjs
+          node scripts/test-gamification-ui.mjs
+          node scripts/test-student-profile-ui.mjs
 
       - name: Install Strix CLI
         run: curl -sSL https://strix.ai/install | bash

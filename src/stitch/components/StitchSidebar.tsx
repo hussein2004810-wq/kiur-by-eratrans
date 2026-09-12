@@ -1,24 +1,40 @@
 import React from 'react';
-import { HeartPulse, ClipboardList, BookOpen, Brain, History, Trophy, UserRound, LogOut, Settings2, FileText, Activity, Calendar, BookMarked } from 'lucide-react';
+import { HeartPulse, ClipboardList, BookOpen, Brain, History, Trophy, UserRound, LogOut, Settings2, FileText, Activity, Calendar, BookMarked, X } from 'lucide-react';
 import { useStitch } from '../StitchContext';
 
 export function StitchSidebar() {
-  const { user, view, setView, tests, logout, openSmartReview } = useStitch();
+  const { user, view, setView, tests, logout, sidebarOpen, setSidebarOpen } = useStitch();
 
   const isStaff = ['admin', 'owner', 'teacher'].includes(user.role);
 
+  const handleNavigate = (targetView: string) => {
+    setView(targetView);
+    if (setSidebarOpen) setSidebarOpen(false);
+  };
+
   return (
-    <aside className="stitchSidebar">
-      {/* Brand Header */}
-      <div className="stitchBrand">
-        <div className="stitchBrandIcon">
-          <HeartPulse size={22} />
+    <>
+      <aside className={`stitchSidebar ${sidebarOpen ? 'open' : ''}`}>
+        {/* Brand Header */}
+        <div className="stitchBrand">
+          <div className="stitchBrandIcon">
+            <HeartPulse size={22} />
+          </div>
+          <div className="stitchBrandTitle">
+            <h2>KIUR Academic</h2>
+            <small>BY ERATRANS • STITCH UI</small>
+          </div>
+          {setSidebarOpen && (
+            <button
+              type="button"
+              className="stitchSidebarCloseBtn"
+              onClick={() => setSidebarOpen(false)}
+              aria-label="إغلاق القائمة"
+            >
+              <X size={20} />
+            </button>
+          )}
         </div>
-        <div className="stitchBrandTitle">
-          <h2>KIUR Academic</h2>
-          <small>BY ERATRANS • STITCH UI</small>
-        </div>
-      </div>
 
       {/* Target Examination Context Pill */}
       <div className="stitchTargetExamPill">
@@ -33,7 +49,7 @@ export function StitchSidebar() {
         <button
           type="button"
           className={`stitchNavItem ${view === 'home' ? 'active' : ''}`}
-          onClick={() => setView('home')}
+          onClick={() => handleNavigate('home')}
         >
           <div className="stitchNavItemInner">
             <BookOpen size={18} />
@@ -44,7 +60,7 @@ export function StitchSidebar() {
         <button
           type="button"
           className={`stitchNavItem ${view === 'qbank' || view === 'tests' ? 'active' : ''}`}
-          onClick={() => setView('qbank')}
+          onClick={() => handleNavigate('qbank')}
         >
           <div className="stitchNavItemInner">
             <ClipboardList size={18} />
@@ -56,7 +72,7 @@ export function StitchSidebar() {
         <button
           type="button"
           className={`stitchNavItem ${view === 'tutor-player' ? 'active' : ''}`}
-          onClick={() => setView('tutor-player')}
+          onClick={() => handleNavigate('tutor-player')}
         >
           <div className="stitchNavItemInner">
             <Brain size={18} />
@@ -67,7 +83,7 @@ export function StitchSidebar() {
         <button
           type="button"
           className={`stitchNavItem ${view === 'exam-player' ? 'active' : ''}`}
-          onClick={() => setView('exam-player')}
+          onClick={() => handleNavigate('exam-player')}
         >
           <div className="stitchNavItemInner">
             <Activity size={18} />
@@ -78,7 +94,7 @@ export function StitchSidebar() {
         <button
           type="button"
           className={`stitchNavItem ${view === 'review-center' ? 'active' : ''}`}
-          onClick={() => setView('review-center')}
+          onClick={() => handleNavigate('review-center')}
         >
           <div className="stitchNavItemInner">
             <RotateCcw size={18} />
@@ -89,7 +105,7 @@ export function StitchSidebar() {
         <button
           type="button"
           className={`stitchNavItem ${view === 'analytics' ? 'active' : ''}`}
-          onClick={() => setView('analytics')}
+          onClick={() => handleNavigate('analytics')}
         >
           <div className="stitchNavItemInner">
             <BarChart3 size={18} />
@@ -100,7 +116,7 @@ export function StitchSidebar() {
         <button
           type="button"
           className={`stitchNavItem ${view === 'study-plan' ? 'active' : ''}`}
-          onClick={() => setView('study-plan')}
+          onClick={() => handleNavigate('study-plan')}
         >
           <div className="stitchNavItemInner">
             <Calendar size={18} />
@@ -111,7 +127,7 @@ export function StitchSidebar() {
         <button
           type="button"
           className={`stitchNavItem ${view === 'notes' ? 'active' : ''}`}
-          onClick={() => setView('notes')}
+          onClick={() => handleNavigate('notes')}
         >
           <div className="stitchNavItemInner">
             <BookMarked size={18} />
@@ -122,7 +138,7 @@ export function StitchSidebar() {
         <button
           type="button"
           className={`stitchNavItem ${view === 'glimpses' ? 'active' : ''}`}
-          onClick={() => setView('glimpses')}
+          onClick={() => handleNavigate('glimpses')}
         >
           <div className="stitchNavItemInner">
             <HeartPulse size={18} />
@@ -135,7 +151,7 @@ export function StitchSidebar() {
         <button
           type="button"
           className={`stitchNavItem ${view === 'pricing' ? 'active' : ''}`}
-          onClick={() => setView('pricing')}
+          onClick={() => handleNavigate('pricing')}
         >
           <div className="stitchNavItemInner">
             <Sparkles size={18} />
@@ -146,7 +162,7 @@ export function StitchSidebar() {
         <button
           type="button"
           className={`stitchNavItem ${view === 'history' ? 'active' : ''}`}
-          onClick={() => setView('history')}
+          onClick={() => handleNavigate('history')}
         >
           <div className="stitchNavItemInner">
             <History size={18} />
@@ -158,7 +174,7 @@ export function StitchSidebar() {
           <button
             type="button"
             className={`stitchNavItem ${view === 'points' ? 'active' : ''}`}
-            onClick={() => setView('points')}
+            onClick={() => handleNavigate('points')}
           >
             <div className="stitchNavItemInner">
               <Trophy size={18} />
@@ -170,7 +186,7 @@ export function StitchSidebar() {
         <button
           type="button"
           className={`stitchNavItem ${view === 'profile' ? 'active' : ''}`}
-          onClick={() => setView('profile')}
+          onClick={() => handleNavigate('profile')}
         >
           <div className="stitchNavItemInner">
             <UserRound size={18} />
@@ -184,7 +200,7 @@ export function StitchSidebar() {
             <button
               type="button"
               className={`stitchNavItem ${view === 'admin' ? 'active' : ''}`}
-              onClick={() => setView('admin')}
+              onClick={() => handleNavigate('admin')}
             >
               <div className="stitchNavItemInner">
                 <Settings2 size={18} />
@@ -215,7 +231,7 @@ export function StitchSidebar() {
         <button
           type="button"
           className="stitchMiniAvatar"
-          onClick={() => setView('profile')}
+          onClick={() => handleNavigate('profile')}
           title="فتح حسابي"
         >
           {user.name.slice(0, 2)}
@@ -235,6 +251,16 @@ export function StitchSidebar() {
         </button>
       </div>
     </aside>
+    {sidebarOpen && (
+      <div
+        className="stitchScrim"
+        onClick={() => setSidebarOpen?.(false)}
+        aria-label="إغلاق القائمة الجانبية"
+        role="button"
+        tabIndex={0}
+      />
+    )}
+  </>
   );
 }
 

@@ -1,4 +1,4 @@
-﻿import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext } from 'react';
 import type { Catalog, Test } from '../RealAppV2';
 
 export interface StitchUser {
@@ -43,6 +43,8 @@ export interface StitchContextValue {
   openSmartReview: (tab?: 'flashcards' | 'quiz' | 'stats') => void;
   commandPaletteOpen: boolean;
   setCommandPaletteOpen: (open: boolean) => void;
+  sidebarOpen?: boolean;
+  setSidebarOpen?: (open: boolean) => void;
   logout: () => Promise<void>;
   notify: (message: string) => void;
 }

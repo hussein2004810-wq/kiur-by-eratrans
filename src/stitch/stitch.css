@@ -137,6 +137,37 @@ html[data-kiur-theme="dark"] {
   transition: transform 0.25s ease;
 }
 
+.stitchMobileMenuBtn {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--stitch-radius-md);
+  border: 1px solid var(--stitch-border);
+  background: var(--stitch-bg-surface);
+  color: var(--stitch-text-primary);
+  place-items: center;
+  cursor: pointer;
+}
+
+.stitchSidebarCloseBtn {
+  display: none;
+  background: transparent;
+  border: 0;
+  color: var(--stitch-text-muted);
+  cursor: pointer;
+  margin-inline-start: auto;
+  padding: 4px;
+}
+
+.stitchScrim {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 90;
+}
+
 .stitchBrand {
   display: flex;
   align-items: center;
@@ -1875,6 +1906,30 @@ html[data-kiur-theme="dark"] .stitchTestSubjectTag {
 }
 
 @media(max-width: 1024px) {
+  .stitchMobileMenuBtn {
+    display: grid;
+  }
+  .stitchSidebarCloseBtn {
+    display: block;
+  }
+  .stitchSidebar {
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 100;
+    transform: translateX(100%);
+    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.5);
+  }
+  .stitchSidebar.open {
+    transform: translateX(0);
+  }
+  .stitchScrim {
+    display: block;
+  }
+  .stitchMain {
+    padding: 0 16px 48px;
+  }
   .stitchPreviewMetricsGrid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1888,6 +1943,15 @@ html[data-kiur-theme="dark"] .stitchTestSubjectTag {
 }
 
 @media(max-width: 768px) {
+  .stitchSidebar {
+    width: 260px;
+  }
+  .stitchTopbar {
+    padding: 12px 0;
+  }
+  .stitchSearch input {
+    font-size: 12px;
+  }
   .stitchNavLinks {
     display: none;
   }

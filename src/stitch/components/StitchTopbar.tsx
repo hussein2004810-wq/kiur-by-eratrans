@@ -1,5 +1,5 @@
-﻿import React from 'react';
-import { Search, Bell } from 'lucide-react';
+import React from 'react';
+import { Search, Bell, Menu } from 'lucide-react';
 import { useStitch } from '../StitchContext';
 import { ThemeToggle } from '../../theme-preference';
 
@@ -13,16 +13,28 @@ export function StitchTopbar() {
     notifications,
     notificationsOpen,
     setNotificationsOpen,
+    setSidebarOpen
   } = useStitch();
 
   const unreadCount = notifications.filter(n => !n.readAt).length;
 
   return (
     <header className="stitchTopbar">
-      <div
-        className="stitchSearch"
-        onClick={() => setCommandPaletteOpen(true)}
-      >
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
+        {setSidebarOpen && (
+          <button
+            type="button"
+            className="stitchMobileMenuBtn"
+            onClick={() => setSidebarOpen(true)}
+            aria-label="فتح القائمة الرئيسية"
+          >
+            <Menu size={22} />
+          </button>
+        )}
+        <div
+          className="stitchSearch"
+          onClick={() => setCommandPaletteOpen(true)}
+        >
         <Search />
         <input
           value={search}
@@ -47,6 +59,7 @@ export function StitchTopbar() {
         >
           ⌘K
         </kbd>
+        </div>
       </div>
 
       <div className="stitchTopbarActions">
