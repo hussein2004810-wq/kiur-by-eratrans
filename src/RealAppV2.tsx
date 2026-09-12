@@ -225,7 +225,7 @@ function ExamRunner({test,attemptId,onClose,onDone,notify}:{test:TestDetail;atte
         <h3 id="exam-dialog-title">{test.title}</h3>
       </div>
       <div style={{display:'flex',alignItems:'center',gap:'8px'}}>
-        {!isOnline&&<span style={{background:'#fee2e2',color:'#991b1b',fontSize:'11px',padding:'4px 8px',borderRadius:'6px',fontWeight:600}}>📴 غير متصل (المسودة محفوظة)</span>}
+        {!isOnline&&<span className="offlineBadge">📴 غير متصل (المسودة محفوظة)</span>}
         <span className="timer"><Clock3/>{String(Math.floor(seconds/60)).padStart(2,'0')}:{String(seconds%60).padStart(2,'0')}</span>
         <button onClick={onClose} aria-label="حفظ الاختبار والخروج"><X/></button>
       </div>
@@ -407,7 +407,7 @@ export default function RealAppV2(){
   {studyContent}
   <ClinicalGlimpsesSpotlight onBrowse={()=>navigate('glimpses')}/>
   </>}
-  {view==='tests'&&<><Title title="المواد والاختبارات" subtitle="اختر محاضرتك؛ فتح الاختبار يستأنف محاولتك الحالية إن وجدت."/>{studyContent}</>}
+  {view==='tests'&&studyContent}
   {view==='glimpses'&&<><Title title="اللمحات السريرية" subtitle="مكتبة معرفية قصيرة ومعتمدة لجميع الطلبة."/><ClinicalGlimpsesLibrary/></>}
   {view==='history'&&<><Title title="سجل النتائج" subtitle="كل محاولاتك ودرجاتك وشهاداتك محفوظة في حسابك."/><div className="stats"><Stat icon={<ClipboardList/>} value={completed} label="إجمالي المحاولات"/><Stat icon={<CheckCircle2/>} value={passed} label="اختبارات ناجحة" tone="amber"/><Stat icon={<BarChart3/>} value={summary.averagePercentage+'%'} label="المتوسط العام" tone="blue"/><Stat icon={<ShieldCheck/>} value={completed?Math.round(passed/completed*100)+'%':'0%'} label="نسبة النجاح" tone="coral"/></div><section className="panel tableWrap responsiveRecordWrap"><table className="responsiveRecords historyRecords"><thead><tr><th>الاختبار</th><th>المادة</th><th>التاريخ</th><th>النتيجة</th><th>الحالة</th><th>الشهادة</th></tr></thead><tbody>{history.map(item=><tr key={item.id}><td data-label="الاختبار">{item.title}</td><td data-label="المادة">{item.subject}</td><td data-label="التاريخ">{new Intl.DateTimeFormat('ar-IQ').format(new Date(item.finishedAt))}</td><td data-label="النتيجة" className={item.passed?'good':'low'}>{item.percentage}%</td><td data-label="الحالة"><span className={item.passed?'success':'retry'}>{item.passed?'ناجح':'إعادة مطلوبة'}</span></td><td data-label="الشهادة">{item.passed?<CertificateButton attemptId={item.id} notify={notify}/>:null}</td></tr>)}</tbody></table>{!history.length&&<div className="empty small"><History/><p>لم تُكمل أي اختبار بعد.</p></div>}</section></>}
   {view==='points'&&user.role==='student'&&<><Title title="نقاطي" subtitle="نقاطك وإنجازاتك وتقدمك الدراسي في مساحة تنافسية هادئة."/><Suspense fallback={<SectionLoading/>}><StudentPoints notify={notify}/></Suspense></>}

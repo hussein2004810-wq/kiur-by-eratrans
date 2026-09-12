@@ -103,15 +103,29 @@ html[data-kiur-theme="light"] .guestVital{color:#334155}
 html[data-kiur-theme="light"] .guestVital b{color:#0f766e}
 html[data-kiur-theme="light"] .guestSearchWrap input{background:#ffffff;border-color:#cbd5e1;color:#0f172a}
 html[data-kiur-theme="light"] .guestBentoCard{background:#ffffff;border-color:#cbd5e1;box-shadow:0 10px 30px rgba(15,23,42,0.06)}
+html[data-kiur-theme="light"] .guestBentoCard.featureBento{background:radial-gradient(circle at 10% 20%,rgba(13,148,136,0.1),transparent 45%),linear-gradient(135deg,#ffffff,#f0fdfa);border-color:#cbd5e1}
+html[data-kiur-theme="light"] .guestSectionHeader h2{color:#0f172a}
 html[data-kiur-theme="light"] .guestBentoCard h3{color:#0f172a}
 html[data-kiur-theme="light"] .guestBentoCard p{color:#475569}
+html[data-kiur-theme="light"] .bentoPill{background:#f1f5f9;color:#475569;border-color:#cbd5e1}
 html[data-kiur-theme="light"] .miniSplitPreview{background:#f8fafc;border-color:#e2e8f0}
+html[data-kiur-theme="light"] .miniImagePane{background:#f0fdfa;border-color:rgba(13,148,136,0.3);color:#0f766e}
+html[data-kiur-theme="light"] .miniImagePane small{color:#64748b}
 html[data-kiur-theme="light"] .miniQuestions span{background:#ffffff;border-color:#cbd5e1;color:#334155}
 html[data-kiur-theme="light"] .miniQuestions span.activeMini{background:#ccfbf1;border-color:#0d9488;color:#0f766e}
+html[data-kiur-theme="light"] .guestQuickTags button{background:#ffffff;color:#334155;border-color:#cbd5e1}
+html[data-kiur-theme="light"] .guestQuickTags button:hover{background:#ccfbf1;border-color:#0d9488;color:#0f766e}
+html[data-kiur-theme="light"] .guestClearSearch{background:#f1f5f9;color:#475569}
 html[data-kiur-theme="light"] .guestPath,html[data-kiur-theme="light"] .guestResults{background:#ffffff;border-color:#cbd5e1;box-shadow:0 14px 40px rgba(15,23,42,0.06)}
 html[data-kiur-theme="light"] .guestPathHeader b,html[data-kiur-theme="light"] .guestResultsHeader h2{color:#0f172a}
+html[data-kiur-theme="light"] .guestResetBtn{background:#f1f5f9;color:#334155;border-color:#cbd5e1}
 html[data-kiur-theme="light"] .guestField span{color:#334155}
 html[data-kiur-theme="light"] .guestField select{background:#ffffff;border-color:#cbd5e1;color:#0f172a}
 html[data-kiur-theme="light"] .guestTestCard{background:#ffffff;border-color:#cbd5e1;box-shadow:0 10px 24px rgba(15,23,42,0.05)}
 html[data-kiur-theme="light"] .guestTestCard h3{color:#0f172a}
 html[data-kiur-theme="light"] .guestLectureName{color:#475569}
+html[data-kiur-theme="light"] .guestCardTag{background:#ccfbf1;color:#0f766e;border-color:#99f6e4}
+html[data-kiur-theme="light"] .guestFormalTag{background:#fef3c7;color:#92400e;border-color:#fde68a}
+html[data-kiur-theme="light"] .guestCardMeta{border-top-color:#e2e8f0;color:#64748b}
+html[data-kiur-theme="light"] .guestStatusState.empty h3{color:#0f172a}
+

@@ -331,6 +331,35 @@ html[data-kiur-theme="light"] .readinessDialog{background:#fff!important;border-
 html[data-kiur-theme="light"] .readinessDialog header>button{background:#f8fafc!important;border-color:#cbd5e1!important}
 html[data-kiur-theme="light"] .readinessDialog footer button{background:#f8fafc!important;border-color:#cbd5e1!important;color:#0f172a!important}
 
+/* AuthScreen Light Mode */
+html[data-kiur-theme="light"] .authPage{background:radial-gradient(circle at 10% 10%,rgba(13,148,136,0.08) 0,transparent 30%),linear-gradient(145deg,#f8fafc,#f1f5f9)!important;color:#0f172a!important}
+html[data-kiur-theme="light"] .authBackdrop{background:#f1f5f9!important}
+html[data-kiur-theme="light"] .authFallback{background:radial-gradient(circle at 18% 18%,rgba(13,148,136,0.12) 0,transparent 34%),linear-gradient(145deg,#ffffff,#f1f5f9 55%,#f8fafc)!important}
+html[data-kiur-theme="light"] .hybridAuth.authCard{background:linear-gradient(180deg,#ffffff,#f8fafc)!important;border-color:#cbd5e1!important;box-shadow:0 25px 70px rgba(15,23,42,0.12)!important;color:#0f172a!important}
+html[data-kiur-theme="light"] .hybridAuth .authBrand{color:#0f172a!important}
+html[data-kiur-theme="light"] .hybridAuth .authBrand small{color:#64748b!important}
+html[data-kiur-theme="light"] .hybridAuth .authIntro h1{color:#0f172a!important}
+html[data-kiur-theme="light"] .hybridAuth .authIntro p{color:#475569!important}
+html[data-kiur-theme="light"] .hybridAuth .signinButton{background:#ffffff!important;border-color:#cbd5e1!important;color:#0f172a!important}
+html[data-kiur-theme="light"] .hybridAuth .signinButton:hover{background:#f0fdfa!important;border-color:#0d9488!important}
+html[data-kiur-theme="light"] .authTabs{background:#f1f5f9!important;border-color:#e2e8f0!important}
+html[data-kiur-theme="light"] .authTabs button{color:#64748b!important}
+html[data-kiur-theme="light"] .authTabs button.active{background:#ffffff!important;color:#0f172a!important;box-shadow:0 2px 8px rgba(15,23,42,0.08)!important}
+html[data-kiur-theme="light"] .authField>span,html[data-kiur-theme="light"] .registrationPath label>span{color:#334155!important}
+html[data-kiur-theme="light"] .authField input,html[data-kiur-theme="light"] .registrationPath select{background:#ffffff!important;border-color:#cbd5e1!important;color:#0f172a!important}
+html[data-kiur-theme="light"] .authField input:focus,html[data-kiur-theme="light"] .registrationPath select:focus{background:#ffffff!important;border-color:#0d9488!important}
+html[data-kiur-theme="light"] .registrationPath{border-color:#e2e8f0!important;background:#f8fafc!important}
+html[data-kiur-theme="light"] .registrationPath legend{color:#0f172a!important}
+html[data-kiur-theme="light"] .rememberChoice{color:#475569!important}
+html[data-kiur-theme="light"] .rememberChoice span{background:#e2e8f0!important;border-color:#cbd5e1!important}
+html[data-kiur-theme="light"] .rememberChoice span:before{background:#94a3b8!important}
+html[data-kiur-theme="light"] .rememberChoice input:checked+span{background:#0d9488!important;border-color:#0d9488!important}
+html[data-kiur-theme="light"] .rememberChoice input:checked+span:before{background:#ffffff!important}
+html[data-kiur-theme="light"] .authNote{color:#64748b!important}
+html[data-kiur-theme="light"] .authHint{color:#94a3b8!important}
+html[data-kiur-theme="light"] .authBrowse{color:#64748b!important}
+html[data-kiur-theme="light"] .authBrowse:hover{color:#0d9488!important}
+
 @media(max-width:720px){
   html[data-kiur-theme="light"] .app .topbar{background:rgba(248,250,252,0.96)}
   html[data-kiur-theme="light"] .app :where(.responsiveRecords,.banLog,.studentsTable,.logTable) tr{background:linear-gradient(145deg,#fff,#f8fafc);box-shadow:0 6px 18px rgba(15,23,42,0.06)}
