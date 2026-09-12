@@ -16,10 +16,11 @@ import StudyShelf,{type LearningHub} from './StudyShelf';
 import {matchesStudySearch} from './study-shelf-model';
 import StudentBanManager,{BannedStudentScreen} from './StudentBanManager';
 import AcademicChangeManager,{AcademicChangeStudent} from './AcademicChangeManager';
-import GuestPortal from './GuestPortal';
 import AccountProfile from './AccountProfile';
 import {hydrateAccountTheme,ThemeToggle} from './theme-preference';
 import {CommandPalette} from './CommandPalette';
+
+const GuestPortal=lazy(()=>import('./GuestPortal'));
 
 const ImportManager=lazy(()=>import('./ImportManager'));
 const MediaManager=lazy(()=>import('./MediaManager'));
@@ -378,7 +379,7 @@ export default function RealAppV2(){
   const remove=async(id:string)=>{if(!confirm('أرشفة هذا الاختبار؟ لن يظهر للطلاب بعد ذلك.'))return;try{await api('/api/admin/tests/'+id,{method:'DELETE'});notify('تمت أرشفة الاختبار');await Promise.all([loadAdmin(),loadTests()])}catch(error){notify((error as Error).message)}};
   const logoutCurrent=async()=>{try{await logoutFromProvider(user?.authProvider)}catch(error){notify((error as Error).message)}};
   const toggleNotifications=()=>{setNotificationsOpen(value=>!value);if(notifications.some(item=>!item.readAt))void api('/api/notifications/read-all',{method:'POST',body:'{}'}).then(()=>setNotifications(value=>value.map(item=>({...item,readAt:item.readAt||new Date().toISOString()})))).catch(()=>undefined)};
-  if(authPreview||window.location.pathname==='/auth/action'||['resetPassword','verifyEmail','recoverEmail'].includes(new URLSearchParams(window.location.search).get('mode')||'')||window.location.pathname==='/activate-staff')return <AuthScreen/>;if(verificationCode)return <VerifyScreen code={verificationCode}/>;if(loading)return <Loading/>;if(!user)return <GuestPortal/>;if(user.restriction)return <BannedStudentScreen user={user} onLogout={()=>void logoutCurrent()}/>;if(!catalog)return <Loading/>;if(profileSetup)return user.role==='student'&&user.universityId&&user.collegeId&&user.departmentId&&user.phaseId?<AcademicChangeStudent catalog={catalog} user={user as User&{universityId:string;collegeId:string;departmentId:string;phaseId:string}} onClose={()=>setProfileSetup(false)} notify={notify}/>:<ProfileSetup user={user} catalog={catalog} onSaved={updated=>{setUser(updated);setProfileSetup(false);setView('tests')}} notify={notify}/>;
+  if(authPreview||window.location.pathname==='/auth/action'||['resetPassword','verifyEmail','recoverEmail'].includes(new URLSearchParams(window.location.search).get('mode')||'')||window.location.pathname==='/activate-staff')return <AuthScreen/>;if(verificationCode)return <VerifyScreen code={verificationCode}/>;if(loading)return <Loading/>;if(!user)return <Suspense fallback={<Loading/>}><GuestPortal/></Suspense>;if(user.restriction)return <BannedStudentScreen user={user} onLogout={()=>void logoutCurrent()}/>;if(!catalog)return <Loading/>;if(profileSetup)return user.role==='student'&&user.universityId&&user.collegeId&&user.departmentId&&user.phaseId?<AcademicChangeStudent catalog={catalog} user={user as User&{universityId:string;collegeId:string;departmentId:string;phaseId:string}} onClose={()=>setProfileSetup(false)} notify={notify}/>:<ProfileSetup user={user} catalog={catalog} onSaved={updated=>{setUser(updated);setProfileSetup(false);setView('tests')}} notify={notify}/>;
   const completed=summary.attempts;const passed=history.filter(item=>item.passed).length;const staff=['owner','admin','teacher'].includes(user.role);const links:readonly (readonly [MainView,React.ComponentType<any>,string])[]=[['home',LayoutDashboard,'رفّي الدراسي'],['tests',ClipboardList,'الاختبارات'],['glimpses',HeartPulse,'اللمحات'],['history',History,'النتائج'],...(user.role==='student'?[['points',Trophy,'نقاطي'] as const]:[]),['profile',UserRound,'حسابي']];
   const clearDirectLink=()=>{if(directTarget){setDirectTarget(null);window.history.replaceState({},'', '/')}};
   const navigate=(next:MainView)=>{clearDirectLink();setView(next);setMenu(false)};
