@@ -54,25 +54,42 @@ export async function handleGoogleAuth(request,env,url){
   if(!flow||flow.expires_at<=Math.floor(Date.now()/1000)||flow.origin!==url.origin||flow.session_id!=='firebase-popup')return clearFlow(json({error:{code:'GOOGLE_EXPIRED',message:'انتهت محاولة دخول Google؛ أعد المحاولة'}},401));
   try{
     const profile=await firebaseGoogleProfile(env,idToken);const email=normalizeEmail(profile.email);
+    const ownerEmails=new Set(String(env.OWNER_EMAILS||'').split(',').map(s=>s.trim().toLowerCase()).filter(Boolean));
+    const isOwner=ownerEmails.has(email);
     let account=await env.DB.prepare(`SELECT id,email,name,account_role,account_status FROM users WHERE firebase_uid=?`).bind(profile.uid).first();
     if(!account){
-      // Email alone must never attach Google to an existing privileged account.
-      if(await env.DB.prepare(`SELECT id FROM users WHERE email=?`).bind(email).first())return clearFlow(json({error:{code:'GOOGLE_LINK_REQUIRED',message:'هذا البريد مرتبط بحساب موجود؛ ادخل بالطريقة السابقة أولًا'}},409));
-      const path=JSON.parse(flow.academic_json)||{};const id=crypto.randomUUID();
-      await env.DB.batch([
-        env.DB.prepare(`INSERT INTO users(id,email,name,role,account_role,account_status,auth_provider,firebase_uid,email_verified_at,university_id,college_id,department_id,phase_id,section_id) VALUES(?,?,?,'student','student','active','password',?,CURRENT_TIMESTAMP,?,?,?,?,?)`).bind(id,email,profile.name,profile.uid,path.universityId||null,path.collegeId||null,path.departmentId||null,path.phaseId||null,path.sectionId||null),
-        // Legacy schema names Firebase identities "password"; the immutable Firebase UID is the key.
-        env.DB.prepare(`INSERT INTO user_identities(provider,provider_user_id,user_id,email) VALUES('password',?,?,?)`).bind(profile.uid,id,email)
-      ]);
-      await recordAccountEvent(env,request,{userId:id,accountCode:id,email,eventType:'register',details:{provider:'google',autoActivated:true}});
-      const session=await createSession(env,id,request);await env.DB.prepare(`UPDATE users SET last_login_at=CURRENT_TIMESTAMP WHERE id=?`).bind(id).run();
-      const response=json({authenticated:true,user:{id,email,name:profile.name,role:'student'},profileRequired:!path.universityId});response.headers.append('set-cookie',cookie(''));response.headers.append('set-cookie',session.cookie);return response;
+      // Email alone must never attach Google to an existing privileged account unless it's the declared owner.
+      const existingUser=await env.DB.prepare(`SELECT id,account_role FROM users WHERE email=?`).bind(email).first();
+      if(existingUser&&!isOwner)return clearFlow(json({error:{code:'GOOGLE_LINK_REQUIRED',message:'هذا البريد مرتبط بحساب موجود؛ ادخل بالطريقة السابقة أولًا'}},409));
+      if(existingUser&&isOwner){
+        await env.DB.batch([
+          env.DB.prepare(`UPDATE users SET firebase_uid=?,email_verified_at=COALESCE(email_verified_at,CURRENT_TIMESTAMP),role='admin',account_role='owner',account_status='active',updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(profile.uid,existingUser.id),
+          env.DB.prepare(`INSERT OR REPLACE INTO user_identities(provider,provider_user_id,user_id,email) VALUES('password',?,?,?)`).bind(profile.uid,existingUser.id,email)
+        ]);
+        account={id:existingUser.id,email,name:profile.name,account_role:'owner',account_status:'active'};
+      }else{
+        const path=JSON.parse(flow.academic_json)||{};const id=crypto.randomUUID();
+        const role=isOwner?'owner':'student';
+        const legacyRole=isOwner?'admin':'student';
+        await env.DB.batch([
+          env.DB.prepare(`INSERT INTO users(id,email,name,role,account_role,account_status,auth_provider,firebase_uid,email_verified_at,university_id,college_id,department_id,phase_id,section_id) VALUES(?,?,?,?,?,'active','password',?,CURRENT_TIMESTAMP,?,?,?,?,?)`).bind(id,email,profile.name,legacyRole,role,profile.uid,path.universityId||null,path.collegeId||null,path.departmentId||null,path.phaseId||null,path.sectionId||null),
+          // Legacy schema names Firebase identities "password"; the immutable Firebase UID is the key.
+          env.DB.prepare(`INSERT INTO user_identities(provider,provider_user_id,user_id,email) VALUES('password',?,?,?)`).bind(profile.uid,id,email)
+        ]);
+        await recordAccountEvent(env,request,{userId:id,accountCode:id,email,eventType:'register',details:{provider:'google',autoActivated:true,role}});
+        const session=await createSession(env,id,request);await env.DB.prepare(`UPDATE users SET last_login_at=CURRENT_TIMESTAMP WHERE id=?`).bind(id).run();
+        const response=json({authenticated:true,user:{id,email,name:profile.name,role},profileRequired:!isOwner&&!path.universityId});response.headers.append('set-cookie',cookie(''));response.headers.append('set-cookie',session.cookie);return response;
+      }
+    }
+    if(isOwner&&account.account_role!=='owner'){
+      await env.DB.prepare(`UPDATE users SET account_role='owner',role='admin',account_status='active',updated_at=CURRENT_TIMESTAMP WHERE id=?`).bind(account.id).run();
+      account.account_role='owner';
     }
     if(account.account_status==='pending'&&account.account_role==='student'){await env.DB.prepare(`UPDATE users SET account_status='active',updated_at=CURRENT_TIMESTAMP WHERE id=? AND account_status='pending'`).bind(account.id).run();account.account_status='active';await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email,eventType:'account_status',details:{status:'active',reason:'student_auto_activation'}})}
     if(account.account_status!=='active'){await recordAccountEvent(env,request,{userId:account.id,email,eventType:'login_failure',outcome:'failure',details:{provider:'google',reason:account.account_status}});return clearFlow(json({error:{code:account.account_status==='pending'?'ACCOUNT_PENDING':'ACCOUNT_SUSPENDED',message:account.account_status==='pending'?'الحساب بانتظار تفعيل الإدارة':'الحساب موقوف؛ تواصل مع المشرف'}},403))}
     const session=await createSession(env,account.id,request);
     await env.DB.prepare(`UPDATE users SET last_login_at=CURRENT_TIMESTAMP WHERE id=?`).bind(account.id).run();
-    await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email:account.email,eventType:'login_success',details:{provider:'google'}});
+    await recordAccountEvent(env,request,{userId:account.id,accountCode:account.id,email:account.email,eventType:'login_success',details:{provider:'google',role:account.account_role}});
     const response=json({authenticated:true,user:{id:account.id,email:account.email,name:account.name,role:account.account_role}});response.headers.append('set-cookie',cookie(''));response.headers.append('set-cookie',session.cookie);return response;
   }catch{return clearFlow(json({error:{code:'GOOGLE_IDENTITY_INVALID',message:'تعذر التحقق من هوية Google؛ أعد المحاولة'}},401))}
 }
