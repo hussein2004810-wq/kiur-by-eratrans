@@ -1,8 +1,7 @@
 import {useEffect,useMemo,useState} from 'react';
-import {Award,BookOpen,Brain,CheckCircle2,ChevronLeft,Clock3,FileCheck,GraduationCap,HeartPulse,Search,ShieldCheck,Sparkles,Stethoscope,Trophy} from 'lucide-react';
 import AuthScreen from './AuthScreen';
-import './guest.css';
-import {ThemeToggle} from './theme-preference';
+import StitchPublicLanding from './stitch/components/StitchPublicLanding';
+
 
 type Item={id:string;name:string;universityId?:string;collegeId?:string;departmentId?:string;phaseId?:string;subjectId?:string};
 type Catalog={universities:Item[];colleges:Item[];departments:Item[];phases:Item[];sections:Item[];subjects:Item[];lectures:Item[]};
@@ -86,195 +85,18 @@ export default function GuestPortal(){
   if(auth)return <AuthScreen onBrowse={()=>{window.history.replaceState({},'', '/');setAuth(false)}}/>;
 
   return (
-    <main className="guestPortal" dir="rtl">
-      <header className="guestHeader">
-        <div className="guestBrand">
-          <span className="guestLogo"><HeartPulse/></span>
-          <div>
-            <b>KIUR</b>
-            <small>BY ERATRANS • MEDICAL ACADEMY</small>
-          </div>
-        </div>
-        <div className="guestHeaderActions">
-          <ThemeToggle compact/>
-          <button type="button" className="guestLoginBtn" onClick={()=>setAuth(true)}>
-            <ShieldCheck/>
-            <span>دخول الأطباء والطلبة</span>
-          </button>
-        </div>
-      </header>
-
-      {/* Hero Section */}
-      <section className="guestHero">
-        <span className="guestHeroBadge">
-          <Sparkles/> المنظومة الطبية والتقييم السريري التفاعلي في العراق
-        </span>
-        <h1>المرجع السريري الذكي لطلبة وأطباء العراق</h1>
-        <p>
-          بيئة تدريب وامتحانات طبية متكاملة مصممة وفق المعايير الأكاديمية للكليات الطبية، بحالات مصورة، تكرار متباعد، وشهادات معتمدة فورية.
-        </p>
-
-        {/* Live Vitals Indicator */}
-        <div className="guestVitalsStrip">
-          <div className="guestVital">
-            <span className="vitalDot pulse"/>
-            <span>SpO₂ <b>98%</b></span>
-          </div>
-          <div className="guestVital">
-            <HeartPulse size={14}/>
-            <span>HR <b>72 bpm</b></span>
-          </div>
-          <div className="guestVital">
-            <FileCheck size={14}/>
-            <span>{tests.length} اختبار متاح</span>
-          </div>
-          <div className="guestVital">
-            <Stethoscope size={14}/>
-            <span>حالات سريرية مصورة</span>
-          </div>
-        </div>
-
-        {/* Search Bar */}
-        <div className="guestSearchWrap">
-          <Search/>
-          <input
-            value={search}
-            onChange={e=>setSearch(e.target.value)}
-            placeholder="ابحث عن مادة، محاضرة أو اختبار سريري..."
-            aria-label="بحث في بنك الاختبارات"
-          />
-          {search&&<button type="button" className="guestClearSearch" onClick={()=>setSearch('')}>مسح</button>}
-        </div>
-
-        {/* Quick Filter Tags */}
-        <div className="guestQuickTags">
-          <span>شائع الآن:</span>
-          {['الطب الباطني','الجراحة العامة','طب الأطفال','النسائية والتوليد','علم الأدوية','التشريح'].map(tag=>(
-            <button type="button" key={tag} onClick={()=>setSearch(tag)}>{tag}</button>
-          ))}
-        </div>
-      </section>
-
-      {/* Medical Bento Showcase */}
-      <section className="guestBentoSection">
-        <div className="guestSectionHeader">
-          <small>مميزات المنظومة السريرية</small>
-          <h2>تقنيات متقدمة لبناء التفكير التشخيصي</h2>
-        </div>
-
-        <div className="guestBentoGrid">
-          <article className="guestBentoCard featureBento">
-            <div className="bentoIcon"><Stethoscope/></div>
-            <span className="bentoPill">Split View Mode</span>
-            <h3>حالات سريرية بأسلوب الفحص المزدوج</h3>
-            <p>عرض تفاعلي متزامن لصورة الأشعة السينية، رنين المغناطيسي، أو تخطيط القلب إلى جانب السؤال لتشخيص واقعي.</p>
-            <div className="miniSplitPreview">
-              <div className="miniImagePane">
-                <span className="ecgMiniLine"/>
-                <small>ECG Lead II: Sinus Rhythm</small>
-              </div>
-              <div className="miniQuestions">
-                <span>1. خيار تشخيصي أول</span>
-                <span className="activeMini">2. التشخيص المعتمد ✓</span>
-              </div>
-            </div>
-          </article>
-
-          <article className="guestBentoCard">
-            <div className="bentoIcon amber"><Brain/></div>
-            <span className="bentoPill">Adaptive Engine</span>
-            <h3>خوارزمية التكرار المتباعد</h3>
-            <p>تحليل تلقائي لأنماط الأخطاء في الإجابات وإعادة جدولة الأسئلة المحورية لترسيخ المعلومة في الذاكرة طويلة المدى.</p>
-          </article>
-
-          <article className="guestBentoCard">
-            <div className="bentoIcon blue"><Award/></div>
-            <span className="bentoPill">Verified QR</span>
-            <h3>شهادات إنجاز موثقة فورية</h3>
-            <p>إصدار شهادات أكاديمية رقمية لكل اختبار رسمي مجتاز، مزودة برمز QR فريد للتحقق الفوري من صحة النتيجة.</p>
-          </article>
-
-          <article className="guestBentoCard">
-            <div className="bentoIcon purple"><Trophy/></div>
-            <span className="bentoPill">Clinical Ranks</span>
-            <h3>سلّم الرتب الطبية والتحفيز</h3>
-            <p>تدرّج من طبيب متدرب (Intern) إلى طبيب استشاري (Consultant) مع كل إنجاز تحققه داخل قاعات المنصة.</p>
-          </article>
-        </div>
-      </section>
-
-      {/* Academic Catalog Hierarchy Path */}
-      <section className="guestPath">
-        <div className="guestPathHeader">
-          <GraduationCap/>
-          <div>
-            <b>تحديد المسار الأكاديمي</b>
-            <small>اختر جامعتك، كليتك، مرحلتك، ومادتك لعرض الاختبارات المناسبة لك</small>
-          </div>
-        </div>
-        <div className="guestSelectors">
-          <Select label="الجامعة" value={path.universityId} items={catalog?.universities||[]} onChange={v=>choose('universityId',v)}/>
-          <Select label="الكلية" value={path.collegeId} items={colleges} onChange={v=>choose('collegeId',v)}/>
-          <Select label="القسم" value={path.departmentId} items={departments} onChange={v=>choose('departmentId',v)}/>
-          <Select label="المرحلة" value={path.phaseId} items={phases} onChange={v=>choose('phaseId',v)}/>
-          <Select label="الشعبة" value={path.sectionId} items={sections} onChange={v=>choose('sectionId',v)} optional/>
-          <Select label="المادة" value={path.subjectId} items={subjects} onChange={v=>choose('subjectId',v)}/>
-          <Select label="المحاضرة" value={path.lectureId} items={lectures} onChange={v=>choose('lectureId',v)}/>
-        </div>
-      </section>
-
-      {/* Available Tests Cards Grid */}
-      <section className="guestResults">
-        <header className="guestResultsHeader">
-          <div>
-            <h2>الاختبارات السريرية المتاحة</h2>
-            <p>{visible.length} اختبار مطابق لاختياراتك الحالية</p>
-          </div>
-          {search&&<button type="button" className="guestResetBtn" onClick={()=>setSearch('')}>مسح التصفية</button>}
-        </header>
-
-        <div className="guestCardsGrid">
-          {visible.map(test=>(
-            <article key={test.id} className="guestTestCard">
-              <div className="guestCardHead">
-                <span className="guestCardTag">{test.subjectName||'مادة سريرية'}</span>
-                {test.examMode==='formal'&&<span className="guestFormalTag">امتحان رسمي</span>}
-              </div>
-              <h3>{test.title}</h3>
-              <p className="guestLectureName">{test.lectureName||'المحاضرة'}</p>
-              <div className="guestCardMeta">
-                <span><Clock3/> {test.durationMinutes} دقيقة</span>
-                <span><BookOpen/> {test.questionCount} أسئلة</span>
-              </div>
-              <button type="button" className="guestStartBtn" onClick={()=>start(test.id)}>
-                <span>بدء التقييم السريري</span>
-                <ChevronLeft/>
-              </button>
-            </article>
-          ))}
-        </div>
-
-        {loading&&<div className="guestStatusState"><p>جارٍ تحميل بنك الاختبارات السريرية…</p></div>}
-        {!loading&&!visible.length&&(
-          <div className="guestStatusState empty">
-            <BookOpen/>
-            <h3>لا توجد اختبارات مطابقة</h3>
-            <p>جرّب اختيار قسم أو مرحلة أخرى، أو امسح شريط البحث لعرض كافة الاختبارات المتوفرة.</p>
-          </div>
-        )}
-      </section>
-    </main>
+    <StitchPublicLanding
+      onStartAuth={()=>setAuth(true)}
+      catalog={catalog}
+      tests={tests}
+      path={path}
+      onSelectPath={choose}
+      search={search}
+      onSearchChange={setSearch}
+      visibleTests={visible}
+      loading={loading}
+      onStartTest={start}
+    />
   );
 }
 
-function Select({label,value,items,onChange,optional=false}:{label:string;value:string;items:Item[];onChange:(value:string)=>void;optional?:boolean}){
-  return (
-    <label className="guestField">
-      <span>{label}</span>
-      <select value={value} onChange={e=>onChange(e.target.value)}>
-        <option value="">{optional?'الكل / دون تحديد':`كل ${label}`}</option>
-        {items.map(item=><option key={item.id} value={item.id}>{item.name}</option>)}
-      </select>
-    </label>
-  );
-}
