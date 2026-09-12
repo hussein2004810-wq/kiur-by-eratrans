@@ -10,7 +10,8 @@ import {
   Settings2,
   X,
   ChevronLeft,
-  GraduationCap
+  GraduationCap,
+  Brain
 } from 'lucide-react';
 import type { MainView, Test, Catalog } from './RealAppV2';
 
@@ -19,6 +20,7 @@ interface CommandPaletteProps {
   onClose: () => void;
   onNavigate: (view: MainView) => void;
   onSelectTest: (testId: string) => void;
+  onOpenSmartReview?: (tab?: 'flashcards' | 'quizBuilder' | 'stats') => void;
   tests: Test[];
   catalog: Catalog | null;
   userRole?: string;
@@ -72,6 +74,24 @@ export function CommandPalette({
       { id: 'glimpses', title: 'اللمحات السريرية الطبية', category: 'التنقل', icon: HeartPulse, action: () => onNavigate('glimpses') },
       { id: 'history', title: 'سجل النتائج والشهادات', category: 'التنقل', icon: History, action: () => onNavigate('history') },
       ...(userRole === 'student' ? [{ id: 'points', title: 'لوحة نقاطي والرتبة السريرية', category: 'التنقل', icon: Trophy, action: () => onNavigate('points') }] : []),
+      ...(onOpenSmartReview
+        ? [
+            {
+              id: 'smart-review-flashcards',
+              title: 'المراجعة الذكية والبطاقات السريرية (Flashcards)',
+              category: 'المذاكرة والتكرار',
+              icon: Brain,
+              action: () => onOpenSmartReview('flashcards')
+            },
+            {
+              id: 'smart-review-quiz',
+              title: 'منشئ الاختبارات المخصصة وتدريب الأخطاء',
+              category: 'المذاكرة والتكرار',
+              icon: Brain,
+              action: () => onOpenSmartReview('quizBuilder')
+            }
+          ]
+        : []),
       { id: 'profile', title: 'الملف الشخصي والحساب', category: 'التنقل', icon: UserRound, action: () => onNavigate('profile') },
       ...(['owner', 'admin', 'teacher'].includes(userRole || '') ? [{ id: 'admin', title: 'لوحة الإشراف وإدارة المنصة', category: 'الإدارة', icon: Settings2, action: () => onNavigate('admin') }] : [])
     ];
@@ -107,7 +127,7 @@ export function CommandPalette({
       : [];
 
     return [...matchedNav, ...matchedTests, ...matchedSubjects];
-  }, [query, tests, catalog, userRole, onNavigate, onSelectTest]);
+  }, [query, tests, catalog, userRole, onNavigate, onSelectTest, onOpenSmartReview]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown') {

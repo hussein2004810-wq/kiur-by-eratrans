@@ -1,5 +1,5 @@
 import {useEffect, useId, useMemo, useRef, useState} from 'react';
-import {ArrowRight, BookOpen, CheckCircle2, ChevronLeft, ClipboardList, Clock3, MessageCircleQuestion, Search, Star, Wifi, WifiOff, X} from 'lucide-react';
+import {ArrowRight, BookOpen, Brain, CheckCircle2, ChevronLeft, ClipboardList, Clock3, Layers, MessageCircleQuestion, Search, Star, Wand2, Wifi, WifiOff, X} from 'lucide-react';
 import ShareButton from './ShareButton';
 import {buildStudyShelf, matchesStudySearch, studyTimestamp} from './study-shelf-model';
 import type {ShelfCatalog, ShelfHistory, ShelfTest} from './study-shelf-model';
@@ -14,6 +14,7 @@ type Props = {
   notify: (message: string) => void; startingId: string | null;
   learningHub?: LearningHub | null; favoriteIds?: string[];
   onToggleFavorite?: (testId: string, favorite: boolean) => Promise<void>;
+  onOpenSmartReview?: (tab: 'flashcards' | 'quizBuilder') => void;
 };
 
 export type LearningHub = {
@@ -23,7 +24,7 @@ export type LearningHub = {
   reviewPlan?: {subjectId:string;subjectName:string;intervalDays:number;lastScore:number;lastReviewedAt:string;nextReviewAt:string;due:number}[];
 };
 
-export default function StudyShelf({catalog, tests, history, user, search, setSearch, directTarget, onClearDirect, onStart, onChangeProfile, notify, startingId, learningHub, favoriteIds=[], onToggleFavorite}: Props) {
+export default function StudyShelf({catalog, tests, history, user, search, setSearch, directTarget, onClearDirect, onStart, onChangeProfile, notify, startingId, learningHub, favoriteIds=[], onToggleFavorite, onOpenSmartReview}: Props) {
   const [selection, setSelection] = useState({subjectId: '', lectureId: ''});
   const [pendingFocus, setPendingFocus] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -69,6 +70,27 @@ export default function StudyShelf({catalog, tests, history, user, search, setSe
       <button type="button" className="shelfTextButton" aria-expanded={profileOpen} aria-controls={profileId} onClick={() => setProfileOpen(value => !value)}>مساري وطلبات التصحيح</button>
     </div>
     {profileOpen && <section id={profileId} className="shelfProfile"><div><h3>مسارك المسجل</h3><p>{[user.universityName, user.collegeName, user.departmentName, user.phaseName, user.sectionName].filter(Boolean).join(' / ') || 'لم يكتمل المسار الدراسي'}</p><p>{user.phaseId?'إذا وجدت خطأ، أرسل طلب تصحيح إلى الإدارة وتابع قرار الطلب من المكان نفسه.':'أكمل بياناتك للوصول إلى اختبارات مرحلتك.'}</p></div><button type="button" className="pathCorrectionButton" onClick={onChangeProfile}><MessageCircleQuestion/>{user.phaseId?'طلب تصحيح المسار':'استكمال بيانات المسار'}</button></section>}
+    {!showTests && onOpenSmartReview && (
+      <aside className="shelfReviewBanner">
+        <div className="shelfReviewContent">
+          <span className="shelfReviewIcon"><Brain size={22}/></span>
+          <div className="shelfReviewText">
+            <h4>مركز المراجعة السريرية والتكرار الذكي</h4>
+            <p>استحضر التشخيصات والمفاهيم الطبية بخوارزمية SM-2، أو درّب نفسك على أخطائك السابقة.</p>
+          </div>
+        </div>
+        <div className="shelfReviewActions">
+          <button type="button" className="shelfReviewBtn" onClick={() => onOpenSmartReview('flashcards')}>
+            <Layers size={14}/>
+            <span>مراجعة البطاقات الذكية</span>
+          </button>
+          <button type="button" className="shelfReviewBtnSecondary" onClick={() => onOpenSmartReview('quizBuilder')}>
+            <Wand2 size={14}/>
+            <span>اختبار الأخطاء</span>
+          </button>
+        </div>
+      </aside>
+    )}
     <nav className="shelfBreadcrumb" aria-label="مسار الدراسة">
       <button type="button" onClick={() => choose()} aria-current={!subject && !showTests ? 'page' : undefined}>المواد</button>
       {(subject || showTests) && <ChevronLeft aria-hidden="true"/>}
