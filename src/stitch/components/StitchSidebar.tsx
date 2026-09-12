@@ -2,7 +2,7 @@ import { HeartPulse, ClipboardList, BookOpen, Brain, History, Trophy, UserRound,
 import { useStitch } from '../StitchContext';
 
 export function StitchSidebar() {
-  const { user, view, setView, tests, logout, sidebarOpen, setSidebarOpen } = useStitch();
+  const { user, view, setView, tests, summary, logout, sidebarOpen, setSidebarOpen } = useStitch();
 
   const isStaff = ['admin', 'owner', 'teacher'].includes(user.role);
 
@@ -166,18 +166,21 @@ export function StitchSidebar() {
         )}
       </nav>
 
-      {/* Exam Timer Widget */}
+      {/* Real Academic Progress Widget */}
       <div className="stitchSidebarTimer">
         <div className="stitchSidebarTimerHeader">
-          <span>مؤقت الجلسة النشطة</span>
-          <strong>جلسة تدريبية</strong>
+          <span>التقدم التراكمي</span>
+          <strong>{summary?.completed > 0 ? `${summary.averagePercentage}% إنجاز` : 'جاهز للبدء'}</strong>
         </div>
         <div className="stitchSidebarTimerBar">
-          <div className="stitchSidebarTimerBarFill" />
+          <div 
+            className="stitchSidebarTimerBarFill" 
+            style={{ width: `${Math.min(100, Math.max(0, summary?.averagePercentage || 0))}%` }} 
+          />
         </div>
         <div className="stitchSidebarTimerTime">
-          <span>الوقت المتبقي</span>
-          <b>01:14:22</b>
+          <span>الاختبارات المنجزة</span>
+          <b>{summary?.completed || 0} اختبار</b>
         </div>
       </div>
 
