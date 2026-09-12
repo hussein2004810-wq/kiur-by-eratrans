@@ -109,7 +109,7 @@ jobs:
 
       - name: Upload Security Findings (SARIF)
         if: always()
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         continue-on-error: true
         with:
           sarif_file: strix_runs
