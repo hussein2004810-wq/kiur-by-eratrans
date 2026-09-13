@@ -15,6 +15,7 @@ export default function ExportManagerV2({notify,tests}:{notify:(message:string)=
   const visibleTests=useMemo(()=>{const needle=query.trim().toLocaleLowerCase('ar');return needle?tests.filter(test=>[test.title,test.subjectName,test.subject,test.lectureName,test.lecture].some(value=>String(value||'').toLocaleLowerCase('ar').includes(needle))):tests},[query,tests]);
   const selected=tests.find(test=>test.id===testId);
   const run=async(type:'xlsx'|'docx'|'pdf')=>{
+    if(busy)return;
     setBusy(type);
     try{
       const scoped=await load();

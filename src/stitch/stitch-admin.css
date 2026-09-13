@@ -9,3 +9,20 @@
 @media(max-width:540px){.stitchAdminHero{padding:17px;border-radius:16px}.stitchAdminHero h1{font-size:24px}.stitchAdminHeroCopy>p{font-size:12px}.stitchAdminScope{display:flex}.stitchAdminHeroActions{display:grid;grid-template-columns:1fr 1fr}.stitchAdminPrimary,.stitchAdminSecondary{padding-inline:10px;font-size:10px}.stitchAdminMetrics{gap:8px}.stitchAdminMetric{padding:12px;gap:9px}.stitchAdminMetric>span{width:36px;height:36px;flex-basis:36px}.stitchAdminMetric strong{font-size:19px}.stitchAdminMetric p{display:none}.stitchAdminDirectory>div{grid-template-columns:1fr}.stitchAdminSectionHead{padding:14px}.stitchAdminSectionHead p{line-height:1.55}.stitchAdminModule{overflow-x:hidden}}
 @media(prefers-reduced-motion:reduce){.stitchAdmin *{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}}
 .stitchAdminEyebrow i{background:var(--stitch-primary-container)}
+.moduleErrorFallback{display:flex;align-items:center;justify-content:center;padding:32px 20px;border:1px solid color-mix(in srgb,var(--stitch-error) 25%,var(--admin-line));border-radius:18px;background:color-mix(in srgb,var(--stitch-error-container) 12%,var(--admin-card));margin:12px 0}
+.moduleErrorContent{display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;max-width:460px}
+.moduleErrorIcon{display:grid;place-items:center;width:48px;height:48px;border-radius:14px;background:var(--stitch-error-container);color:var(--stitch-error)}
+.moduleErrorIcon svg{width:24px;height:24px}
+.moduleErrorCopy h3{margin:0;font-size:16px;color:var(--stitch-on-surface)}
+.moduleErrorCopy p{margin:6px 0 0;font-size:13px;color:var(--stitch-on-surface-variant);line-height:1.6}
+.retryButton{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 20px;border-radius:12px;font-weight:700;cursor:pointer}
+.studentPagination{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:16px 8px;margin-top:12px;border-top:1px solid var(--admin-line)}
+.paginationInfo{font-size:13px;color:var(--stitch-on-surface-variant)}
+.paginationActions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.pageSizeSelect{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--stitch-on-surface-variant)}
+.pageSizeSelect select{border:1px solid var(--admin-line)!important;border-radius:8px;padding:6px 10px;background:var(--admin-card);color:var(--stitch-on-surface);min-height:36px}
+.pageButtons{display:inline-flex;align-items:center;gap:8px}
+.pageButtons button{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 12px;border-radius:8px;border:1px solid var(--admin-line);background:var(--admin-card);color:var(--stitch-on-surface);font-size:12px;font-weight:600;cursor:pointer}
+.pageButtons button:disabled{opacity:.45;cursor:not-allowed}
+.pageCurrent{font-size:12px;font-weight:700;color:var(--stitch-primary-container);padding:0 6px}
+@media(max-width:640px){.studentPagination{flex-direction:column;align-items:stretch}.paginationActions{justify-content:space-between}}

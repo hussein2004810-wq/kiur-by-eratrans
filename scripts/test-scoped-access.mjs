@@ -19,4 +19,21 @@ const escalation=await call(`/api/admin/users/${teacherCreate.data.id}/grants`,{
 if(!firebase.messages.some(item=>item.kind==='password_reset'&&item.email==='teacher.scope@example.com'))throw new Error('Teacher Firebase reset invitation was not sent');firebase.resetPassword('teacher.scope@example.com','TeacherSecure2026');const teacherLogin=await call('/api/auth/login',{method:'POST',body:{email:'teacher.scope@example.com',password:'TeacherSecure2026'}});const teacherCookie=teacherLogin.response.headers.get('set-cookie')?.split(';')[0];const visible=await call('/api/admin/tests',{extraHeaders:{cookie:teacherCookie}});if(visible.response.status!==200||visible.data.data.some(test=>test.id==='test-other')||!visible.data.data.some(test=>test.id==='demo-preop'))throw new Error('Teacher test list was not scope-filtered');
 const outside=await call('/api/admin/tests/test-other',{extraHeaders:{cookie:teacherCookie}});if(outside.response.status!==403)throw new Error('Teacher opened an out-of-scope test');
 const savedTitle=sqlite.prepare(`SELECT staff_title AS staffTitle FROM users WHERE id=?`).get(teacherCreate.data.id)?.staffTitle;if(savedTitle!=='department_head')throw new Error('Staff title was not persisted');
-console.log(JSON.stringify({ok:true,adminCreated:adminCreate.response.status,staffCreated:teacherCreate.response.status,staffTitle:savedTitle,invalidStaffBlocked:invalidStaff.response.status,delegationBlocked:escalation.response.status,visibleTests:visible.data.data.length,outsideBlocked:outside.response.status}));
+
+const teacherSubjectCreate=await call('/api/admin/users',{method:'POST',extraHeaders:{cookie:adminCookie},body:{name:'أستاذ مادة التخدير',email:'teacher.subject@example.com',password:'TeacherSub2026',role:'teacher',staffTitle:'university_doctor',grants:[{scopeType:'subject',scopeId:'sub-a4-general',permissions:['view_reports']}]}});
+if(teacherSubjectCreate.response.status!==201)throw new Error('Admin could not create teacher with subject scope');
+firebase.resetPassword('teacher.subject@example.com','TeacherSub2026');
+const teacherSubLogin=await call('/api/auth/login',{method:'POST',body:{email:'teacher.subject@example.com',password:'TeacherSub2026'}});
+const teacherSubCookie=teacherSubLogin.response.headers.get('set-cookie')?.split(';')[0];
+if(!teacherSubCookie)throw new Error('Teacher with subject scope login failed');
+
+sqlite.prepare(`INSERT OR IGNORE INTO users(id,email,name,role,account_role,department_id,phase_id) VALUES(?,?,?,?,?,?,?)`).run('student-sub-1','student.sub1@example.com','طالب مادة تخدير','student','student','dep-anesthesia','pha-a4');
+sqlite.prepare(`INSERT OR IGNORE INTO attempts(id,user_id,test_id,status,score,max_score,percentage,finished_at) VALUES(?,?,?,?,?,?,?,CURRENT_TIMESTAMP)`).run('att-sub-1','student-sub-1','demo-preop','submitted',1,3,33.33);
+sqlite.prepare(`INSERT OR IGNORE INTO users(id,email,name,role,account_role,department_id,phase_id) VALUES(?,?,?,?,?,?,?)`).run('student-other-1','student.other1@example.com','طالب خارج المادة','student','student','dep-other','phase-other');
+sqlite.prepare(`INSERT OR IGNORE INTO attempts(id,user_id,test_id,status,score,max_score,percentage,finished_at) VALUES(?,?,?,?,?,?,?,CURRENT_TIMESTAMP)`).run('att-other-1','student-other-1','test-other','submitted',1,2,50);
+
+const studentsResp=await call('/api/admin/students?limit=10',{extraHeaders:{cookie:teacherSubCookie}});
+if(studentsResp.response.status!==200||studentsResp.data.total!==1)throw new Error('Teacher with subject scope student count incorrect');
+if(studentsResp.data.data.some(s=>s.id==='student-other-1')||!studentsResp.data.data.some(s=>s.id==='student-sub-1'))throw new Error('Teacher with subject scope leaked or missed student');
+
+console.log(JSON.stringify({ok:true,adminCreated:adminCreate.response.status,staffCreated:teacherCreate.response.status,staffTitle:savedTitle,invalidStaffBlocked:invalidStaff.response.status,delegationBlocked:escalation.response.status,visibleTests:visible.data.data.length,outsideBlocked:outside.response.status,teacherSubjectStudents:studentsResp.data.total}));
